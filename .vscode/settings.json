@@ -1,0 +1,38 @@
+{
+  "git.enabled": true,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.suggestSmartCommit": true,
+  "git.autoStash": true,
+  "git.showPushSuccessNotification": true,
+  "git.timeline.enabled": true,
+  "git.timeline.showInside": true,
+  "git.openRepositoryInParentFolders": "always",
+  "scm.defaultViewMode": "tree",
+  "scm.alwaysShowRepositories": true,
+  "scm.autoReveal": true,
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/node_modules/**": true
+  },
+  "search.exclude": {
+    "**/.git": true,
+    "**/node_modules": true
+  },
+  "editor.rulers": [80, 120],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "html.format.indentInnerHtml": true,
+  "html.format.wrapLineLength": 120,
+  "css.format.maxLineLength": 120,
+  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact"
+  },
+  "git.inputValidation": true,
+  "git.inputValidationLength": 72,
+  "git.inputValidationSubjectLength": 50
+}

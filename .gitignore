@@ -10,7 +10,7 @@ ehthumbs.db
 Thumbs.db
 
 # IDE/Editor Files
-.vscode/
+# .vscode/ (commented out to allow project-specific VS Code settings)
 .idea/
 *.swp
 *.swo
