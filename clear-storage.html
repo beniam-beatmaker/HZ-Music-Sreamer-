@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Hertz Storage</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            background: #181818; 
+            color: #fff; 
+            padding: 2rem; 
+            text-align: center; 
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #232526;
+            padding: 2rem;
+            border-radius: 15px;
+        }
+        .btn {
+            background: #1db954;
+            color: #181818;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 1rem;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #17a74a;
+        }
+        .btn.danger {
+            background: #ff4444;
+            color: white;
+        }
+        .btn.danger:hover {
+            background: #cc3333;
+        }
+        .storage-info {
+            background: #282828;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧹 Hertz Storage Manager</h1>
+        <p>Manage your Hertz app's local storage</p>
+        
+        <div class="storage-info" id="storageInfo">
+            <h3>Current Storage Usage</h3>
+            <p>Loading...</p>
+        </div>
+        
+        <button class="btn" onclick="showStorageDetails()">📊 View Storage Details</button>
+        <button class="btn" onclick="compressStorage()">🗜️ Compress Storage</button>
+        <button class="btn danger" onclick="clearSelectedStorage()">🗑️ Clear Track Storage</button>
+        <button class="btn danger" onclick="clearAllStorage()">💥 Clear All Storage</button>
+        
+        <div style="margin-top: 2rem;">
+            <a href="index.html" style="color: #1db954;">← Back to Hertz</a> | 
+            <a href="Hertz App.html" style="color: #1db954;">Hertz App →</a>
+        </div>
+    </div>
+
+    <script>
+        function updateStorageInfo() {
+            try {
+                const metas = localStorage.getItem('hertzCustomTrackMeta') || '{}';
+                const backup = localStorage.getItem('hertzCustomTrackMeta_backup') || '{}';
+                const liked = localStorage.getItem('hertzLikedTracks') || '[]';
+                
+                const totalSize = new Blob([metas + backup + liked]).size;
+                const trackCount = Object.keys(JSON.parse(metas)).length;
+                const likedCount = JSON.parse(liked).length;
+                
+                document.getElementById('storageInfo').innerHTML = `
+                    <h3>Current Storage Usage</h3>
+                    <p><strong>Total Size:</strong> ${(totalSize / 1024 / 1024).toFixed(2)}MB</p>
+                    <p><strong>Tracks with MP3s:</strong> ${trackCount}</p>
+                    <p><strong>Liked Tracks:</strong> ${likedCount}</p>
+                    <p><strong>Storage Limit:</strong> ~5MB (browser dependent)</p>
+                `;
+            } catch (e) {
+                document.getElementById('storageInfo').innerHTML = `
+                    <h3>Current Storage Usage</h3>
+                    <p>Error reading storage: ${e.message}</p>
+                `;
+            }
+        }
+
+        function showStorageDetails() {
+            try {
+                const allKeys = Object.keys(localStorage);
+                const hertzKeys = allKeys.filter(key => key.startsWith('hertz'));
+                
+                let details = 'Storage Details:\n\n';
+                hertzKeys.forEach(key => {
+                    const size = new Blob([localStorage.getItem(key) || '']).size;
+                    details += `${key}: ${(size / 1024).toFixed(1)}KB\n`;
+                });
+                
+                details += `\nTotal localStorage keys: ${allKeys.length}`;
+                alert(details);
+            } catch (e) {
+                alert('Error: ' + e.message);
+            }
+        }
+
+        function compressStorage() {
+            try {
+                const metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+                let compressed = false;
+                
+                Object.keys(metas).forEach(trackId => {
+                    const meta = metas[trackId];
+                    if (meta.mp3 && meta.mp3.length > 100000) {
+                        // Simple compression
+                        const base64Data = meta.mp3.split(',')[1];
+                        const binaryString = atob(base64Data);
+                        const compressedData = binaryString.substring(0, Math.floor(binaryString.length * 0.8));
+                        const compressedUrl = meta.mp3.split(',')[0] + ',' + btoa(compressedData);
+                        
+                        if (compressedUrl.length < meta.mp3.length) {
+                            metas[trackId].mp3 = compressedUrl;
+                            compressed = true;
+                        }
+                    }
+                });
+                
+                if (compressed) {
+                    localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(metas));
+                    localStorage.setItem('hertzCustomTrackMeta_backup', JSON.stringify(metas));
+                    alert('Storage compressed successfully!');
+                    updateStorageInfo();
+                } else {
+                    alert('No compression needed or possible.');
+                }
+            } catch (e) {
+                alert('Compression failed: ' + e.message);
+            }
+        }
+
+        function clearSelectedStorage() {
+            if (confirm('Clear all track MP3s and custom metadata?\n\nThis will remove all uploaded music files but keep your liked tracks.')) {
+                localStorage.removeItem('hertzCustomTrackMeta');
+                localStorage.removeItem('hertzCustomTrackMeta_backup');
+                localStorage.removeItem('hertzSaveCount');
+                localStorage.removeItem('hertzLastUpdate');
+                alert('Track storage cleared! You can now upload new music files.');
+                updateStorageInfo();
+            }
+        }
+
+        function clearAllStorage() {
+            if (confirm('⚠️ WARNING ⚠️\n\nThis will clear ALL Hertz data including:\n• All uploaded MP3 files\n• All liked tracks\n• All custom track names\n• All settings\n\nThis cannot be undone. Continue?')) {
+                if (confirm('Are you absolutely sure? This will delete everything!')) {
+                    const hertzKeys = Object.keys(localStorage).filter(key => key.startsWith('hertz'));
+                    hertzKeys.forEach(key => localStorage.removeItem(key));
+                    
+                    // Also clear session storage
+                    const sessionKeys = Object.keys(sessionStorage).filter(key => key.startsWith('hertz'));
+                    sessionKeys.forEach(key => sessionStorage.removeItem(key));
+                    
+                    alert('All Hertz storage cleared! The app will start fresh.');
+                    updateStorageInfo();
+                }
+            }
+        }
+
+        // Update on load
+        updateStorageInfo();
+        
+        // Auto-refresh every 5 seconds
+        setInterval(updateStorageInfo, 5000);
+    </script>
+</body>
+</html>

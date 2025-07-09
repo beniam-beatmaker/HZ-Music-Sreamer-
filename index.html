@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hertz - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+    header { position: sticky; top: 0; background: #121212; padding: 1rem 2rem; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); z-index: 1000; }
+    .logo-btn { display: inline-block; font-size: 1.7rem; font-weight: bold; color: #1db954; background: transparent; border: 2px solid #1db954; border-radius: 30px; padding: 0.4rem 1.6rem; text-decoration: none; letter-spacing: 2px; cursor: pointer; transition: background 0.2s, color 0.2s;}
+    .logo-btn:hover, .logo-btn:focus { background: #1db954; color: #181818; outline: none;}
+    nav { display: flex; gap: 1rem;}
+    nav a { text-decoration: none; color: #fff; background: #282828; padding: 0.6rem 1.4rem; border-radius: 30px; font-weight: 500; transition: background 0.2s, color 0.2s; border: 2px solid transparent;}
+    nav a:hover, nav a.active { background: #1db954; color: #181818; border-color: #1db954;}
+    .mobile-menu-btn { display: none; background: none; border: 2px solid #1db954; color: #1db954; font-size: 1.5rem; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .mobile-menu-btn:hover { background: #1db954; color: #181818; }
+    .mobile-nav { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.95); z-index: 1000; padding-top: 4rem; }
+    .mobile-nav.active { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+    .mobile-nav a { color: #fff; background: #282828; padding: 1rem 2rem; border-radius: 30px; font-weight: 500; text-decoration: none; font-size: 1.1rem; border: 2px solid transparent; transition: all 0.2s; }
+    .mobile-nav a:hover, .mobile-nav a.active { background: #1db954; color: #181818; border-color: #1db954; }
+    .mobile-nav .close-btn { position: absolute; top: 1rem; right: 2rem; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
+    .container { display: flex; flex: 1; min-height: 0;}
+    aside { width: 220px; background: #121212; padding: 2rem 1rem; display: flex; flex-direction: column; gap: 1.5rem; border-right: 1px solid #232323;}
+    aside h2 { font-size: 1.1rem; color: #b3b3b3; margin-bottom: 1rem; letter-spacing: 1px;}
+    aside ul { list-style: none; display: flex; flex-direction: column; gap: 1rem;}
+    aside ul li a { color: #b3b3b3; text-decoration: none; font-size: 1rem; transition: color 0.2s;}
+    aside ul li a:hover { color: #1db954;}
+    main { flex: 1; padding: 2rem; overflow-y: auto; background: linear-gradient(135deg, #232526 0%, #181818 100%); border-radius: 0 0 0 30px;}
+    .welcome { font-size: 2.2rem; font-weight: 700; margin-bottom: 1.2rem; color: #fff;}
+    .desc { color: #b3b3b3; font-size: 1.1rem; margin-bottom: 2rem;}
+    .action-buttons { display: flex; gap: 1.5rem; margin-bottom: 2rem;}
+    .action-buttons a { display: inline-block; padding: 0.8rem 2.2rem; border-radius: 30px; background: #1db954; color: #181818; font-weight: bold; font-size: 1.1rem; text-decoration: none; box-shadow: 0 2px 8px rgba(30,185,84,0.15); transition: background 0.2s, color 0.2s; border: 2px solid #1db954;}
+    .action-buttons a.secondary { background: transparent; color: #1db954; border: 2px solid #1db954;}
+    .action-buttons a.secondary:hover { background: #1db954; color: #181818;}
+    .action-buttons a:hover { background: #17a74a; color: #fff;}
+    @media (max-width: 900px) { aside { display: none; } .container { flex-direction: column; } main { border-radius: 0; } }
+    @media (max-width: 768px) { 
+      nav { display: none; } 
+      .mobile-menu-btn { display: block; }
+      header { flex-wrap: wrap; }
+      .search-bar { order: 3; width: 100%; margin-top: 1rem; max-width: none !important; }
+    }
+    @media (max-width: 600px) { header { flex-direction: column; gap: 1rem; } .action-buttons { flex-direction: column; gap: 1rem; } main { padding: 1rem; } }
+    /* Custom for sticky player */
+    .sticky-player { 
+      position: fixed; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      background: #232526; 
+      z-index: 1000; 
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2); 
+      display: flex; 
+      align-items: center; 
+      padding: 0.8rem 2rem; 
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .sticky-player > div {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .player-controls { display: flex; align-items: center; gap: 0.8rem; margin: 0; padding: 0; }
+    .player-btn { background: none; border: none; color: #1db954; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; margin: 0; padding: 0.2rem;}
+    .player-btn:hover { color: #fff; }
+    .player-title { font-weight: bold; color: #fff; text-align: center; margin: 0; padding: 0; }
+    .player-audio { width: 250px; }
+    .player-loop.active, .player-shuffle.active { color: #fff700; }
+    @media (max-width: 700px) {
+      .sticky-player { flex-direction: column; align-items: center; padding: 0.6rem 0.8rem; gap: 0.3rem; }
+      .player-controls { gap: 0.6rem; flex-wrap: wrap; justify-content: center; }
+      .player-btn { font-size: 1.3rem; }
+      #volumeRange { width: 80px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; width: 100%;">
+      <a href="index.html" class="logo-btn" aria-label="Go to Hertz homepage">Hertz</a>
+      <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">☰</button>
+      <nav style="flex: 1;">
+        <a href="index.html" class="active">Home</a>
+        <a href="online.html">Online</a>
+        <a href="offline.html">Offline</a>
+        <a href="playlists.html">Playlists</a>
+        <a href="favorites.html">Favorites</a>
+        <a href="liked.html">Liked</a>
+        <a href="Account.html">Account</a>
+        <a href="settings.html">Settings</a>
+      </nav>
+      <form class="search-bar" style="max-width:350px; min-width:200px; flex: 0 0 350px; display:flex; gap:1rem; align-items:center;" onsubmit="event.preventDefault(); searchHertz();">
+        <input type="text" id="mainSearchInput" placeholder="Search tracks, albums, artists..." style="flex:1; padding:0.7rem; border-radius:20px; border:none; font-size:1rem;">
+        <button type="submit" style="padding:0.7rem 1.5rem; border-radius:20px; border:none; background:#1db954; color:#181818; font-weight:bold; cursor:pointer; transition:background 0.2s;">Search</button>
+      </form>
+      <div id="storageIndicator" style="color:#b3b3b3; font-size:0.9rem; text-align:center; margin-left:1rem; cursor:pointer;" onclick="showStorageDetails()" title="Click for storage details">
+        <div>Storage: <span id="storageUsed">0.0</span>MB</div>
+        <div><span id="trackCount">0</span> tracks</div>
+      </div>
+    </div>
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav" id="mobileNav">
+      <button class="close-btn" onclick="toggleMobileMenu()">&times;</button>
+      <a href="index.html" class="active">Home</a>
+      <a href="online.html">Online</a>
+      <a href="offline.html">Offline</a>
+      <a href="playlists.html">Playlists</a>
+      <a href="favorites.html">Favorites</a>
+      <a href="liked.html">Liked</a>
+      <a href="Account.html">Account</a>
+      <a href="settings.html">Settings</a>
+    </div>
+  </header>
+  <div class="container">
+    <aside>
+      <h2>Browse</h2>
+      <ul>
+        <li><a href="online.html">Online Streaming</a></li>
+        <li><a href="offline.html">Offline Mode</a></li>
+        <li><a href="playlists.html">Playlists</a></li>
+        <li><a href="favorites.html">Favorites</a></li>
+        <li><a href="liked.html">Liked</a></li>
+        <li><a href="Account.html">Account</a></li>
+        <li><a href="settings.html">Settings</a></li>
+      </ul>
+    </aside>
+    <main>
+      <div class="welcome">Welcome to Hertz</div>
+      <div class="desc">
+        Enjoy your favorite music online or offline.<br>
+        Stream tracks instantly or download for offline listening.<br>
+        Inspired by Youtube, Spotify and SoundCloud.
+      </div>
+      <div class="action-buttons">
+        <a href="online.html">Go Online</a>
+        <a href="offline.html" class="secondary">Go Offline</a>
+      </div>
+      <!-- Track rows will be injected here -->
+    </main>
+  </div>
+
+  <!-- Sticky Player (matching offline page layout) -->
+  <div class="sticky-player" id="stickyPlayer" style="display:none;">
+    <div id="lyricsDisplay" style="display:none; margin-bottom:0.7rem; width:100%; text-align:center; min-height:2.2em; color:#1db954; font-size:1.1em; font-weight:bold; letter-spacing:1px; transition:color 0.2s;"></div>
+    
+    <!-- Song Title - Row 1 -->
+    <div style="width:100%; text-align:center;">
+      <span class="player-title" id="playerTrackTitle" style="font-weight:bold;color:#fff;font-size:1.2rem;display:block;line-height:1.3;"></span>
+    </div>
+    
+    <!-- Time Display - Row 2 -->
+    <div style="display:flex;align-items:center;justify-content:center;width:100%;">
+      <span id="currentTime" style="font-size:0.95em;color:#b3b3b3;margin-right:0.5rem;">0:00</span>
+      <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="flex:1;max-width:300px;">
+      <span id="duration" style="font-size:0.95em;color:#b3b3b3;margin-left:0.5rem;">0:00</span>
+    </div>
+    
+    <!-- Player Controls - Row 3 -->
+    <div style="display:flex;align-items:center;justify-content:center;width:100%;">
+      <div class="player-controls">
+        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
+        <button class="player-btn" id="playPauseBtn" title="Play/Pause">&#9654;</button>
+        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
+        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
+        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
+        <button class="player-btn" id="lyricsBtn" title="Show/Hide Lyrics" style="color:#1db954;font-size:1.3em;">&#119070;</button>
+        <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
+        <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
+        <button id="likeBtn" title="Like" style="background:none;border:none;cursor:pointer;font-size:1.7rem;color:#b3b3b3;transition:color 0.2s;margin-left:1rem;">&#10084;</button>
+      </div>
+    </div>
+    <audio id="playerAudio" class="player-audio"></audio>
+  </div>
+
+  <script>
+    // --- Mobile Menu Toggle ---
+    function toggleMobileMenu() {
+      const mobileNav = document.getElementById('mobileNav');
+      mobileNav.classList.toggle('active');
+    }
+
+    // --- Search ---
+    function searchHertz() {
+      const query = document.getElementById('mainSearchInput').value.trim();
+      if (query) {
+        alert('Search for: ' + query);
+      }
+    }
+
+    // --- Track Data and Persistence ---
+    const mostPopularTracks = Array.from({length:25}, (_,i)=>({
+      name: `Popular Track ${i+1}`,
+      artist: `Artist ${i+1}`,
+      cover: `https://placehold.co/100x100/1db954/fff?text=P${i+1}`,
+      id: `popular_${i+1}`
+    }));
+    const recommendedTracks = Array.from({length:25}, (_,i)=>({
+      name: `Recommended Track ${i+1}`,
+      artist: `Artist ${i+26}`,
+      cover: `https://placehold.co/100x100/1db954/fff?text=R${i+1}`,
+      id: `recommended_${i+1}`
+    }));
+    const trendingTracks = Array.from({length:25}, (_,i)=>({
+      name: `Trending Track ${i+1}`,
+      artist: `Artist ${i+51}`,
+      cover: `https://placehold.co/100x100/1db954/fff?text=T${i+1}`,
+      id: `trending_${i+1}`
+    }));
+
+    function saveCustomTrackMeta(trackId, meta) {
+      try {
+        let metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+        metas[trackId] = { ...(metas[trackId] || {}), ...meta };
+        
+        // Add timestamp to new entries
+        if (meta.mp3) {
+          metas[trackId].timestamp = Date.now();
+        }
+        
+        const dataStr = JSON.stringify(metas);
+        
+        // Add timestamp to new entries
+        if (meta.mp3) {
+          metas[trackId].timestamp = Date.now();
+        }
+        
+        try {
+          const finalDataStr = JSON.stringify(metas);
+          localStorage.setItem('hertzCustomTrackMeta', finalDataStr);
+          
+          // Also save to a backup key for extra persistence
+          localStorage.setItem('hertzCustomTrackMeta_backup', finalDataStr);
+          
+          // Save a timestamp of last update
+          localStorage.setItem('hertzLastUpdate', Date.now().toString());
+          
+          console.log(`Storage used: ${(new Blob([finalDataStr]).size / 1024 / 1024).toFixed(2)}MB`);
+          
+          // Update storage indicator
+          if (typeof updateStorageIndicator === 'function') {
+            updateStorageIndicator();
+          }
+        } catch (storageError) {
+          if (storageError.name === 'QuotaExceededError') {
+            // Only if we actually hit the quota, try to clean up
+            console.log('Storage quota exceeded, attempting cleanup...');
+            
+            // Try to free up space by removing oldest entries
+            const sortedEntries = Object.entries(metas).sort((a, b) => {
+              const aTime = a[1].timestamp || 0;
+              const bTime = b[1].timestamp || 0;
+              return aTime - bTime;
+            });
+            
+            // Remove oldest entries until we can save
+            while (sortedEntries.length > 1) {
+              const [oldestTrackId] = sortedEntries.shift();
+              if (oldestTrackId !== trackId) { // Don't remove the track we're trying to add
+                delete metas[oldestTrackId];
+                console.log(`Removed oldest track ${oldestTrackId} to free up space`);
+                
+                // Try to save again
+                try {
+                  const cleanedDataStr = JSON.stringify(metas);
+                  localStorage.setItem('hertzCustomTrackMeta', cleanedDataStr);
+                  localStorage.setItem('hertzCustomTrackMeta_backup', cleanedDataStr);
+                  console.log('Storage cleaned and saved successfully');
+                  break;
+                } catch (e) {
+                  // Continue cleaning if still failing
+                  continue;
+                }
+              }
+            }
+          } else {
+            throw storageError;
+          }
+        }
+        
+        return true; // Success
+        
+      } catch (e) {
+        if (e.name === 'QuotaExceededError') {
+          console.log('Storage quota exceeded, attempting emergency cleanup...');
+          
+          // Try emergency cleanup first
+          emergencyCleanup();
+          
+          // Try saving again with just essential data
+          try {
+            let metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+            
+            // Remove the largest files first to make room
+            const entries = Object.entries(metas);
+            entries.sort((a, b) => {
+              const aSize = a[1].mp3 ? a[1].mp3.length : 0;
+              const bSize = b[1].mp3 ? b[1].mp3.length : 0;
+              return bSize - aSize; // Largest first
+            });
+            
+            // Remove largest files until we have room
+            while (entries.length > 0) {
+              const [largestTrackId] = entries.shift();
+              if (largestTrackId !== trackId) {
+                delete metas[largestTrackId];
+                console.log(`Removed large track ${largestTrackId} to make room`);
+                
+                // Try to save again
+                try {
+                  metas[trackId] = { ...(metas[trackId] || {}), ...meta };
+                  if (meta.mp3) {
+                    metas[trackId].timestamp = Date.now();
+                  }
+                  localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(metas));
+                  localStorage.setItem('hertzCustomTrackMeta_backup', JSON.stringify(metas));
+                  console.log('Successfully saved after freeing space');
+                  return true;
+                } catch (e3) {
+                  continue; // Try removing more files
+                }
+              }
+            }
+            
+            // If we get here, show user-friendly error
+            alert('Storage is full! The file is too large or you have too many tracks.\n\nPlease:\n• Remove some tracks using the 🗑️ button\n• Use smaller audio files (under 5MB recommended)\n• Visit clear-storage.html to manage storage');
+            return false;
+            
+          } catch (e2) {
+            alert('Storage is completely full!\n\nPlease remove some tracks or visit clear-storage.html to free up space.');
+            console.error('Emergency save failed:', e2);
+            return false;
+          }
+        } else {
+          console.error('Error saving track metadata:', e);
+          alert('Error saving track: ' + e.message);
+          return false;
+        }
+      }
+    }
+    
+    function getCustomTrackMeta(trackId) {
+      let metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+      
+      // If primary storage is empty, try backup
+      if (Object.keys(metas).length === 0) {
+        metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta_backup') || '{}');
+        if (Object.keys(metas).length > 0) {
+          // Restore from backup
+          localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(metas));
+        }
+      }
+      
+      return metas[trackId] || {};
+    }
+
+    function getTrackById(trackId) {
+      const allTrackDefs = [...mostPopularTracks, ...recommendedTracks, ...trendingTracks];
+      return allTrackDefs.find(track => track.id === trackId) || {};
+    }
+
+    function cleanupCustomTrackMeta() {
+      // Remove empty metadata entries to keep localStorage clean
+      let metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+      const cleanedMetas = {};
+      
+      for (const trackId in metas) {
+        const meta = metas[trackId];
+        if (meta.mp3 || meta.cover || meta.name || meta.artist) {
+          cleanedMetas[trackId] = meta;
+        }
+      }
+      
+      localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(cleanedMetas));
+      localStorage.setItem('hertzCustomTrackMeta_backup', JSON.stringify(cleanedMetas));
+    }
+
+    function validateAndRestoreData() {
+      try {
+        // Validate primary storage
+        const primaryData = localStorage.getItem('hertzCustomTrackMeta');
+        if (primaryData) {
+          JSON.parse(primaryData);
+        }
+      } catch (e) {
+        console.log('Primary storage corrupted, restoring from backup...');
+        // Restore from backup if primary is corrupted
+        const backupData = localStorage.getItem('hertzCustomTrackMeta_backup');
+        if (backupData) {
+          try {
+            JSON.parse(backupData);
+            localStorage.setItem('hertzCustomTrackMeta', backupData);
+          } catch (e2) {
+            console.log('Backup also corrupted, starting fresh');
+            localStorage.removeItem('hertzCustomTrackMeta');
+            localStorage.removeItem('hertzCustomTrackMeta_backup');
+          }
+        }
+      }
+    }
+
+    function emergencyCleanup() {
+      try {
+        // Remove all non-essential data first
+        const keysToRemove = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && !key.startsWith('hertzCustomTrackMeta') && !key.startsWith('hertzLiked')) {
+            keysToRemove.push(key);
+          }
+        }
+        
+        keysToRemove.forEach(key => {
+          localStorage.removeItem(key);
+          console.log(`Removed ${key} during emergency cleanup`);
+        });
+        
+        // Then try to compress existing track data
+        const metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+        let compressed = false;
+        
+        Object.keys(metas).forEach(trackId => {
+          const meta = metas[trackId];
+          if (meta.mp3 && meta.mp3.length > 100000) { // Only compress large files
+            const compressed = compressAudioData(meta.mp3);
+            if (compressed.length < meta.mp3.length) {
+              metas[trackId].mp3 = compressed;
+              compressed = true;
+            }
+          }
+        });
+        
+        if (compressed) {
+          localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(metas));
+          localStorage.setItem('hertzCustomTrackMeta_backup', JSON.stringify(metas));
+          console.log('Compressed existing audio data');
+        }
+        
+      } catch (e) {
+        console.error('Emergency cleanup failed:', e);
+      }
+    }
+
+    function compressAudioData(audioDataUrl) {
+      try {
+        // For audio files, we can reduce quality by resampling
+        // This is a simplified compression - in practice, you'd want to use a proper audio library
+        
+        // Extract the base64 data
+        const base64Data = audioDataUrl.split(',')[1];
+        const binaryString = atob(base64Data);
+        
+        // Simple compression by reducing data size (this is a placeholder)
+        // In a real implementation, you'd use proper audio compression
+        const compressed = binaryString.substring(0, Math.floor(binaryString.length * 0.7));
+        
+        return audioDataUrl.split(',')[0] + ',' + btoa(compressed);
+      } catch (e) {
+        console.error('Compression failed:', e);
+        return audioDataUrl; // Return original if compression fails
+      }
+    }
+
+    function getStorageInfo() {
+      try {
+        const metas = localStorage.getItem('hertzCustomTrackMeta') || '{}';
+        const backupMetas = localStorage.getItem('hertzCustomTrackMeta_backup') || '{}';
+        const totalSize = new Blob([metas + backupMetas]).size;
+        const trackCount = Object.keys(JSON.parse(metas)).length;
+        
+        return {
+          totalSize: totalSize,
+          totalSizeMB: (totalSize / 1024 / 1024).toFixed(2),
+          trackCount: trackCount,
+          averagePerTrack: trackCount > 0 ? (totalSize / trackCount / 1024).toFixed(2) : 0
+        };
+      } catch (e) {
+        return { totalSize: 0, totalSizeMB: '0.00', trackCount: 0, averagePerTrack: 0 };
+      }
+    }
+
+    // Expose storage info for debugging
+    window.getStorageInfo = getStorageInfo;
+
+    function updateStorageIndicator() {
+      const storageInfo = getStorageInfo();
+      const storageUsedSpan = document.getElementById('storageUsed');
+      const trackCountSpan = document.getElementById('trackCount');
+      
+      if (storageUsedSpan) {
+        storageUsedSpan.textContent = storageInfo.totalSizeMB;
+        
+        // Color code based on usage
+        const indicator = document.getElementById('storageIndicator');
+        if (parseFloat(storageInfo.totalSizeMB) > 20) {
+          indicator.style.color = '#ff4444'; // Red for high usage
+        } else if (parseFloat(storageInfo.totalSizeMB) > 10) {
+          indicator.style.color = '#ff8800'; // Orange for medium usage
+        } else {
+          indicator.style.color = '#b3b3b3'; // Normal color
+        }
+      }
+      
+      if (trackCountSpan) {
+        trackCountSpan.textContent = storageInfo.trackCount;
+      }
+    }
+
+    function showStorageDetails() {
+      const storageInfo = getStorageInfo();
+      const details = `Storage Details:
+      
+Total Storage Used: ${storageInfo.totalSizeMB}MB
+Number of Tracks: ${storageInfo.trackCount}
+Average per Track: ${storageInfo.averagePerTrack}KB
+
+Limit: ~5MB (browser dependent)
+
+Tips to save space:
+• Use MP3 files under 2MB
+• Remove unused tracks with 🗑️ button
+• Compress large audio files before uploading`;
+      
+      alert(details);
+    }
+
+    // Clean up localStorage on page load to prevent quota issues
+    function initializeStorage() {
+      try {
+        // Check if localStorage is available and working
+        const testKey = 'hertz_test_' + Date.now();
+        localStorage.setItem(testKey, 'test');
+        localStorage.removeItem(testKey);
+        
+        // Get current storage size
+        const metas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+        const currentSize = new Blob([JSON.stringify(metas)]).size / 1024 / 1024;
+        
+        console.log(`Current storage usage: ${currentSize.toFixed(2)}MB`);
+        
+        // If storage is reasonable, we're good
+        if (currentSize < 25) {
+          return;
+        }
+        
+        // If storage is too large, clean up old entries
+        const sortedEntries = Object.entries(metas).sort((a, b) => {
+          const aTime = a[1].timestamp || 0;
+          const bTime = b[1].timestamp || 0;
+          return aTime - bTime;
+        });
+        
+        // Remove oldest entries until we're under 15MB
+        while (new Blob([JSON.stringify(metas)]).size > 15 * 1024 * 1024 && sortedEntries.length > 0) {
+          const [oldTrackId] = sortedEntries.shift();
+          delete metas[oldTrackId];
+          console.log(`Cleaned up old track ${oldTrackId}`);
+        }
+        
+        localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(metas));
+        console.log('Storage cleaned up successfully');
+        
+      } catch (error) {
+        console.error('Storage initialization error:', error);
+        // If there's a critical error, clear everything
+        try {
+          localStorage.removeItem('hertzCustomTrackMeta');
+          localStorage.removeItem('hertzCustomTrackMeta_backup');
+          console.log('Storage cleared due to error');
+        } catch (e) {
+          console.error('Could not clear storage:', e);
+        }
+      }
+    }
+
+    // Functions to update only specific elements of a track card
+    function updateTrackCoverOnly(trackId) {
+      const card = document.querySelector(`[data-trackid="${trackId}"]`);
+      if (!card) return;
+      
+      const meta = getCustomTrackMeta(trackId);
+      const originalTrack = getTrackById(trackId);
+      const customCover = meta.cover || originalTrack.cover;
+      
+      // Update cover image only
+      const coverImg = card.querySelector(`#cover_${trackId}`);
+      if (coverImg) {
+        coverImg.src = customCover;
+      }
+      
+      console.log(`Updated cover for track ${trackId}`);
+    }
+    
+    function updateTrackNameOnly(trackId) {
+      const card = document.querySelector(`[data-trackid="${trackId}"]`);
+      if (!card) return;
+      
+      const meta = getCustomTrackMeta(trackId);
+      const originalTrack = getTrackById(trackId);
+      const customName = meta.name || originalTrack.name;
+      
+      // Update track name only
+      const nameSpan = card.querySelector(`#name_${trackId}`);
+      const nameInput = card.querySelector(`#input_name_${trackId}`);
+      if (nameSpan) nameSpan.textContent = customName;
+      if (nameInput) nameInput.value = customName;
+      
+      console.log(`Updated name for track ${trackId}`);
+    }
+    
+    function updateTrackArtistOnly(trackId) {
+      const card = document.querySelector(`[data-trackid="${trackId}"]`);
+      if (!card) return;
+      
+      const meta = getCustomTrackMeta(trackId);
+      const originalTrack = getTrackById(trackId);
+      const customArtist = meta.artist || originalTrack.artist;
+      
+      // Update artist name only
+      const artistSpan = card.querySelector(`#artist_${trackId}`);
+      const artistInput = card.querySelector(`#input_artist_${trackId}`);
+      if (artistSpan) artistSpan.textContent = customArtist;
+      if (artistInput) artistInput.value = customArtist;
+      
+      console.log(`Updated artist for track ${trackId}`);
+    }
+    
+    function updateTrackMp3Only(trackId) {
+      const card = document.querySelector(`[data-trackid="${trackId}"]`);
+      if (!card) return;
+      
+      const meta = getCustomTrackMeta(trackId);
+      const hasMp3 = !!meta.mp3;
+      
+      // Update MP3-related elements only
+      const coverImg = card.querySelector(`#cover_${trackId}`);
+      if (coverImg) {
+        coverImg.style.cursor = hasMp3 ? 'pointer' : 'default';
+      }
+      
+      // Update play button
+      const playBtn = card.querySelector('.play-mp3-btn');
+      if (playBtn) {
+        playBtn.style.background = hasMp3 ? '#1db954' : '#404040';
+        playBtn.style.color = hasMp3 ? '#181818' : '#b3b3b3';
+        playBtn.textContent = hasMp3 ? '🎵 Ready to Play' : '📁 Upload MP3';
+        playBtn.disabled = false;
+      }
+      
+      // Update/add remove button
+      let removeBtn = card.querySelector('.remove-mp3-btn');
+      const buttonContainer = card.querySelector('div[style*="margin-top:0.5rem"]');
+      
+      if (hasMp3 && !removeBtn && buttonContainer) {
+        // Add remove button if MP3 exists but button doesn't
+        removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-mp3-btn';
+        removeBtn.setAttribute('data-trackid', trackId);
+        removeBtn.title = 'Remove MP3';
+        removeBtn.style.cssText = 'background:#ff4444;border:none;border-radius:20px;padding:0.4rem 0.8rem;font-size:0.9rem;cursor:pointer;color:#fff;font-weight:600;transition:all 0.2s;';
+        removeBtn.textContent = '🗑️';
+        buttonContainer.appendChild(removeBtn);
+        
+        // Add event listener to new remove button
+        removeBtn.onclick = function(e) {
+          e.stopPropagation();
+          if (confirm('Are you sure you want to remove this MP3?')) {
+            removeTrackMp3(trackId);
+          }
+        };
+      } else if (!hasMp3 && removeBtn) {
+        // Remove the remove button if no MP3
+        removeBtn.remove();
+      }
+      
+      // Update card border
+      card.style.border = hasMp3 ? '2px solid #1db954' : '';
+      
+      // Update play overlay
+      let playOverlay = card.querySelector('.play-overlay');
+      const imageContainer = card.querySelector('div[style*="position:relative"]');
+      
+      if (hasMp3 && !playOverlay && imageContainer) {
+        // Add play overlay if MP3 exists but overlay doesn't
+        playOverlay = document.createElement('div');
+        playOverlay.className = 'play-overlay';
+        playOverlay.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:rgba(29,185,84,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+        playOverlay.innerHTML = '<span style="color:#fff;font-size:20px;margin-left:2px;">▶</span>';
+        imageContainer.appendChild(playOverlay);
+      } else if (!hasMp3 && playOverlay) {
+        // Remove play overlay if no MP3
+        playOverlay.remove();
+      }
+      
+      // Update click handlers for this specific card
+      updateCardEventListeners(trackId, card);
+      
+      console.log(`Updated MP3 elements for track ${trackId}`);
+    }
+
+    // Expose debug function globally
+    window.debugTrackIsolation = debugTrackIsolation;
+
+    // Function to update only a single track card without affecting others
+    function updateSingleTrackCard(trackId) {
+      const card = document.querySelector(`[data-trackid="${trackId}"]`);
+      if (!card) return;
+      
+      const meta = getCustomTrackMeta(trackId);
+      const originalTrack = getTrackById(trackId);
+      const customCover = meta.cover || originalTrack.cover;
+      const customName = meta.name || originalTrack.name;
+      const customArtist = meta.artist || originalTrack.artist;
+      const hasMp3 = !!meta.mp3;
+      
+      // Update cover image
+      const coverImg = card.querySelector(`#cover_${trackId}`);
+      if (coverImg) {
+        coverImg.src = customCover;
+        coverImg.style.cursor = hasMp3 ? 'pointer' : 'default';
+      }
+      
+      // Update track name
+      const nameSpan = card.querySelector(`#name_${trackId}`);
+      const nameInput = card.querySelector(`#input_name_${trackId}`);
+      if (nameSpan) nameSpan.textContent = customName;
+      if (nameInput) nameInput.value = customName;
+      
+      // Update artist name
+      const artistSpan = card.querySelector(`#artist_${trackId}`);
+      const artistInput = card.querySelector(`#input_artist_${trackId}`);
+      if (artistSpan) artistSpan.textContent = customArtist;
+      if (artistInput) artistInput.value = customArtist;
+      
+      // Update play button
+      const playBtn = card.querySelector('.play-mp3-btn');
+      if (playBtn) {
+        playBtn.style.background = hasMp3 ? '#1db954' : '#404040';
+        playBtn.style.color = hasMp3 ? '#181818' : '#b3b3b3';
+        playBtn.textContent = hasMp3 ? '🎵 Ready to Play' : '📁 Upload MP3';
+        playBtn.disabled = false;
+      }
+      
+      // Update/add remove button
+      let removeBtn = card.querySelector('.remove-mp3-btn');
+      const buttonContainer = card.querySelector('div[style*="margin-top:0.5rem"]');
+      
+      if (hasMp3 && !removeBtn && buttonContainer) {
+        // Add remove button if MP3 exists but button doesn't
+        removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-mp3-btn';
+        removeBtn.setAttribute('data-trackid', trackId);
+        removeBtn.title = 'Remove MP3';
+        removeBtn.style.cssText = 'background:#ff4444;border:none;border-radius:20px;padding:0.4rem 0.8rem;font-size:0.9rem;cursor:pointer;color:#fff;font-weight:600;transition:all 0.2s;';
+        removeBtn.textContent = '🗑️';
+        buttonContainer.appendChild(removeBtn);
+        
+        // Add event listener to new remove button
+        removeBtn.onclick = function(e) {
+          e.stopPropagation();
+          if (confirm('Are you sure you want to remove this MP3?')) {
+            removeTrackMp3(trackId);
+          }
+        };
+      } else if (!hasMp3 && removeBtn) {
+        // Remove the remove button if no MP3
+        removeBtn.remove();
+      }
+      
+      // Update card border
+      card.style.border = hasMp3 ? '2px solid #1db954' : '';
+      
+      // Update play overlay
+      let playOverlay = card.querySelector('.play-overlay');
+      const imageContainer = card.querySelector('div[style*="position:relative"]');
+      
+      if (hasMp3 && !playOverlay && imageContainer) {
+        // Add play overlay if MP3 exists but overlay doesn't
+        playOverlay = document.createElement('div');
+        playOverlay.className = 'play-overlay';
+        playOverlay.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:rgba(29,185,84,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;pointer-events:none;';
+        playOverlay.innerHTML = '<span style="color:#fff;font-size:20px;margin-left:2px;">▶</span>';
+        imageContainer.appendChild(playOverlay);
+      } else if (!hasMp3 && playOverlay) {
+        // Remove play overlay if no MP3
+        playOverlay.remove();
+      }
+      
+      // Update click handlers for this specific card
+      updateCardEventListeners(trackId, card);
+    }
+
+    // Function to update event listeners for a specific card
+    function updateCardEventListeners(trackId, card) {
+      const meta = getCustomTrackMeta(trackId);
+      
+      // Update cover image click
+      const coverImg = card.querySelector(`#cover_${trackId}`);
+      if (coverImg) {
+        if (meta.mp3) {
+          coverImg.style.cursor = 'pointer';
+          coverImg.onclick = function(e) {
+            e.stopPropagation();
+            playTrackFromCard(trackId);
+          };
+        } else {
+          coverImg.style.cursor = 'default';
+          coverImg.onclick = null;
+        }
+      }
+      
+      // Update track card click
+      if (meta.mp3) {
+        card.style.cursor = 'pointer';
+        card.onclick = function(e) {
+          // Don't trigger on button clicks
+          if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.tagName === 'SPAN') {
+            return;
+          }
+          playTrackFromCard(trackId);
+        };
+      } else {
+        card.style.cursor = 'default';
+        card.onclick = null;
+      }
+      
+      // Update play button click
+      const playBtn = card.querySelector('.play-mp3-btn');
+      if (playBtn) {
+        playBtn.onclick = function(e) {
+          e.stopPropagation();
+          const currentMeta = getCustomTrackMeta(trackId);
+          if (currentMeta.mp3) {
+            // Play the track
+            updateAllTracksFromRows();
+            const idx = allTracks.findIndex(t => t.id === trackId);
+            if (idx !== -1) {
+              loadTrack(idx, true);
+            }
+          } else {
+            // Open file dialog
+            document.getElementById('mp3file_' + trackId).click();
+          }
+        };
+      }
+    }
+    
+    // Function to remove MP3 from a specific track
+    function removeTrackMp3(trackId) {
+      let currentMeta = getCustomTrackMeta(trackId);
+      if (currentMeta.mp3) {
+        delete currentMeta.mp3;
+        const originalTrack = getTrackById(trackId);
+        
+        // Keep other customizations but remove MP3-related name if it matches file name
+        if (currentMeta.name && currentMeta.name !== originalTrack.name) {
+          // Keep custom name if it's different from original
+        } else {
+          delete currentMeta.name; // Remove name if it was just from MP3 upload
+        }
+        
+        // Save the updated metadata
+        if (Object.keys(currentMeta).length === 0) {
+          let allMetas = JSON.parse(localStorage.getItem('hertzCustomTrackMeta') || '{}');
+          delete allMetas[trackId];
+          localStorage.setItem('hertzCustomTrackMeta', JSON.stringify(allMetas));
+          localStorage.setItem('hertzCustomTrackMeta_backup', JSON.stringify(allMetas));
+        } else {
+          saveCustomTrackMeta(trackId, currentMeta);
+        }
+        
+        // Update tracks array
+        updateAllTracksFromRows();
+        
+        // Update only this specific card
+        updateSingleTrackCard(trackId);
+        
+        // Show success feedback
+        const card = document.querySelector(`[data-trackid="${trackId}"]`);
+        if (card) {
+          card.style.background = '#ff4444';
+          setTimeout(() => {
+            card.style.background = '#232526';
+          }, 500);
+        }
+      }
+    }
+
+    // ...existing code...
+  </script>
+  
+  <style>
+    .track-card:hover .play-overlay {
+      opacity: 1 !important;
+    }
+  </style>
+</body>
+</html>
