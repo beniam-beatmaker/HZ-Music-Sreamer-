@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hertz - Online Streaming</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #121212;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            background: #1a1a1a;
+        }
+
+        /* Navigation Buttons */
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #0066ff, #4d94ff);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #003366, #0066ff);
+            border-color: #0066ff;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        .nav-btn.active:hover {
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1db954;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
+        }
+
+        /* Search Box */
+        .search-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 25px;
+            background: #2a2a2a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            border: 1px solid #404040;
+        }
+
+        .search-box:focus {
+            background: #333;
+            border-color: #1db954;
+            transform: scale(1.02);
+        }
+
+        .search-box::placeholder {
+            color: #b3b3b3;
+        }
+
+        /* Track Lists */
+        .track-list {
+            background: #2a2a2a;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid #404040;
+        }
+
+        .section-title {
+            color: #0066ff;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Track Items */
+        .track-item {
+            background: #181818;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .track-item:hover {
+            background: #282828;
+            border-color: #1db954;
+            transform: translateY(-2px);
+        }
+
+        .track-info {
+            flex: 1;
+        }
+
+        .track-title {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .track-artist {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+        }
+
+        .play-btn {
+            background: linear-gradient(45deg, #1db954, #1ed760);
+            color: #fff;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(29, 185, 84, 0.3);
+            min-width: 80px;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(29, 185, 84, 0.5);
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: none;
+            padding: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: rgba(29, 185, 84, 0.3);
+            transform: scale(1.1);
+            color: #1db954;
+        }
+
+        .track-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .upload-btn {
+            background: linear-gradient(45deg, #0066ff, #4d94ff);
+            color: #fff;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+            margin: 0.25rem;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Legacy styles for existing functionality */
+        .feature-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            background: #2a2a2a;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            border: 1px solid #404040;
+        }
+
+        h2 {
+            margin-bottom: 1.5rem;
+            color: #1db954;
+        }
+
+        .media-player {
+            margin-bottom: 2rem;
+            background: #181818;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border: 1px solid #333;
+        }
+
+        .media-player .track-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .track {
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .track-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #1db954;
+            background: #222;
+        }
+
+        .genre-section {
+            margin-bottom: 2rem;
+        }
+
+        .genre-title {
+            font-size: 1.1rem;
+            color: #1db954;
+            margin-bottom: 0.7rem;
+        }
+
+        .genre-tracks {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .genre-track {
+            background: #181818;
+            border-radius: 10px;
+            padding: 1rem;
+            width: 260px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #333;
+            transition: all 0.3s ease;
+        }
+
+        .genre-track:hover {
+            background: #282828;
+            border-color: #1db954;
+            transform: translateY(-2px);
+        }
+
+        .genre-track .track-title {
+            font-size: 1rem;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            color: #1db954;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-left: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .like-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .like-btn.liked {
+            color: #fff700;
+        }
+
+        .lyrics-link {
+            color: #1db954;
+            text-decoration: underline;
+            font-size: 0.95em;
+            margin-left: 0.5em;
+            transition: all 0.3s ease;
+        }
+
+        .lyrics-link:hover {
+            color: #1ed760;
+        }
+
+        #ytSuggestionBox {
+            position: absolute;
+            background: #2a2a2a;
+            color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 1001;
+            width: 100%;
+            max-width: 500px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 1rem;
+            border: 1px solid #404040;
+    }
+    .yt-suggestion-item { display: flex; align-items: center; gap: 1rem; cursor: pointer; }
+    .yt-suggestion-item:hover, .yt-suggestion-item.active { background: #1db954 !important; color: #181818 !important; }
+
+    /* Navigation Buttons - Hide since we're using hamburger menu */
+    .nav-buttons {
+      display: none !important;
+    }
+    .nav-btn {
+      background: #282828;
+      color: #fff;
+      text-decoration: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.95rem;
+    }
+    .nav-btn:hover {
+      background: #0066ff;
+      border-color: #0066ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.3);
+    }
+    .nav-btn.active {
+      background: linear-gradient(45deg, #003366, #0066ff);
+      border-color: #0066ff;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+    }
+    .nav-btn.active:hover {
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+    }
+    @media (max-width: 900px) {
+      .feature-container { max-width: 100%; }
+      .genre-tracks { flex-direction: column; gap: 1rem; }
+      .genre-track { width: 100%; }
+      .track { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .mobile-menu-btn { display: block; }
+      header { flex-wrap: wrap; padding: 1rem; }
+      .search-bar { order: 3; width: 100%; margin-top: 1rem; max-width: none !important; }
+      .nav-buttons {
+        gap: 0.5rem;
+      }
+      .nav-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Hamburger Menu Styles */
+    .hamburger-menu {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 2000;
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .hamburger-menu:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    .hamburger-line {
+        width: 20px;
+        height: 2px;
+        background: #000;
+        border-radius: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* Navigation Dropdown */
+    .nav-dropdown {
+        position: fixed;
+        top: 80px;
+        left: 20px;
+        z-index: 1900;
+        background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
+        border-radius: 15px;
+        padding: 1rem;
+        min-width: 200px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        border: 2px solid #404040;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-dropdown.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .nav-dropdown .nav-btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.5rem;
+        text-align: left;
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        background: transparent;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .nav-dropdown .nav-btn:last-child {
+        margin-bottom: 0;
+    }
+
+    .nav-dropdown .nav-btn:hover {
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        color: #000;
+        transform: translateX(5px);
+        border-color: #FFD700;
+    }
+
+    .nav-dropdown .nav-btn.active {
+        background: linear-gradient(45deg, #0066ff, #4d94ff);
+        color: #fff;
+        border-color: #0066ff;
+    }
+
+    .nav-dropdown .nav-btn.active:hover {
+        background: linear-gradient(45deg, #FFD700, #FFA500);
+        color: #000;
+        border-color: #FFD700;
+    }
+  </style>
+</head>
+<body>
+  <!-- Hamburger Menu -->
+  <button class="hamburger-menu" id="hamburgerMenu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <!-- Navigation Dropdown -->
+  <div class="nav-dropdown" id="navDropdown">
+    <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
+    <a href="Online25App.html" class="nav-btn active">🌐 Online</a>
+    <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
+    <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+    <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
+    <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+    <a href="Account25App.html" class="nav-btn">👤 Account</a>
+    <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+  </div>
+
+  <div class="container">
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>🌐 <span style="color:#FFD700;">Hertz</span> <span style="color:#0066ff; font-size:2.0rem;">Online Streaming</span></h1>
+
+      <!-- Navigation Buttons -->
+      <div class="nav-buttons">
+        <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
+        <a href="Online25App.html" class="nav-btn active">🌐 Online</a>
+        <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
+        <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+        <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
+        <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+        <a href="Account25App.html" class="nav-btn">👤 Account</a>
+        <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+      </div>
+
+      <!-- Search -->
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search for tracks, artists, genres..." autocomplete="off">
+        <button onclick="searchTracks()" class="upload-btn" style="margin-top: 1rem;">Search</button>
+      </div>
+
+      <!-- Media Player -->
+      <div class="track-list">
+        <h3 class="section-title">🎵 Now Playing</h3>
+        <div class="media-player" id="mediaPlayer" style="display:none;">
+          <div class="track-title" id="playerTrackTitle" style="text-align:center; font-size:1.3rem; font-weight:bold; margin-bottom:1rem;"></div>
+          <iframe id="playerIframe" width="100%" height="100" style="border:none;" allow="autoplay"></iframe>
+          <div><a id="lyricsLink" class="lyrics-link" href="#" target="_blank" style="display:none;">View Lyrics on YouTube</a></div>
+        </div>
+      </div>
+
+      <!-- Search Results -->
+      <div class="track-list">
+        <h3 class="section-title">🔍 Search Results</h3>
+        <div id="searchResults">
+          <p style="color: #b3b3b3; text-align: center; padding: 2rem;">
+            Search for tracks above to see results here
+          </p>
+        </div>
+      </div>
+
+      <!-- Featured Genres -->
+      <div class="track-list">
+        <h3 class="section-title">🎶 Featured Tracks by Genre</h3>
+        <div id="genresContainer">
+          <p style="color: #b3b3b3; text-align: center; padding: 2rem;">
+            Loading featured tracks...
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="hertz-universal.js"></script>
+  <script>
+  // --- Mobile Menu Toggle ---
+  function toggleMobileMenu() {
+    const mobileNav = document.getElementById('mobileNav');
+    mobileNav.classList.toggle('active');
+  }
+
+  // --- Local tracks for genre/like/featured display ---
+  const tracks = [
+    {
+      title: "Billie Eilish - bad guy",
+      artist: "Billie Eilish",
+      genre: "Pop",
+      youtubeId: "DyDfgMOUjCI",
+      img: "https://i.scdn.co/image/ab67616d0000b273b8e2f6b3e7e7e3e8e8e8",
+      likes: 120,
+      featured: true
+    },
+    {
+      title: "The Weeknd - Blinding Lights",
+      artist: "The Weeknd",
+      genre: "Pop",
+      youtubeId: "fHI8X4OXluQ",
+      img: "https://i1.sndcdn.com/artworks-000652232857-4n7j7d-t500x500.jpg",
+      likes: 200,
+      featured: true
+    },
+    {
+      title: "Imagine Dragons - Believer",
+      artist: "Imagine Dragons",
+      genre: "Rock",
+      youtubeId: "7wtfhZwyrcc",
+      img: "https://i.scdn.co/image/ab67616d0000b273b2e2f6b3e7e7e3e8e8e8e8e8",
+      likes: 180,
+      featured: true
+    },
+    {
+      title: "Drake - God's Plan",
+      artist: "Drake",
+      genre: "Hip-Hop",
+      youtubeId: "xpVfcZ0ZcFM",
+      img: "https://i1.sndcdn.com/artworks-000304681792-2bq8w6-t500x500.jpg",
+      likes: 150,
+      featured: true
+    },
+    {
+      title: "Ed Sheeran - Shape of You",
+      artist: "Ed Sheeran",
+      genre: "Pop",
+      youtubeId: "JGwWNGJdvx8",
+      img: "https://i.scdn.co/image/ab67616d0000b273e8e8e8e8e8e8e8e8e8e8e8e8",
+      likes: 170,
+      featured: false
+    },
+    {
+      title: "Eminem - Lose Yourself",
+      artist: "Eminem",
+      genre: "Hip-Hop",
+      youtubeId: "_Yhyp-_hX2s",
+      img: "https://i1.sndcdn.com/artworks-000239443123-2bq8w6-t500x500.jpg",
+      likes: 210,
+      featured: false
+    },
+    {
+      title: "Queen - Bohemian Rhapsody",
+      artist: "Queen",
+      genre: "Rock",
+      youtubeId: "fJ9rUzIMcZQ",
+      img: "https://i.scdn.co/image/ab67616d0000b273b3e2f6b3e7e7e3e8e8e8e8e8",
+      likes: 300,
+      featured: false
+    },
+    {
+      title: "Miles Davis - So What",
+      artist: "Miles Davis",
+      genre: "Jazz",
+      youtubeId: "zqNTltOGh5c",
+      img: "https://i1.sndcdn.com/artworks-000239443123-2bq8w6-t500x500.jpg",
+      likes: 90,
+      featured: true
+    }
+  ];
+
+  let likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '[]');
+  const genres = [...new Set(tracks.map(t => t.genre))];
+
+  // --- Use only these 2 API keys and rotate between them ---
+  const YT_API_KEYS = [
+    'AIzaSyAdRN2jhOaF6ul_mSz_xQGXSyqlTvRhSXQ',
+    'AIzaSyAp60G0VgTBwhz32wQMK7hHdsBtg0LyAsM'
+  ];
+  let ytApiKeyIndex = 0;
+  function getYTApiKey() {
+    const key = YT_API_KEYS[ytApiKeyIndex];
+    ytApiKeyIndex = (ytApiKeyIndex + 1) % YT_API_KEYS.length;
+    return key;
+  }
+
+  function renderGenres() {
+    const container = document.getElementById('genresContainer');
+    container.innerHTML = '';
+    genres.forEach(genre => {
+      const genreTracks = tracks.filter(t => t.genre === genre);
+      const mostLiked = [...genreTracks].sort((a, b) => b.likes - a.likes)[0];
+      const featured = genreTracks.find(t => t.featured) || mostLiked;
+      container.innerHTML += `
+        <div class="genre-section">
+          <div class="genre-title">${genre}</div>
+          <div class="genre-tracks">
+            <div class="genre-track">
+              <img class="track-img" src="${mostLiked.img}" alt="${mostLiked.title}">
+              <div class="track-title">Most Liked: ${mostLiked.title}</div>
+              <div>Artist: ${mostLiked.artist}</div>
+              <div>Likes: <span id="likes-${mostLiked.youtubeId}">${mostLiked.likes + (likedTracks.some(t => t.youtubeId === mostLiked.youtubeId) ? 1 : 0)}</span>
+                <button class="like-btn${likedTracks.some(t => t.youtubeId === mostLiked.youtubeId) ? ' liked' : ''}" onclick="likeTrack('${mostLiked.youtubeId}')">&#9733;</button>
+              </div>
+              <button onclick="playTrack('${mostLiked.youtubeId}')">Play</button>
+              <a class="lyrics-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(mostLiked.title + ' lyrics')}" target="_blank">Lyrics</a>
+            </div>
+            <div class="genre-track">
+              <img class="track-img" src="${featured.img}" alt="${featured.title}">
+              <div class="track-title">Featured: ${featured.title}</div>
+              <div>Artist: ${featured.artist}</div>
+              <div>Likes: <span id="likes-${featured.youtubeId}">${featured.likes + (likedTracks.some(t => t.youtubeId === featured.youtubeId) ? 1 : 0)}</span>
+                <button class="like-btn${likedTracks.some(t => t.youtubeId === featured.youtubeId) ? ' liked' : ''}" onclick="likeTrack('${featured.youtubeId}')">&#9733;</button>
+              </div>
+              <button onclick="playTrack('${featured.youtubeId}')">Play</button>
+              <a class="lyrics-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(featured.title + ' lyrics')}" target="_blank">Lyrics</a>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  function playTrack(youtubeId) {
+    const track = tracks.find(t => t.youtubeId === youtubeId);
+    if (!track) return;
+    document.getElementById('mediaPlayer').style.display = 'block';
+    document.getElementById('playerTrackTitle').textContent = `${track.title} - ${track.artist}`;
+    document.getElementById('playerIframe').src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1`;
+    const lyricsLink = document.getElementById('lyricsLink');
+    lyricsLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(track.title + ' lyrics')}`;
+    lyricsLink.style.display = 'inline';
+  }
+
+  function likeTrack(youtubeId) {
+    const track = tracks.find(t => t.youtubeId === youtubeId);
+    if (!track) return;
+
+    const isAlreadyLiked = likedTracks.some(t => t.youtubeId === youtubeId);
+
+    if (isAlreadyLiked) {
+      // Remove from liked tracks
+      likedTracks = likedTracks.filter(t => t.youtubeId !== youtubeId);
+    } else {
+      // Add to liked tracks
+      likedTracks.push({
+        id: track.youtubeId,
+        youtubeId: track.youtubeId,
+        title: track.title,
+        artist: track.artist,
+        url: `https://www.youtube.com/watch?v=${track.youtubeId}`,
+        genre: track.genre,
+        img: track.img,
+        source: 'online'
+      });
+    }
+
+    localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracks));
+    renderGenres();
+    renderSearchResults(currentSearchResults);
+  }
+
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  let suggestionBox = null;
+  let ytSuggestions = [];
+  let suggestionIndex = -1;
+
+  // --- Always show and update recommendations as user types ---
+  function createSuggestionBox() {
+    if (!suggestionBox) {
+      suggestionBox = document.createElement('div');
+      suggestionBox.id = 'ytSuggestionBox';
+      suggestionBox.style.position = 'absolute';
+      suggestionBox.style.background = '#232526';
+      suggestionBox.style.color = '#fff';
+      suggestionBox.style.borderRadius = '10px';
+      suggestionBox.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+      suggestionBox.style.zIndex = '1001';
+      suggestionBox.style.width = searchInput.offsetWidth + 'px';
+      suggestionBox.style.maxWidth = '500px';
+      suggestionBox.style.maxHeight = '300px';
+      suggestionBox.style.overflowY = 'auto';
+      suggestionBox.style.fontSize = '1rem';
+      suggestionBox.style.left = searchInput.getBoundingClientRect().left + 'px';
+      suggestionBox.style.top = (searchInput.getBoundingClientRect().bottom + window.scrollY) + 'px';
+      document.body.appendChild(suggestionBox);
+    }
+  }
+
+  function positionSuggestionBox() {
+    if (suggestionBox) {
+      suggestionBox.style.width = searchInput.offsetWidth + 'px';
+      suggestionBox.style.left = searchInput.getBoundingClientRect().left + 'px';
+      suggestionBox.style.top = (searchInput.getBoundingClientRect().bottom + window.scrollY) + 'px';
+    }
+  }
+
+  // --- Robust YouTube Suggestions with API key rotation ---
+  async function fetchYTSuggestions(query) {
+    if (!query) {
+      ytSuggestions = [];
+      renderSuggestions();
+      return;
+    }
+    let success = false;
+    for (let i = 0; i < YT_API_KEYS.length; i++) {
+      try {
+        const key = getYTApiKey();
+        const resp = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=7&q=${encodeURIComponent(query)}&key=${key}`);
+        const data = await resp.json();
+        if (data && data.items) {
+          ytSuggestions = (data.items || []).map(item => ({
+            title: item.snippet.title,
+            videoId: item.id.videoId,
+            channel: item.snippet.channelTitle,
+            thumb: item.snippet.thumbnails && item.snippet.thumbnails.default ? item.snippet.thumbnails.default.url : ''
+          }));
+          success = true;
+          break;
+        }
+      } catch (e) {
+        // Try next key
+      }
+    }
+    if (!success) ytSuggestions = [];
+    renderSuggestions();
+  }
+
+  function renderSuggestions() {
+    if (!suggestionBox) createSuggestionBox();
+    if (!ytSuggestions.length) {
+      suggestionBox.style.display = 'none';
+      return;
+    }
+    suggestionBox.innerHTML = ytSuggestions.map((s, i) => `
+      <div class="yt-suggestion-item${i===suggestionIndex?' active':''}" data-index="${i}" style="padding:0.7rem 1rem;">
+        <img src="${s.thumb}" alt="" style="width:40px;height:40px;border-radius:6px;object-fit:cover;">
+        <div>
+          <div style="font-weight:600;">${s.title}</div>
+          <div style="font-size:0.95em;color:#b3b3b3;">${s.channel}</div>
+        </div>
+      </div>
+    `).join('');
+    suggestionBox.style.display = 'block';
+    positionSuggestionBox();
+    suggestionBox.querySelectorAll('.yt-suggestion-item').forEach(item => {
+      item.onclick = function() {
+        const idx = parseInt(item.getAttribute('data-index'));
+        selectSuggestion(idx);
+      };
+    });
+  }
+
+  function selectSuggestion(idx) {
+    if (!ytSuggestions[idx]) return;
+    searchInput.value = ytSuggestions[idx].title;
+    suggestionBox.style.display = 'none';
+    playYouTubeVideo(ytSuggestions[idx].videoId, ytSuggestions[idx].title);
+  }
+
+  function playYouTubeVideo(videoId, title) {
+    document.getElementById('mediaPlayer').style.display = 'block';
+    document.getElementById('playerTrackTitle').textContent = title;
+    const iframe = document.getElementById('playerIframe');
+    iframe.src = '';
+    setTimeout(() => {
+      iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    }, 50);
+    const lyricsLink = document.getElementById('lyricsLink');
+    lyricsLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(title + ' lyrics')}`;
+    lyricsLink.style.display = 'inline';
+    // Restore the user's search text in the search bar
+    if (window.lastSearchText !== undefined) {
+      searchInput.value = window.lastSearchText;
+    }
+    // Set the document title to the video title
+    document.title = title + " - Hertz";
+  }
+
+  // --- Show recommendations as user types and on focus ---
+  searchInput.addEventListener('input', function() {
+    window.lastSearchText = searchInput.value; // Store the latest search text
+    fetchYTSuggestions(searchInput.value.trim());
+    suggestionIndex = -1;
+  });
+
+  searchInput.addEventListener('focus', function() {
+    fetchYTSuggestions(searchInput.value.trim());
+  });
+
+  searchInput.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' && ytSuggestions.length) {
+      suggestionIndex = (suggestionIndex + 1) % ytSuggestions.length;
+      renderSuggestions();
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp' && ytSuggestions.length) {
+      suggestionIndex = (suggestionIndex - 1 + ytSuggestions.length) % ytSuggestions.length;
+      renderSuggestions();
+      e.preventDefault();
+    } else if (e.key === 'Enter') {
+      if (ytSuggestions.length && suggestionIndex >= 0) {
+        selectSuggestion(suggestionIndex);
+        e.preventDefault();
+      } else if (ytSuggestions.length) {
+        selectSuggestion(0);
+        e.preventDefault();
+      } else {
+        searchTracks();
+        e.preventDefault();
+      }
+    }
+  });
+
+  document.addEventListener('mousedown', function(e) {
+    if (suggestionBox && !suggestionBox.contains(e.target) && e.target !== searchInput) {
+      suggestionBox.style.display = 'none';
+    }
+  });
+
+  window.addEventListener('resize', positionSuggestionBox);
+
+  // --- Robust YouTube Search with API key rotation ---
+  let currentSearchResults = [];
+  async function searchTracks() {
+    const query = searchInput.value.trim();
+    if (!query) {
+      searchResults.innerHTML = '';
+      return;
+    }
+    // Try local tracks first
+    const localResults = tracks.filter(t =>
+      t.title.toLowerCase().includes(query.toLowerCase()) ||
+      t.artist.toLowerCase().includes(query.toLowerCase()) ||
+      t.genre.toLowerCase().includes(query.toLowerCase())
+    );
+    if (localResults.length > 0) {
+      currentSearchResults = localResults;
+      renderSearchResults(localResults);
+      return;
+    }
+    // If no local, fetch from YouTube
+    let data = null;
+    for (let i = 0; i < YT_API_KEYS.length; i++) {
+      try {
+        const key = getYTApiKey();
+        const resp = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=5&q=${encodeURIComponent(query)}&key=${key}`);
+        data = await resp.json();
+        if (data && data.items && data.items.length) break;
+      } catch (e) {
+        // Try next key
+      }
+    }
+    if (!data || !data.items || !data.items.length) {
+      searchResults.innerHTML = '<div style="color:#b3b3b3;">No tracks found.</div>';
+      return;
+    }
+    searchResults.innerHTML = data.items.map(item => `
+      <div class="track" style="cursor:pointer;" onclick="playYouTubeVideo('${item.id.videoId}', '${item.snippet.title.replace(/'/g,"&#39;")}')">
+        <img class="track-img" src="${item.snippet.thumbnails.default.url}" alt="${item.snippet.title}">
+        <div>
+          <div class="track-title">${item.snippet.title}</div>
+          <div style="color:#b3b3b3;">${item.snippet.channelTitle}</div>
+          <button style="background:#1db954;color:#181818;border:none;border-radius:20px;padding:0.2rem 1.1rem;font-size:0.97rem;cursor:pointer;font-weight:600;margin-top:0.5rem;">Play</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function renderSearchResults(results) {
+    const container = document.getElementById('searchResults');
+    if (!results || results.length === 0) {
+      container.innerHTML = '<div style="color:#b3b3b3;">No tracks found.</div>';
+      return;
+    }
+    container.innerHTML = results.map(track => `
+      <div class="track">
+        <img class="track-img" src="${track.img}" alt="${track.title}">
+        <div>
+          <div class="track-title">${track.title} - ${track.artist} <span style="color:#1db954;font-size:0.95em;">(${track.genre})</span></div>
+          <div>Likes: <span id="likes-${track.youtubeId}">${track.likes + (likedTracks.some(t => t.youtubeId === track.youtubeId) ? 1 : 0)}</span>
+            <button class="like-btn${likedTracks.some(t => t.youtubeId === track.youtubeId) ? ' liked' : ''}" onclick="likeTrack('${track.youtubeId}')">&#9733;</button>
+          </div>
+          <button onclick="playTrack('${track.youtubeId}')">Play</button>
+          <a class="lyrics-link" href="https://www.youtube.com/results?search_query=${encodeURIComponent(track.title + ' lyrics')}" target="_blank">Lyrics</a>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Expose for inline onclick
+  window.playYouTubeVideo = playYouTubeVideo;
+
+  // Hamburger Menu Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerBtn = document.getElementById('hamburgerMenu');
+    const dropdown = document.getElementById('navDropdown');
+
+    if (!hamburgerBtn || !dropdown) {
+        console.log('Hamburger menu elements not found');
+        return;
+    }
+
+    let isMenuOpen = false;
+
+    function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        console.log('Toggle menu called, isMenuOpen:', isMenuOpen);
+
+        if (isMenuOpen) {
+            dropdown.classList.add('show');
+            hamburgerBtn.classList.add('active');
+        } else {
+            dropdown.classList.remove('show');
+            hamburgerBtn.classList.remove('active');
+        }
+    }
+
+    function closeMenu() {
+        isMenuOpen = false;
+        dropdown.classList.remove('show');
+        hamburgerBtn.classList.remove('active');
+    }
+
+    // Hamburger button click
+    hamburgerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Hamburger button clicked');
+        toggleMenu();
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', function(e) {
+        if (isMenuOpen && !dropdown.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isMenuOpen) {
+            closeMenu();
+        }
+    });
+
+    // Close when clicking navigation links
+    const navLinks = dropdown.querySelectorAll('.nav-btn');
+    navLinks.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+  });
+
+  // Initial render
+  renderGenres();
+  </script>
+
+  <!-- Copyright Footer -->
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #b3b3b3; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; z-index: 999;">
+    © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  </div>
+</body>
+</html>
