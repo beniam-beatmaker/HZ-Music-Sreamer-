@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hertz - Account</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #fff; margin: 0; }
+    header { position: sticky; top: 0; background: #121212; padding: 1rem 2rem; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .logo-btn { font-size: 1.7rem; font-weight: bold; color: gold; background: transparent; border: 2px solid gold; border-radius: 30px; padding: 0.4rem 1.6rem; text-decoration: none; letter-spacing: 2px; cursor: pointer; transition: background 0.2s, color 0.2s;}
+    .logo-btn:hover, .logo-btn:focus { background: #0066ff; color: #fff; outline: none; border-color: #0066ff;}
+    nav { display: flex; gap: 1rem;}
+    nav a { text-decoration: none; color: #fff; background: #282828; padding: 0.6rem 1.4rem; border-radius: 30px; font-weight: 500; transition: background 0.2s, color 0.2s; border: 2px solid transparent;}
+    nav a:hover, nav a.active { background: #0066ff; color: #fff; border-color: #0066ff;}
+    .mobile-menu-btn { display: none; background: none; border: 2px solid gold; color: gold; font-size: 1.5rem; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+    .mobile-menu-btn:hover { background: #0066ff; color: #fff; border-color: #0066ff; }
+    .mobile-nav { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.95); z-index: 1000; padding-top: 4rem; }
+    .mobile-nav.active { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
+    .mobile-nav a { color: #fff; background: #282828; padding: 1rem 2rem; border-radius: 30px; font-weight: 500; text-decoration: none; font-size: 1.1rem; border: 2px solid transparent; transition: all 0.2s; }
+    .mobile-nav a:hover, .mobile-nav a.active { background: #0066ff; color: #fff; border-color: #0066ff; }
+    .mobile-nav .close-btn { position: absolute; top: 1rem; right: 2rem; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
+    .account-container { max-width: 440px; margin: 3rem auto; background: #232526; padding: 2rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+    h2 { margin-bottom: 1.5rem; }
+    label { display: block; margin-top: 1rem; color: #b3b3b3; }
+    input, select { width: 100%; padding: 0.7rem; margin-top: 0.3rem; border-radius: 8px; border: none; background: #181818; color: #fff; font-size: 1rem; }
+    button { margin-top: 1.5rem; padding: 0.7rem 2rem; border-radius: 30px; background: gold; color: #181818; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    button:hover { background: #0066ff; color: #fff; }
+    .saved { color: gold; margin-top: 1rem; }
+    .profile-img-container { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; }
+    .profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid gold; background: #282828; }
+    .img-upload-label { color: gold; cursor: pointer; font-size: 0.95rem; margin-top: 0.5rem; display: inline-block;}
+    .account-options { margin-top: 2rem; }
+    .option-group { margin-bottom: 1.5rem; }
+    .signout-btn { background: #282828; color: #fff; border: 2px solid gold; }
+    .signout-btn:hover { background: #0066ff; color: #fff; }
+    .danger-zone { margin-top: 2.5rem; border-top: 1px solid #333; padding-top: 1.5rem; }
+    .danger-btn { background: #d32f2f; color: #fff; border: none; }
+    .danger-btn:hover { background: #b71c1c; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .mobile-menu-btn { display: block; }
+      header { flex-wrap: wrap; padding: 1rem; }
+      .account-container { margin: 1rem; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="Hertz25App.html" class="logo-btn" aria-label="Go to Hertz homepage">Hertz</a>
+  </header>
+  <div class="account-container">
+    <h2>Your Account</h2>
+    <form id="accountForm" autocomplete="off">
+      <div class="profile-img-container">
+        <img id="profileImg" class="profile-img" src="https://ui-avatars.com/api/?name=User&background=232526&color=FFD700" alt="Profile Image">
+        <div>
+          <label class="img-upload-label">
+            Change Image
+            <input type="file" id="imgInput" accept="image/*" style="display:none;">
+          </label>
+        </div>
+      </div>
+      <label for="name">Name</label>
+      <input type="text" id="name" required>
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+      <label for="username">Username</label>
+      <input type="text" id="username" required>
+      <label for="country">Country</label>
+      <select id="country">
+        <option value="">Select country</option>
+        <option value="us">United States</option>
+        <option value="uk">United Kingdom</option>
+        <option value="ca">Canada</option>
+        <option value="au">Australia</option>
+        <option value="fr">France</option>
+        <option value="de">Germany</option>
+        <option value="other">Other</option>
+      </select>
+      <label for="bio">Bio</label>
+      <input type="text" id="bio" maxlength="120" placeholder="Tell us about yourself...">
+      <button type="submit">Save</button>
+      <div class="saved" id="savedMsg" style="display:none;">Saved!</div>
+    </form>
+    <div class="account-options">
+      <div class="option-group">
+        <label>
+          <input type="checkbox" id="newsletter"> Subscribe to newsletter
+        </label>
+      </div>
+      <div class="option-group">
+        <label>
+          <input type="checkbox" id="privateProfile"> Private profile
+        </label>
+      </div>
+      <div class="option-group">
+        <label>
+          <input type="checkbox" id="emailNotifications"> Email notifications
+        </label>
+      </div>
+      <button class="signout-btn" id="signoutBtn" type="button">Sign Out</button>
+    </div>
+    <div class="danger-zone">
+      <button class="danger-btn" id="deleteBtn" type="button">Delete Account</button>
+    </div>
+  </div>
+  <script src="hertz-universal.js"></script>
+  <script>
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const usernameInput = document.getElementById('username');
+    const countryInput = document.getElementById('country');
+    const bioInput = document.getElementById('bio');
+    const profileImg = document.getElementById('profileImg');
+    const imgInput = document.getElementById('imgInput');
+    const savedMsg = document.getElementById('savedMsg');
+    const newsletter = document.getElementById('newsletter');
+    const privateProfile = document.getElementById('privateProfile');
+    const emailNotifications = document.getElementById('emailNotifications');
+    const signoutBtn = document.getElementById('signoutBtn');
+    const deleteBtn = document.getElementById('deleteBtn');
+
+    // Load user data
+    window.onload = function() {
+      const user = JSON.parse(localStorage.getItem('hertzUser')) || {};
+      if(user.name) nameInput.value = user.name;
+      if(user.email) emailInput.value = user.email;
+      if(user.username) usernameInput.value = user.username;
+      if(user.country) countryInput.value = user.country;
+      if(user.bio) bioInput.value = user.bio;
+      if(user.img) profileImg.src = user.img;
+      newsletter.checked = !!user.newsletter;
+      privateProfile.checked = !!user.privateProfile;
+      emailNotifications.checked = !!user.emailNotifications;
+    };
+
+    // Save user data
+    document.getElementById('accountForm').onsubmit = function(e) {
+      e.preventDefault();
+      const user = {
+        name: nameInput.value,
+        email: emailInput.value,
+        username: usernameInput.value,
+        country: countryInput.value,
+        bio: bioInput.value,
+        img: profileImg.src,
+        newsletter: newsletter.checked,
+        privateProfile: privateProfile.checked,
+        emailNotifications: emailNotifications.checked
+      };
+      localStorage.setItem('hertzUser', JSON.stringify(user));
+      savedMsg.style.display = 'block';
+      setTimeout(()=>savedMsg.style.display='none', 1500);
+    };
+
+    // Handle image upload
+    imgInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profileImg.src = e.target.result;
+          // Save image to localStorage user object immediately
+          let user = JSON.parse(localStorage.getItem('hertzUser')) || {};
+          user.img = e.target.result;
+          user.name = nameInput.value;
+          user.email = emailInput.value;
+          user.username = usernameInput.value;
+          user.country = countryInput.value;
+          user.bio = bioInput.value;
+          user.newsletter = newsletter.checked;
+          user.privateProfile = privateProfile.checked;
+          user.emailNotifications = emailNotifications.checked;
+          localStorage.setItem('hertzUser', JSON.stringify(user));
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Click label triggers file input
+    document.querySelector('.img-upload-label').onclick = function() {
+      imgInput.click();
+    };
+
+    // Sign out
+    signoutBtn.onclick = function() {
+      localStorage.removeItem('hertzUser');
+      window.location.href = "Hertz App.html";
+    };
+
+    // Delete account
+    deleteBtn.onclick = function() {
+      if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+        localStorage.removeItem('hertzUser');
+        window.location.href = "Hertz App.html";
+      }
+    };
+  </script>
+
+  <!-- Copyright Footer -->
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #b3b3b3; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; z-index: 999;">
+    © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  </div>
+</body>
+</html>
