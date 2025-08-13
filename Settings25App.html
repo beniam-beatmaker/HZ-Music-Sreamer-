@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hertz - Settings</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC0+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #fff; margin: 0; }
+    header { position: sticky; top: 0; background: #121212; padding: 1rem 2rem; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .logo-btn { font-size: 1.7rem; font-weight: bold; color: gold; background: transparent; border: 2px solid gold; border-radius: 30px; padding: 0.4rem 1.6rem; text-decoration: none; letter-spacing: 2px; cursor: pointer; transition: background 0.2s, color 0.2s;}
+    .logo-btn:hover, .logo-btn:focus { background: #0066ff; color: #fff; outline: none; border-color: #0066ff;}
+    .settings-container { max-width: 500px; margin: 3rem auto; background: #232526; padding: 2rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
+    h2 { margin-bottom: 1.5rem; }
+    label { display: block; margin-top: 1rem; color: #b3b3b3; }
+    select, input[type="checkbox"], input[type="range"] { margin-top: 0.5rem; }
+    input[type="range"] { width: 100%; }
+    button { margin-top: 1.5rem; padding: 0.7rem 2rem; border-radius: 30px; background: #1db954; color: #181818; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    button:hover { background: #0066ff; color: #fff; }
+    .saved { color: #1db954; margin-top: 1rem; }
+    .setting-group { margin-bottom: 1.5rem; }
+    .range-value { color: #1db954; font-weight: bold; margin-left: 0.5rem; }
+    @media (max-width: 768px) {
+      .settings-container { margin: 1rem; padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="Hertz25App.html" class="logo-btn" aria-label="Go to Hertz homepage">Hertz</a>
+  </header>
+  <div class="settings-container">
+    <h2>Settings</h2>
+    <form id="settingsForm">
+      <div class="setting-group">
+        <label>
+          Theme
+          <select id="theme">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>
+          <input type="checkbox" id="autoplay"> Autoplay next track
+        </label>
+        <label>
+          <input type="checkbox" id="notifications"> Enable notifications
+        </label>
+        <label>
+          <input type="checkbox" id="explicit"> Allow explicit content
+        </label>
+        <label>
+          <input type="checkbox" id="crossfade"> Enable crossfade
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>
+          Streaming Quality
+          <select id="quality">
+            <option value="auto">Auto</option>
+            <option value="low">Low (64kbps)</option>
+            <option value="medium">Medium (128kbps)</option>
+            <option value="high">High (320kbps)</option>
+          </select>
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>
+          Volume
+          <input type="range" id="volume" min="0" max="100" step="1">
+          <span class="range-value" id="volumeValue"></span>
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>
+          Language
+          <select id="language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+            <option value="zh">Chinese</option>
+          </select>
+        </label>
+      </div>
+      <div class="setting-group">
+        <label>
+          <input type="checkbox" id="downloadWifi"> Download only on Wi-Fi
+        </label>
+        <label>
+          <input type="checkbox" id="privateSession"> Private session
+        </label>
+      </div>
+      <button type="submit">Save Settings</button>
+      <div class="saved" id="savedMsg" style="display:none;">Saved!</div>
+    </form>
+  </div>
+  <script src="hertz-universal.js"></script>
+  <script>
+    // Get elements
+    const theme = document.getElementById('theme');
+    const autoplay = document.getElementById('autoplay');
+    const notifications = document.getElementById('notifications');
+    const explicit = document.getElementById('explicit');
+    const crossfade = document.getElementById('crossfade');
+    const quality = document.getElementById('quality');
+    const volume = document.getElementById('volume');
+    const volumeValue = document.getElementById('volumeValue');
+    const language = document.getElementById('language');
+    const downloadWifi = document.getElementById('downloadWifi');
+    const privateSession = document.getElementById('privateSession');
+    const savedMsg = document.getElementById('savedMsg');
+
+    // Show volume value
+    function updateVolumeValue() {
+      volumeValue.textContent = volume.value + "%";
+    }
+    volume.addEventListener('input', updateVolumeValue);
+
+    // Load saved settings
+    window.onload = function() {
+      const settings = JSON.parse(localStorage.getItem('hertzSettings')) || {};
+      if(settings.theme) theme.value = settings.theme;
+      autoplay.checked = !!settings.autoplay;
+      notifications.checked = !!settings.notifications;
+      explicit.checked = !!settings.explicit;
+      crossfade.checked = !!settings.crossfade;
+      quality.value = settings.quality || "auto";
+      volume.value = settings.volume !== undefined ? settings.volume : 70;
+      language.value = settings.language || "en";
+      downloadWifi.checked = !!settings.downloadWifi;
+      privateSession.checked = !!settings.privateSession;
+      updateVolumeValue();
+      // Apply theme
+      applyTheme(settings.theme || theme.value);
+    };
+
+    // Apply theme function
+    function applyTheme(themeValue) {
+      if(themeValue === 'light') {
+        document.body.style.background = '#fff';
+        document.body.style.color = '#181818';
+      } else {
+        document.body.style.background = '#181818';
+        document.body.style.color = '#fff';
+      }
+    }
+
+    document.getElementById('settingsForm').onsubmit = function(e) {
+      e.preventDefault();
+      const settings = {
+        theme: theme.value,
+        autoplay: autoplay.checked,
+        notifications: notifications.checked,
+        explicit: explicit.checked,
+        crossfade: crossfade.checked,
+        quality: quality.value,
+        volume: volume.value,
+        language: language.value,
+        downloadWifi: downloadWifi.checked,
+        privateSession: privateSession.checked
+      };
+      localStorage.setItem('hertzSettings', JSON.stringify(settings));
+      savedMsg.style.display = 'block';
+      setTimeout(()=>savedMsg.style.display='none', 1500);
+      applyTheme(settings.theme);
+    };
+  </script>
+
+  <!-- Copyright Footer -->
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #b3b3b3; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; z-index: 999;">
+    © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  </div>
+</body>
+</html>
