@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -2625,7 +2625,7 @@ input[type="file"] {
 
   <!-- Navigation Dropdown -->
   <div class="nav-dropdown" id="navDropdown">
-    <a href="index.html" class="nav-btn">🏠 Home</a>
+    <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
     <a href="Online25App.html" class="nav-btn">🌐 Online</a>
     <a href="Offline25App.html" class="nav-btn active">📱 Offline</a>
     <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
@@ -2674,8 +2674,8 @@ input[type="file"] {
 
   <div class="spacer"></div>
   <div class="feature-container">
-    <h2>Offline Mode</h2>
-    <p class="desc">Upload and play your own music files and videos locally (offline).</p>
+    <h2></h2>
+    <p class="desc">For Producers to upload and play your own type beats and videos locally (offline).</p>
 
     <!-- Replace the file upload section with automatic processing -->
     <div style="display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:2rem;">
@@ -3118,12 +3118,13 @@ input[type="file"] {
       if (key && (key.includes('Track') || key.includes('Video') || key.includes('offline'))) {
         console.log(`${key}:`, localStorage.getItem(key));
       }
-    }
+
     console.log('=== LOCALSTORAGE CHECK COMPLETE ===');
   }
 
   window.checkLocalStorage = checkLocalStorage;
 
+    }
   // Bass Detection System for 808s and Kicks
   let audioContext = null;
   let analyser = null;
@@ -4118,6 +4119,29 @@ input[type="file"] {
     // Save to database and update library after visual feedback
     saveTrackToDB(track);
     renderOfflineLibrary();
+
+    // Also add to shared liked tracks for Liked25App.html
+    try {
+      let likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
+      if (track.liked && !likedTracks.some(t => t.id === track.id)) {
+        likedTracks.unshift({
+          id: track.id,
+          name: track.name,
+          artist: track.artist,
+          url: track.url || '',
+          likedAt: new Date().toISOString()
+        });
+        localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
+        localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+      } else if (!track.liked) {
+        // Remove from liked tracks if unliked
+        likedTracks = likedTracks.filter(t => t.id !== track.id);
+        localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
+        localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+      }
+    } catch (e) {
+      console.error('Error syncing liked track to global storage:', e);
+    }
   }
 
   // Toggle like for sticky player
@@ -4927,13 +4951,109 @@ function updateSelectAllButton() {
     document.getElementById(`menu-${trackId}`).style.display = 'none';
   };
 
-  window.shareTrack = function(trackId) {
+  // Place this inside your <script> tag, replacing ONLY the window.shareTrack function
+
+  window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+
+    // Remove any existing dropdown
+    document.getElementById('shareDropdown')?.remove();
+
     const track = offlineTracks.find(t => t.id === trackId);
-    if (track) {
-      navigator.clipboard.writeText(`Check out this track: ${track.name} by ${track.artist}`);
-      showNotification('Track info copied to clipboard!', 'success');
-    }
-    document.getElementById(`menu-${trackId}`).style.display = 'none';
+    if (!track) return;
+
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+      {
+        name: 'facebook',
+        url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+        icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+      },
+      {
+        name: 'x',
+        url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+        icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+      },
+      {
+        name: 'instagram',
+        url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+        icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+      },
+      {
+        name: 'whatsapp',
+        url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+        icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+      }
+    ];
+
+    // The link to share (could be a track page, or just the app)
+    const shareLink = window.location.origin + window.location.pathname + `#track-${track.id}`;
+    const shareText = `Check out "${track.name}" by ${track.artist || 'Unknown Artist'}`;
+
+    // Find the menu button to position the dropdown
+    const menuBtn = document.getElementById(`menu-${trackId}`);
+    let dropdownParent = document.body;
+
+    // Calculate position for dropdown
+    let rect = menuBtn?.getBoundingClientRect();
+    let top = rect ? rect.bottom + window.scrollY : 100;
+    let left = rect ? rect.left + window.scrollX : 100;
+
+    // Build dropdown HTML
+    let dropdown = document.createElement('div');
+    dropdown.id = 'shareDropdown';
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = top + 'px';
+    dropdown.style.left = left + 'px';
+    dropdown.style.background = 'transparent'; // Remove grey background
+    dropdown.style.borderRadius = '8px';
+    dropdown.style.boxShadow = 'none'; // Remove shadow
+    dropdown.style.padding = '0.3rem 0.5rem'; // Make very small
+    dropdown.style.zIndex = 9999;
+    dropdown.style.display = 'flex';
+    dropdown.style.flexDirection = 'row'; // Horizontal row
+    dropdown.style.gap = '0.3rem'; // Small gap
+    dropdown.style.minWidth = 'unset';
+    dropdown.style.width = 'auto';
+    dropdown.style.height = 'auto';
+    dropdown.style.alignItems = 'center';
+    dropdown.style.justifyContent = 'center';
+
+    platforms.forEach(platform => {
+      let btn = document.createElement('a');
+      btn.href = platform.url(shareLink, shareText);
+      btn.target = '_blank';
+      btn.rel = 'noopener noreferrer';
+      btn.style.display = 'flex';
+      btn.style.alignItems = 'center';
+      btn.style.justifyContent = 'center';
+      btn.style.background = 'none';
+      btn.style.border = 'none';
+      btn.style.color = '#fff';
+      btn.style.fontWeight = '500';
+      btn.style.fontSize = '1.2rem';
+      btn.style.textDecoration = 'none';
+      btn.style.padding = '0.5rem 0.2rem';
+      btn.style.borderRadius = '6px';
+      btn.style.transition = 'background 0.2s';
+      btn.onmouseover = () => btn.style.background = '#181818';
+      btn.onmouseout = () => btn.style.background = 'none';
+      btn.innerHTML = `${platform.icon}`;
+      dropdown.appendChild(btn);
+    });
+
+    // Remove dropdown on click outside
+    setTimeout(() => {
+      document.addEventListener('mousedown', function handler(e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.remove();
+          document.removeEventListener('mousedown', handler);
+        }
+      });
+    }, 10);
+
+    // Insert dropdown in DOM
+    dropdownParent.appendChild(dropdown);
   };
 
   window.shareVideo = function(videoId) {
@@ -5645,7 +5765,7 @@ function renderOfflineLibrary() {
           <div onclick="addToQueue('${track.id}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
             <span>📝</span> Add to Queue
           </div>
-          <div onclick="shareTrack('${track.id}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+          <div onclick="shareTrack('${track.id}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
             <span>🔗</span> Share
           </div>
           <div onclick="removeTrack('${track.id}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
@@ -5795,7 +5915,6 @@ window.playTrack = function(trackId) {
     isPlaying = true;
     // showNotification(`Now playing: ${track.name}`, 'success'); // Removed notification
   }
-};
 
 // Enhanced play video function
 window.playVideo = function(videoId) {
@@ -5827,7 +5946,7 @@ window.playVideo = function(videoId) {
   document.body.appendChild(modal);
 
   // showNotification(`Playing video: ${video.name}`, 'success'); // Removed notification
-};
+
 
 // Enhanced toggle like function
 window.toggleLike = function(trackId) {
@@ -6674,20 +6793,8 @@ window.toggleTrackSelection = function(trackId) {
 };
 
 // Enhanced play track function
-window.playTrack = function(trackId) {
-  const track = offlineTracks.find(t => t.id === trackId);
-  if (!track) return;
-
-  currentTrack = track;
-  currentIndex = queue.findIndex(t => t.id === trackId);
-  if (currentIndex === -1) currentIndex = 0;
-
-  const stickyPlayer = document.getElementById('stickyPlayer');
-  const playerTitle = document.getElementById('playerTrackTitle');
-  const playerAudio = document.getElementById('playerAudio');
-  const popupTitle = document.getElementById('popupTitle');
-
-  if (stickyPlayer && playerAudio) {
+// OVERRIDE: Only use the popup social media share logic (see earlier definition)
+// This is intentionally left blank to prevent clipboard or play logic from running.
     stickyPlayer.style.display = 'flex';
     if (playerTitle) playerTitle.textContent = track.name;
     if (popupTitle) popupTitle.textContent = track.name;
@@ -6754,6 +6861,28 @@ window.toggleTrackMenu = function(trackId) {
 
 window.likeTrack = function(trackId) {
   toggleLike(trackId);
+  // Also add to global liked tracks for Liked25App.html
+  try {
+    const track = offlineTracks.find(t => t.id === trackId);
+    if (track) {
+      let likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
+      // Prevent duplicates
+      if (!likedTracks.some(t => t.id === track.id)) {
+        likedTracks.unshift({
+          id: track.id,
+          name: track.name,
+          artist: track.artist,
+          url: track.url || '',
+          likedAt: new Date().toISOString()
+        });
+        localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
+        // Notify other tabs/pages
+        localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+      }
+    }
+  } catch (e) {
+    console.error('Error syncing liked track to global storage:', e);
+  }
   document.getElementById(`menu-${trackId}`).style.display = 'none';
 };
 
@@ -6766,14 +6895,6 @@ window.addToQueue = function(trackId) {
   document.getElementById(`menu-${trackId}`).style.display = 'none';
 };
 
-window.shareTrack = function(trackId) {
-  const track = offlineTracks.find(t => t.id === trackId);
-  if (track) {
-    navigator.clipboard.writeText(`Check out this track: ${track.name} by ${track.artist}`);
-    showNotification('Track info copied to clipboard!', 'success');
-  }
-  document.getElementById(`menu-${trackId}`).style.display = 'none';
-};
 
 window.removeTrack = function(trackId) {
   if (confirm('Are you sure you want to remove this track from your library?')) {
