@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hertz25 App</title>
   <style>
+  .card-display { background: linear-gradient(135deg, #232526 0%, #414345 100%); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 22px 28px 18px 28px; margin: 0 auto 18px auto; min-width: 270px; max-width: 340px; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; border: 1.5px solid #333; }
+  .card-chip { width: 38px; height: 24px; background: linear-gradient(90deg, #e0e0e0 0%, #bdbdbd 100%); border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+  .card-number { font-size: 1.25rem; letter-spacing: 2.5px; font-family: 'Roboto Mono', 'Courier New', monospace; margin-bottom: 6px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.18); }
+  .card-details-row { display: flex; align-items: center; gap: 12px; width: 100%; }
+  .card-label { font-size: 0.85rem; color: #bdbdbd; font-weight: 600; margin-right: 6px; }
+  .card-expiry { font-size: 1.05rem; font-family: 'Roboto Mono', 'Courier New', monospace; color: #fff; font-weight: 700; letter-spacing: 1.5px; }
   :root {
   /* Default (Dark) theme */
     --bg-main: #000;
@@ -1850,6 +1856,15 @@
       <div class="payment-modal-content">
         <button class="payment-modal-close" id="closePaymentModalBtn" title="Close">&times;</button>
         <h2 class="payment-modal-title">Upgrade to Premium</h2>
+        <!-- Professional Card Display -->
+        <div id="cardDisplay" class="card-display">
+          <div class="card-chip"></div>
+          <div class="card-number" id="displayCardNumber">1111 1111 1111 1111</div>
+          <div class="card-details-row">
+            <div class="card-label">Expiry</div>
+            <div class="card-expiry" id="displayCardExpiry">11/11</div>
+          </div>
+        </div>
         <form id="paymentForm" autocomplete="off">
           <label for="userEmail" class="payment-label">Email</label>
           <input type="email" id="userEmail" name="userEmail" class="payment-input" placeholder="you@email.com" required>
@@ -1927,6 +1942,32 @@
       }
     </style>
     <script>
+      // Card Display Live Update
+      const cardNumberInput = document.getElementById('cardNumber');
+      const displayCardNumber = document.getElementById('displayCardNumber');
+      const cardExpiryInput2 = document.getElementById('cardExpiry');
+      const displayCardExpiry = document.getElementById('displayCardExpiry');
+      function formatCardNumber(num) {
+        return num.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
+      }
+      cardNumberInput.addEventListener('input', function(e) {
+        let value = this.value.replace(/[^\d]/g, '');
+        let formatted = value.replace(/(.{4})/g, '$1 ').trim();
+        // Set the formatted value back to the input, preserving caret position
+        let caret = this.selectionStart;
+        let prevLength = this.value.length;
+        this.value = formatted;
+        let nextLength = formatted.length;
+        if (nextLength > prevLength && caret % 5 === 0 && caret < nextLength) {
+          this.selectionStart = this.selectionEnd = caret + 1;
+        } else {
+          this.selectionStart = this.selectionEnd = caret;
+        }
+        displayCardNumber.textContent = formatted || '1111 1111 1111 1111';
+      });
+      cardExpiryInput2.addEventListener('input', function() {
+        displayCardExpiry.textContent = this.value || '11/11';
+      });
       // Payment Modal Logic
       const openBtn = document.getElementById('openPaymentModalBtn');
       const modal = document.getElementById('paymentModal');
@@ -1957,8 +1998,8 @@
           alert('Please fill in all fields.');
           return;
         }
-        // Show professional confirmation
-        modal.querySelector('.payment-modal-content').innerHTML = `
+        // Only inject HTML, never <script> or <!-- ... -->
+        const confirmationHTML = `
           <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 0;">
             <div style="font-size:3rem;color:var(--accent-color);margin-bottom:16px;">✔️</div>
             <h2 style="color:var(--accent-color);margin-bottom:8px;">Payment Successful</h2>
@@ -1966,11 +2007,16 @@
             <button id="closeAfterPay" style="margin-top:12px;padding:10px 32px;border-radius:500px;background:var(--accent-color);color:var(--bg-main);font-weight:700;font-size:1rem;border:none;cursor:pointer;">Close</button>
           </div>
         `;
-        document.getElementById('closeAfterPay').onclick = function() {
-          modal.style.display = 'none';
-          document.body.style.overflow = '';
-          setTimeout(() => { location.reload(); }, 200);
-        };
+        modal.querySelector('.payment-modal-content').innerHTML = confirmationHTML;
+        // Re-attach close handler after DOM update
+        const closeAfterPayBtn = document.getElementById('closeAfterPay');
+        if (closeAfterPayBtn) {
+          closeAfterPayBtn.onclick = function() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            setTimeout(() => { location.reload(); }, 200);
+          };
+        }
       });
     </script>
       </div>
