@@ -1158,22 +1158,23 @@
     }
 
     /* Navigation Dropdown */
-    .nav-dropdown {
-        position: fixed;
-        top: 80px;
-        left: 20px;
-        z-index: 1900;
-        background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
-        border-radius: 15px;
-        padding: 1rem;
-        min-width: 200px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        border: 2px solid #404040;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
-    }
+  .nav-dropdown {
+    position: fixed;
+    top: 80px;
+    left: 20px;
+    z-index: 1900;
+    background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 15px;
+    padding: 1rem;
+    min-width: 200px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    border: 2px solid #404040;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-20px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
 
     .nav-dropdown.show {
         opacity: 1;
@@ -1181,17 +1182,19 @@
         transform: translateY(0);
     }
 
-    .nav-dropdown .nav-btn {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.5rem;
-        text-align: left;
-        padding: 0.8rem 1rem;
-        border-radius: 8px;
-        background: transparent;
-        border: 1px solid transparent;
-        transition: all 0.2s ease;
-    }
+  .nav-dropdown .nav-btn {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 0.5rem;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    overflow: hidden;
+  }
 
     .nav-dropdown .nav-btn:last-child {
         margin-bottom: 0;
@@ -1650,7 +1653,7 @@
 
     /* Copyright Footer */
     .copyright-footer {
-        position: absolute;
+        position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
@@ -1813,6 +1816,7 @@
         <a href="Online25App.html" class="nav-btn">🌐 Online</a>
         <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+        <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
         <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
@@ -1820,7 +1824,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <h1>🏠 <span style="color:#FFD700;">Hertz</span> <span style="color:#0066ff; font-size:2.0rem;">Music Hub</span></h1>
+      <h1> <span style="color:#FFD700;"></span> <span style="color:#0066ff; font-size:2.0rem;"></span></h1>
 
       <!-- Navigation Buttons -->
       <div class="nav-buttons">
@@ -2388,7 +2392,7 @@
         <button class="page-close-btn" onclick="closePage('accountPageOverlay')">Close</button>
       </div>
       <div id="accountContent">
-        <!-- Profile Section -->
+        <!-- Profile Section (Only) -->
         <div class="track-list">
           <h3 class="section-title">👤 Profile Information</h3>
           <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1.5rem;">
@@ -2396,14 +2400,13 @@
             <div style="flex: 1;">
               <h2 id="userName" style="color: #fff; margin-bottom: 0.5rem; font-size: 1.8rem;">Music Lover</h2>
               <p id="userUsername" style="color: #FFD700; margin-bottom: 0.3rem; font-weight: 500;">@username</p>
-              <p id="userEmail" style="color: #b3b3b3; margin-bottom: 0.3rem;">📧 user@hertz.music</p>
+              <p id="userEmail" style="color: #b3b3b3; margin-bottom: 0.3rem;">📧 <span id="profileEmail"></span></p>
               <p id="userCountry" style="color: #b3b3b3; margin-bottom: 0.3rem;">🌍 Country: Not specified</p>
               <p id="userBio" style="color: #b3b3b3; margin-bottom: 0.3rem; font-style: italic;">✨ Bio: Tell us about yourself...</p>
               <p id="memberSince" style="color: #b3b3b3; margin-bottom: 0.3rem;">📅 Member Since: January 2025</p>
               <p id="userPlan" style="color: #1db954; font-weight: bold;">🎵 Free Plan</p>
             </div>
           </div>
-
           <!-- Stats -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
             <div style="background: #333; padding: 1rem; border-radius: 8px; text-align: center;">
@@ -2424,74 +2427,24 @@
             </div>
           </div>
         </div>
-
-        <!-- Account Preferences -->
-        <div class="track-list">
-          <h3 class="section-title">⚙️ Account Preferences</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="background: #333; padding: 1rem; border-radius: 8px;">
-              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                <span style="font-size: 1.2rem;">📧</span>
-                <span style="color: #fff; font-weight: 600;">Newsletter</span>
-              </div>
-              <div id="newsletterStatus" style="color: #b3b3b3; font-size: 0.9rem;">Not subscribed</div>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 8px;">
-              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                <span style="font-size: 1.2rem;">🔒</span>
-                <span style="color: #fff; font-weight: 600;">Privacy</span>
-              </div>
-              <div id="privacyStatus" style="color: #b3b3b3; font-size: 0.9rem;">Public profile</div>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 8px;">
-              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                <span style="font-size: 1.2rem;">🔔</span>
-                <span style="color: #fff; font-weight: 600;">Notifications</span>
-              </div>
-              <div id="notificationStatus" style="color: #b3b3b3; font-size: 0.9rem;">Disabled</div>
-            </div>
-          </div>
+        <!-- Upgrade to Premium Button (shows same modal as Hertz25App.html) -->
+        <div style="margin-top:2rem; text-align:center;">
+          <button class="upgrade-btn" id="openPaymentModalBtnAccount" style="background: white; color: #1db954; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+            Upgrade to Premium
+          </button>
         </div>
-
-        <!-- Account Management -->
-        <div class="track-list">
-          <h3 class="section-title">⚙️ Account Management</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
-            <button class="upload-btn" onclick="editProfile()" style="display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>✏️</span> Edit Profile
-            </button>
-            <button class="upload-btn" onclick="changePassword()" style="background: linear-gradient(45deg, #ff6b35, #f7931e); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🔐</span> Change Password
-            </button>
-            <button class="upload-btn" onclick="manageNotifications()" style="background: linear-gradient(45deg, #6c5ce7, #a29bfe); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🔔</span> Notifications
-            </button>
-            <button class="upload-btn" onclick="privacySettings()" style="background: linear-gradient(45deg, #fd79a8, #e84393); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🛡️</span> Privacy
-            </button>
-          </div>
-        </div>
-
-        <!-- Subscription -->
-        <div class="track-list">
-          <h3 class="section-title">💳 Subscription & Billing</h3>
-          <div style="background: linear-gradient(45deg, #1db954, #1ed760); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
-            <h4 style="color: white; margin-bottom: 0.5rem;">Current Plan: Free</h4>
-            <p style="color: rgba(255,255,255,0.8); margin-bottom: 1rem;">Upgrade to Premium for ad-free listening, offline downloads, and high-quality audio.</p>
-            <button onclick="upgradeAccount()" style="background: white; color: #1db954; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
-              Upgrade to Premium
-            </button>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <button class="upload-btn" onclick="billingHistory()" style="background: linear-gradient(45deg, #0984e3, #74b9ff);">
-              📄 Billing History
-            </button>
-            <button class="upload-btn" onclick="paymentMethods()" style="background: linear-gradient(45deg, #00b894, #55efc4);">
-              💳 Payment Methods
-            </button>
-          </div>
-        </div>
+        <script>
+        // Set profile email from Account25App.html
+        document.addEventListener('DOMContentLoaded', function() {
+          var email = localStorage.getItem('accountEmail');
+          document.getElementById('profileEmail').textContent = email ? email : 'No email set';
+        });
+        // Upgrade to Premium button logic (show same modal as Hertz25App.html)
+        document.getElementById('openPaymentModalBtnAccount').onclick = function() {
+          var modal = document.getElementById('paymentModal');
+          if(modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+        };
+        </script>
 
         <!-- Activity & Data -->
         <div class="track-list">
