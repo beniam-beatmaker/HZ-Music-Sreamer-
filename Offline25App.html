@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -4996,7 +4996,9 @@ function updateSelectAllButton() {
 
     // Calculate position for dropdown
     let rect = menuBtn?.getBoundingClientRect();
-    let top = rect ? rect.bottom + window.scrollY : 100;
+    // Place above the track instead of below
+    let dropdownHeight = 40; // estimated height of the dropdown
+    let top = rect ? rect.top + window.scrollY - dropdownHeight - 8 : 100; // 8px gap above
     let left = rect ? rect.left + window.scrollX : 100;
 
     // Build dropdown HTML
@@ -5038,7 +5040,15 @@ function updateSelectAllButton() {
       btn.style.transition = 'background 0.2s';
       btn.onmouseover = () => btn.style.background = '#181818';
       btn.onmouseout = () => btn.style.background = 'none';
-      btn.innerHTML = `${platform.icon}`;
+      // Wrap the icon in a span with a small grey background
+      const iconWrapper = document.createElement('span');
+      iconWrapper.style.background = '#e0e0e0';
+      iconWrapper.style.borderRadius = '6px';
+      iconWrapper.style.padding = '4px';
+      iconWrapper.style.display = 'flex';
+      iconWrapper.style.alignItems = 'center';
+      iconWrapper.innerHTML = platform.icon;
+      btn.appendChild(iconWrapper);
       dropdown.appendChild(btn);
     });
 
