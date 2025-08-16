@@ -1,800 +1,799 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>HZ Music Hub</title>
-    <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
-    <style>
-    :root {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hertz25 App</title>
+  <style>
+  :root {
   /* Default (Dark) theme */
-      --bg-main: #000;
-      --bg-secondary: #181818;
-      --bg-tertiary: #222;
-      --text-primary: #fff;
-      --accent-color: #ffb700;
-    }
-    [data-theme="light"] {
-      --bg-main: #fff;
-      --bg-secondary: #f3f3f3;
-      --bg-tertiary: #eaeaea;
-      --text-primary: #181818;
-      --accent-color: #1db954;
-    }
-    [data-theme="green"] {
-      --bg-main: #1db954;
-      --bg-secondary: #1ed760;
-      --bg-tertiary: #b2f5c5;
-      --text-primary: #181818;
-      --accent-color: #1db954;
-    }
-    [data-theme="ocean-blue"] {
-      --bg-main: #185a9d;
-      --bg-secondary: #43cea2;
-      --bg-tertiary: #0a2540;
-      --text-primary: #ffffff;
-      --accent-color: #3ec6ff;
-    }
-    [data-theme="purple-vibes"] {
-      --bg-main: #7b2ff2;
-      --bg-secondary: #f357a8;
-      --bg-tertiary: #4f2c91;
-      --text-primary: #ffffff;
-      --accent-color: #e040fb;
-    }
-    /* Add more custom themes as needed */
-        /* Spotify-Authentic Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            font-size: 16px;
-        }
-
-    body {
-      font-family: 'Spotify Circular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: var(--bg-main);
-      color: var(--text-primary);
-      min-height: 100vh;
-      overflow-x: hidden;
-      line-height: 1.6;
-    }
-
-    .container {
-      display: flex;
-      min-height: 100vh;
-      position: relative;
-      background: var(--bg-main);
-    }
-
-        /* Spotify Main Content Layout */
-    .main-content {
-      flex: 1;
+    --bg-main: #000;
+    --bg-secondary: #181818;
+    --bg-tertiary: #222;
+    --text-primary: #fff;
+    --accent-color: #ffb700;
+  }
+  [data-theme="light"] {
+    --bg-main: #fff;
+    --bg-secondary: #f3f3f3;
+    --bg-tertiary: #eaeaea;
+    --text-primary: #181818;
+    --accent-color: #1db954;
+  }
+  [data-theme="green"] {
+    --bg-main: #1db954;
+    --bg-secondary: #1ed760;
+    --bg-tertiary: #b2f5c5;
+    --text-primary: #181818;
+    --accent-color: #1db954;
+  }
+  [data-theme="ocean-blue"] {
+    --bg-main: #185a9d;
+    --bg-secondary: #43cea2;
+    --bg-tertiary: #0a2540;
+    --text-primary: #ffffff;
+    --accent-color: #3ec6ff;
+  }
+  [data-theme="purple-vibes"] {
+    --bg-main: #7b2ff2;
+    --bg-secondary: #f357a8;
+    --bg-tertiary: #4f2c91;
+    --text-primary: #ffffff;
+    --accent-color: #e040fb;
+  }
+  /* Add more custom themes as needed */
+    /* Spotify-Authentic Base Styles */
+    * {
+      margin: 0;
       padding: 0;
-      background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 15%, var(--bg-main) 100%);
-      min-height: 100vh;
-      overflow-y: auto;
-      border-radius: 8px 8px 0 0;
-      margin: 8px 8px 0 8px;
+      box-sizing: border-box;
     }
 
-        /* Spotify Header */
-        .page-header {
-            padding: 16px 32px 24px 32px;
-            position: sticky;
-            top: 0;
-            background: linear-gradient(180deg, rgba(26, 26, 26, 0.8) 0%, rgba(18, 18, 18, 0.6) 50%, transparent 100%);
-            backdrop-filter: blur(16px);
-            z-index: 50;
-            border-bottom: none;
-        }
+    html {
+      font-size: 16px;
+    }
 
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            max-width: none;
-            margin: 0;
-            padding-bottom: 0;
-        }
+  body {
+    font-family: 'Spotify Circular', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg-main);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
 
-        .greeting-section {
-            flex: 1;
-        }
+  .container {
+    display: flex;
+    min-height: 100vh;
+    position: relative;
+    background: var(--bg-main);
+  }
 
-        .greeting-text {
-            font-size: 2rem;
-            font-weight: 900;
-            margin: 0;
-            color: #ffffff;
-            letter-spacing: -0.04em;
-            line-height: 1.2;
-        }
+    /* Spotify Main Content Layout */
+  .main-content {
+    flex: 1;
+    padding: 0;
+    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 15%, var(--bg-main) 100%);
+    min-height: 100vh;
+    overflow-y: auto;
+    border-radius: 8px 8px 0 0;
+    margin: 8px 8px 0 8px;
+  }
 
-        .time-based-message {
-            font-size: 0.875rem;
-            color: #a7a7a7;
-            margin-top: 4px;
-            font-weight: 400;
-        }
+    /* Spotify Header */
+    .page-header {
+      padding: 16px 32px 24px 32px;
+      position: sticky;
+      top: 0;
+      background: linear-gradient(180deg, rgba(26, 26, 26, 0.8) 0%, rgba(18, 18, 18, 0.6) 50%, transparent 100%);
+      backdrop-filter: blur(16px);
+      z-index: 50;
+      border-bottom: none;
+    }
 
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      max-width: none;
+      margin: 0;
+      padding-bottom: 0;
+    }
 
-        .upgrade-btn {
-            background: transparent;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 4px 16px;
-            border-radius: 500px;
-            font-weight: 700;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            height: 32px;
-        }
+    .greeting-section {
+      flex: 1;
+    }
 
-        .upgrade-btn:hover {
-            transform: scale(1.04);
-            border-color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-        }
+    .greeting-text {
+      font-size: 2rem;
+      font-weight: 900;
+      margin: 0;
+      color: #ffffff;
+      letter-spacing: -0.04em;
+      line-height: 1.2;
+    }
 
-        .premium-icon {
-            font-size: 0.875rem;
-        }
+    .time-based-message {
+      font-size: 0.875rem;
+      color: #a7a7a7;
+      margin-top: 4px;
+      font-weight: 400;
+    }
 
-        /* Spotify Content Sections */
-        .content-section {
-            margin-bottom: 40px;
-            padding: 0 32px;
-            max-width: none;
-            margin-left: 0;
-            margin-right: 0;
-        }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
+    .upgrade-btn {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 4px 16px;
+      border-radius: 500px;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      height: 32px;
+    }
 
-    .section-title {
+    .upgrade-btn:hover {
+      transform: scale(1.04);
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .premium-icon {
+      font-size: 0.875rem;
+    }
+
+    /* Spotify Content Sections */
+    .content-section {
+      margin-bottom: 40px;
+      padding: 0 32px;
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: -0.04em;
+    line-height: 1.3;
+  }
+
+    .show-all-link {
+      color: #a7a7a7;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: color 0.1s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .show-all-link:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .content-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 24px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .content-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Spotify Content Cards */
+    .content-card {
+      background: #181818;
+      border-radius: 8px;
+      padding: 16px;
+      transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: none;
+      box-shadow: none;
+    }
+
+    .content-card:hover {
+      background: #282828;
+      transform: translateY(0);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-image, .card-cover {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      object-fit: cover;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #333333, #1a1a1a);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .content-card:hover .card-image,
+    .content-card:hover .card-cover {
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-title, .card-title-text {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 4px;
+      line-height: 1.3;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      line-clamp: 1;
+      -webkit-box-orient: vertical;
+      letter-spacing: -0.04em;
+    }
+
+    .card-subtitle, .card-description {
+      font-size: 0.875rem;
+      color: #a7a7a7;
+      line-height: 1.3;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+      -webkit-box-orient: vertical;
+      font-weight: 400;
+    }
+
+    /* Artist Cards - Circular */
+    .artist-card .card-cover,
+    .artist-card .card-image {
+      border-radius: 50%;
+    }
+
+    /* Content Cards Container - Horizontal Layout */
+    .content-cards {
+      display: flex;
+      gap: 16px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .content-cards::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Small Content Cards */
+    .content-card-small {
+      padding: 12px;
+      width: 140px;
+      flex-shrink: 0;
+    }
+
+    .card-image-small {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 8px;
+    }
+
+    .card-title-small {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+
+    .card-description-small {
+      font-size: 0.7rem;
+      line-height: 1.2;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+
+    /* Spotify Play Button */
+    .play-button, .play-overlay {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      width: 48px;
+      height: 48px;
+      background: #1db954;
+      border: none;
+      border-radius: 50%;
+      color: #000000;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
+      box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+    }
+
+    .content-card:hover .play-button,
+    .content-card:hover .play-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .play-button:hover,
+    .play-overlay:hover {
+      transform: scale(1.05);
+      background: #1ed760;
+    }
+
+    /* Streaming Platform Track Display */
+    .track-list-container {
+      background: transparent;
+      border-radius: 8px;
+      margin: 32px 0;
+      padding: 0 32px;
+    }
+
+    .track-list-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .track-list-title {
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--text-primary);
+      color: #ffffff;
       margin: 0;
       letter-spacing: -0.04em;
-      line-height: 1.3;
     }
 
-        .show-all-link {
-            color: #a7a7a7;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: 700;
-            transition: color 0.1s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .show-all-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        .content-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 24px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .content-row::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Spotify Content Cards */
-        .content-card {
-            background: #181818;
-            border-radius: 8px;
-            padding: 16px;
-            transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            box-shadow: none;
-        }
-
-        .content-card:hover {
-            background: #282828;
-            transform: translateY(0);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .card-image, .card-cover {
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 4px;
-            object-fit: cover;
-            margin-bottom: 16px;
-            background: linear-gradient(135deg, #333333, #1a1a1a);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .content-card:hover .card-image,
-        .content-card:hover .card-cover {
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
-        }
-
-        .card-title, .card-title-text {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #ffffff;
-            margin-bottom: 4px;
-            line-height: 1.3;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            -webkit-box-orient: vertical;
-            letter-spacing: -0.04em;
-        }
-
-        .card-subtitle, .card-description {
-            font-size: 0.875rem;
-            color: #a7a7a7;
-            line-height: 1.3;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            font-weight: 400;
-        }
-
-        /* Artist Cards - Circular */
-        .artist-card .card-cover,
-        .artist-card .card-image {
-            border-radius: 50%;
-        }
-
-        /* Content Cards Container - Horizontal Layout */
-        .content-cards {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 8px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .content-cards::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Small Content Cards */
-        .content-card-small {
-            padding: 12px;
-            width: 140px;
-            flex-shrink: 0;
-        }
-
-        .card-image-small {
-            width: 100%;
-            height: 100px;
-            margin-bottom: 8px;
-        }
-
-        .card-title-small {
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 2px;
-            line-height: 1.2;
-        }
-
-        .card-description-small {
-            font-size: 0.7rem;
-            line-height: 1.2;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-        }
-
-        /* Spotify Play Button */
-        .play-button, .play-overlay {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
-            width: 48px;
-            height: 48px;
-            background: #1db954;
-            border: none;
-            border-radius: 50%;
-            color: #000000;
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(8px);
-            transition: all 0.3s cubic-bezier(0.3, 0, 0, 1);
-            box-shadow: 0 8px 8px rgba(0, 0, 0, 0.3);
-            z-index: 10;
-        }
-
-        .content-card:hover .play-button,
-        .content-card:hover .play-overlay {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .play-button:hover,
-        .play-overlay:hover {
-            transform: scale(1.05);
-            background: #1ed760;
-        }
-
-        /* Streaming Platform Track Display */
-        .track-list-container {
-            background: transparent;
-            border-radius: 8px;
-            margin: 32px 0;
-            padding: 0 32px;
-        }
-
-        .track-list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .track-list-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin: 0;
-            letter-spacing: -0.04em;
-        }
-
-        .track-list-controls {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .play-all-btn {
-            background: #1db954;
-            border: none;
-            border-radius: 50%;
-            width: 56px;
-            height: 56px;
-            color: #000000;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.1s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .play-all-btn:hover {
-            transform: scale(1.05);
-            background: #1ed760;
-        }
-
-        .track-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 16px;
-        }
-
-        .track-table-header {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 36px;
-        }
-
-        .track-table-header th {
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: #a7a7a7;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            padding: 0 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .track-table-header th:first-child {
-            width: 40px;
-            padding-left: 0;
-        }
-
-        .track-table-header th:nth-child(2) {
-            width: 50%;
-        }
-
-        .track-table-header th:nth-child(3) {
-            width: 25%;
-        }
-
-        .track-table-header th:nth-child(4) {
-            width: 15%;
-        }
-
-        .track-table-header th:last-child {
-            width: 60px;
-            padding-right: 0;
-        }
-
-        .track-row {
-            height: 56px;
-            border-radius: 4px;
-            transition: all 0.1s ease;
-            cursor: pointer;
-        }
-
-        .track-row:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .track-row td {
-            padding: 8px 16px;
-            border: none;
-            vertical-align: middle;
-        }
-
-        .track-row td:first-child {
-            padding-left: 0;
-            width: 40px;
-        }
-
-        .track-row td:last-child {
-            padding-right: 0;
-            width: 60px;
-        }
-
-        .track-number {
-            font-size: 1rem;
-            color: #a7a7a7;
-            font-weight: 400;
-            text-align: center;
-            width: 40px;
-        }
-
-        .track-row:hover .track-number {
-            opacity: 0;
-        }
-
-        .track-row:hover .track-play-btn {
-            opacity: 1;
-        }
-
-        .track-play-btn {
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 1rem;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.1s ease;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .track-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-        }
-
-        .track-artwork {
-            width: 40px;
-            height: 40px;
-            border-radius: 4px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #333333, #1a1a1a);
-        }
-
-        .track-details {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .track-name {
-            font-size: 1rem;
-            font-weight: 400;
-            color: #ffffff;
-            margin-bottom: 2px;
-            line-height: 1.3;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .track-artist {
-            font-size: 0.875rem;
-            color: #a7a7a7;
-            line-height: 1.3;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .track-album {
-            font-size: 0.875rem;
-            color: #a7a7a7;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .track-album:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-
-        .track-duration {
-            font-size: 0.875rem;
-            color: #a7a7a7;
-            font-weight: 400;
-            text-align: right;
-        }
-
-        .track-actions {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.1s ease;
-        }
-
-        .track-row:hover .track-actions {
-            opacity: 1;
-        }
-
-        .track-like-btn, .track-menu-btn {
-            background: transparent;
-            border: none;
-            color: #a7a7a7;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.1s ease;
-        }
-
-        .track-like-btn:hover, .track-menu-btn:hover {
-            color: #ffffff;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .track-like-btn.liked {
-            color: #1db954;
-        }
-
-        /* Recently Played Tracks Section */
-        .recently-played-tracks {
-            margin: 32px 0;
-            padding: 0 32px;
-        }
-
-        .recently-played-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .recently-played-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .recent-track-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            border-radius: 4px;
-            transition: all 0.1s ease;
-            cursor: pointer;
-        }
-
-        .recent-track-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .recent-track-artwork {
-            width: 48px;
-            height: 48px;
-            border-radius: 4px;
-            object-fit: cover;
-            background: linear-gradient(135deg, #333333, #1a1a1a);
-        }
-
-        .recent-track-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .recent-track-name {
-            font-size: 0.875rem;
-            font-weight: 400;
-            color: #ffffff;
-            margin-bottom: 2px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .recent-track-artist {
-            font-size: 0.75rem;
-            color: #a7a7a7;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .recent-track-time {
-            font-size: 0.75rem;
-            color: #a7a7a7;
-            white-space: nowrap;
-        }
-
-        /* Spotify Quick Access Cards */
-        .quick-access-card:hover {
-            transform: scale(1.02);
-            filter: brightness(1.1);
-        }
-
-        /* Navigation Buttons - Hide main nav since we use hamburger */
-        .nav-buttons {
-            display: none;
-        }
-
-        .nav-btn {
-            background: linear-gradient(45deg, #0066ff, #4d94ff);
-            color: #fff;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(45deg, #003366, #0066ff);
-            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
-        }
-
-        .nav-btn.active:hover {
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--accent-color);
-            font-size: 2.5rem;
-            text-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
-            transition: color 0.3s ease;
-        }
-
-        /* Track Lists */
-        .track-list {
-            background: var(--bg-tertiary);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .section-title {
-            color: var(--accent-color);
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .welcome {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 1.2rem;
-            color: var(--text-primary);
-            text-align: center;
-            transition: color 0.3s ease;
-        }
-
-        .desc {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            transition: color 0.3s ease;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .action-buttons a, .action-buttons button {
-            background: linear-gradient(45deg, #0066ff, #4d94ff);
-            color: #fff;
-            border: none;
-            padding: 0.8rem 2.2rem;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .action-buttons a:hover, .action-buttons button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
-        }
-
-        .action-buttons a.secondary {
-            background: transparent;
-            color: #FFD700;
-            border: 2px solid #FFD700;
-        }
-
-        .action-buttons a.secondary:hover {
-            background: #FFD700;
-            color: #000;
-        }
-
-        /* Search Box */
-        .search-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
+    .track-list-controls {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .play-all-btn {
+      background: #1db954;
+      border: none;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      color: #000000;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.1s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-all-btn:hover {
+      transform: scale(1.05);
+      background: #1ed760;
+    }
+
+    .track-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .track-table-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      height: 36px;
+    }
+
+    .track-table-header th {
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: #a7a7a7;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .track-table-header th:first-child {
+      width: 40px;
+      padding-left: 0;
+    }
+
+    .track-table-header th:nth-child(2) {
+      width: 50%;
+    }
+
+    .track-table-header th:nth-child(3) {
+      width: 25%;
+    }
+
+    .track-table-header th:nth-child(4) {
+      width: 15%;
+    }
+
+    .track-table-header th:last-child {
+      width: 60px;
+      padding-right: 0;
+    }
+
+    .track-row {
+      height: 56px;
+      border-radius: 4px;
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+
+    .track-row:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .track-row td {
+      padding: 8px 16px;
+      border: none;
+      vertical-align: middle;
+    }
+
+    .track-row td:first-child {
+      padding-left: 0;
+      width: 40px;
+    }
+
+    .track-row td:last-child {
+      padding-right: 0;
+      width: 60px;
+    }
+
+    .track-number {
+      font-size: 1rem;
+      color: #a7a7a7;
+      font-weight: 400;
+      text-align: center;
+      width: 40px;
+    }
+
+    .track-row:hover .track-number {
+      opacity: 0;
+    }
+
+    .track-row:hover .track-play-btn {
+      opacity: 1;
+    }
+
+    .track-play-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1rem;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .track-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .track-artwork {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #333333, #1a1a1a);
+    }
+
+    .track-details {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .track-name {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin-bottom: 2px;
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-artist {
+      font-size: 0.875rem;
+      color: #a7a7a7;
+      line-height: 1.3;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-album {
+      font-size: 0.875rem;
+      color: #a7a7a7;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .track-album:hover {
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    .track-duration {
+      font-size: 0.875rem;
+      color: #a7a7a7;
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .track-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+
+    .track-row:hover .track-actions {
+      opacity: 1;
+    }
+
+    .track-like-btn, .track-menu-btn {
+      background: transparent;
+      border: none;
+      color: #a7a7a7;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.1s ease;
+    }
+
+    .track-like-btn:hover, .track-menu-btn:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .track-like-btn.liked {
+      color: #1db954;
+    }
+
+    /* Recently Played Tracks Section */
+    .recently-played-tracks {
+      margin: 32px 0;
+      padding: 0 32px;
+    }
+
+    .recently-played-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .recently-played-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .recent-track-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+
+    .recent-track-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .recent-track-artwork {
+      width: 48px;
+      height: 48px;
+      border-radius: 4px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #333333, #1a1a1a);
+    }
+
+    .recent-track-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .recent-track-name {
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: #ffffff;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .recent-track-artist {
+      font-size: 0.75rem;
+      color: #a7a7a7;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .recent-track-time {
+      font-size: 0.75rem;
+      color: #a7a7a7;
+      white-space: nowrap;
+    }
+
+    /* Spotify Quick Access Cards */
+    .quick-access-card:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1);
+    }
+
+    /* Navigation Buttons - Hide main nav since we use hamburger */
+    .nav-buttons {
+      display: none;
+    }
+
+    .nav-btn {
+      background: linear-gradient(45deg, #0066ff, #4d94ff);
+      color: #fff;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+    }
+
+    .nav-btn.active {
+      background: linear-gradient(45deg, #003366, #0066ff);
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+    }
+
+    .nav-btn.active:hover {
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--accent-color);
+      font-size: 2.5rem;
+      text-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
+      transition: color 0.3s ease;
+    }
+
+    /* Track Lists */
+    .track-list {
+      background: var(--bg-tertiary);
+      border-radius: 15px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .section-title {
+      color: var(--accent-color);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .welcome {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      color: var(--text-primary);
+      text-align: center;
+      transition: color 0.3s ease;
+    }
+
+    .desc {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      transition: color 0.3s ease;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .action-buttons a, .action-buttons button {
+      background: linear-gradient(45deg, #0066ff, #4d94ff);
+      color: #fff;
+      border: none;
+      padding: 0.8rem 2.2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .action-buttons a:hover, .action-buttons button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.4);
+    }
+
+    .action-buttons a.secondary {
+      background: transparent;
+      color: #FFD700;
+      border: 2px solid #FFD700;
+    }
+
+    .action-buttons a.secondary:hover {
+      background: #FFD700;
+      color: #000;
+    }
+
+    /* Search Box */
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
 
         .search-box {
             width: 100%;
@@ -1870,7 +1869,7 @@
         </form>
       </div>
     </div>
-    <style>
+  <style>
       .payment-modal {
         position: fixed;
         top: 0; left: 0; width: 100vw; height: 100vh;
@@ -1936,14 +1935,8 @@
       closeBtn.addEventListener('click', () => { modal.style.display = 'none'; document.body.style.overflow = ''; });
       window.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.style.display === 'flex') { modal.style.display = 'none'; document.body.style.overflow = ''; } });
       modal.addEventListener('click', function(e) { if (e.target === modal) { modal.style.display = 'none'; document.body.style.overflow = ''; } });
-
-      // Card number auto-formatting (spaces every 4 digits)
-      const cardNumberInput = document.getElementById('cardNumber');
-      cardNumberInput.addEventListener('input', function(e) {
-        let value = this.value.replace(/\D/g, '').slice(0, 16);
-        value = value.replace(/(.{4})/g, '$1 ').trim();
-        this.value = value;
-      });
+      /* ...existing CSS... */
+  <!-- All JavaScript code should be placed inside <script> tags below, not inside <style> or outside tags. -->
 
       // Expiry auto-formatting (MM/YY)
       const cardExpiryInput = document.getElementById('cardExpiry');
@@ -2552,13 +2545,6 @@
               <input type="checkbox" id="autoplay" style="transform: scale(1.2);">
             </label>
 
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>🔔</span>
-                <span>Show desktop notifications for new tracks</span>
-              </span>
-              <input type="checkbox" id="notifications" checked style="transform: scale(1.2);">
-            </label>
 
             <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
               <span style="display: flex; align-items: center; gap: 0.5rem;">
@@ -2568,13 +2554,299 @@
               <input type="checkbox" id="crossfade" style="transform: scale(1.2);">
             </label>
 
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
+            <label id="remoteControlLabel" style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease; position: relative;">
               <span style="display: flex; align-items: center; gap: 0.5rem;">
                 <span>📱</span>
                 <span>Allow control from other devices</span>
               </span>
-              <input type="checkbox" id="remoteControl" checked style="transform: scale(1.2);">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <input type="checkbox" id="remoteControl" checked style="transform: scale(1.2);">
+                <button id="addBluetoothDeviceBtn" type="button" style="background: #0066ff; color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 0.5rem;">+</button>
+              </div>
             </label>
+            <div id="selectedBluetoothDevice" style="margin: 0 0 1rem 2.5rem; color: #FFD700; font-weight: 600; display: none;"></div>
+
+            <!-- Bluetooth Popup Modal -->
+            <div id="bluetoothPopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+              <div style="background:#232526; padding:2rem 2.5rem; border-radius:18px; box-shadow:0 4px 24px #000a; min-width:320px; max-width:90vw; margin:auto; display:flex; flex-direction:column; align-items:center;">
+                <h3 style="color:#FFD700; margin-bottom:1.2rem;">Add Bluetooth Device</h3>
+                <div id="bluetoothDeviceList" style="width:100%; margin-bottom:1.5rem; color:#fff; text-align:left;"></div>
+                <button id="closeBluetoothPopup" style="background:#444; color:#fff; border:none; border-radius:8px; padding:0.5rem 1.5rem; font-size:1rem; cursor:pointer;">Cancel</button>
+              </div>
+            </div>
+<script>
+// --- Simple WebSocket Remote Control ---
+// Uses public relay: wss://ws.postman-echo.com/raw (for demo/testing)
+let ws = null;
+let wsRoom = '';
+let wsIsHost = false;
+function openWebSocketRoom(room) {
+  if (ws) ws.close();
+  wsRoom = room;
+  ws = new WebSocket('wss://ws.postman-echo.com/raw');
+  ws.onopen = () => {
+    ws.send(JSON.stringify({ join: room }));
+    if (wsIsHost) document.getElementById('wsStatus').textContent = 'Connected as host';
+    else document.getElementById('wsStatus').textContent = 'Connected as guest';
+  };
+  ws.onclose = () => {
+    document.getElementById('wsStatus').textContent = 'Disconnected';
+  };
+  ws.onerror = () => {
+    document.getElementById('wsStatus').textContent = 'WebSocket error';
+  };
+  ws.onmessage = (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+      if (msg.room !== wsRoom) return;
+      if (msg.cmd === 'play') document.getElementById('playPauseBtn')?.click();
+      if (msg.cmd === 'pause') document.getElementById('playPauseBtn')?.click();
+      if (msg.cmd === 'next') document.getElementById('nextBtn')?.click();
+      if (msg.cmd === 'prev') document.getElementById('prevBtn')?.click();
+      if (msg.cmd && msg.cmd.startsWith('search:')) {
+        const query = msg.cmd.slice(7);
+        const searchInput = document.querySelector('input[type="search"], input#searchBar, input.search-bar');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.value = query;
+          searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }
+      if (msg.cmd === 'openmenu') document.getElementById('hamburgerMenu')?.click();
+      if (msg.cmd && msg.cmd.startsWith('selectpage:')) {
+        const page = msg.cmd.slice(11);
+        const navLinks = document.querySelectorAll('.nav-dropdown .nav-btn, .nav-btn');
+        for (const link of navLinks) {
+          if (link.getAttribute('href') === page || link.textContent.trim().toLowerCase().includes(page.trim().toLowerCase())) {
+            link.click();
+            break;
+          }
+        }
+      }
+    } catch {}
+  };
+}
+function sendWsCmd(cmd) {
+  if (ws && ws.readyState === 1 && wsRoom) {
+    ws.send(JSON.stringify({ room: wsRoom, cmd }));
+  }
+}
+// UI for remote control
+document.addEventListener('DOMContentLoaded', function() {
+  const wsDiv = document.createElement('div');
+  wsDiv.style = 'margin:1rem 0 1rem 0; padding:1rem; background:#181818; border-radius:10px; color:#FFD700;';
+  wsDiv.innerHTML = `
+    <b>Remote Control (WebSocket)</b><br>
+    <input id="wsRoomInput" placeholder="Enter room code" style="margin:0.5rem 0.5rem 0.5rem 0; padding:0.3rem; border-radius:5px; border:1px solid #FFD700;" />
+    <button id="wsHostBtn" style="margin-right:0.5rem;">Host</button>
+    <button id="wsJoinBtn">Join</button>
+    <span id="wsStatus" style="margin-left:1rem; color:#FFD700;">Not connected</span>
+  `;
+  const settings = document.querySelector('.track-list');
+  if (settings) settings.parentNode.insertBefore(wsDiv, settings);
+  document.getElementById('wsHostBtn').onclick = () => {
+    wsIsHost = true;
+    openWebSocketRoom(document.getElementById('wsRoomInput').value.trim());
+  };
+  document.getElementById('wsJoinBtn').onclick = () => {
+    wsIsHost = false;
+    openWebSocketRoom(document.getElementById('wsRoomInput').value.trim());
+  };
+  // Send commands on local actions
+  document.getElementById('playPauseBtn')?.addEventListener('click', () => {
+    const audio = document.getElementById('playerAudio');
+    sendWsCmd(audio.paused ? 'pause' : 'play');
+  });
+  document.getElementById('nextBtn')?.addEventListener('click', () => sendWsCmd('next'));
+  document.getElementById('prevBtn')?.addEventListener('click', () => sendWsCmd('prev'));
+  const searchInput = document.querySelector('input[type="search"], input#searchBar, input.search-bar');
+  if (searchInput) {
+    searchInput.addEventListener('change', () => {
+      sendWsCmd('search:' + searchInput.value);
+    });
+  }
+  const hamburgerMenu = document.getElementById('hamburgerMenu');
+  if (hamburgerMenu) {
+    hamburgerMenu.addEventListener('click', () => {
+      sendWsCmd('openmenu');
+    });
+  }
+  document.querySelectorAll('.nav-dropdown .nav-btn, .nav-btn').forEach(link => {
+    link.addEventListener('click', () => {
+      const href = link.getAttribute('href') || link.textContent.trim();
+      sendWsCmd('selectpage:' + href);
+    });
+  });
+});
+// Bluetooth device selection logic for Allow control from other devices
+document.addEventListener('DOMContentLoaded', function() {
+  const addBtn = document.getElementById('addBluetoothDeviceBtn');
+  const popup = document.getElementById('bluetoothPopup');
+  const closeBtn = document.getElementById('closeBluetoothPopup');
+  const deviceListDiv = document.getElementById('bluetoothDeviceList');
+  const selectedDiv = document.getElementById('selectedBluetoothDevice');
+  let selectedDevice = null;
+
+  // Use Web Bluetooth API for real device discovery
+  addBtn.addEventListener('click', async function(e) {
+    e.preventDefault();
+    popup.style.display = 'flex';
+    deviceListDiv.innerHTML = '<div style="color:#FFD700;">Scanning for Bluetooth devices...</div>';
+    try {
+      // Request Bluetooth device (scan for paired devices advertising standard services: Media Control, HID, or custom)
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [
+          'media_control',
+          'human_interface_device',
+          'generic_access',
+          'generic_attribute',
+          '0000abcd-0000-1000-8000-00805f9b34fb'
+        ]
+      });
+      // Show the device in the list
+  deviceListDiv.innerHTML = `<button type="button" data-id="${device.id}" style="width:100%;margin-bottom:0.5rem;padding:0.7rem 1rem;background:#181818;color:#FFD700;border:none;border-radius:8px;font-size:1rem;cursor:pointer;text-align:left;">${device.name || 'Unnamed Device'}</button>`;
+      // Add click listener
+      const btn = deviceListDiv.querySelector('button');
+      btn.onclick = async function() {
+        selectedDevice = device;
+        selectedDiv.textContent = `Connected: ${device.name || 'Unnamed Device'}`;
+        selectedDiv.style.display = 'block';
+        popup.style.display = 'none';
+        // Connect to GATT server and enable track control communication
+        try {
+          const server = await device.gatt.connect();
+          // Try standard Media Control Service first, then fallback to custom
+          let controlChar = null;
+          let service = null;
+          try {
+            // Try Media Control Service (standard)
+            service = await server.getPrimaryService('media_control');
+            // Try to get characteristic for media control (play/pause/next/prev)
+            // This is a placeholder, as the actual characteristic UUIDs may vary by device
+            controlChar = await service.getCharacteristic('00002b93-0000-1000-8000-00805f9b34fb'); // Media Control Point
+          } catch (e) {
+            try {
+              // Try HID Service (standard)
+              service = await server.getPrimaryService('human_interface_device');
+              // Try to get a characteristic (this is a placeholder, as HID is complex)
+              controlChar = await service.getCharacteristic('00002a4d-0000-1000-8000-00805f9b34fb'); // HID Report
+            } catch (e2) {
+              try {
+                // Fallback to custom service/characteristic
+                service = await server.getPrimaryService('0000abcd-0000-1000-8000-00805f9b34fb');
+                controlChar = await service.getCharacteristic('0000dcba-0000-1000-8000-00805f9b34fb');
+              } catch (e3) {
+                // Service/characteristic not found, show error
+                selectedDiv.textContent = 'Device does not support remote control';
+                setTimeout(() => { selectedDiv.style.display = 'none'; }, 2000);
+                return;
+              }
+            }
+          }
+
+          // Listen for remote control commands (if supported)
+          if (controlChar.properties.notify) {
+            await controlChar.startNotifications();
+            controlChar.addEventListener('characteristicvaluechanged', event => {
+              const value = new TextDecoder().decode(event.target.value);
+              // Handle received command: 'play', 'pause', 'next', 'prev', 'search:<query>', 'openmenu', 'selectpage:<page>'
+              if (value === 'play') document.getElementById('playPauseBtn')?.click();
+              if (value === 'pause') document.getElementById('playPauseBtn')?.click();
+              if (value === 'next') document.getElementById('nextBtn')?.click();
+              if (value === 'prev') document.getElementById('prevBtn')?.click();
+              if (value.startsWith('search:')) {
+                const query = value.slice(7);
+                const searchInput = document.querySelector('input[type="search"], input#searchBar, input.search-bar');
+                if (searchInput) {
+                  searchInput.focus();
+                  searchInput.value = query;
+                  // Trigger input event for live search
+                  searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+              }
+              if (value === 'openmenu') {
+                document.getElementById('hamburgerMenu')?.click();
+              }
+              if (value.startsWith('selectpage:')) {
+                const page = value.slice(11);
+                // Find nav link by href or text and click it
+                const navLinks = document.querySelectorAll('.nav-dropdown .nav-btn, .nav-btn');
+                for (const link of navLinks) {
+                  if (link.getAttribute('href') === page || link.textContent.trim().toLowerCase().includes(page.trim().toLowerCase())) {
+                    link.click();
+                    break;
+                  }
+                }
+              }
+            });
+          }
+
+          // Send local control commands to the connected device
+          function sendControlCommand(cmd) {
+            if (controlChar && controlChar.properties.write) {
+              const data = new TextEncoder().encode(cmd);
+              controlChar.writeValue(data).catch(() => {});
+            }
+          }
+          // Attach to local player controls
+          document.getElementById('playPauseBtn')?.addEventListener('click', () => {
+            const audio = document.getElementById('playerAudio');
+            sendControlCommand(audio.paused ? 'pause' : 'play');
+          });
+          document.getElementById('nextBtn')?.addEventListener('click', () => sendControlCommand('next'));
+          document.getElementById('prevBtn')?.addEventListener('click', () => sendControlCommand('prev'));
+          // Attach to search bar (send search:<query> command)
+          const searchInput = document.querySelector('input[type="search"], input#searchBar, input.search-bar');
+          if (searchInput) {
+            searchInput.addEventListener('change', () => {
+              sendControlCommand('search:' + searchInput.value);
+            });
+          }
+          // Attach to hamburger menu (send openmenu command)
+          const hamburgerMenu = document.getElementById('hamburgerMenu');
+          if (hamburgerMenu) {
+            hamburgerMenu.addEventListener('click', () => {
+              sendControlCommand('openmenu');
+            });
+          }
+          // Attach to nav links (send selectpage:<page> command)
+          document.querySelectorAll('.nav-dropdown .nav-btn, .nav-btn').forEach(link => {
+            link.addEventListener('click', () => {
+              const href = link.getAttribute('href') || link.textContent.trim();
+              sendControlCommand('selectpage:' + href);
+            });
+          });
+
+          // Listen for disconnect
+          device.addEventListener('gattserverdisconnected', () => {
+            selectedDiv.textContent = 'Device disconnected';
+            setTimeout(() => { selectedDiv.style.display = 'none'; }, 2000);
+          });
+        } catch (err) {
+          selectedDiv.textContent = 'Failed to connect to device';
+          setTimeout(() => { selectedDiv.style.display = 'none'; }, 2000);
+        }
+      };
+    } catch (err) {
+      if (err?.name === 'NotFoundError') {
+        deviceListDiv.innerHTML = '<div style="color:#e17055;">No device selected.</div>';
+      } else if (!navigator.bluetooth) {
+        deviceListDiv.innerHTML = '<div style="color:#e17055;">Bluetooth not available in this browser. Please use Chrome, Edge, or a supported browser and enable Bluetooth.</div>';
+      } else {
+        deviceListDiv.innerHTML = `<div style="color:#e17055;">Bluetooth error: ${err.message || err}</div>`;
+      }
+    }
+  });
+  closeBtn.addEventListener('click', function() {
+    popup.style.display = 'none';
+  });
+  // Hide popup if clicking outside modal
+  popup.addEventListener('mousedown', function(e) {
+    if (e.target === popup) popup.style.display = 'none';
+  });
+});
+</script>
 
             <div style="margin-top: 1.5rem;">
               <label style="display: block; color: var(--accent-color); font-weight: bold; margin-bottom: 0.5rem; transition: color 0.3s ease;">Crossfade Duration</label>
@@ -2612,59 +2884,15 @@
               <input type="checkbox" id="visualizations" checked style="transform: scale(1.2);">
             </label>
 
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>🖼️</span>
-                <span>Display album artwork in background</span>
-              </span>
-              <input type="checkbox" id="albumBackground" style="transform: scale(1.2);">
-            </label>
           </div>
         </div>
 
-        <!-- Privacy & Security -->
-        <div class="track-list">
-          <h3 class="section-title">🔒 Privacy & Security</h3>
-          <div style="padding: 1rem 0;">
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>📊</span>
-                <span>Share listening data for recommendations</span>
-              </span>
-              <input type="checkbox" id="shareData" checked style="transform: scale(1.2);">
-            </label>
-
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>👥</span>
-                <span>Make my playlists public by default</span>
-              </span>
-              <input type="checkbox" id="publicPlaylists" style="transform: scale(1.2);">
-            </label>
-
-            <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>🔍</span>
-                <span>Allow others to find me by email</span>
-              </span>
-              <input type="checkbox" id="findByEmail" style="transform: scale(1.2);">
-            </label>
-          </div>
-        </div>
+  <!-- Privacy & Security section removed -->
 
         <!-- Data & Storage -->
         <div class="track-list">
           <h3 class="section-title">💾 Data & Storage</h3>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <button class="upload-btn" onclick="clearCache()" style="background: linear-gradient(45deg, #e17055, #fdcb6e); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🧹</span> Clear Cache
-            </button>
-            <button class="upload-btn" onclick="exportData()" style="background: linear-gradient(45deg, #0984e3, #74b9ff); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>📤</span> Export Data
-            </button>
-            <button class="upload-btn" onclick="importData()" style="background: linear-gradient(45deg, #00b894, #55efc4); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>📥</span> Import Data
-            </button>
             <button class="upload-btn" onclick="resetSettings()" style="background: linear-gradient(45deg, #6c5ce7, #a29bfe); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
               <span>🔄</span> Reset Settings
             </button>
@@ -2679,24 +2907,7 @@
           </div>
         </div>
 
-        <!-- Advanced -->
-        <div class="track-list">
-          <h3 class="section-title">🔧 Advanced</h3>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <button class="upload-btn" onclick="developerMode()" style="background: linear-gradient(45deg, #fd79a8, #e84393); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>👨‍💻</span> Developer Mode
-            </button>
-            <button class="upload-btn" onclick="betaFeatures()" style="background: linear-gradient(45deg, #fdcb6e, #e17055); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🧪</span> Beta Features
-            </button>
-            <button class="upload-btn" onclick="diagnostics()" style="background: linear-gradient(45deg, #00cec9, #81ecec); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>🩺</span> Diagnostics
-            </button>
-            <button class="upload-btn" onclick="about()" style="background: linear-gradient(45deg, #a29bfe, #6c5ce7); display: flex; align-items: center; gap: 0.5rem; justify-content: center;">
-              <span>ℹ️</span> About Hertz
-            </button>
-          </div>
-        </div>
+  <!-- Advanced section removed -->
 
         <!-- Copyright Footer -->
         <div style="text-align: center; padding: 2rem 1rem 1rem 1rem; margin-top: 2rem; border-top: 1px solid #404040;">
