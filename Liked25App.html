@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Hertz - Liked Songs</title>
+  <title>HZ Liked Songs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
 <style>
@@ -59,29 +59,36 @@
       border: 2px solid #FFD700;
       flex-direction: column;
       align-items: stretch;
+      overflow: hidden;
     }
     .nav-dropdown .nav-btn {
       display: block;
       width: 100%;
+      box-sizing: border-box;
       padding: 0.8rem 1.2rem;
       margin: 0.2rem 0;
       background: none;
       border: none;
-      color: #FFD700;
+      color: #fff;
       font-size: 1.1rem;
       font-weight: 600;
       text-align: left;
       border-radius: 8px;
       transition: background 0.2s, color 0.2s;
       text-decoration: none;
+      overflow: hidden;
     }
     .nav-dropdown .nav-btn.active {
-      background: #FFD70022;
+      background: #0066ffcc;
       color: #fff;
     }
     .nav-dropdown .nav-btn:hover {
-      background: #FFD70033;
-      color: #fff;
+      background: #FFD700;
+      color: #000;
+      box-shadow: none;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
     }
 
     .header {
@@ -208,12 +215,21 @@
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
     </button>
-    <span style="font-size: 2rem; font-weight: bold; color: gold; margin-right: 1.5rem;">Hertz</span>
+    <span style="font-size: 2rem; font-weight: bold; color: gold; margin-right: 1.5rem;">HZ</span>
     <span style="font-size: 1.3rem; color: #ff4081; font-weight: 600;">❤️ Liked Songs</span>
   </header>
 
   <!-- Navigation Dropdown (hidden by default) -->
-  <div class="nav-dropdown" id="navDropdown"></div>
+  <div class="nav-dropdown" id="navDropdown">
+    <a href="index.html" class="nav-btn">🏠 Home</a>
+    <a href="Online25App.html" class="nav-btn">🌐 Online</a>
+    <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
+    <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+    <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
+    <a href="Liked25App.html" class="nav-btn active">❤️ Liked</a>
+    <a href="Account25App.html" class="nav-btn">👤 Account</a>
+    <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+  </div>
 
   <!-- Sticky Player -->
   <div class="sticky-player" id="stickyPlayer" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(90deg,#181818 0%,#282828 100%);border-top:1px solid #404040;padding:12px 16px;z-index:1000;cursor:grab;" draggable="false">
@@ -355,6 +371,41 @@
   <!-- Liked Tracks List -->
   <div class="liked-tracks" id="likedTracksList"></div>
 <script>
+    // Hamburger Menu Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const navDropdown = document.getElementById('navDropdown');
+      let isMenuOpen = false;
+      function toggleMenu() {
+        isMenuOpen = !isMenuOpen;
+        hamburgerMenu.classList.toggle('active', isMenuOpen);
+        navDropdown.style.display = isMenuOpen ? 'flex' : 'none';
+      }
+      function closeMenu() {
+        isMenuOpen = false;
+        hamburgerMenu.classList.remove('active');
+        navDropdown.style.display = 'none';
+      }
+      hamburgerMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleMenu();
+      });
+      document.addEventListener('click', function(e) {
+        if (isMenuOpen && !navDropdown.contains(e.target) && !hamburgerMenu.contains(e.target)) {
+          closeMenu();
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isMenuOpen) {
+          closeMenu();
+        }
+      });
+      navDropdown.querySelectorAll('.nav-btn').forEach(link => {
+        link.addEventListener('click', function() {
+          closeMenu();
+        });
+      });
+    });
     // Utility: Format time in mm:ss
     function formatTime(seconds) {
       const m = Math.floor(seconds / 60);
