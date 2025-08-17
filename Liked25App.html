@@ -59,36 +59,32 @@
       border: 2px solid #FFD700;
       flex-direction: column;
       align-items: stretch;
-      overflow: hidden;
     }
     .nav-dropdown .nav-btn {
       display: block;
-      width: 100%;
+      width: calc(100% - 8px);
       box-sizing: border-box;
       padding: 0.8rem 1.2rem;
-      margin: 0.2rem 0;
+      margin: 0.2rem 4px;
       background: none;
       border: none;
       color: #fff;
-      font-size: 1.1rem;
+  font-size: 0.82rem;
       font-weight: 600;
       text-align: left;
       border-radius: 8px;
       transition: background 0.2s, color 0.2s;
       text-decoration: none;
-      overflow: hidden;
+      outline: none;
     }
     .nav-dropdown .nav-btn.active {
-      background: #0066ffcc;
+      background: #1976d2;
       color: #fff;
     }
-    .nav-dropdown .nav-btn:hover {
+    .nav-dropdown .nav-btn:hover,
+    .nav-dropdown .nav-btn:focus {
       background: #FFD700;
-      color: #000;
-      box-shadow: none;
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
+      color: #111;
     }
 
     .header {
@@ -221,15 +217,35 @@
 
   <!-- Navigation Dropdown (hidden by default) -->
   <div class="nav-dropdown" id="navDropdown">
-    <a href="index.html" class="nav-btn">🏠 Home</a>
-    <a href="Online25App.html" class="nav-btn">🌐 Online</a>
-    <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
-    <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
-    <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
-    <a href="Liked25App.html" class="nav-btn active">❤️ Liked</a>
-    <a href="Account25App.html" class="nav-btn">👤 Account</a>
-    <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+  <a href="index.html" class="nav-btn">🏠 Home</a>
+  <a href="Online25App.html" class="nav-btn">🌐 Online</a>
+  <a href="Offline25App.html" class="nav-btn">📴 Offline</a>
+  <a href="Playlist25App.html" class="nav-btn">🎵 Playlists</a>
+  <a href="Liked25App.html" class="nav-btn active">❤️ Liked</a>
+  <a href="Account25App.html" class="nav-btn">👤 Account</a>
+  <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
   </div>
+<script>
+// Hamburger menu dropdown toggle logic
+document.addEventListener('DOMContentLoaded', function() {
+  const hamburger = document.getElementById('hamburgerMenu');
+  const dropdown = document.getElementById('navDropdown');
+  // Hide dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!dropdown.contains(e.target) && !hamburger.contains(e.target)) {
+      dropdown.style.display = 'none';
+      hamburger.classList.remove('active');
+    }
+  });
+  // Toggle dropdown on hamburger click
+  hamburger.addEventListener('click', function(e) {
+    e.stopPropagation();
+    const isOpen = dropdown.style.display === 'flex';
+    dropdown.style.display = isOpen ? 'none' : 'flex';
+    hamburger.classList.toggle('active', !isOpen);
+  });
+});
+</script>
 
   <!-- Sticky Player -->
   <div class="sticky-player" id="stickyPlayer" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(90deg,#181818 0%,#282828 100%);border-top:1px solid #404040;padding:12px 16px;z-index:1000;cursor:grab;" draggable="false">
@@ -371,41 +387,6 @@
   <!-- Liked Tracks List -->
   <div class="liked-tracks" id="likedTracksList"></div>
 <script>
-    // Hamburger Menu Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-      const hamburgerMenu = document.getElementById('hamburgerMenu');
-      const navDropdown = document.getElementById('navDropdown');
-      let isMenuOpen = false;
-      function toggleMenu() {
-        isMenuOpen = !isMenuOpen;
-        hamburgerMenu.classList.toggle('active', isMenuOpen);
-        navDropdown.style.display = isMenuOpen ? 'flex' : 'none';
-      }
-      function closeMenu() {
-        isMenuOpen = false;
-        hamburgerMenu.classList.remove('active');
-        navDropdown.style.display = 'none';
-      }
-      hamburgerMenu.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleMenu();
-      });
-      document.addEventListener('click', function(e) {
-        if (isMenuOpen && !navDropdown.contains(e.target) && !hamburgerMenu.contains(e.target)) {
-          closeMenu();
-        }
-      });
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && isMenuOpen) {
-          closeMenu();
-        }
-      });
-      navDropdown.querySelectorAll('.nav-btn').forEach(link => {
-        link.addEventListener('click', function() {
-          closeMenu();
-        });
-      });
-    });
     // Utility: Format time in mm:ss
     function formatTime(seconds) {
       const m = Math.floor(seconds / 60);
