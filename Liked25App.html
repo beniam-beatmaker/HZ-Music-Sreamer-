@@ -205,14 +205,16 @@
 </head>
 <body>
   <!-- Navigation/Menu Button -->
-  <header>
-    <button class="hamburger-menu" id="hamburgerMenu" title="Open Menu" aria-label="Open navigation menu" style="margin-right: 1rem;">
+  <header style="display: flex; align-items: center; justify-content: center; position: relative;">
+    <button class="hamburger-menu" id="hamburgerMenu" title="Open Menu" aria-label="Open navigation menu" style="position: absolute; left: 0; margin-left: 1rem;">
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
       <span class="hamburger-line"></span>
     </button>
-    <span style="font-size: 2rem; font-weight: bold; color: gold; margin-right: 1.5rem;">HZ</span>
-    <span style="font-size: 1.3rem; color: #ff4081; font-weight: 600;">❤️ Liked Songs</span>
+    <div style="display: flex; flex-direction: row; align-items: center; gap: 1.5rem;">
+      <span style="font-size: 2rem; font-weight: bold; color: gold;">HZ</span>
+      <span style="font-size: 1.3rem; color: #ff4081; font-weight: 600;">❤️ Liked Songs</span>
+    </div>
   </header>
 
   <!-- Navigation Dropdown (hidden by default) -->
