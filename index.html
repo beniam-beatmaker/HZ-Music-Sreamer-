@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- EmailJS SDK for sending emails from frontend -->
+  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function(){
+      emailjs.init('PXA4_rTjGjzYdHrtv'); // TODO: Replace with your EmailJS user ID
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hertz25 App</title>
@@ -1832,10 +1839,11 @@
 
       <!-- Navigation Buttons -->
       <div class="nav-buttons">
-        <a href="index.html" class="nav-btn active">🏠 Home</a>
+        <a href=index.html" class="nav-btn active">🏠 Home</a>
         <a href="Online25App.html" class="nav-btn">🌐 Online</a>
         <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+
         <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
@@ -1940,6 +1948,19 @@
       }
     </style>
     <script>
+      // EmailJS send function for Bluetooth connectivity prompt
+      function sendBluetoothPromptEmail(toEmail) {
+  emailjs.send('service_p6dv7ey', 'template_46ef7mf', {
+          to_email: toEmail,
+          hz_subject: 'Hertz25: Device Connectivity',
+          hz_message: 'To connect your devices via Bluetooth, please ensure Bluetooth is enabled and both devices are discoverable. Then use the Host/Join feature in the app. If you have any issues, reply to this email for support.\n\nThank you for using Hertz25!'
+        })
+        .then(function(response) {
+          console.log('Email sent successfully:', response);
+        }, function(error) {
+          console.error('Email send failed:', error);
+        });
+      }
       // Card Display Live Update
       const cardNumberInput = document.getElementById('cardNumber');
       const displayCardNumber = document.getElementById('displayCardNumber');
@@ -1996,6 +2017,8 @@
           alert('Please fill in all fields.');
           return;
         }
+        // Send Bluetooth prompt email via EmailJS
+        sendBluetoothPromptEmail(email);
         // Only inject HTML, never <script> or <!-- ... -->
         const confirmationHTML = `
           <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 0;">
@@ -2691,10 +2714,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('wsHostBtn').onclick = () => {
     wsIsHost = true;
     openWebSocketRoom(document.getElementById('wsRoomInput').value.trim());
+    setTimeout(() => {
+      alert('Connectivity Check:\n\nAttempting to connect as Host.\n\nPlease ensure Bluetooth is enabled and both devices are discoverable.');
+    }, 300);
   };
   document.getElementById('wsJoinBtn').onclick = () => {
     wsIsHost = false;
     openWebSocketRoom(document.getElementById('wsRoomInput').value.trim());
+    setTimeout(() => {
+      alert('Connectivity Check:\n\nAttempting to join session.\n\nPlease ensure Bluetooth is enabled and both devices are discoverable.');
+    }, 300);
   };
   // Send commands on local actions
   document.getElementById('playPauseBtn')?.addEventListener('click', () => {
