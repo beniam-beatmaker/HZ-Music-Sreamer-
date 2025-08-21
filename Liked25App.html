@@ -1,827 +1,2991 @@
-<html lang="en"><head>
-  <meta charset="UTF-8">
-  <title>HZ Liked Songs</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
-  <style>
-    /* --- Professional, Appealing, Unified CSS --- */
-    body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #181818;
-      color: #fff;
-      margin: 0;
-    }
-    header {
-      position: sticky;
-      top: 0;
-      background: #121212;
-      padding: 1rem 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      z-index: 1000;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .logo-btn {
-      font-size: 1.7rem;
-      font-weight: bold;
-      color: #1db954;
-      background: transparent;
-      border: 2px solid #1db954;
-      border-radius: 30px;
-      padding: 0.4rem 1.6rem;
-      text-decoration: none;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: background 0.2s, color 0.2s;
-    }
-    .logo-btn:hover, .logo-btn:focus {
-      background: #0066ff;
-      color: #fff;
-      border-color: #0066ff;
-      outline: none;
-    }
-    nav {
-      display: flex;
-      gap: 1rem;
-    }
-    nav a {
-      text-decoration: none;
-      color: #fff;
-      background: #232526;
-      padding: 0.6rem 1.4rem;
-      border-radius: 30px;
-      font-weight: 500;
-      transition: background 0.2s, color 0.2s;
-      border: 2px solid transparent;
-    }
-    nav a:hover, nav a.active {
-      background: #1db954;
-      color: #181818;
-      border-color: #1db954;
-    }
-    .mobile-menu-btn {
-      display: none;
-      background: gold !important;
-      color: black !important;
-      border-color: gold !important;
-      font-size: 1.5rem;
-      padding: 0.5rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .mobile-menu-btn:hover, .mobile-menu-btn:focus {
-      background: #ffd700 !important;
-      color: black !important;
-      border-color: #ffd700 !important;
-    }
-    .mobile-nav {
-      display: none !important;
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
-      background: linear-gradient(135deg, #232526 0%, #181818 100%);
-      border-radius: 15px;
-      padding: 1rem;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-      z-index: 3002;
-      min-width: 250px;
-      backdrop-filter: blur(10px);
-      border: 1px solid #404040;
-    }
-    .mobile-nav.active {
-      display: block !important;
-    }
-    .mobile-nav .nav-btn {
-      width: 100%;
-      margin: 0.2rem 0;
-      font-size: 0.9rem;
-      text-align: left;
-      padding: 0.6rem 1rem;
-      border-radius: 10px;
-      background: linear-gradient(45deg, #1db954, #1ed760);
-      color: #fff;
-      border: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(29, 185, 84, 0.2);
-      text-decoration: none;
-    }
-    .mobile-nav .nav-btn:hover {
-      transform: translateX(5px);
-      box-shadow: 0 4px 12px rgba(29, 185, 84, 0.4);
-    }
-    .mobile-nav .nav-btn.active {
-      background: linear-gradient(45deg, #0066ff, #4d94ff);
-      box-shadow: 0 2px 8px rgba(0, 102, 255, 0.2);
-    }
-    .mobile-nav .nav-btn.active:hover {
-      box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
-    }
-    .hamburger-menu {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 2000;
-      background: linear-gradient(45deg, #FFD700, #FFA500);
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-    }
-    .hamburger-menu:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-    }
-    .hamburger-line {
-      width: 20px;
-      height: 2px;
-      background: #000;
-      border-radius: 1px;
-      transition: all 0.3s ease;
-    }
-    .hamburger-menu.active .hamburger-line:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    .hamburger-menu.active .hamburger-line:nth-child(2) {
-      opacity: 0;
-    }
-    .hamburger-menu.active .hamburger-line:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
-    }
-    .nav-dropdown {
-      position: fixed;
-      top: 80px;
-      left: 20px;
-      z-index: 1900;
-      background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
-      border-radius: 15px;
-      padding: 1rem;
-      min-width: 200px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-      border: 2px solid #404040;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(-20px);
-      transition: all 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    .nav-dropdown.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-    .nav-dropdown .nav-btn {
-      display: block;
-      width: 100%;
-      box-sizing: border-box;
-      margin-bottom: 0.5rem;
-      text-align: left;
-      padding: 0.8rem 1rem;
-      border-radius: 8px;
-      background: transparent;
-      border: 1px solid transparent;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 600;
-      overflow: hidden;
-    }
-    .nav-dropdown .nav-btn:last-child {
-      margin-bottom: 0;
-    }
-    .nav-dropdown .nav-btn:hover {
-      background: linear-gradient(45deg, #FFD700, #FFA500);
-      color: #000;
-      transform: translateX(5px);
-      border-color: #FFD700;
-    }
-    .nav-dropdown .nav-btn.active {
-      background: linear-gradient(45deg, #0066ff, #4d94ff);
-      color: #fff;
-      border-color: #0066ff;
-    }
-    .nav-dropdown .nav-btn.active:hover {
-      background: linear-gradient(45deg, #FFD700, #FFA500);
-      color: #000;
-      border-color: #FFD700;
-    }
-    .mobile-nav .close-btn {
-      display: none;
-    }
-    .spacer { height: 20px; }
-  </style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hertz-Playlists</title>
+    <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
+    <style>
+        /* COMPLETELY NEW VERSION - NO CACHE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #121212;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            width: 100vw;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+            background: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            text-align: center;
+            width: 100%;
+        }
+
+        .nav-btn {
+            background: linear-gradient(45deg, #2196f3, #4fc3f7);
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(45deg, #0066ff, #4d94ff);
+            box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #1db954;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(29, 185, 84, 0.5);
+            width: 100%;
+        }
+
+        .hertz-gold { color: gold; }
+        .playlists-blue { color: #2196f3; font-size: 2.0rem; }
+
+        .section-title {
+            color: gold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        /* Sticky Player Styles */
+        .sticky-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #181818;
+            padding: 0.2rem 0.7rem;
+            border-top: 1px solid #404040;
+            z-index: 1000;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.18);
+            display: none;
+            flex-direction: column;
+            min-height: 38px;
+            height: 38px;
+        }
+
+        .player-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin: 0 0.3rem;
+            border-radius: 50%;
+            transition: color 0.2s;
+        }
+
+        .player-btn:hover { color: #0066ff; }
+        .player-loop.active, .player-shuffle.active { color: #1db954; }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .player-title {
+            font-weight: 500;
+            margin: 0 1.5rem;
+            flex: 1;
+            text-align: center;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        #likeBtn {
+            margin-left: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.7rem;
+            color: #b3b3b3;
+            transition: color 0.2s;
+        }
+
+        #likeBtn.liked { color: #ff6b6b; }
+
+        /* Popup Player Modal (Offline blue style) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.82);
+            transition: background 0.2s;
+        }
+
+        .modal-content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(33,150,243,0.32);
+            padding: 2.7rem 2.7rem 2.2rem 2.7rem;
+            max-width: 420px;
+            width: 95%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1565c0;
+        }
+
+        .close {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            font-size: 2.2rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            background: none;
+            border: none;
+            transition: color 0.2s;
+        }
+
+        .close:hover { color: gold; }
+
+        .popup-queue-btn {
+            position: absolute;
+            top: 18px;
+            left: 22px;
+            font-size: 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            z-index: 10;
+            background: none;
+            border: none;
+            transition: color 0.2s;
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .popup-queue-btn:hover { color: gold; }
+
+        .queue-icon {
+            position: relative;
+            width: 20px;
+            height: 16px;
+        }
+
+        .queue-line {
+            position: absolute;
+            width: 16px;
+            height: 2px;
+            background: gold;
+            border-radius: 1px;
+        }
+
+        .queue-line:nth-child(1) { top: 0; }
+        .queue-line:nth-child(2) { top: 7px; }
+        .queue-line:nth-child(3) { top: 14px; }
+
+
+
+        /* Queue Modal Styles */
+        .queue-modal {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+        }
+
+        .queue-modal-content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid #404040;
+        }
+
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #404040;
+        }
+
+        .queue-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: gold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .queue-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0.5rem;
+        }
+
+        .queue-close:hover { color: gold; }
+
+        .queue-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+        }
+
+        .queue-control-btn {
+            background: linear-gradient(45deg, #2196f3, #4fc3f7);
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+        }
+
+        .queue-control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+        }
+
+        .queue-control-btn.active {
+            background: linear-gradient(45deg, #1db954, #1ed760);
+            box-shadow: 0 2px 8px rgba(29, 185, 84, 0.3);
+        }
+
+        .queue-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .queue-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: #1a1a1a;
+            border-radius: 12px;
+            cursor: grab;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        .queue-item:active {
+            cursor: grabbing;
+        }
+
+        .queue-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+            z-index: 1000;
+        }
+
+        .queue-item.drag-over {
+            border-color: #2196f3;
+            background: #2a2a2a;
+            transform: translateY(-2px);
+        }
+
+        .queue-item:hover {
+            background: #2a2a2a;
+            border-color: #404040;
+            transform: translateX(5px);
+        }
+
+        .queue-item.current {
+            background: linear-gradient(45deg, #1db954, #1ed760);
+            border-color: #1db954;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .queue-item.current:hover {
+            background: linear-gradient(45deg, #1ed760, #1db954);
+        }
+
+        .queue-number {
+            min-width: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: gold;
+            margin-right: 1rem;
+        }
+
+        .queue-item.current .queue-number {
+            color: #000;
+        }
+
+        .queue-track-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .queue-track-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .queue-track-artist {
+            font-size: 0.85rem;
+            color: #b3b3b3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .queue-item.current .queue-track-artist {
+            color: #000;
+            opacity: 0.8;
+        }
+
+        .queue-actions {
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .queue-item:hover .queue-actions {
+            opacity: 1;
+        }
+
+        .queue-action-btn {
+            background: #404040;
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .queue-action-btn:hover {
+            background: #2196f3;
+            transform: scale(1.1);
+        }
+
+        .popup-player-header {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: gold;
+            text-align: center;
+            margin-bottom: 1.1rem;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 12px #1565c0;
+        }
+
+        .popup-player-track-info {
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+
+        .popup-player-title {
+            font-weight: 600;
+            color: #fff;
+            font-size: 1.18rem;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.01em;
+            text-shadow: 0 0 8px #2196f3;
+        }
+
+        .popup-player-artist {
+            color: #e3f2fd;
+            font-size: 1.05rem;
+            text-shadow: 0 0 6px #1565c0;
+        }
+
+        .popup-player-cover {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            margin-bottom: 1.2rem;
+            object-fit: cover;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.3);
+            border: 3px solid gold;
+        }
+
+        .popup-player-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.7rem;
+            padding: 0.2rem 0;
+        }
+
+        .popup-player-btn {
+            background: linear-gradient(135deg, #1565c0 0%, #2196f3 100%);
+            border: none;
+            color: #fff;
+            font-size: 1.05rem;
+            cursor: pointer;
+            padding: 0.45rem;
+            margin: 0 0.12rem;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.18);
+            transition: background 0.2s, color 0.2s;
+            min-width: 32px;
+            min-height: 32px;
+            width: 32px;
+            height: 32px;
+        }
+
+        .popup-player-btn:hover {
+            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            color: gold;
+        }
+
+        .popup-player-loop.active, .popup-player-shuffle.active { color: gold; }
+
+        #popupLikeBtn {
+            font-size: 1.7rem;
+            color: #fff;
+            transition: color 0.2s;
+            background: linear-gradient(135deg, #1565c0 0%, #2196f3 100%);
+            border: none;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 0.7rem;
+            box-shadow: 0 2px 8px rgba(33,150,243,0.18);
+        }
+
+        #popupLikeBtn.liked {
+            color: #ff6b6b;
+            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+        }
+
+        .popup-player-extra {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        #popupPlayerCurrentTime, #popupPlayerDuration {
+            color: #e3f2fd;
+            font-size: 0.98rem;
+            text-shadow: 0 0 6px #1565c0;
+        }
+
+        #popupPlayerProgressBar {
+            width: 70%;
+            margin: 0 1rem;
+            accent-color: #2196f3;
+            background: #1565c0;
+            border-radius: 8px;
+            height: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content { padding: 1rem; }
+            .nav-buttons { justify-content: center; width: 100%; }
+
+            .nav-dropdown {
+                top: 70px;
+                left: 10px;
+                min-width: 180px;
+            }
+
+            .hamburger-menu {
+                top: 15px;
+                left: 15px;
+                width: 45px;
+                height: 45px;
+                padding: 10px;
+            }
+
+            .hamburger-line {
+                width: 18px;
+                height: 2.5px;
+            }
+        }
+
+        /* Hamburger Menu Styles */
+        .hamburger-menu {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .hamburger-menu:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .hamburger-line {
+            width: 20px;
+            height: 2px;
+            background: #000;
+            border-radius: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger-menu.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -6px);
+        }
+
+        /* Navigation Dropdown */
+        .nav-dropdown {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 1900;
+            background: linear-gradient(145deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 15px;
+            padding: 1rem;
+            min-width: 200px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 2px solid #404040;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .nav-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .nav-dropdown .nav-btn {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 0.5rem;
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            overflow: hidden;
+        }
+
+        .nav-dropdown .nav-btn:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-dropdown .nav-btn:hover {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            transform: translateX(5px);
+            border-color: #FFD700;
+        }
+
+        .nav-dropdown .nav-btn.active {
+            background: linear-gradient(45deg, #0066ff, #4d94ff);
+            color: #fff;
+            border-color: #0066ff;
+        }
+
+        .nav-dropdown .nav-btn.active:hover {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: #000;
+            border-color: #FFD700;
+        }
+
+        /* Hide original nav buttons */
+        .nav-buttons {
+            display: none;
+        }
+
+        /* Search Bar Styles */
+        .search-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1500;
+            width: 320px;
+            max-width: calc(100vw - 40px);
+            display: none; /* Hide the original fixed search */
+        }
+
+        /* Sticky Search Bar Styles */
+        #stickySearchBar {
+            transition: all 0.3s ease;
+        }
+
+        #stickySearchBar:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(218, 165, 32, 0.4);
+            border-color: gold;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 16px;
+            border: 2px solid #404040;
+            border-radius: 25px;
+            background: #181818;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .search-input:focus {
+            border-color: gold;
+            box-shadow: 0 4px 20px rgba(218, 165, 32, 0.4);
+        }
+
+        .search-input::placeholder {
+            color: #b3b3b3;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b3b3b3;
+            font-size: 18px;
+            pointer-events: none;
+        }
+
+        .search-clear {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #b3b3b3;
+            font-size: 20px;
+            cursor: pointer;
+            display: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: color 0.2s;
+        }
+
+        .search-clear:hover {
+            color: #fff;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            border: 2px solid #404040;
+            border-top: none;
+            border-radius: 0 0 15px 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .search-suggestion {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion:hover {
+            background: #2a2a2a;
+        }
+
+        .search-suggestion.highlighted {
+            background: #2196f3;
+            color: #fff;
+        }
+
+        .suggestion-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, #2196f3, #4fc3f7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .suggestion-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .suggestion-title {
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .suggestion-artist {
+            font-size: 12px;
+            color: #b3b3b3;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-suggestion.highlighted .suggestion-title,
+        .search-suggestion.highlighted .suggestion-artist {
+            color: #fff;
+        }
+
+        .no-results {
+            padding: 16px;
+            text-align: center;
+            color: #b3b3b3;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .modal-content {
+                padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+                max-width: 98vw;
+            }
+
+            .search-container {
+                top: 10px;
+                right: 10px;
+                width: 280px;
+                max-width: calc(100vw - 80px);
+            }
+
+            .nav-dropdown {
+                top: 65px;
+                left: 5px;
+                min-width: 160px;
+                padding: 0.8rem;
+            }
+
+            .nav-dropdown .nav-btn {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.85rem;
+            }
+
+            /* Sticky search bar responsive */
+            #stickySearchBar {
+                top: 10px;
+                margin: 1rem 1rem 1rem auto !important;
+                margin-right: 1rem !important;
+                max-width: 95%;
+                padding: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Top Bar: Hamburger + Centered Title -->
-  <header style="width:100%;display:flex;align-items:center;justify-content:center;position:relative;margin-top:1.5rem;margin-bottom:1.5rem;">
-    <button class="hamburger-menu" id="hamburgerMenu" title="Open Menu" aria-label="Open navigation menu" style="position:absolute;left:0;top:50%;transform:translateY(-50%);margin-left:1.5rem;"><span class="hamburger-line"></span><span class="hamburger-line"></span><span class="hamburger-line"></span></button>
-    <span style="font-size:2.3rem;font-weight:bold;color:gold;letter-spacing:2px;">HZ <span style='color:#ff4081;font-size:1.5rem;'>❤️</span> Liked Tracks</span>
-  </header>
+    <!-- Hamburger Menu -->
+    <!-- Search Icon Button (top right) -->
+    <button id="searchToggleBtn" title="Search" style="position: fixed; top: 22px; right: 22px; z-index: 2100; background: linear-gradient(45deg, gold, #FFD700); border: none; border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(218,165,32,0.25); cursor: pointer;">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11" cy="11" r="7" stroke="black" stroke-width="2"/>
+            <line x1="16.4142" y1="16.5858" x2="21" y2="21" stroke="black" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+    </button>
+    <button class="hamburger-menu" id="hamburgerMenu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </button>
 
-  <!-- Navigation Dropdown (hidden by default, will be populated by JS) -->
-  <div class="nav-dropdown" id="navDropdown">
-    <a href="index.html" class="nav-btn">🏠 Home</a>
-    <a href="Online25App.html" class="nav-btn">🌐 Online</a>
-    <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
-    <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
-    <a href="Liked25App.html" class="nav-btn active">❤️ Liked</a>
-    <a href="Account25App.html" class="nav-btn">👤 Account</a>
-    <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
-    <button class="nav-btn" onclick="openDashboard()" style="width: 100%; text-align: left; cursor: pointer;">📊 Dashboard</button>
-  </div>
-
-  <!-- Sticky Player (copied and adapted from Playlist25App.html for professional look/functionality) -->
-  <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#282828 100%);border-top:1px solid #404040;padding:0.5rem 1.5rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);">
-    <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:36px;cursor:pointer;">
-      <div class="player-controls">
-        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
-        <button class="player-btn" id="playPauseBtn" title="Always Playing">&#10073;&#10073;</button>
-        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
-        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
-        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
-        <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
-        <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
-      </div>
-      <span class="player-title" id="playerTrackTitle"></span>
-      <div style="display:flex;align-items:center;gap:0.7rem;width:320px;max-width:90%;">
-        <span id="currentTime" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
-        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="flex:1;">
-        <span id="duration" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
-      </div>
-      <button id="likeBtn" title="Like Track">&#10084;</button>
+    <!-- Navigation Dropdown -->
+    <div class="nav-dropdown" id="navDropdown">
+        <a href="index.html" class="nav-btn">🏠 Home</a>
+        <a href="Online25App.html" class="nav-btn">🌐 Online</a>
+        <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
+        <a href="Playlist25App.html" class="nav-btn active">📋 Playlists</a>
+        <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+        <a href="Account25App.html" class="nav-btn">👤 Account</a>
+        <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+        <button class="nav-btn" onclick="openDashboard()" style="width: 100%; text-align: left; cursor: pointer;">📊 Dashboard</button>
     </div>
-    <audio id="playerAudio" style="display:none;" preload="metadata"></audio>
-  </div>
-  <script>
-  // Hamburger Menu Functionality (copied/adapted from Playlist25App.html)
-  document.addEventListener('DOMContentLoaded', function() {
-    const hamburgerBtn = document.getElementById('hamburgerMenu');
-    const dropdown = document.getElementById('navDropdown');
-    if (!hamburgerBtn || !dropdown) return;
-    let isMenuOpen = false;
-    function toggleMenu() {
-      isMenuOpen = !isMenuOpen;
-      if (isMenuOpen) {
-        dropdown.classList.add('show');
-        hamburgerBtn.classList.add('active');
-        dropdown.style.display = 'flex';
-      } else {
-        dropdown.classList.remove('show');
-        hamburgerBtn.classList.remove('active');
-        dropdown.style.display = 'none';
-      }
-    }
-    function closeMenu() {
-      isMenuOpen = false;
-      dropdown.classList.remove('show');
-      hamburgerBtn.classList.remove('active');
-      dropdown.style.display = 'none';
-    }
-    hamburgerBtn.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      toggleMenu();
-    });
-    document.addEventListener('click', function(e) {
-      if (isMenuOpen && !dropdown.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-        closeMenu();
-      }
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && isMenuOpen) {
-        closeMenu();
-      }
-    });
-    // Close when clicking navigation links
-    const navLinks = dropdown.querySelectorAll('.nav-btn');
-    navLinks.forEach(link => {
-      link.addEventListener('click', closeMenu);
-    });
-    // Ensure correct display on load
-    dropdown.style.display = 'none';
-  });
-  // Dummy openDashboard for nav button
-  function openDashboard() { window.open('admin-dashboard.html', 'dashboard', 'width=1400,height=900,scrollbars=yes,resizable=yes'); }
-  </script>
 
-  <!-- Single Popup Player -->
-  <div class="popup-backdrop" id="popupPlayer" style="display:none;">
-    <div class="popup-player">
-      <button onclick="closePopupPlayer()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#b3b3b3;font-size:24px;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.color='#b3b3b3';this.style.background='none'" title="Close">×</button>
-      <button id="queueBtnPopup" class="popup-btn" aria-label="Queue" onclick="toggleQueue()" style="position:absolute;top:20px;left:20px;background:none;border:none;box-shadow:none;color:#1db954;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:8px;width:32px;height:32px;border-radius:50%;transition:all 0.2s;" onmouseover="this.style.background='rgba(29,185,84,0.1)'" onmouseout="this.style.background='none'" title="Queue">
-        <span style="display:inline-block;line-height:1;">
-          <span style="display:block;height:2px;width:16px;background:currentColor;border-radius:2px;margin:2px 0;"></span>
-          <span style="display:block;height:2px;width:16px;background:currentColor;border-radius:2px;margin:2px 0;"></span>
-          <span style="display:block;height:2px;width:16px;background:currentColor;border-radius:2px;margin:2px 0;"></span>
-        </span>
-      </button>
-      <!-- Bass Detection Control Button -->
-      <button onclick="toggleBassDetection()" id="bassDetectionBtn" style="position:absolute;top:60px;left:20px;background:#333;border:2px solid #666;color:#999;font-size:10px;cursor:pointer;padding:4px 8px;border-radius:4px;font-weight:bold;" title="Enable Bass Detection (Currently Disabled for Stability)">BASS OFF</button>
-
-      <!-- Vertical volume control on the right side -->
-      <div style="position:absolute;right:60px;top:60px;bottom:60px;display:flex;flex-direction:column;align-items:center;gap:10px;">
-        <svg width="16" height="16" fill="gold" viewBox="0 0 16 16"><path d="M9 4a1 1 0 0 0-2 0v4a1 1 0 0 0 2 0V4zM6 6a1 1 0 0 1 2 0v2a1 1 0 1 1-2 0V6zM5 9a1 1 0 0 0 2 0V7a1 1 0 0 0-2 0v2zm8-3a1 1 0 0 0-2 0v4a1 1 0 0 0 2 0V6z"></path></svg>
-        <input type="range" id="popupVolumeRangeVertical" min="0" max="1" step="0.01" value="0.7" style="writing-mode:bt-lr;-webkit-appearance:slider-vertical;appearance:slider-vertical;width:6px;height:200px;background:gold;outline:none;border:none;border-radius:2px;">
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:center;">
-        <!-- Rotating gold HZ circle with live Hertz visualization -->
-        <div id="popupCover" class="popup-cover" style="margin-bottom:0.8rem;display:flex;align-items:center;justify-content:center;background:transparent;border:none;box-shadow:none;width:120px;height:120px;">
-          <!-- Live Hertz Waveform Visualization -->
-          <div class="hertz-visualizer">
-            <canvas id="hertzCanvas" width="140" height="140"></canvas>
-          </div>
-          <!-- Center HZ Circle -->
-          <svg width="120" height="120" xmlns="http://www.w3.org/2000/svg" class="hz-circle" style="z-index: 2; position: relative;">
-            <defs>
-              <radialGradient id="goldenPopup" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1"></stop>
-                <stop offset="30%" style="stop-color:#FFA500;stop-opacity:1"></stop>
-                <stop offset="70%" style="stop-color:#DA7F00;stop-opacity:1"></stop>
-                <stop offset="100%" style="stop-color:#884D00;stop-opacity:1"></stop>
-              </radialGradient>
-            </defs>
-            <circle cx="60" cy="60" r="55" fill="url(#goldenPopup)"></circle>
-            <text x="60" y="75" font-family="Arial, sans-serif" font-size="42" font-weight="bold" text-anchor="middle" fill="#000000">HZ</text>
-          </svg>
-        </div>
-        <!-- Track name and artist info -->
-        <div class="player-meta" style="margin-bottom:0.8rem;text-align:center;max-width:300px;">
-          <div style="font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.3rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="popupTitle">Track Name</div>
-          <div style="font-size:0.9rem;color:#b3b3b3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" id="popupArtist">Artist Name</div>
-        </div>
-        <!-- Progress bar with Spotify-like styling -->
-        <div class="player-progress" style="display:flex;align-items:center;justify-content:center;gap:0.8rem;margin-bottom:1rem;width:100%;max-width:300px;">
-          <span id="popupCurrentTime" style="font-size:0.85rem;color:gold;min-width:35px;font-weight:600;">1:49</span>
-          <input type="range" id="popupProgressBar" min="0" max="100" value="0" step="0.1" style="flex:1;height:4px;background:#404040;outline:none;border:none;border-radius:2px;-webkit-appearance:none;appearance:none;">
-          <span id="popupDuration" style="font-size:0.85rem;color:gold;min-width:35px;font-weight:600;">1:49</span>
-        </div>
-        <!-- Spotify-like control buttons -->
-        <div class="player-controls" style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1rem;">
-          <button id="popupShuffleBtn" class="player-btn" style="background:none;border:none;color:#b3b3b3;font-size:1rem;cursor:pointer;padding:8px;border-radius:50%;transition:all 0.2s;" title="Shuffle">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.624 9.624 0 0 0 7.556 8a9.624 9.624 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.595 10.595 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.624 9.624 0 0 0 6.444 8a9.624 9.624 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5z"></path><path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192zm0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192z"></path></svg>
-          </button>
-          <button id="popupPrevBtn" class="player-btn" style="background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:8px;border-radius:50%;transition:all 0.2s;" title="Previous">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path><path d="m9.729 5.055a.5.5 0 0 0-.52.026L5 7.055a.5.5 0 0 0 0 .89l4.209 1.973A.5.5 0 0 0 10 9.5V6.5a.5.5 0 0 0-.271-.445z"></path></svg>
-          </button>
-          <button class="player-btn" id="popupPlayPauseBtn" style="background:none;border:none;color:#b3b3b3;font-size:1.5rem;cursor:pointer;padding:12px;border-radius:50%;transition:all 0.2s;width:48px;height:48px;display:flex;align-items:center;justify-content:center;" title="Play/Pause">
-            <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path></svg>
-          </button>
-          <button id="popupNextBtn" class="player-btn" style="background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:8px;border-radius:50%;transition:all 0.2s;" title="Next">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path><path d="M6.271 5.055a.5.5 0 0 1 .52.026L11 7.055a.5.5 0 0 1 0 .89L6.791 9.919A.5.5 0 0 1 6 9.5V6.5a.5.5 0 0 1 .271-.445z"></path></svg>
-          </button>
-          <button id="popupLikeBtn" class="player-btn like-btn" style="background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:8px;border-radius:50%;transition:all 0.2s;position:relative;overflow:visible;" title="Like" onclick="togglePopupLike()">
-            <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.011L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"></path></svg>
-          </button>
-          <button id="popupLoopBtn" class="player-btn" style="background:none;border:none;color:#b3b3b3;font-size:1rem;cursor:pointer;padding:8px;border-radius:50%;transition:all 0.2s;" title="Repeat">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11 5.466V4H5a4 4 0 0 0-3.584 5.777.5.5 0 1 1-.896.446A5 5 0 0 1 5 3h6V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966A.25.25 0 0 1 11 5.466zm-6 4.534V11h6a4 4 0 0 0 3.584-5.777.5.5 0 1 1 .896-.446A5 5 0 0 1 11 13H5v1.466a.25.25 0 0 1-.41.192l-2.36-1.966a.3.3 0 0 1 0-.384l2.36-1.966A.25.25 0 0 1 5 10.534z"></path></svg>
-          </button>
-        </div>
-      </div>
-    </div>
-  <audio id="popupAudio" class="player-audio" src="https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3" style="display: none;"></audio></div>
-
-  <!-- Liked Tracks List -->
-  <div class="liked-tracks" id="likedTracksList" style="display:flex;flex-direction:column;gap:1rem;max-width:700px;margin:2rem auto 0 auto;">
-    <!-- Liked tracks will be rendered here by JS -->
-  </div>
-  </head>
-  </html>
-<script>
-    // Utility: Format time in mm:ss
-    function formatTime(seconds) {
-      const m = Math.floor(seconds / 60);
-      const s = Math.floor(seconds % 60);
-      return m + ':' + (s < 10 ? '0' : '') + s;
-    }
-
-    // Sticky Player Controls
-    document.addEventListener('DOMContentLoaded', function() {
-      const audio = document.getElementById('playerAudio');
-      const playPauseBtn = document.getElementById('playPauseBtn');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const progressBar = document.getElementById('progressBar');
-      const currentTime = document.getElementById('currentTime');
-      const duration = document.getElementById('duration');
-      const volumeRange = document.getElementById('volumeRange');
-
-      // Play/Pause
-      playPauseBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (audio.paused) {
-          audio.play();
-          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="2" width="3" height="12"/><rect x="10" y="2" width="3" height="12"/></svg>';
-        } else {
-          audio.pause();
-          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
-        }
-      });
-
-      // Progress bar update
-      audio.addEventListener('timeupdate', function() {
-        progressBar.value = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
-        currentTime.textContent = formatTime(audio.currentTime);
-        duration.textContent = formatTime(audio.duration || 0);
-      });
-      progressBar.addEventListener('input', function(e) {
-        if (audio.duration) {
-          audio.currentTime = (progressBar.value / 100) * audio.duration;
-        }
-      });
-
-      // Volume
-      volumeRange.addEventListener('input', function() {
-        audio.volume = volumeRange.value;
-      });
-      audio.volume = volumeRange.value;
-
-      // Previous/Next (no playlist, just reset)
-      prevBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        audio.currentTime = 0;
-      });
-      nextBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        audio.currentTime = audio.duration || 0;
-      });
-    });
-
-    // Popup Player Controls
-    document.addEventListener('DOMContentLoaded', function() {
-      const popup = document.getElementById('popupPlayer');
-      const popupAudio = document.createElement('audio');
-      popupAudio.id = 'popupAudio';
-      popupAudio.className = 'player-audio';
-      popupAudio.style.display = 'none';
-      popup.appendChild(popupAudio);
-
-      const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
-      const popupProgressBar = document.getElementById('popupProgressBar');
-      const popupCurrentTime = document.getElementById('popupCurrentTime');
-      const popupDuration = document.getElementById('popupDuration');
-      const popupVolumeRange = document.getElementById('popupVolumeRangeVertical');
-      const popupCover = document.getElementById('popupCover');
-
-      // Play/Pause
-      popupPlayPauseBtn.addEventListener('click', function() {
-        if (popupAudio.paused) {
-          popupAudio.play();
-          popupPlayPauseBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="2" width="3" height="12"/><rect x="10" y="2" width="3" height="12"/></svg>';
-        } else {
-          popupAudio.pause();
-          popupPlayPauseBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
-        }
-      });
-
-      // Progress bar update
-      popupAudio.addEventListener('timeupdate', function() {
-        popupProgressBar.value = popupAudio.duration ? (popupAudio.currentTime / popupAudio.duration) * 100 : 0;
-        popupCurrentTime.textContent = formatTime(popupAudio.currentTime);
-        popupDuration.textContent = formatTime(popupAudio.duration || 0);
-      });
-      popupProgressBar.addEventListener('input', function(e) {
-        if (popupAudio.duration) {
-          popupAudio.currentTime = (popupProgressBar.value / 100) * popupAudio.duration;
-        }
-      });
-
-      // Volume
-      popupVolumeRange.addEventListener('input', function() {
-        popupAudio.volume = popupVolumeRange.value;
-      });
-      popupAudio.volume = popupVolumeRange.value;
-
-      // Rotating cover image animation
-      let rotation = 0;
-      function animateCover() {
-        if (!popup.classList.contains('show')) return;
-        rotation = (rotation + 0.5) % 360;
-        popupCover.style.transform = `rotate(${rotation}deg)`;
-        requestAnimationFrame(animateCover);
-      }
-      popup.addEventListener('transitionend', function() {
-        if (popup.classList.contains('show')) animateCover();
-      });
-      // Start animation when popup is shown
-      const observer = new MutationObserver(() => {
-        if (popup.style.display !== 'none') {
-          popup.classList.add('show');
-          animateCover();
-        } else {
-          popup.classList.remove('show');
-          popupCover.style.transform = '';
-        }
-      });
-      observer.observe(popup, { attributes: true, attributeFilter: ['style'] });
-
-      // Sync popup audio with sticky player
-      document.getElementById('stickyPlayer').addEventListener('click', function(e) {
-        if (e.target.closest('button') || e.target.tagName === 'INPUT') return;
-        const stickyAudio = document.getElementById('playerAudio');
-        popupAudio.src = stickyAudio.src;
-        popupAudio.currentTime = stickyAudio.currentTime;
-        popupAudio.volume = popupVolumeRange.value;
-        popupAudio.play();
-      });
-    });
-
-    // Load liked tracks from localStorage
-    let likedTracks = [];
-    function loadLikedTracks() {
-      try {
-        likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
-      } catch {
-        likedTracks = [];
-      }
-    }
-
-    // Save liked tracks to localStorage
-    function saveLikedTracks() {
-      localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
-    }
-
-    // Add a track to liked tracks
-    function addLikedTrack(track) {
-      // Always ensure the liked track has a valid url (from url or audioUrl)
-      let url = track.url || track.audioUrl || '';
-      // If the track is from the DOM, try to get the data-track-url attribute
-      if (!url && track.id) {
-        const domItem = document.querySelector(`[data-track-id="${track.id}"]`);
-        if (domItem) {
-          url = domItem.getAttribute('data-track-url') || '';
-        }
-      }
-      // If still no url, try to request it from Playlist25App.html via postMessage
-      if (!url && track.id) {
-        window.addEventListener('message', function handleUrlMessage(e) {
-          if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
-            // Update the liked track with the received URL
-            likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
-            saveLikedTracks();
-            renderLikedTracks();
-            window.removeEventListener('message', handleUrlMessage);
-          }
-        });
-        // Send request to parent/opener (if exists)
-        try {
-          if (window.opener) {
-            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          } else if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          }
-        } catch {}
-      }
-      const likedTrack = {
-        ...track,
-        url: url,
-        likedAt: new Date().toISOString()
-      };
-      likedTracks.unshift(likedTrack);
-      saveLikedTracks();
-      renderLikedTracks();
-      return true;
-    }
-
-    // Remove a track from liked tracks
-    function removeLikedTrack(trackId) {
-      const index = likedTracks.findIndex(t => t.id === trackId);
-      if (index > -1) {
-        likedTracks.splice(index, 1);
-        saveLikedTracks();
-        renderLikedTracks();
-        return true;
-      }
-      return false;
-    }
-
-    // Check if a track is liked
-    function isTrackLiked(trackId) {
-      return likedTracks.some(t => t.id === trackId);
-    }
-
-    // Render liked tracks list
-    function renderLikedTracks() {
-      const container = document.getElementById('likedTracksList');
-      if (likedTracks.length === 0) {
-        container.innerHTML = '<div class="empty-state">No liked songs yet. Start liking tracks from the music player!</div>';
-        return;
-      }
-      let html = '';
-      likedTracks.forEach(track => {
-        const likedDate = new Date(track.likedAt).toLocaleDateString();
-        // Show a warning if the track has no URL
-        const hasUrl = track.url && (track.url.startsWith('http://') || track.url.startsWith('https://'));
-        html += `
-          <div class="track-item pro-track" data-track-id="${track.id}" data-track-name="${track.name}" data-track-artist="${track.artist || 'Unknown Artist'}" data-track-url="${track.url || ''}" style="display:flex;align-items:center;gap:1.2rem;padding:1.1rem 1.5rem;background:#232526;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,0.10);cursor:pointer;transition:box-shadow 0.18s,background 0.18s;position:relative;">
-            <div class="track-cover" style="width:56px;height:56px;min-width:56px;min-height:56px;border-radius:10px;background:#181818;display:flex;align-items:center;justify-content:center;color:#FFD700;font-weight:bold;font-size:1.5rem;letter-spacing:2px;border:2px solid #FFD700;box-shadow:0 2px 8px rgba(0,0,0,0.13);">HZ</div>
-            <div class="track-info" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:0.2rem;">
-              <div class="track-title" style="color:#fff;font-size:1.08rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.name}</div>
-              <div class="track-artist" style="color:#b3b3b3;font-size:0.97rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.artist || 'Unknown Artist'}</div>
-              <div class="track-date" style="color:#888;font-size:0.85rem;margin-top:0.1rem;">Liked on ${likedDate}</div>
-              ${!hasUrl ? `<div style='color:#ff4081;font-size:0.92em;margin-top:0.2em;'>No online audio available</div>` : ''}
+    <div class="container">
+        <!-- Search Bar (hidden by default, toggled by search icon) -->
+        <div class="search-container" id="mainSearchContainer" style="display:none;">
+            <div style="position: relative;">
+                <input type="text" id="searchInputMain" class="search-input" placeholder="Search for tracks..." maxlength="50" style="width: 100%; position: relative; z-index: 1;">
+                <span class="search-icon" id="searchIconMain" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #b3b3b3; font-size: 18px; pointer-events: none;">🔍</span>
+                <button class="search-clear" id="searchClearMain" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #b3b3b3; font-size: 20px; cursor: pointer; display: none; width: 20px; height: 20px; border-radius: 50%; transition: color 0.2s;">&times;</button>
             </div>
-            <button class="pro-play-btn" title="Play" style="background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(255,215,0,0.13);cursor:pointer;transition:background 0.18s;outline:none;margin-right:0.7rem;" ${!hasUrl ? 'disabled style="opacity:0.5;pointer-events:none;"' : ''}>
-              <svg width="20" height="20" fill="#181818" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path></svg>
-            </button>
-            <button class="remove-btn pro-remove-btn" title="Remove from liked" onclick="removeLikedTrack('${track.id}');event.stopPropagation();" style="background:none;border:none;color:#ff4081;font-size:1.3rem;position:absolute;top:12px;right:12px;cursor:pointer;opacity:0.7;transition:opacity 0.15s;"><svg width="18" height="18" fill="#ff4081" viewBox="0 0 16 16"><path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/></svg></button>
-          </div>
-        `;
-      });
-      container.innerHTML = html;
-      // Add click event listeners to play track in sticky player
-      Array.from(container.getElementsByClassName('pro-track')).forEach(item => {
-        // Play on card or play button click, only if URL is present
-        item.addEventListener('click', function(e) {
-          if (e.target.closest('.remove-btn')) return;
-          const url = item.getAttribute('data-track-url');
-          if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
-          const track = {
-            id: item.getAttribute('data-track-id'),
-            name: item.getAttribute('data-track-name'),
-            artist: item.getAttribute('data-track-artist'),
-            url: url
-          };
-          playTrackInStickyPlayer(track);
+            <div class="search-suggestions" id="searchSuggestionsMain" style="position: absolute; top: calc(100% - 1rem); left: 1rem; right: 1rem; background: #1a1a1a; border: 2px solid #404040; border-top: none; border-radius: 0 0 15px 15px; max-height: 300px; overflow-y: auto; display: none; box-shadow: 0 8px 24px rgba(0,0,0,0.4); z-index: 10;">
+                <!-- Suggestions will be populated here -->
+            </div>
+        </div>
+
+        <div class="main-content">
+            <h1><span class="hertz-gold">HZ</span> <span class="playlists-blue">Playlists</span></h1>
+
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">🏠 Home</a>
+                <a href="Online25App.html" class="nav-btn">🌐 Online</a>
+                <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
+                <a href="Playlist25App.html" class="nav-btn active">📋 Playlists</a>
+                <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+                <a href="Account25App.html" class="nav-btn">👤 Account</a>
+                <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+            </div>
+
+            <!-- ONLY ONE SECTION: FEATURED TRACKS -->
+            <div id="spotifyTrackGridSection" style="max-width:900px;margin:1.5rem auto 2.5rem auto;padding:1.5rem;background:#181818;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+                <h2 class="section-title" style="text-align:center;color:gold;font-size:1.5rem;margin-bottom:1.5rem;">FEATURED TRACKS</h2>
+                <div id="spotifyTrackGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;justify-items:center;">
+                    <!-- Track cards will be injected here -->
+                </div>
+            </div>
+
+            <!-- Popup Player -->
+            <div id="popupPlayerModal" class="modal" style="display:none;">
+                <div class="modal-content" id="popupPlayerContent">
+                    <button class="popup-queue-btn" id="popupQueueBtn" title="Queue">
+                        <div class="queue-icon">
+                            <div class="queue-line"></div>
+                            <div class="queue-line"></div>
+                            <div class="queue-line"></div>
+                        </div>
+                    </button>
+                    <button class="close" id="closePopupPlayer" title="Close">&times;</button>
+                    <div class="popup-player-header">Now Playing</div>
+                    <div class="popup-player-track-info" id="popupPlayerTrackInfo"></div>
+                    <img id="popupPlayerCover" class="popup-player-cover" alt="Track Cover">
+                    <div class="popup-player-controls">
+                        <button class="popup-player-btn" id="popupPrevBtn" title="Previous">&#9198;</button>
+                        <button class="popup-player-btn" id="popupPlayPauseBtn" title="Always Playing">&#10073;&#10073;</button>
+                        <button class="popup-player-btn" id="popupNextBtn" title="Next">&#9197;</button>
+                        <button class="popup-player-btn popup-player-loop" id="popupLoopBtn" title="Loop">&#128257;</button>
+                        <button class="popup-player-btn popup-player-shuffle" id="popupShuffleBtn" title="Shuffle">&#128256;</button>
+                        <button id="popupLikeBtn" title="Like Track">&#10084;</button>
+                    </div>
+                    <div class="popup-player-extra">
+                        <span id="popupPlayerCurrentTime">0:00</span>
+                        <input type="range" id="popupPlayerProgressBar" min="0" max="100" value="0" step="0.1">
+                        <span id="popupPlayerDuration">0:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Queue Modal -->
+            <div id="queueModal" class="queue-modal" style="display:none;">
+                <div class="queue-modal-content">
+                    <div class="queue-header">
+                        <div class="queue-title">🎵 Queue</div>
+                        <button class="queue-close" id="closeQueueModal">&times;</button>
+                    </div>
+                    <div class="queue-controls">
+                        <button class="queue-control-btn" id="clearQueueBtn">Clear Queue</button>
+                        <button class="queue-control-btn" id="shuffleQueueBtn">Shuffle</button>
+                        <button class="queue-control-btn" id="reverseQueueBtn">Reverse</button>
+                    </div>
+                    <div id="queueList" class="queue-list">
+                        <!-- Queue items will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sticky Player -->
+            <div class="sticky-player" id="stickyPlayer">
+                <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:36px;cursor:pointer;">
+                    <div class="player-controls">
+                        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
+                        <button class="player-btn" id="playPauseBtn" title="Always Playing">&#10073;&#10073;</button>
+                        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
+                        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
+                        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
+                        <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
+                        <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
+                    </div>
+                    <span class="player-title" id="playerTrackTitle"></span>
+                    <div style="display:flex;align-items:center;gap:0.7rem;width:320px;max-width:90%;">
+                        <span id="currentTime" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
+                        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="flex:1;">
+                        <span id="duration" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
+                    </div>
+                    <button id="likeBtn" title="Like Track">&#10084;</button>
+                </div>
+                <audio id="playerAudio" style="display:none;" preload="metadata"></audio>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Search Icon Toggle Functionality for main search bar
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchToggleBtn = document.getElementById('searchToggleBtn');
+        const mainSearchContainer = document.getElementById('mainSearchContainer');
+        const searchInputMain = document.getElementById('searchInputMain');
+        if (searchToggleBtn && mainSearchContainer && searchInputMain) {
+            let searchVisible = false;
+            searchToggleBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                searchVisible = !searchVisible;
+                mainSearchContainer.style.display = searchVisible ? 'block' : 'none';
+                if (searchVisible) {
+                    searchInputMain.focus();
+                }
+            });
+            // Hide search bar when clicking outside
+            document.addEventListener('click', function(e) {
+                if (searchVisible && !mainSearchContainer.contains(e.target) && e.target !== searchToggleBtn) {
+                    mainSearchContainer.style.display = 'none';
+                    searchVisible = false;
+                }
+            });
+            // Optional: Hide on Escape
+            document.addEventListener('keydown', function(e) {
+                if (searchVisible && e.key === 'Escape') {
+                    mainSearchContainer.style.display = 'none';
+                    searchVisible = false;
+                }
+            });
+        }
+    });
+        // Global user interaction detection for autoplay
+        window.userHasInteracted = false;
+
+        // Function to enable autoplay after user interaction
+        function enableAutoplay() {
+            if (!window.userHasInteracted) {
+                window.userHasInteracted = true;
+                console.log('✅ User interaction detected - autoplay enabled');
+
+                // Create and play a silent audio to unlock audio context
+                try {
+                    const silentAudio = new Audio();
+                    silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAAAQQBgADAADAAxAAEAAEEiSgLDUAAA';
+                    silentAudio.volume = 0;
+                    silentAudio.play().then(() => {
+                        console.log('🔓 Audio context unlocked');
+                    }).catch(() => {
+                        console.log('Silent audio failed, but continuing...');
+                    });
+                } catch (e) {
+                    console.log('Silent audio error:', e.message);
+                }
+            }
+        }
+
+        // Add multiple event listeners for user interaction
+        document.addEventListener('click', enableAutoplay);
+        document.addEventListener('keydown', enableAutoplay);
+        document.addEventListener('touchstart', enableAutoplay);
+        document.addEventListener('mousedown', enableAutoplay);
+
+        // Hamburger Menu Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerMenu');
+            const dropdown = document.getElementById('navDropdown');
+
+            if (!hamburgerBtn || !dropdown) {
+                console.log('Hamburger menu elements not found');
+                return;
+            }
+
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                console.log('Toggle menu called, isMenuOpen:', isMenuOpen);
+
+                if (isMenuOpen) {
+                    dropdown.classList.add('show');
+                    hamburgerBtn.classList.add('active');
+                } else {
+                    dropdown.classList.remove('show');
+                    hamburgerBtn.classList.remove('active');
+                }
+            }
+
+            function closeMenu() {
+                isMenuOpen = false;
+                dropdown.classList.remove('show');
+                hamburgerBtn.classList.remove('active');
+            }
+
+            // Hamburger button click
+            hamburgerBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Hamburger button clicked');
+                toggleMenu();
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', function(e) {
+                if (isMenuOpen && !dropdown.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+
+            // Close with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    closeMenu();
+                }
+            });
+
+            // Close when clicking navigation links
+            const navLinks = dropdown.querySelectorAll('.nav-btn');
+            navLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
         });
-        // Play on play button click
-        const playBtn = item.querySelector('.pro-play-btn');
-        if (playBtn) {
-          playBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const url = item.getAttribute('data-track-url');
-            if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
-            const track = {
-              id: item.getAttribute('data-track-id'),
-              name: item.getAttribute('data-track-name'),
-              artist: item.getAttribute('data-track-artist'),
-              url: url
+
+        // CLEAN TRACKS DATA
+        const featuredTracks = [
+            { url: 'https://storage.googleapis.com/hertz-music-folder/afro-dancehall-music.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-music.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-theme.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-upbeat.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/best-time-hip-hop.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/calm-mind.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/chill.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/eemotional-trap-beat.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/energetic-hip-hop.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/emotional-pop.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/for-her-chill-type-beat.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/hip-hop-music.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-chill.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-hiphop.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-music.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3' }
+       ];
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    // Playlist25App-hertz-url-bridge.js
+    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
+    // It should be included in Playlist25App.html.
+
+    window.addEventListener('message', function(event) {
+      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+      // Find the track by id in your playlist data
+      var trackId = event.data.id;
+      var found = null;
+      // Try window.playlistTracks (array of objects with id and url)
+      if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+      }
+      // If not found, try DOM lookup (data-track-id)
+      if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+          if (url) found = { id: trackId, url: url };
+        }
+      }
+      // If found and has url, send it back
+      if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+      }
+    });
+
+        function getTrackInfo(url) {
+            const fileName = decodeURIComponent(url.split('/').pop());
+            let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            let artist = '';
+            if (/Prod\. Tedla/i.test(name)) {
+                artist = 'Prod. Tedla';
+                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            }
+            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+                artist = 'Prod. Tedla';
+                name = 'Teddy Afro';
+            }
+            if (!artist) artist = '';
+            return { name, artist, url };
+        }
+
+        // Render ONLY Featured Tracks
+        function renderFeaturedTracks() {
+            console.log('Rendering FEATURED TRACKS ONLY');
+            const grid = document.getElementById('spotifyTrackGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            featuredTracks.forEach((trackObj, idx) => {
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                searchIcon.style.display = 'block';
+                searchInput.focus();
+            });
+
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-container')) {
+                    searchSuggestions.style.display = 'none';
+                }
+            });
+
+            // Show suggestions when input is focused and has content
+            searchInput.addEventListener('focus', function() {
+                if (searchInput.value.trim()) {
+                    performSearch(searchInput.value);
+                }
+            });
+        }
+
+        // Event Listeners
+        playPauseBtn.addEventListener('click', playPause);
+        prevBtn.addEventListener('click', function() {
+            console.log('⏮️ Sticky previous button clicked');
+            enableAutoplay();
+            playPrev();
+        });
+        nextBtn.addEventListener('click', function() {
+            console.log('⏭️ Sticky next button clicked');
+            enableAutoplay();
+            playNext();
+        });
+        loopBtn.addEventListener('click', toggleLoop);
+        shuffleBtn.addEventListener('click', toggleShuffle);
+        volumeRange.addEventListener('input', function() {
+            playerAudio.volume = volumeRange.value;
+        });
+        likeBtn.addEventListener('click', toggleLike);
+
+        playerAudio.addEventListener('timeupdate', function() {
+            if (!playerAudio.duration) return;
+            progressBar.value = (playerAudio.currentTime / playerAudio.duration) * 100;
+            currentTimeSpan.textContent = formatTime(playerAudio.currentTime);
+            durationSpan.textContent = formatTime(playerAudio.duration);
+        });
+
+        // Sync button state with actual audio player state
+        playerAudio.addEventListener('play', function() {
+            playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+            isPlaying = true;
+            // Sync popup player if it exists
+            const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+            if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#10073;&#10073;';
+        });
+
+        playerAudio.addEventListener('pause', function() {
+            playPauseBtn.innerHTML = '&#9654;'; // Show play button when paused
+            isPlaying = false;
+            // Sync popup player if it exists
+            const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+            if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#9654;';
+        });
+
+        playerAudio.addEventListener('ended', function() {
+            if (isLoop) {
+                playerAudio.currentTime = 0;
+                const playPromise = playerAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+                        isPlaying = true;
+                        // Sync popup player if it exists
+                        const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+                        if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#10073;&#10073;';
+                    }).catch(() => {
+                        playPauseBtn.innerHTML = '&#9654;'; // Show play button on error
+                        isPlaying = false;
+                    });
+                }
+            } else {
+                // Automatically move to next track and play
+                playNext();
+            }
+        });
+
+        // Ensure audio can autoplay when loaded
+        playerAudio.addEventListener('canplaythrough', function() {
+            console.log('Audio can play through, shouldAutoplay:', this.dataset.shouldAutoplay);
+            // Only autoplay if we're expecting it and user has interacted
+            if (this.dataset.shouldAutoplay === 'true' && window.userHasInteracted) {
+                console.log('Attempting canplaythrough autoplay');
+                attemptAutoplay();
+            }
+        });
+
+        // Additional autoplay trigger on loadeddata for faster response
+        playerAudio.addEventListener('loadeddata', function() {
+            console.log('Audio data loaded, shouldAutoplay:', this.dataset.shouldAutoplay);
+            if (this.dataset.shouldAutoplay === 'true' && window.userHasInteracted) {
+                console.log('Attempting loadeddata autoplay');
+                attemptAutoplay();
+            }
+        });
+
+        progressBar.addEventListener('input', function() {
+            if (!playerAudio.duration) return;
+            playerAudio.currentTime = (progressBar.value / 100) * playerAudio.duration;
+        });
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', function() {
+            renderFeaturedTracks();
+            console.log('✅ CLEAN VERSION LOADED - NO MAIN PLAYLIST TRACKS SECTION');
+
+            // Initialize search functionality
+            initializeSearch();
+
+            // Popup Player Elements
+            const stickyPlayerMain = document.getElementById('stickyPlayerMain');
+            const popupPlayerModal = document.getElementById('popupPlayerModal');
+            const popupPlayerContent = document.getElementById('popupPlayerContent');
+            const closePopupPlayer = document.getElementById('closePopupPlayer');
+            const popupPlayerCover = document.getElementById('popupPlayerCover');
+            const popupPlayerTrackInfo = document.getElementById('popupPlayerTrackInfo');
+            const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+            const popupPrevBtn = document.getElementById('popupPrevBtn');
+            const popupNextBtn = document.getElementById('popupNextBtn');
+            const popupLoopBtn = document.getElementById('popupLoopBtn');
+            const popupShuffleBtn = document.getElementById('popupShuffleBtn');
+            const popupLikeBtn = document.getElementById('popupLikeBtn');
+            const popupQueueBtn = document.getElementById('popupQueueBtn');
+            const popupPlayerCurrentTime = document.getElementById('popupPlayerCurrentTime');
+            const popupPlayerDuration = document.getElementById('popupPlayerDuration');
+            const popupPlayerProgressBar = document.getElementById('popupPlayerProgressBar');
+
+            // Show popup when clicking sticky player (but not buttons or progress)
+            stickyPlayerMain.addEventListener('click', function(e) {
+                // Don't show popup if clicking on buttons, volume slider, or progress bar
+                if (e.target.closest('button') ||
+                    e.target === volumeRange ||
+                    e.target === progressBar ||
+                    e.target.id === 'currentTime' ||
+                    e.target.id === 'duration') {
+                    return;
+                }
+                showPopupPlayer();
+            });
+
+            function showPopupPlayer() {
+                // Center popup in viewport
+                popupPlayerModal.style.display = 'block';
+                popupPlayerContent.style.top = '50%';
+                popupPlayerContent.style.left = '50%';
+                popupPlayerContent.style.transform = 'translate(-50%, -50%)';
+
+                // Sync track info
+                const track = getTrackInfo(featuredTracks[currentIndex].url);
+                popupPlayerTrackInfo.innerHTML = `
+                    <div class='popup-player-title'>${track.name}</div>
+                    ${track.artist ? `<div class='popup-player-artist'>${track.artist}</div>` : ''}
+                `;
+
+                // Set cover image (HZ logo)
+                const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+                popupPlayerCover.src = hzLogoDataUrl;
+
+                // Sync controls
+                popupPlayPauseBtn.innerHTML = isPlaying ? '&#10073;&#10073;' : '&#9654;';
+                popupLoopBtn.classList.toggle('active', isLoop);
+                popupShuffleBtn.classList.toggle('active', isShuffle);
+
+                // Show small '1' on popup buttons if active
+                if (isLoop) {
+                    popupLoopBtn.innerHTML = '&#128257;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+                } else {
+                    popupLoopBtn.innerHTML = '&#128257;';
+                }
+                if (isShuffle) {
+                    popupShuffleBtn.innerHTML = '&#128256;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+                } else {
+                    popupShuffleBtn.innerHTML = '&#128256;';
+                }
+
+                // Sync like button
+                popupLikeBtn.className = likeBtn.className;
+                if (likeBtn.classList.contains('liked')) {
+                    popupLikeBtn.style.color = '#ff6b6b';
+                } else {
+                    popupLikeBtn.style.color = '#fff';
+                }
+
+                // Sync time display
+                popupPlayerCurrentTime.textContent = formatTime(playerAudio.currentTime);
+                popupPlayerDuration.textContent = formatTime(playerAudio.duration || 0);
+                popupPlayerProgressBar.value = playerAudio.duration ?
+                    (playerAudio.currentTime / playerAudio.duration) * 100 : 0;
+            }
+
+            function hidePopupPlayer() {
+                popupPlayerModal.style.display = 'none';
+            }
+
+            // Close popup when X is clicked
+            closePopupPlayer.addEventListener('click', hidePopupPlayer);
+
+            // Close popup when clicking outside content
+            popupPlayerModal.addEventListener('click', function(e) {
+                if (e.target === popupPlayerModal) {
+                    hidePopupPlayer();
+                }
+            });
+
+            // Popup player controls
+            popupPlayPauseBtn.addEventListener('click', function() {
+                playPause(); // Use the main player's play/pause function
+            });
+
+            popupPrevBtn.addEventListener('click', function() {
+                console.log('⏮️ Popup previous button clicked');
+                enableAutoplay();
+                playPrev();
+                showPopupPlayer(); // Refresh popup with new track
+            });
+
+            popupNextBtn.addEventListener('click', function() {
+                console.log('⏭️ Popup next button clicked');
+                enableAutoplay();
+                playNext();
+                showPopupPlayer(); // Refresh popup with new track
+            });
+
+            popupLoopBtn.addEventListener('click', function() {
+                toggleLoop();
+                // Sync popup button
+                if (isLoop) {
+                    popupLoopBtn.innerHTML = '&#128257;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+                } else {
+                    popupLoopBtn.innerHTML = '&#128257;';
+                }
+            });
+
+            popupShuffleBtn.addEventListener('click', function() {
+                toggleShuffle();
+                // Sync popup button
+                if (isShuffle) {
+                    popupShuffleBtn.innerHTML = '&#128256;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+                } else {
+                    popupShuffleBtn.innerHTML = '&#128256;';
+                }
+            });
+
+            popupLikeBtn.addEventListener('click', toggleLike);
+
+            // Queue button - now shows advanced queue modal
+            popupQueueBtn.addEventListener('click', function() {
+                showQueueModal();
+            });
+
+            function showQueueModal() {
+                const queueModal = document.getElementById('queueModal');
+                queueModal.style.display = 'block';
+                populateQueueList();
+            }
+
+            function hideQueueModal() {
+                const queueModal = document.getElementById('queueModal');
+                queueModal.style.display = 'none';
+            }
+
+            function populateQueueList() {
+                const queueList = document.getElementById('queueList');
+                queueList.innerHTML = '';
+
+                // Create ordered queue: current track first, then remaining tracks in order
+                const orderedQueue = [];
+
+                // Add current track first
+                orderedQueue.push({ track: featuredTracks[currentIndex], originalIndex: currentIndex, queuePosition: 0 });
+
+                // Add tracks that come after current track
+                for (let i = currentIndex + 1; i < featuredTracks.length; i++) {
+                    orderedQueue.push({ track: featuredTracks[i], originalIndex: i, queuePosition: orderedQueue.length });
+                }
+
+                // Add tracks that come before current track (they'll play after the end)
+                for (let i = 0; i < currentIndex; i++) {
+                    orderedQueue.push({ track: featuredTracks[i], originalIndex: i, queuePosition: orderedQueue.length });
+                }
+
+                orderedQueue.forEach((item, displayIndex) => {
+                    const trackInfo = getTrackInfo(item.track.url);
+                    const queueItem = document.createElement('div');
+                    queueItem.className = `queue-item ${displayIndex === 0 ? 'current' : ''}`;
+                    queueItem.draggable = true;
+                    queueItem.dataset.originalIndex = item.originalIndex;
+                    queueItem.dataset.displayIndex = displayIndex;
+
+                    queueItem.innerHTML = `
+                        <div class="queue-number">${displayIndex === 0 ? '▶️' : displayIndex + 1}</div>
+                        <div class="queue-track-info">
+                            <div class="queue-track-name">${trackInfo.name}</div>
+                            <div class="queue-track-artist">${trackInfo.artist || 'Unknown Artist'}</div>
+                        </div>
+                        <div class="queue-actions">
+                            <button class="queue-action-btn" onclick="moveTrackUp(${item.originalIndex})" title="Move Up">↑</button>
+                            <button class="queue-action-btn" onclick="moveTrackDown(${item.originalIndex})" title="Move Down">↓</button>
+                            <button class="queue-action-btn" onclick="removeFromQueue(${item.originalIndex})" title="Remove">✕</button>
+                        </div>
+                    `;
+
+                    // Click to play track (but not if it's the current track)
+                    queueItem.addEventListener('click', function(e) {
+                        if (!e.target.closest('.queue-actions') && displayIndex !== 0) {
+                            loadTrack(item.originalIndex);
+                            populateQueueList(); // Refresh to show new current track
+                        }
+                    });
+
+                    // Drag and drop events
+                    queueItem.addEventListener('dragstart', function(e) {
+                        if (displayIndex === 0) {
+                            e.preventDefault(); // Don't allow dragging the currently playing track
+                            return;
+                        }
+                        queueItem.classList.add('dragging');
+                        e.dataTransfer.setData('text/plain', displayIndex);
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+
+                    queueItem.addEventListener('dragend', function() {
+                        queueItem.classList.remove('dragging');
+                        // Remove drag-over class from all items
+                        document.querySelectorAll('.queue-item').forEach(item => {
+                            item.classList.remove('drag-over');
+                        });
+                    });
+
+                    queueItem.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                    });
+
+                    queueItem.addEventListener('dragenter', function(e) {
+                        e.preventDefault();
+                        if (!queueItem.classList.contains('dragging')) {
+                            queueItem.classList.add('drag-over');
+                        }
+                    });
+
+                    queueItem.addEventListener('dragleave', function(e) {
+                        queueItem.classList.remove('drag-over');
+                    });
+
+                    queueItem.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        const draggedDisplayIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                        const targetDisplayIndex = parseInt(queueItem.dataset.displayIndex);
+
+                        if (draggedDisplayIndex !== targetDisplayIndex && targetDisplayIndex !== 0) {
+                            // Reorder the featuredTracks array based on the new order
+                            reorderQueue(draggedDisplayIndex, targetDisplayIndex, orderedQueue);
+                        }
+
+                        queueItem.classList.remove('drag-over');
+                    });
+
+                    queueList.appendChild(queueItem);
+                });
+            }
+
+            function reorderQueue(fromIndex, toIndex, orderedQueue) {
+                // Get the track being moved
+                const draggedTrack = orderedQueue[fromIndex];
+
+                // Remove from old position
+                orderedQueue.splice(fromIndex, 1);
+
+                // Insert at new position (adjust toIndex if needed)
+                const adjustedToIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+                orderedQueue.splice(adjustedToIndex, 0, draggedTrack);
+
+                // Rebuild featuredTracks array from the new order
+                const newFeaturedTracks = [];
+                orderedQueue.forEach(item => {
+                    newFeaturedTracks.push(item.track);
+                });
+
+                // Update the global featuredTracks array
+                featuredTracks.length = 0;
+                featuredTracks.push(...newFeaturedTracks);
+
+                // Update current index (it should always be 0 since current track is first)
+                currentIndex = 0;
+
+                // Refresh the queue display
+                populateQueueList();
+            }
+
+            // Queue management functions
+            window.moveTrackUp = function(index) {
+                if (index > 0) {
+                    // Swap tracks
+                    const temp = featuredTracks[index];
+                    featuredTracks[index] = featuredTracks[index - 1];
+                    featuredTracks[index - 1] = temp;
+
+                    // Update current index if needed
+                    if (currentIndex === index) {
+                        currentIndex = index - 1;
+                    } else if (currentIndex === index - 1) {
+                        currentIndex = index;
+                    }
+
+                    populateQueueList();
+                }
             };
-            playTrackInStickyPlayer(track);
-          });
+
+            window.moveTrackDown = function(index) {
+                if (index < featuredTracks.length - 1) {
+                    // Swap tracks
+                    const temp = featuredTracks[index];
+                    featuredTracks[index] = featuredTracks[index + 1];
+                    featuredTracks[index + 1] = temp;
+
+                    // Update current index if needed
+                    if (currentIndex === index) {
+                        currentIndex = index + 1;
+                    } else if (currentIndex === index + 1) {
+                        currentIndex = index;
+                    }
+
+                    populateQueueList();
+                }
+            };
+
+            window.removeFromQueue = function(index) {
+                if (featuredTracks.length > 1) {
+                    featuredTracks.splice(index, 1);
+
+                    // Update current index if needed
+                    if (currentIndex > index) {
+                        currentIndex--;
+                    } else if (currentIndex === index) {
+                        if (currentIndex >= featuredTracks.length) {
+                            currentIndex = 0;
+                        }
+                        loadTrack(currentIndex, false); // Don't autoplay
+                    }
+
+                    populateQueueList();
+                }
+            };
+
+            // Queue control buttons
+            document.getElementById('clearQueueBtn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear the entire queue?')) {
+                    // Keep only current track
+                    const currentTrack = featuredTracks[currentIndex];
+                    featuredTracks.length = 0;
+                    featuredTracks.push(currentTrack);
+                    currentIndex = 0;
+                    populateQueueList();
+                }
+            });
+
+            document.getElementById('shuffleQueueBtn').addEventListener('click', function() {
+                // Shuffle all tracks except current
+                const currentTrack = featuredTracks[currentIndex];
+                const otherTracks = featuredTracks.filter((_, i) => i !== currentIndex);
+
+                // Fisher-Yates shuffle
+                for (let i = otherTracks.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [otherTracks[i], otherTracks[j]] = [otherTracks[j], otherTracks[i]];
+                }
+
+                // Rebuild array with current track first
+                featuredTracks.length = 0;
+                featuredTracks.push(currentTrack);
+                featuredTracks.push(...otherTracks);
+                currentIndex = 0;
+                populateQueueList();
+            });
+
+            document.getElementById('reverseQueueBtn').addEventListener('click', function() {
+                // Reverse the order of tracks
+                const currentTrack = featuredTracks[currentIndex];
+                featuredTracks.reverse();
+                currentIndex = featuredTracks.findIndex(track => track === currentTrack);
+                populateQueueList();
+            });
+
+            document.getElementById('closeQueueModal').addEventListener('click', hideQueueModal);
+
+            // Close queue modal when clicking outside
+            document.getElementById('queueModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideQueueModal();
+                }
+            });
+
+            // Progress bar and time update for popup (sync with main player)
+            playerAudio.addEventListener('timeupdate', function() {
+                if (!playerAudio.duration) return;
+                // Update popup if it's open
+                if (popupPlayerModal.style.display === 'block') {
+                    popupPlayerProgressBar.value = (playerAudio.currentTime / playerAudio.duration) * 100;
+                    popupPlayerCurrentTime.textContent = formatTime(playerAudio.currentTime);
+                    popupPlayerDuration.textContent = formatTime(playerAudio.duration);
+                }
+            });
+
+            popupPlayerProgressBar.addEventListener('input', function() {
+                if (!playerAudio.duration) return;
+                playerAudio.currentTime = (popupPlayerProgressBar.value / 100) * playerAudio.duration;
+            });
+        });
+
+        // Listen for localStorage changes to sync like button states
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'hertzLikedTracks' || e.key === 'hertzLikedTracksUpdate') {
+                // Update like button state for current track
+                if (featuredTracks[currentIndex]) {
+                    const track = getTrackInfo(featuredTracks[currentIndex].url);
+                    const trackId = `track_${currentIndex}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                    const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+                    const isLiked = likedTracksObj[trackId];
+
+                    if (isLiked) {
+                        likeBtn.classList.add('liked');
+                        likeBtn.style.color = '#ff6b6b';
+                    } else {
+                        likeBtn.classList.remove('liked');
+                        likeBtn.style.color = '#b3b3b3';
+                    }
+
+                    // Also update popup like button if it exists
+                    const popupLikeBtn = document.getElementById('popupLikeBtn');
+                    if (popupLikeBtn) {
+                        popupLikeBtn.className = likeBtn.className;
+                        if (likeBtn.classList.contains('liked')) {
+                            popupLikeBtn.style.color = '#ff6b6b';
+                        } else {
+                            popupLikeBtn.style.color = '#fff';
+                        }
+                    }
+                }
+            }
+        });
+
+        // Initialize 30-second view logging system
+        function initializeViewLogging() {
+            console.log('🎯 Initializing 30-second view logging system...');
+
+            // Load existing data from localStorage
+            try {
+                const savedData = localStorage.getItem('hertzPlaylistViewData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    totalViews = data.totalViews || 0;
+
+                    // Restore play counts for tracks
+                    if (data.trackPlays) {
+                        featuredTracks.forEach((track, index) => {
+                            if (data.trackPlays[index]) {
+                                track.plays = data.trackPlays[index];
+                            }
+                        });
+                    }
+
+                    console.log(`📊 Loaded existing data: ${totalViews} total views`);
+                }
+            } catch (error) {
+                console.log('⚠️ Could not load existing view data, starting fresh');
+            }
+
+            // Send initial dashboard update
+            sendDashboardUpdate();
+
+            // Set up periodic dashboard updates every 10 seconds
+            setInterval(() => {
+                sendDashboardUpdate();
+            }, 10000);
+
+            console.log('✅ 30-second view logging system initialized');
         }
-      });
-    }
 
-    // Play track in sticky player and show it
-    function playTrackInStickyPlayer(track) {
-      const stickyPlayer = document.getElementById('stickyPlayer');
-      stickyPlayer.style.display = 'flex';
-      document.getElementById('playerTrackTitle').textContent = track.name;
-      document.getElementById('playerArtist').textContent = track.artist;
-      const audio = document.getElementById('playerAudio');
-      let src = track.url && track.url.trim() ? track.url : '';
-      // Check if the URL is likely to be online (http/https)
-      const isOnline = src.startsWith('http://') || src.startsWith('https://');
-      if (!src || !isOnline) {
-        // Show a user-friendly message and use fallback audio
-        alert('This track is only available offline and cannot be played in the browser.');
-        src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-      }
-      if (audio.src !== src) {
-        audio.src = src;
-      }
-      audio.currentTime = 0;
-      audio.play().catch(()=>{});
-      // Update play/pause button
-      const playPauseBtn = document.getElementById('stickyPlayPause');
-      playPauseBtn.textContent = '⏸️';
-      // Store current track for popup
-      stickyPlayer.dataset.currentTrack = JSON.stringify(track);
-      // Always ensure popup is hidden when new track is played
-      document.getElementById('popupPlayer').style.display = 'none';
-    }
+        // Save data before page unloads
+        window.addEventListener('beforeunload', () => {
+            saveViewData();
+            stopProgressTracking();
+        });
 
-    // Sticky player click: open popup player if not clicking a control
-    document.addEventListener('DOMContentLoaded', function() {
-      const stickyPlayer = document.getElementById('stickyPlayer');
-      const playPauseBtn = document.getElementById('stickyPlayPause');
-      const closeBtn = document.getElementById('stickyClose');
-      const audio = document.getElementById('playerAudio');
-      // Play/Pause button
-      playPauseBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        if (audio.paused) {
-          audio.play();
-          playPauseBtn.textContent = '⏸️';
-        } else {
-          audio.pause();
-          playPauseBtn.textContent = '▶️';
+        // Initialize the view logging system when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeViewLogging();
+        });
+
+        // Like/Unlike Track Functions
+        function toggleLike() {
+            if (!featuredTracks[currentIndex]) {
+                console.error('No current track to like/unlike');
+                showStatus('No track selected', 'error');
+                return;
+            }
+
+            const track = getTrackInfo(featuredTracks[currentIndex].url);
+            const trackId = `track_${currentIndex}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+
+            console.log('🔄 Toggling like for track:', {
+                index: currentIndex,
+                name: track.name,
+                artist: track.artist,
+                url: track.url,
+                trackId: trackId
+            });
+
+            try {
+                // Get current liked tracks
+                let likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+                let sharedLikedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
+                let simpleLikedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks_simple') || '[]');
+                // Patch: Always keep hertz_liked_tracks array in sync for Liked25App.html
+                let likedTracksArray = Array.isArray(sharedLikedTracks) ? sharedLikedTracks.filter(t => !!t.id) : [];
+                console.log('📦 Current liked tracks count:', Object.keys(likedTracksObj).length);
+
+                const isCurrentlyLiked = likedTracksObj[trackId];
+
+                // Helper to sync popup like button state
+                function syncPopupLikeBtn(liked) {
+                    const popupLikeBtn = document.getElementById('popupLikeBtn');
+                    if (popupLikeBtn) {
+                        popupLikeBtn.classList.toggle('liked', liked);
+                        popupLikeBtn.style.color = liked ? '#ff6b6b' : '#fff';
+                    }
+                }
+
+                if (isCurrentlyLiked) {
+                    // Unlike the track
+                    delete likedTracksObj[trackId];
+                    // Remove from sharedLikedTracks if it was liked from Playlist25App
+                    sharedLikedTracks = sharedLikedTracks.filter(t => {
+                        if (t.id === trackId) {
+                            return t.source && t.source !== 'Playlist25App';
+                        }
+                        return true;
+                    });
+                    // Remove from simpleLikedTracks by id
+                    simpleLikedTracks = simpleLikedTracks.filter(t => t.id !== trackId);
+                    // Remove from hertz_liked_tracks array for Liked25App.html
+                    likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
+                    likeBtn.classList.remove('liked');
+                    likeBtn.style.color = '#b3b3b3';
+                    syncPopupLikeBtn(false);
+                    showStatus(`Removed \"${track.name}\" from liked tracks`, 'info');
+                } else {
+                    // Like the track
+                    const likedTrack = {
+                        id: trackId,
+                        name: track.name,
+                        artist: track.artist || 'Unknown Artist',
+                        url: track.url,
+                        likedAt: new Date().toISOString()
+                    };
+                    likedTracksObj[trackId] = {
+                        ...likedTrack,
+                        album: '',
+                        source: 'Playlist25App'
+                    };
+                    // Only add if not already present (by id)
+                    if (!sharedLikedTracks.some(t => t.id === trackId)) {
+                        sharedLikedTracks.unshift({
+                            ...likedTrack,
+                            source: 'Playlist25App'
+                        });
+                    }
+                    // Add to simpleLikedTracks if not present
+                    if (!simpleLikedTracks.some(t => t.id === trackId)) {
+                        simpleLikedTracks.unshift({
+                            ...likedTrack
+                        });
+                    }
+                    // Add to hertz_liked_tracks array for Liked25App.html (remove any old, then add new)
+                    likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
+                    likedTracksArray.unshift(likedTrack);
+                    likeBtn.classList.add('liked');
+                    likeBtn.style.color = '#ff6b6b';
+                    syncPopupLikeBtn(true);
+                    showStatus(`Added \"${track.name}\" to liked tracks`, 'success');
+                }
+
+                // Save to localStorage with multiple keys for compatibility
+                localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracksObj));
+                localStorage.setItem('hertzLikedTracks_backup', JSON.stringify(likedTracksObj));
+                localStorage.setItem('playlistLikedTracks', JSON.stringify(likedTracksObj));
+                localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracksArray)); // PATCH: always update array for Liked25App.html
+                localStorage.setItem('hertz_liked_tracks_simple', JSON.stringify(simpleLikedTracks));
+
+                // Also save in legacy array format for compatibility
+                localStorage.setItem('likedTracks', JSON.stringify(Object.values(likedTracksObj)));
+
+                // Update timestamp for cross-tab synchronization
+                localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+
+                console.log('💾 Saved to localStorage. New count:', Object.keys(likedTracksObj).length);
+
+                // Trigger storage event for other tabs/pages
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'hertzLikedTracksUpdate',
+                    newValue: Date.now().toString(),
+                    url: window.location.href
+                }));
+
+                // Also trigger events for legacy keys
+                window.dispatchEvent(new StorageEvent('storage', {
+                    key: 'hertzLikedTracks',
+                    newValue: JSON.stringify(likedTracksObj),
+                    url: window.location.href
+                }));
+
+                console.log('📡 Triggered storage events for cross-tab sync');
+
+            } catch (error) {
+                console.error('❌ Error toggling like:', error);
+                showStatus('Error updating liked tracks', 'error');
+            }
         }
-      });
-      // Close button
-      closeBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        stickyPlayer.style.display = 'none';
-        audio.pause();
-      });
-      // Always show popup player on sticky click (not on buttons)
-      stickyPlayer.addEventListener('click', function(e) {
-        if (e.target.closest('button') || e.target.tagName === 'INPUT') return;
-        const popup = document.getElementById('popupPlayer');
-        const popupAudio = document.getElementById('popupAudio');
-        const popupTitle = document.getElementById('popupTrackTitle');
-        const popupArtist = document.getElementById('popupArtist');
-        // Get current track from sticky
-        let track = null;
-        try {
-          track = JSON.parse(stickyPlayer.dataset.currentTrack || '{}');
-        } catch {}
-        if (track && track.name) {
-          popupTitle.textContent = track.name;
-          popupArtist.textContent = track.artist || '';
-          let src = track.url && track.url.trim() ? track.url : '';
-          if (!src) src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-          popupAudio.src = src;
-          popupAudio.currentTime = audio.currentTime;
-          if (!popupAudio.paused) popupAudio.pause();
-        }
-        popup.style.display = 'block';
-      });
-      // Popup close
-      document.getElementById('popupClose').addEventListener('click', function() {
-        document.getElementById('popupPlayer').style.display = 'none';
-        document.getElementById('popupAudio').pause();
-      });
-    });
 
+        // Test function to verify like functionality
+        window.testLikeFunctionality = function() {
+            console.log('🧪 Testing like functionality...');
 
-    // Always display liked tracks instantly and clearly
-    function syncAndRenderLikedTracks() {
-      loadLikedTracks();
-      renderLikedTracks();
-    }
+            if (!featuredTracks[currentIndex]) {
+                console.log('❌ No track loaded for testing');
+                return;
+            }
 
-    // On page load, render immediately
-    syncAndRenderLikedTracks();
+            const track = getTrackInfo(featuredTracks[currentIndex].url);
+            console.log('🎵 Testing with track:', track.name);
 
-    // Also keep the old DOMContentLoaded for safety
-    document.addEventListener('DOMContentLoaded', function() {
-      syncAndRenderLikedTracks();
-      window.addEventListener('storage', function(e) {
-        const relevantKeys = [
-          'hertz_liked_tracks',
-          'hertzLikedTracks',
-          'likedTracks',
-          'playlistLikedTracks',
-          'hertzLikedTracksUpdate'
-        ];
-        if (relevantKeys.includes(e.key)) {
-          syncAndRenderLikedTracks();
-        }
-      });
-    });
+            // Test liking
+            console.log('1️⃣ Testing LIKE...');
+            toggleLike();
 
-    // Expose functions to window for external access
-    window.addLikedTrack = addLikedTrack;
-    window.removeLikedTrack = removeLikedTrack;
-    window.isTrackLiked = isTrackLiked;
+            // Check if it was saved
+            setTimeout(() => {
+                const saved = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+                const trackId = `track_${currentIndex}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
 
-    // Add: Like button handler for popup player
-    window.togglePopupLike = function() {
-      // Get the current track from the popup player UI
-      const popupTitle = document.getElementById('popupTitle');
-      const popupArtist = document.getElementById('popupArtist');
-      const popupAudio = document.getElementById('popupAudio');
-      // Try to get the track info from the sticky player if available
-      let track = null;
-      try {
-        const stickyPlayer = document.getElementById('stickyPlayer');
-        if (stickyPlayer && stickyPlayer.dataset.currentTrack) {
-          track = JSON.parse(stickyPlayer.dataset.currentTrack);
-        }
-      } catch {}
-      // Fallback: build track from popup UI
-      if (!track || !track.name) {
-        track = {
-          id: popupTitle.textContent.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now(),
-          name: popupTitle.textContent,
-          artist: popupArtist.textContent,
-          url: popupAudio.src || '',
+                if (saved[trackId]) {
+                    console.log('✅ LIKE test passed - track saved to localStorage');
+                    console.log('📦 Saved track data:', saved[trackId]);
+
+                    // Test unliking
+                    console.log('2️⃣ Testing UNLIKE...');
+                    setTimeout(() => {
+                        toggleLike();
+
+                        setTimeout(() => {
+                            const updated = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+                            if (!updated[trackId]) {
+                                console.log('✅ UNLIKE test passed - track removed from localStorage');
+                                console.log('🎉 ALL TESTS PASSED! Like functionality is working correctly.');
+                                showStatus('Like functionality test completed successfully!', 'success');
+                            } else {
+                                console.log('❌ UNLIKE test failed - track still in localStorage');
+                                showStatus('Unlike test failed', 'error');
+                            }
+                        }, 100);
+                    }, 1000);
+                } else {
+                    console.log('❌ LIKE test failed - track not saved to localStorage');
+                    showStatus('Like test failed', 'error');
+                }
+            }, 100);
         };
-      } else {
-        // Always update url to current popup audio src
-        track.url = popupAudio.src || track.url || '';
-      }
-      // Add to liked tracks
-      addLikedTrack(track);
-    };
 
+        // Function to check current liked tracks
+        window.checkLikedTracks = function() {
+            const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+            console.log('📦 Current liked tracks:', likedTracks);
+            console.log('📊 Total liked tracks:', Object.keys(likedTracks).length);
+            return likedTracks;
+        };
 
+        // Function to manually trigger sync with Liked25App
+        window.syncWithLikedPage = function() {
+            const timestamp = Date.now().toString();
+            localStorage.setItem('hertzLikedTracksUpdate', timestamp);
 
+            // Trigger multiple storage events for maximum compatibility
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'hertzLikedTracksUpdate',
+                newValue: timestamp,
+                url: window.location.href
+            }));
 
+            window.dispatchEvent(new StorageEvent('storage', {
+                key: 'hertzLikedTracks',
+                newValue: localStorage.getItem('hertzLikedTracks'),
+                url: window.location.href
+            }));
+
+            console.log('📡 Manual sync triggered with Liked25App');
+            showStatus('Sync triggered with Liked page', 'info');
+        };        // Status notification function
+        function showStatus(message, type = 'info') {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+
+            // Create status notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#2196f3'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                z-index: 10000;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                font-weight: 600;
+                max-width: 300px;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+
+            // Add animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+
+            document.body.appendChild(notification);
+
+            // Remove after delay
+            setTimeout(() => {
+                notification.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                    if (document.head.contains(style)) {
+                        document.head.removeChild(style);
+                    }
+                }, 300);
+            }, 3000);
+        }
+    </script>
+
+    <!-- Copyright Footer -->
+    <footer style="text-align:center;padding:2rem 1rem 1rem 1rem;margin-top:3rem;border-top:1px solid #404040;background:rgba(24,24,24,0.8);backdrop-filter:blur(10px);">
+        <p style="margin:0;color:#b3b3b3;font-size:0.85rem;font-weight:400;">
+            © 2025 <span style="color:#FFD700;font-weight:600;">HZ</span> Music Platform. All rights reserved. | Developed by Beniam Endale Tedla
+        </p>
+    </footer>
+<script>
+// Hertz postMessage bridge: respond to Liked25App.html requests for track URLs
+window.addEventListener('message', function(event) {
+    if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
+    var trackId = event.data.id;
+    var found = null;
+    // Try window.playlistTracks (array of objects with id and url)
+    if (Array.isArray(window.playlistTracks)) {
+        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
+    }
+    // If not found, try DOM lookup (data-track-id)
+    if (!found) {
+        var el = document.querySelector('[data-track-id="' + trackId + '"]');
+        if (el) {
+            var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
+            if (url) found = { id: trackId, url: url };
+        }
+    }
+    // If found and has url, send it back
+    if (found && found.url) {
+        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
+    }
+});
 </script>
 </body>
 </html>
