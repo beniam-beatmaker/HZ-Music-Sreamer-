@@ -718,7 +718,34 @@ function renderLikedTracks() {
       // Check if the URL is likely to be online (http/https)
       const isOnline = src.startsWith('http://') || src.startsWith('https://');
       if (!src || !isOnline) {
-        // Show a user-friendly message and use fallback audio
+        // Try to request the correct URL from Playlist25App.html if possible
+        if (track.id) {
+          function handleUrlMessage(e) {
+            if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
+              // Update the track with the received URL and play
+              track.url = e.data.url;
+              // Save the updated track in likedTracks
+              likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
+              saveLikedTracks();
+              // Play the track with the new URL
+              playTrackInStickyPlayer(track);
+              window.removeEventListener('message', handleUrlMessage);
+            }
+          }
+          window.addEventListener('message', handleUrlMessage);
+          try {
+            if (window.opener) {
+              window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+            } else if (window.parent && window.parent !== window) {
+              window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+            }
+          } catch {}
+          // Show a loading message while waiting
+          document.getElementById('playerTrackTitle').textContent = track.name + ' (Loading...)';
+          document.getElementById('playerArtist').textContent = track.artist;
+          return;
+        }
+        // Fallback: Show a user-friendly message and use fallback audio
         alert('This track is only available offline and cannot be played in the browser.');
         src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
       }
