@@ -423,11 +423,17 @@
         e.stopPropagation();
         if (audio.paused) {
           audio.play();
-          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="2" width="3" height="12"/><rect x="10" y="2" width="3" height="12"/></svg>';
         } else {
           audio.pause();
-          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
         }
+      });
+
+      // Update play/pause button icon based on playback
+      audio.addEventListener('play', function() {
+        playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="2" width="3" height="12"/><rect x="10" y="2" width="3" height="12"/></svg>';
+      });
+      audio.addEventListener('pause', function() {
+        playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
       });
 
       // Progress bar update
@@ -457,86 +463,53 @@
         e.stopPropagation();
         audio.currentTime = audio.duration || 0;
       });
+
+      // Ensure only one audio plays at a time (pause popup audio if sticky plays)
+      audio.addEventListener('play', function() {
+        const popupAudio = document.getElementById('popupAudio');
+        if (popupAudio && !popupAudio.paused) popupAudio.pause();
+      });
     });
 
-    // Popup Player Controls
-    document.addEventListener('DOMContentLoaded', function() {
-      const popup = document.getElementById('popupPlayer');
-      const popupAudio = document.createElement('audio');
-      popupAudio.id = 'popupAudio';
-      popupAudio.className = 'player-audio';
-      popupAudio.style.display = 'none';
-      popup.appendChild(popupAudio);
-
-      const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
-      const popupProgressBar = document.getElementById('popupProgressBar');
-      const popupCurrentTime = document.getElementById('popupCurrentTime');
-      const popupDuration = document.getElementById('popupDuration');
-      const popupVolumeRange = document.getElementById('popupVolumeRangeVertical');
-      const popupCover = document.getElementById('popupCover');
-
-      // Play/Pause
-      popupPlayPauseBtn.addEventListener('click', function() {
-        if (popupAudio.paused) {
-          popupAudio.play();
-          popupPlayPauseBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><rect x="3" y="2" width="3" height="12"/><rect x="10" y="2" width="3" height="12"/></svg>';
-        } else {
-          popupAudio.pause();
-          popupPlayPauseBtn.innerHTML = '<svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
-        }
-      });
-
-      // Progress bar update
-      popupAudio.addEventListener('timeupdate', function() {
-        popupProgressBar.value = popupAudio.duration ? (popupAudio.currentTime / popupAudio.duration) * 100 : 0;
-        popupCurrentTime.textContent = formatTime(popupAudio.currentTime);
-        popupDuration.textContent = formatTime(popupAudio.duration || 0);
-      });
-      popupProgressBar.addEventListener('input', function(e) {
-        if (popupAudio.duration) {
-          popupAudio.currentTime = (popupProgressBar.value / 100) * popupAudio.duration;
-        }
-      });
-
-      // Volume
-      popupVolumeRange.addEventListener('input', function() {
-        popupAudio.volume = popupVolumeRange.value;
-      });
-      popupAudio.volume = popupVolumeRange.value;
-
-      // Rotating cover image animation
-      let rotation = 0;
-      function animateCover() {
-        if (!popup.classList.contains('show')) return;
-        rotation = (rotation + 0.5) % 360;
-        popupCover.style.transform = `rotate(${rotation}deg)`;
-        requestAnimationFrame(animateCover);
+    // --- Ensure playTrackInStickyPlayer always plays the selected track ---
+    function playTrackInStickyPlayer(track, recursionDepth = 0) {
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      stickyPlayer.style.display = 'flex';
+      document.getElementById('playerTrackTitle').textContent = track.name;
+      document.getElementById('playerArtist').textContent = track.artist;
+      const audio = document.getElementById('playerAudio');
+      let src = track.url && track.url.trim() ? track.url : '';
+      // Check if the URL is likely to be online (http/https)
+      const isOnline = src.startsWith('http://') || src.startsWith('https://');
+      if ((!src || !isOnline) && track.id && recursionDepth < 2) {
+        // Request the correct URL from Playlist25App.html if possible
+        try {
+          if (window.opener) {
+            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          } else if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          }
+        } catch {}
+        // Show a loading message while waiting
+        document.getElementById('playerTrackTitle').textContent = track.name + ' (Loading...)';
+        document.getElementById('playerArtist').textContent = track.artist;
+        // Save the current track in stickyPlayer for the handler
+        stickyPlayer.dataset.currentTrack = JSON.stringify(track);
+        return;
       }
-      popup.addEventListener('transitionend', function() {
-        if (popup.classList.contains('show')) animateCover();
-      });
-      // Start animation when popup is shown
-      const observer = new MutationObserver(() => {
-        if (popup.style.display !== 'none') {
-          popup.classList.add('show');
-          animateCover();
-        } else {
-          popup.classList.remove('show');
-          popupCover.style.transform = '';
-        }
-      });
-      observer.observe(popup, { attributes: true, attributeFilter: ['style'] });
-
-      // Sync popup audio with sticky player
-      document.getElementById('stickyPlayer').addEventListener('click', function(e) {
-        if (e.target.closest('button') || e.target.tagName === 'INPUT') return;
-        const stickyAudio = document.getElementById('playerAudio');
-        popupAudio.src = stickyAudio.src;
-        popupAudio.currentTime = stickyAudio.currentTime;
-        popupAudio.volume = popupVolumeRange.value;
-        popupAudio.play();
-      });
-    });
+      if (!src || !isOnline) {
+        // Fallback: Show a user-friendly message and use fallback audio
+        alert('This track is only available offline and cannot be played in the browser.');
+        src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      }
+      if (audio.src !== src) {
+        audio.src = src;
+      }
+      audio.currentTime = 0;
+      audio.play(); // Always play the selected track
+      stickyPlayer.dataset.currentTrack = JSON.stringify(track);
+      document.getElementById('popupPlayer').style.display = 'none';
+    }
 
     // --- Autoplay/user interaction logic (ported from Playlist25App.html) ---
 if (typeof window.userHasInteracted === 'undefined') {
@@ -761,8 +734,7 @@ window.addEventListener('message', function handleUrlMessage(e) {
         audio.src = src;
       }
       audio.currentTime = 0;
-      const playPauseBtn = document.getElementById('stickyPlayPause');
-      attemptAutoplay(audio, playPauseBtn);
+      audio.play(); // Always play the selected track
       stickyPlayer.dataset.currentTrack = JSON.stringify(track);
       document.getElementById('popupPlayer').style.display = 'none';
     }
