@@ -359,7 +359,7 @@
             <div class="track-date">Liked on 8/20/2025</div>
             <button class="remove-btn" onclick="removeLikedTrack('file_1754451834226_0_l9aiwogla');event.stopPropagation();">Remove</button>
           </div>
-        
+
           <div class="track-item" data-track-id="track_24_Believe" data-track-name="Believe" data-track-artist="Prod. Tedla" data-track-url="https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3">
             <div class="track-cover">HZ</div>
             <div class="track-info">
@@ -369,7 +369,7 @@
             <div class="track-date">Liked on 8/14/2025</div>
             <button class="remove-btn" onclick="removeLikedTrack('track_24_Believe');event.stopPropagation();">Remove</button>
           </div>
-        
+
           <div class="track-item" data-track-id="1754547615392_r5xfkhpp6" data-track-name="Rush" data-track-artist="Unknown Artist" data-track-url="">
             <div class="track-cover">HZ</div>
             <div class="track-info">
@@ -379,7 +379,7 @@
             <div class="track-date">Liked on 8/14/2025</div>
             <button class="remove-btn" onclick="removeLikedTrack('1754547615392_r5xfkhpp6');event.stopPropagation();">Remove</button>
           </div>
-        
+
           <div class="track-item" data-track-id="1755152015313_xc14a84jq" data-track-name="Candle type beat" data-track-artist="Unknown Artist" data-track-url="">
             <div class="track-cover">HZ</div>
             <div class="track-info">
@@ -546,8 +546,10 @@
 
     // Add a track to liked tracks
     function addLikedTrack(track) {
+      // Always ensure the liked track has a valid url (from url or audioUrl)
       const likedTrack = {
         ...track,
+        url: track.url || track.audioUrl || '',
         likedAt: new Date().toISOString()
       };
       likedTracks.unshift(likedTrack);
@@ -689,10 +691,19 @@
       });
     });
 
-    // Initialize on page load
-    document.addEventListener('DOMContentLoaded', function() {
+
+    // Always display liked tracks instantly and clearly
+    function syncAndRenderLikedTracks() {
       loadLikedTracks();
       renderLikedTracks();
+    }
+
+    // On page load, render immediately
+    syncAndRenderLikedTracks();
+
+    // Also keep the old DOMContentLoaded for safety
+    document.addEventListener('DOMContentLoaded', function() {
+      syncAndRenderLikedTracks();
       window.addEventListener('storage', function(e) {
         const relevantKeys = [
           'hertz_liked_tracks',
@@ -702,8 +713,7 @@
           'hertzLikedTracksUpdate'
         ];
         if (relevantKeys.includes(e.key)) {
-          loadLikedTracks();
-          renderLikedTracks();
+          syncAndRenderLikedTracks();
         }
       });
     });
@@ -712,6 +722,36 @@
     window.addLikedTrack = addLikedTrack;
     window.removeLikedTrack = removeLikedTrack;
     window.isTrackLiked = isTrackLiked;
+
+    // Add: Like button handler for popup player
+    window.togglePopupLike = function() {
+      // Get the current track from the popup player UI
+      const popupTitle = document.getElementById('popupTitle');
+      const popupArtist = document.getElementById('popupArtist');
+      const popupAudio = document.getElementById('popupAudio');
+      // Try to get the track info from the sticky player if available
+      let track = null;
+      try {
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        if (stickyPlayer && stickyPlayer.dataset.currentTrack) {
+          track = JSON.parse(stickyPlayer.dataset.currentTrack);
+        }
+      } catch {}
+      // Fallback: build track from popup UI
+      if (!track || !track.name) {
+        track = {
+          id: popupTitle.textContent.replace(/\s+/g, '_').toLowerCase() + '_' + Date.now(),
+          name: popupTitle.textContent,
+          artist: popupArtist.textContent,
+          url: popupAudio.src || '',
+        };
+      } else {
+        // Always update url to current popup audio src
+        track.url = popupAudio.src || track.url || '';
+      }
+      // Add to liked tracks
+      addLikedTrack(track);
+    };
 </script>
 
 
