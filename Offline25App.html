@@ -2628,7 +2628,7 @@ input[type="file"] {
 
   <!-- Navigation Dropdown -->
   <div class="nav-dropdown" id="navDropdown">
-    <a href="index.html" class="nav-btn">🏠 Home</a>
+    <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
     <a href="Online25App.html" class="nav-btn">🌐 Online</a>
     <a href="Offline25App.html" class="nav-btn active">📱 Offline</a>
     <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
@@ -4126,17 +4126,21 @@ input[type="file"] {
     // Also add to shared liked tracks for Liked25App.html
     try {
       let likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
-      if (track.liked && !likedTracks.some(t => t.id === track.id)) {
+      if (track.liked) {
+        // Remove any existing entry for this id
+        likedTracks = likedTracks.filter(t => t.id !== track.id);
+        // Always save the correct mp3 URL for the liked track
+        let url = track.url || track.audioUrl || '';
         likedTracks.unshift({
           id: track.id,
           name: track.name,
           artist: track.artist,
-          url: track.url || '',
+          url: url,
           likedAt: new Date().toISOString()
         });
         localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
         localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
-      } else if (!track.liked) {
+      } else {
         // Remove from liked tracks if unliked
         likedTracks = likedTracks.filter(t => t.id !== track.id);
         localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
@@ -6880,12 +6884,20 @@ window.likeTrack = function(trackId) {
     if (track) {
       let likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
       // Prevent duplicates
+      // Always use the actual mp3 URL currently being played for this track
+      let actualUrl = '';
+      const playerAudio = document.getElementById('playerAudio');
+      if (playerAudio && playerAudio.src && track.name && playerAudio.dataset && playerAudio.dataset.trackId === track.id) {
+        actualUrl = playerAudio.src;
+      } else {
+        actualUrl = track.url || '';
+      }
       if (!likedTracks.some(t => t.id === track.id)) {
         likedTracks.unshift({
           id: track.id,
           name: track.name,
           artist: track.artist,
-          url: track.url || '',
+          url: actualUrl,
           likedAt: new Date().toISOString()
         });
         localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
