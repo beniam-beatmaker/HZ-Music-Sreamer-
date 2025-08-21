@@ -1216,7 +1216,7 @@
 
             grid.innerHTML = '';
 
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
 
             featuredTracks.forEach((trackObj, idx) => {
                                 const track = getTrackInfo(trackObj.url);
@@ -1312,798 +1312,798 @@ window.shareTrack = function(trackId, event) {
             icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
         }
     ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
-
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
+    const shareLink = window.location.origin + window.location.pathname + `#track-${trackId}`;
+    const shareText = `Check out "${track.name}" by ${track.artist || 'Unknown Artist'}`;
+    const menuBtn = document.getElementById(`menu-${trackId}`);
+    let rect = menuBtn?.getBoundingClientRect();
+    let dropdownHeight = 40;
+    let top = rect ? rect.top + window.scrollY - dropdownHeight - 8 : 100;
+    let left = rect ? rect.left + window.scrollX : 100;
+    let dropdown = document.createElement('div');
+    dropdown.id = 'shareDropdown';
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = top + 'px';
+    dropdown.style.left = left + 'px';
+    dropdown.style.background = 'transparent';
+    dropdown.style.borderRadius = '8px';
+    dropdown.style.boxShadow = 'none';
+    dropdown.style.padding = '0.3rem 0.5rem';
+    dropdown.style.zIndex = 9999;
+    dropdown.style.display = 'flex';
+    dropdown.style.flexDirection = 'row';
+    dropdown.style.gap = '0.3rem';
+    dropdown.style.minWidth = 'unset';
+    dropdown.style.width = 'auto';
+    dropdown.style.height = 'auto';
+    dropdown.style.alignItems = 'center';
+    dropdown.style.justifyContent = 'center';
+    platforms.forEach(platform => {
+        let btn = document.createElement('a');
+        btn.href = platform.url(shareLink, shareText);
+        btn.target = '_blank';
+        btn.rel = 'noopener noreferrer';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.background = 'none';
+        btn.style.border = 'none';
+        btn.style.color = '#fff';
+        btn.style.fontWeight = '500';
+        btn.style.fontSize = '1.2rem';
+        btn.style.textDecoration = 'none';
+        btn.style.padding = '0.5rem 0.2rem';
+        btn.style.borderRadius = '6px';
+        btn.style.transition = 'background 0.2s';
+        btn.onmouseover = () => btn.style.background = '#181818';
+        btn.onmouseout = () => btn.style.background = 'none';
+        const iconWrapper = document.createElement('span');
+        iconWrapper.style.background = '#e0e0e0';
+        iconWrapper.style.borderRadius = '6px';
+        iconWrapper.style.padding = '4px';
+        iconWrapper.style.display = 'flex';
+        iconWrapper.style.alignItems = 'center';
+        iconWrapper.innerHTML = platform.icon;
+        btn.appendChild(iconWrapper);
+        dropdown.appendChild(btn);
     });
-
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+    setTimeout(() => {
+        document.addEventListener('mousedown', function handler(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.remove();
+                document.removeEventListener('mousedown', handler);
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
-            }
-            if (!artist) artist = '';
-            return { name, artist, url };
-        }
-
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
-
-            grid.innerHTML = '';
-
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
-
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
-// --- 3-dot menu support for featured tracks ---
-window.toggleTrackMenu = function(trackId) {
-    document.querySelectorAll('.track-menu-popup').forEach(menu => {
-        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
-    });
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-};
-
-
-window.addToQueue = function(trackId) {
-    // Add to queue for featured tracks
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    if (!window.queue) window.queue = [];
-    if (!window.queue.find(t => t.url === track.url)) {
-        window.queue.push(track);
-        showNotification('Added to queue!', 'success');
-    } else {
-        showNotification('Already in queue!', 'info');
-    }
+        });
+    }, 10);
+    document.body.appendChild(dropdown);
     const menu = document.getElementById(`menu-${trackId}`);
     if (menu) menu.style.display = 'none';
 };
 
-
-window.shareTrack = function(trackId, event) {
-    if (event) event.stopPropagation();
-    document.getElementById('shareDropdown')?.remove();
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    // Social platforms and SVG icons (X replaces Twitter)
-    const platforms = [
-        {
-            name: 'facebook',
-            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
-        },
-        {
-            name: 'x',
-            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
-        },
-        {
-            name: 'instagram',
-            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
-        },
-        {
-            name: 'whatsapp',
-            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
-        }
-    ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
-
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
-    });
-
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
-            }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
-            }
-            if (!artist) artist = '';
-            return { name, artist, url };
-        }
-
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
-
-            grid.innerHTML = '';
-
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
-
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
-// --- 3-dot menu support for featured tracks ---
-window.toggleTrackMenu = function(trackId) {
-    document.querySelectorAll('.track-menu-popup').forEach(menu => {
-        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
-    });
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-};
-
-
-window.addToQueue = function(trackId) {
-    // Add to queue for featured tracks
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    if (!window.queue) window.queue = [];
-    if (!window.queue.find(t => t.url === track.url)) {
-        window.queue.push(track);
-        showNotification('Added to queue!', 'success');
-    } else {
-        showNotification('Already in queue!', 'info');
+window.removeTrack = function(trackId) {
+    if (confirm('Are you sure you want to remove this track from featured?')) {
+        // Remove from DOM only for demo. Implement real removal as needed.
+        const card = document.getElementById(`menu-${trackId}`)?.closest('.spotify-track-card');
+        if (card) card.remove();
+        showNotification('Track removed from featured', 'success');
     }
     const menu = document.getElementById(`menu-${trackId}`);
     if (menu) menu.style.display = 'none';
 };
-
-
-window.shareTrack = function(trackId, event) {
-    if (event) event.stopPropagation();
-    document.getElementById('shareDropdown')?.remove();
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    // Social platforms and SVG icons (X replaces Twitter)
-    const platforms = [
-        {
-            name: 'facebook',
-            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
-        },
-        {
-            name: 'x',
-            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
-        },
-        {
-            name: 'instagram',
-            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
-        },
-        {
-            name: 'whatsapp',
-            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+            });
+            console.log('Featured tracks rendered:', grid.children.length);
         }
-    ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
 
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
-    });
+        // Player Logic
+        let currentIndex = 0;
+        let isPlaying = false;
+        let isLoop = false;
+        let isShuffle = false;
 
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+        // 30-Second View Logging Variables
+        let totalViews = 0;
+        let activeListeners = 1;
+        let trackViewLogged = false;
+        let progressTracker = 0;
+        let progressInterval = null;
+        let sessionStartTime = Date.now();
+
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        const playerAudio = document.getElementById('playerAudio');
+        const playerTrackTitle = document.getElementById('playerTrackTitle');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const loopBtn = document.getElementById('loopBtn');
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        const volumeRange = document.getElementById('volumeRange');
+        const progressBar = document.getElementById('progressBar');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+        const likeBtn = document.getElementById('likeBtn');
+
+        function loadTrack(idx, autoplay = true) {
+            if (!featuredTracks[idx] || !featuredTracks[idx].url) return;
+
+            console.log(`🎧 Loading track ${idx} with autoplay: ${autoplay}`);
+            stickyPlayer.style.display = 'flex';
+            const track = getTrackInfo(featuredTracks[idx].url);
+
+            // Stop current audio if playing
+            if (!playerAudio.paused) {
+                playerAudio.pause();
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
+
+            // Clear any timeouts
+            if (window.autoplayTimeout) {
+                clearTimeout(window.autoplayTimeout);
             }
-            if (!artist) artist = '';
-            return { name, artist, url };
-        }
+            window.autoplayRetried = false;
 
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
+            // Clear any existing event listeners to avoid duplicates
+            playerAudio.removeEventListener('loadstart', handleLoadStart);
+            playerAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+            playerAudio.removeEventListener('canplay', handleCanPlay);
 
-            grid.innerHTML = '';
+            // Set track info
+            playerAudio.src = track.url;
+            playerTrackTitle.textContent = track.name;
+            currentIndex = idx;
+            progressBar.value = 0;
+            currentTimeSpan.textContent = "0:00";
+            durationSpan.textContent = "0:00";
 
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+            // Set autoplay flag
+            playerAudio.dataset.shouldAutoplay = autoplay ? 'true' : 'false';
 
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
-// --- 3-dot menu support for featured tracks ---
-window.toggleTrackMenu = function(trackId) {
-    document.querySelectorAll('.track-menu-popup').forEach(menu => {
-        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
-    });
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-};
+            // Configure audio for autoplay
+            playerAudio.autoplay = false; // We'll handle this manually
+            playerAudio.muted = false;
+            playerAudio.volume = volumeRange.value || 0.7;
+            console.log('🔊 Audio configured for autoplay, volume=', playerAudio.volume);
 
-
-window.addToQueue = function(trackId) {
-    // Add to queue for featured tracks
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    if (!window.queue) window.queue = [];
-    if (!window.queue.find(t => t.url === track.url)) {
-        window.queue.push(track);
-        showNotification('Added to queue!', 'success');
-    } else {
-        showNotification('Already in queue!', 'info');
-    }
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) menu.style.display = 'none';
-};
-
-
-window.shareTrack = function(trackId, event) {
-    if (event) event.stopPropagation();
-    document.getElementById('shareDropdown')?.remove();
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    // Social platforms and SVG icons (X replaces Twitter)
-    const platforms = [
-        {
-            name: 'facebook',
-            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
-        },
-        {
-            name: 'x',
-            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
-        },
-        {
-            name: 'instagram',
-            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
-        },
-        {
-            name: 'whatsapp',
-            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
-        }
-    ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
-
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
-    });
-
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            // Set initial button state based on autoplay
+            if (autoplay) {
+                playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when autoplay is expected
+                isPlaying = true;
+                console.log('🎛️ UI set to pause button - autoplay enabled');
+            } else {
+                playPauseBtn.innerHTML = '&#9654;'; // Show play button when no autoplay
+                isPlaying = false;
+                console.log('🎛️ UI set to play button - no autoplay');
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
+
+            // Also sync popup player button
+            const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+            if (popupPlayPauseBtn) {
+                popupPlayPauseBtn.innerHTML = autoplay ? '&#10073;&#10073;' : '&#9654;';
+            }            // Check if current track is liked and set button state
+            const trackId = `track_${idx}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
+            const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+            const isLiked = likedTracksObj[trackId];
+
+            if (isLiked) {
+                likeBtn.classList.add('liked');
+                likeBtn.style.color = '#ff6b6b';
+            } else {
+                likeBtn.classList.remove('liked');
+                likeBtn.style.color = '#b3b3b3';
             }
-            if (!artist) artist = '';
-            return { name, artist, url };
-        }
 
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
-
-            grid.innerHTML = '';
-
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
-
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
-// --- 3-dot menu support for featured tracks ---
-window.toggleTrackMenu = function(trackId) {
-    document.querySelectorAll('.track-menu-popup').forEach(menu => {
-        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
-    });
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-};
-
-
-window.addToQueue = function(trackId) {
-    // Add to queue for featured tracks
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    if (!window.queue) window.queue = [];
-    if (!window.queue.find(t => t.url === track.url)) {
-        window.queue.push(track);
-        showNotification('Added to queue!', 'success');
-    } else {
-        showNotification('Already in queue!', 'info');
-    }
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) menu.style.display = 'none';
-};
-
-
-window.shareTrack = function(trackId, event) {
-    if (event) event.stopPropagation();
-    document.getElementById('shareDropdown')?.remove();
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    // Social platforms and SVG icons (X replaces Twitter)
-    const platforms = [
-        {
-            name: 'facebook',
-            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
-        },
-        {
-            name: 'x',
-            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
-        },
-        {
-            name: 'instagram',
-            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
-        },
-        {
-            name: 'whatsapp',
-            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
-        }
-    ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
-
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
-    });
-
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+            // Also update popup player like button
+            const popupLikeBtn = document.getElementById('popupLikeBtn');
+            if (popupLikeBtn) {
+                if (isLiked) {
+                    popupLikeBtn.classList.add('liked');
+                    popupLikeBtn.style.color = '#ff6b6b';
+                } else {
+                    popupLikeBtn.classList.remove('liked');
+                    popupLikeBtn.style.color = '#fff';
+                }
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
+
+            // Add loading event listeners for autoplay
+            if (autoplay) {
+                playerAudio.addEventListener('loadstart', handleLoadStart, { once: true });
+                playerAudio.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
+                playerAudio.addEventListener('canplay', handleCanPlay, { once: true });
+                playerAudio.addEventListener('canplaythrough', function() {
+                    console.log('🎵 Can play through - attempting autoplay');
+                    if (playerAudio.dataset.shouldAutoplay === 'true') {
+                        attemptAutoplay();
+                    }
+                }, { once: true });
             }
-            if (!artist) artist = '';
-            return { name, artist, url };
-        }
 
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
+            // Force load the audio
+            playerAudio.load();
 
-            grid.innerHTML = '';
+            // Start 30-second progress tracking for this track
+            startProgressTracking();
 
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+            // Multiple autoplay triggers with delays for better reliability
+            if (autoplay) {
+                // Immediate attempt
+                setTimeout(() => {
+                    console.log('⚡ Immediate autoplay attempt');
+                    attemptAutoplay();
+                }, 50);
 
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
-// --- 3-dot menu support for featured tracks ---
-window.toggleTrackMenu = function(trackId) {
-    document.querySelectorAll('.track-menu-popup').forEach(menu => {
-        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
-    });
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) {
-        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-    }
-};
+                // Backup attempt
+                setTimeout(() => {
+                    if (playerAudio.dataset.shouldAutoplay === 'true') {
+                        console.log('🔄 Backup autoplay attempt');
+                        attemptAutoplay();
+                    }
+                }, 500);
 
-
-window.addToQueue = function(trackId) {
-    // Add to queue for featured tracks
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    if (!window.queue) window.queue = [];
-    if (!window.queue.find(t => t.url === track.url)) {
-        window.queue.push(track);
-        showNotification('Added to queue!', 'success');
-    } else {
-        showNotification('Already in queue!', 'info');
-    }
-    const menu = document.getElementById(`menu-${trackId}`);
-    if (menu) menu.style.display = 'none';
-};
-
-
-window.shareTrack = function(trackId, event) {
-    if (event) event.stopPropagation();
-    document.getElementById('shareDropdown')?.remove();
-    let idx = -1;
-    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
-    if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
-    // Social platforms and SVG icons (X replaces Twitter)
-    const platforms = [
-        {
-            name: 'facebook',
-            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
-        },
-        {
-            name: 'x',
-            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
-        },
-        {
-            name: 'instagram',
-            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
-        },
-        {
-            name: 'whatsapp',
-            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
-            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
-        }
-    ];
-    // Playlist25App-hertz-url-bridge.js
-    // This script enables Playlist25App.html to respond to Liked25App.html's requests for track URLs via postMessage.
-    // It should be included in Playlist25App.html.
-
-    window.addEventListener('message', function(event) {
-      if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-      // Find the track by id in your playlist data
-      var trackId = event.data.id;
-      var found = null;
-      // Try window.playlistTracks (array of objects with id and url)
-      if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-      }
-      // If not found, try DOM lookup (data-track-id)
-      if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-          var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-          if (url) found = { id: trackId, url: url };
-        }
-      }
-      // If found and has url, send it back
-      if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-      }
-    });
-
-        function getTrackInfo(url) {
-            const fileName = decodeURIComponent(url.split('/').pop());
-            let name = fileName.replace(/\.(mp3|wav)$/i, '');
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
-                artist = 'Prod. Tedla';
-                name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
+                // Final attempt
+                setTimeout(() => {
+                    if (playerAudio.dataset.shouldAutoplay === 'true') {
+                        console.log('🎯 Final autoplay attempt');
+                        attemptAutoplay();
+                    }
+                }, 1000);
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
-                artist = 'Prod. Tedla';
-                name = 'Teddy Afro';
-            }
-            if (!artist) artist = '';
-            return { name, artist, url };
         }
 
-        // Render ONLY Featured Tracks
-        function renderFeaturedTracks() {
-            console.log('Rendering FEATURED TRACKS ONLY');
-            const grid = document.getElementById('spotifyTrackGrid');
-            if (!grid) return;
+        // Helper functions for audio loading
+        function handleLoadStart() {
+            console.log('Audio loading started');
+        }
 
-            grid.innerHTML = '';
+        function handleLoadedMetadata() {
+            console.log('Audio metadata loaded, attempting autoplay');
+            if (playerAudio.dataset.shouldAutoplay === 'true') {
+                attemptAutoplay();
+            }
+        }
 
-            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+        function handleCanPlay() {
+            console.log('Audio can play, attempting autoplay');
+            if (playerAudio.dataset.shouldAutoplay === 'true') {
+                attemptAutoplay();
+            }
+        }
 
-            featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
+        function attemptAutoplay() {
+            console.log('🎵 Attempting autoplay - readyState:', playerAudio.readyState, 'userInteracted:', window.userHasInteracted);
+
+            // Clear any previous timeout
+            if (window.autoplayTimeout) {
+                clearTimeout(window.autoplayTimeout);
+            }
+
+            // Ensure we have user interaction
+            if (!window.userHasInteracted) {
+                console.log('⚠️ No user interaction yet, cannot autoplay');
+                return;
+            }
+
+            // Check if audio is ready to play
+            if (playerAudio.readyState < 2) {
+                console.log('⏳ Audio not ready (readyState: ' + playerAudio.readyState + '), retrying in 200ms...');
+                window.autoplayTimeout = setTimeout(() => {
+                    if (playerAudio.dataset.shouldAutoplay === 'true') {
+                        attemptAutoplay();
+                    }
+                }, 200);
+                return;
+            }
+
+            // Try to play the audio
+            console.log('🎯 Audio ready, attempting to play...');
+            playerAudio.play().then(() => {
+                console.log('✅ Autoplay successful!');
+                playPauseBtn.innerHTML = '&#10073;&#10073;'; // Always show pause button
+                isPlaying = true;
+
+                // Sync popup player - always show pause button
+                const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+                if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#10073;&#10073;';
+
+                // Clear the autoplay flag
+                playerAudio.dataset.shouldAutoplay = 'false';
+
+            }).catch(error => {
+                console.log('❌ Autoplay failed:', error.message);
+
+                // ALWAYS set UI to pause button (playing state) regardless of actual playback
+                playPauseBtn.innerHTML = '&#10073;&#10073;'; // Always show pause button
+                isPlaying = true;
+
+                // Sync popup player
+                const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+                if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#10073;&#10073;';
+
+                // One retry after a delay
+                if (!window.autoplayRetried) {
+                    window.autoplayRetried = true;
+                    console.log('🔄 Retrying autoplay in 1 second...');
+                    window.autoplayTimeout = setTimeout(() => {
+                        if (playerAudio.dataset.shouldAutoplay === 'true') {
+                            playerAudio.play().then(() => {
+                                console.log('✅ Retry autoplay successful!');
+                                playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+                                playerAudio.dataset.shouldAutoplay = 'false';
+                                window.autoplayRetried = false;
+                            }).catch(() => {
+                                console.log('❌ Retry autoplay also failed');
+                                playPauseBtn.innerHTML = '&#9654;'; // Show play button on failure
+                                playerAudio.dataset.shouldAutoplay = 'false';
+                                window.autoplayRetried = false;
+                            });
+                        }
+                    }, 1000);
+                } else {
+                    playerAudio.dataset.shouldAutoplay = 'false';
+                }
+            });
+        }
+
+        function playPause() {
+            if (!featuredTracks[currentIndex] || !featuredTracks[currentIndex].url) return;
+
+            // Ensure user interaction is registered
+            enableAutoplay();
+
+            if (isPlaying) {
+                console.log('⏸️ Pausing audio');
+                playerAudio.pause();
+                playPauseBtn.innerHTML = '&#9654;'; // Show play button when paused
+                isPlaying = false;
+
+                // Sync popup player
+                const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+                if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#9654;';
+            } else {
+                console.log('▶️ Playing audio');
+                playerAudio.play().then(() => {
+                    console.log('✅ Manual play successful');
+                    playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+                    isPlaying = true;
+
+                    // Sync popup player
+                    const popupPlayPauseBtn = document.getElementById('popupPlayPauseBtn');
+                    if (popupPlayPauseBtn) popupPlayPauseBtn.innerHTML = '&#10073;&#10073;';
+                }).catch(error => {
+                    console.log('❌ Manual play failed:', error);
+                    playPauseBtn.innerHTML = '&#9654;'; // Keep play button on error
+                    isPlaying = false;
+                });
+            }
+        }
+
+        function playNext() {
+            if (isLoop) {
+                playerAudio.currentTime = 0;
+                const playPromise = playerAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+                        isPlaying = true;
+                    }).catch(() => {
+                        playPauseBtn.innerHTML = '&#9654;'; // Show play button on error
+                        isPlaying = false;
+                    });
+                } else {
+                    playPauseBtn.innerHTML = '&#9654;'; // Default to play button
+                    isPlaying = false;
+                }
+                return;
+            }
+            if (isShuffle) {
+                let nextIdx = Math.floor(Math.random() * featuredTracks.length);
+                if (featuredTracks.length > 1 && nextIdx === currentIndex) {
+                    nextIdx = (nextIdx + 1) % featuredTracks.length;
+                }
+                currentIndex = nextIdx;
+            } else {
+                currentIndex = (currentIndex + 1) % featuredTracks.length;
+            }
+            loadTrack(currentIndex, true); // Ensure autoplay is true for next track
+        }
+
+        function playPrev() {
+            if (isLoop) {
+                playerAudio.currentTime = 0;
+                const playPromise = playerAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        playPauseBtn.innerHTML = '&#10073;&#10073;'; // Show pause button when playing
+                        isPlaying = true;
+                    }).catch(() => {
+                        playPauseBtn.innerHTML = '&#9654;'; // Show play button on error
+                        isPlaying = false;
+                    });
+                } else {
+                    playPauseBtn.innerHTML = '&#9654;'; // Default to play button
+                    isPlaying = false;
+                }
+                return;
+            }
+            if (isShuffle) {
+                let prevIdx = Math.floor(Math.random() * featuredTracks.length);
+                if (featuredTracks.length > 1 && prevIdx === currentIndex) {
+                    prevIdx = (prevIdx - 1 + featuredTracks.length) % featuredTracks.length;
+                }
+                currentIndex = prevIdx;
+            } else {
+                currentIndex = (currentIndex - 1 + featuredTracks.length) % featuredTracks.length;
+            }
+            loadTrack(currentIndex, true); // Ensure autoplay is true for previous track
+        }
+
+        function toggleLoop() {
+            isLoop = !isLoop;
+            playerAudio.loop = isLoop;
+            loopBtn.style.color = isLoop ? '#1db954' : '#fff';
+            if (isLoop) {
+                loopBtn.innerHTML = '&#128257;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+            } else {
+                loopBtn.innerHTML = '&#128257;';
+            }
+        }
+
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            shuffleBtn.style.color = isShuffle ? '#1db954' : '#fff';
+            if (isShuffle) {
+                shuffleBtn.innerHTML = '&#128256;<span style="font-size:0.7em;vertical-align:super;position:relative;left:-4px;">1</span>';
+            } else {
+                shuffleBtn.innerHTML = '&#128256;';
+            }
+        }
+
+        function formatTime(sec) {
+            sec = Math.floor(sec);
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return m + ':' + (s < 10 ? '0' : '') + s;
+        }
+
+        // 30-Second View Logging Functions
+        function startProgressTracking() {
+            // Clear any existing progress tracker
+            if (progressInterval) {
+                clearInterval(progressInterval);
+            }
+
+            // Reset tracking for new track
+            progressTracker = 0;
+            trackViewLogged = false;
+
+            // Start tracking progress every second
+            progressInterval = setInterval(() => {
+                if (isPlaying && !playerAudio.paused) {
+                    progressTracker += 1;
+
+                    // Log progress every 10 seconds for debugging
+                    if (progressTracker % 10 === 0) {
+                        console.log(`🎵 Track progress: ${progressTracker} seconds`);
+                    }
+
+                    // Log view after 30 seconds of continuous play
+                    if (progressTracker >= 30 && !trackViewLogged) {
+                        trackViewLogged = true;
+                        logTrackView();
+                    }
+                }
+            }, 1000);
+        }
+
+        function stopProgressTracking() {
+            if (progressInterval) {
+                clearInterval(progressInterval);
+                progressInterval = null;
+            }
+        }
+
+        function logTrackView() {
+            if (!featuredTracks[currentIndex]) return;
+
+            totalViews += 1;
+            const track = getTrackInfo(featuredTracks[currentIndex].url);
+
+            console.log(`🎉 VIEW LOGGED: ${track.name} (played for 30+ seconds) - Total Views: ${totalViews}`);
+
+            // Add plays count to the track
+            if (!featuredTracks[currentIndex].plays) {
+                featuredTracks[currentIndex].plays = 0;
+            }
+            featuredTracks[currentIndex].plays += 1;
+
+            // Save the updated data
+            saveViewData();
+
+            // Send update to dashboard
+            sendDashboardUpdate();
+        }
+
+        function sendDashboardUpdate() {
+            // Get tracks that have been played (have plays > 0)
+            const listenedTracks = featuredTracks
+                .map((trackObj, index) => {
+                    const track = getTrackInfo(trackObj.url);
+                    return {
+                        id: index,
+                        name: track.name,
+                        artist: track.artist,
+                        plays: trackObj.plays || 0
+                    };
+                })
+                .filter(track => track.plays > 0)
+                .sort((a, b) => b.plays - a.plays)
+                .slice(0, 10); // Top 10 most played
+
+            const updateData = {
+                type: 'playlistUpdate',
+                totalViews: totalViews,
+                activeUsers: activeListeners,
+                totalTracks: featuredTracks.length,
+                avgSessionTime: Math.floor((Date.now() - sessionStartTime) / 60000), // minutes
+                currentTrack: currentIndex >= 0 && featuredTracks[currentIndex] ? {
+                    id: currentIndex,
+                    name: getTrackInfo(featuredTracks[currentIndex].url).name,
+                    artist: getTrackInfo(featuredTracks[currentIndex].url).artist,
+                    plays: featuredTracks[currentIndex].plays || 0
+                } : null,
+                topTracks: listenedTracks,
+                chartData: generateChartData(),
+                timestamp: Date.now()
+            };
+
+            // Enhanced logging
+            console.log(`📊 Sending dashboard update:`);
+            console.log(`   📈 Total Views: ${totalViews}`);
+            console.log(`   👥 Active Users: ${activeListeners}`);
+            console.log(`   🎵 Tracks with plays: ${listenedTracks.length}`);
+            if (listenedTracks.length > 0) {
+                listenedTracks.forEach(track => {
+                    console.log(`      • ${track.name}: ${track.plays} plays`);
+                });
+            }
+
+            // Send via multiple communication methods
+            // Method 1: PostMessage to parent window
+            if (window.parent !== window) {
+                window.parent.postMessage(updateData, '*');
+                console.log('📤 Data sent to parent window');
+            }
+
+            // Method 2: PostMessage to dashboard popup
+            if (window.dashboardWindow && !window.dashboardWindow.closed) {
+                window.dashboardWindow.postMessage(updateData, '*');
+                console.log('📤 Data sent to dashboard popup');
+            }
+
+            // Method 3: BroadcastChannel
+            if ('BroadcastChannel' in window) {
+                const channel = new BroadcastChannel('playlist-updates');
+                channel.postMessage(updateData);
+                channel.close();
+                console.log('📤 Data broadcasted via BroadcastChannel');
+            }
+
+            // Method 4: LocalStorage
+            localStorage.setItem('playlistData', JSON.stringify(updateData));
+            console.log('📤 Data saved to localStorage');
+
+            // Method 5: PostMessage to all windows
+            window.postMessage(updateData, '*');
+
+            console.log(`✅ Dashboard update sent: ${totalViews} views, ${activeListeners} listeners`);
+        }
+
+        function generateChartData() {
+            const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const today = new Date().getDay(); // 0 = Sunday, 1 = Monday, etc.
+
+            return days.map((day, index) => {
+                // Show activity for today
+                if (index === today) {
+                    return {
+                        name: day,
+                        views: totalViews,
+                        users: activeListeners
+                    };
+                } else {
+                    // Minimal activity on other days
+                    return {
+                        name: day,
+                        views: Math.random() < 0.3 ? Math.floor(Math.random() * 3) : 0,
+                        users: Math.random() < 0.2 ? 1 : 0
+                    };
+                }
+            });
+        }
+
+        function openDashboard() {
+            window.dashboardWindow = window.open(
+                'admin-dashboard.html',
+                'dashboard',
+                'width=1400,height=900,scrollbars=yes,resizable=yes'
+            );
+            console.log('📊 Dashboard opened in new window');
+        }
+
+        // Save tracking data to localStorage
+        function saveViewData() {
+            try {
+                const trackPlays = {};
+                featuredTracks.forEach((track, index) => {
+                    if (track.plays) {
+                        trackPlays[index] = track.plays;
+                    }
+                });
+
+                const dataToSave = {
+                    totalViews: totalViews,
+                    trackPlays: trackPlays,
+                    lastUpdated: Date.now()
+                };
+
+                localStorage.setItem('hertzPlaylistViewData', JSON.stringify(dataToSave));
+            } catch (error) {
+                console.log('⚠️ Could not save view data:', error);
+            }
+        }
+
+        // Search functionality
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInputMain');
+            const searchSuggestions = document.getElementById('searchSuggestionsMain');
+            const searchClear = document.getElementById('searchClearMain');
+            const searchIcon = document.getElementById('searchIconMain');
+            let currentHighlighted = -1;
+            let filteredTracks = [];
+
+            function performSearch(query) {
+                if (!query.trim()) {
+                    searchSuggestions.style.display = 'none';
+                    return;
+                }
+
+                // Filter tracks based on search query
+                filteredTracks = featuredTracks
+                    .map((track, index) => ({ ...getTrackInfo(track.url), originalIndex: index }))
+                    .filter(track => {
+                        const searchTerm = query.toLowerCase();
+                        return track.name.toLowerCase().includes(searchTerm) ||
+                               (track.artist && track.artist.toLowerCase().includes(searchTerm));
+                    })
+                    .slice(0, 8); // Limit to 8 results
+
+                displaySuggestions(filteredTracks, query);
+            }
+
+            function displaySuggestions(tracks, query) {
+                searchSuggestions.innerHTML = '';
+                currentHighlighted = -1;
+
+                if (tracks.length === 0) {
+                    searchSuggestions.innerHTML = '<div class="no-results">No tracks found</div>';
+                    searchSuggestions.style.display = 'block';
+                    return;
+                }
+
+                tracks.forEach((track, index) => {
+                    const suggestion = document.createElement('div');
+                    suggestion.className = 'search-suggestion';
+                    suggestion.dataset.index = index;
+                    suggestion.dataset.trackIndex = track.originalIndex;
+
+                    // Highlight matching text
+                    const highlightText = (text, query) => {
+                        if (!text) return '';
+                        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                        return text.replace(regex, '<mark style="background: gold; color: #000; padding: 0 2px;">$1</mark>');
+                    };
+
+                    suggestion.innerHTML = `
+                        <div class="suggestion-icon">🎵</div>
+                        <div class="suggestion-text">
+                            <div class="suggestion-title">${highlightText(track.name, query)}</div>
+                            <div class="suggestion-artist">${highlightText(track.artist || 'Unknown Artist', query)}</div>
+                        </div>
+                    `;
+
+                    suggestion.addEventListener('click', function() {
+                        selectTrack(track.originalIndex);
+                    });
+
+                    suggestion.addEventListener('mouseenter', function() {
+                        clearHighlights();
+                        suggestion.classList.add('highlighted');
+                        currentHighlighted = index;
+                    });
+
+                    searchSuggestions.appendChild(suggestion);
+                });
+
+                searchSuggestions.style.display = 'block';
+            }
+
+            function selectTrack(trackIndex) {
+                console.log('🔍 Selecting track from search:', trackIndex);
+                // Ensure user interaction is registered
+                enableAutoplay();
+                // Load track with forced autoplay
+                loadTrack(trackIndex, true);
+                searchInput.value = '';
+                searchSuggestions.style.display = 'none';
+                searchClear.style.display = 'none';
+                searchIcon.style.display = 'block';
+                searchInput.blur();
+            }
+
+            function clearHighlights() {
+                const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+                suggestions.forEach(s => s.classList.remove('highlighted'));
+            }
+
+            function highlightSuggestion(index) {
+                clearHighlights();
+                const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+                if (suggestions[index]) {
+                    suggestions[index].classList.add('highlighted');
+                    suggestions[index].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            // Event listeners
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value;
+
+                if (query.length > 0) {
+                    searchClear.style.display = 'block';
+                    searchIcon.style.display = 'none';
+                } else {
+                    searchClear.style.display = 'none';
+                    searchIcon.style.display = 'block';
+                }
+
+                performSearch(query);
+            });
+
+            searchInput.addEventListener('keydown', function(e) {
+                const suggestions = searchSuggestions.querySelectorAll('.search-suggestion');
+
+                switch(e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        currentHighlighted = Math.min(currentHighlighted + 1, suggestions.length - 1);
+                        highlightSuggestion(currentHighlighted);
+                        break;
+
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        currentHighlighted = Math.max(currentHighlighted - 1, -1);
+                        if (currentHighlighted === -1) {
+                            clearHighlights();
+                        } else {
+                            highlightSuggestion(currentHighlighted);
+                        }
+                        break;
+
+                    case 'Enter':
+                        e.preventDefault();
+                        if (currentHighlighted >= 0 && suggestions[currentHighlighted]) {
+                            const trackIndex = parseInt(suggestions[currentHighlighted].dataset.trackIndex);
+                            selectTrack(trackIndex);
+                        }
+                        break;
+
+                    case 'Escape':
+                        searchInput.blur();
+                        searchSuggestions.style.display = 'none';
+                        break;
+                }
+            });
+
+            searchClear.addEventListener('click', function() {
+                searchInput.value = '';
+                searchSuggestions.style.display = 'none';
+                searchClear.style.display = 'none';
                 searchIcon.style.display = 'block';
                 searchInput.focus();
             });
@@ -2963,29 +2963,5 @@ window.shareTrack = function(trackId, event) {
             © 2025 <span style="color:#FFD700;font-weight:600;">HZ</span> Music Platform. All rights reserved. | Developed by Beniam Endale Tedla
         </p>
     </footer>
-<script>
-// Hertz postMessage bridge: respond to Liked25App.html requests for track URLs
-window.addEventListener('message', function(event) {
-    if (!event.data || event.data.type !== 'hertz-request-track-url' || !event.data.id) return;
-    var trackId = event.data.id;
-    var found = null;
-    // Try window.playlistTracks (array of objects with id and url)
-    if (Array.isArray(window.playlistTracks)) {
-        found = window.playlistTracks.find(function(t) { return t.id === trackId; });
-    }
-    // If not found, try DOM lookup (data-track-id)
-    if (!found) {
-        var el = document.querySelector('[data-track-id="' + trackId + '"]');
-        if (el) {
-            var url = el.getAttribute('data-track-url') || el.getAttribute('data-url') || '';
-            if (url) found = { id: trackId, url: url };
-        }
-    }
-    // If found and has url, send it back
-    if (found && found.url) {
-        event.source.postMessage({ type: 'hertz-track-url', id: trackId, url: found.url }, event.origin);
-    }
-});
-</script>
 </body>
 </html>
