@@ -1219,29 +1219,176 @@
             const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
 
             featuredTracks.forEach((trackObj, idx) => {
-                const track = getTrackInfo(trackObj.url);
-                const card = document.createElement('div');
-                card.className = 'spotify-track-card';
-                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;';
-                card.innerHTML = `
-                    <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                    <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                    ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                `;
-                card.addEventListener('click', function() {
-                    console.log('🎪 Track card clicked:', idx);
-                    // Ensure user interaction is registered
-                    enableAutoplay();
-                    // Load track with forced autoplay
-                    loadTrack(idx, true);
-                });
-                card.addEventListener('mouseover', function() {
-                    card.style.transform = 'scale(1.04)';
-                });
-                card.addEventListener('mouseout', function() {
-                    card.style.transform = 'scale(1)';
-                });
-                grid.appendChild(card);
+                                const track = getTrackInfo(trackObj.url);
+                                const card = document.createElement('div');
+                                card.className = 'spotify-track-card';
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                                card.innerHTML = `
+                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
+                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>📝</span> Add to Queue
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                                                <span>🔗</span> Share
+                                                            </div>
+                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                                                <span>🗑️</span> Remove
+                                                            </div>
+                                                        </div>
+                                                `;
+                                card.addEventListener('click', function() {
+                                        console.log('🎪 Track card clicked:', idx);
+                                        enableAutoplay();
+                                        loadTrack(idx, true);
+                                });
+                                card.addEventListener('mouseover', function() {
+                                        card.style.transform = 'scale(1.04)';
+                                });
+                                card.addEventListener('mouseout', function() {
+                                        card.style.transform = 'scale(1)';
+                                });
+                                grid.appendChild(card);
+// --- 3-dot menu support for featured tracks ---
+window.toggleTrackMenu = function(trackId) {
+    document.querySelectorAll('.track-menu-popup').forEach(menu => {
+        if (menu.id !== `menu-${trackId}`) menu.style.display = 'none';
+    });
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) {
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+};
+
+
+window.addToQueue = function(trackId) {
+    // Add to queue for featured tracks
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    if (!window.queue) window.queue = [];
+    if (!window.queue.find(t => t.url === track.url)) {
+        window.queue.push(track);
+        showNotification('Added to queue!', 'success');
+    } else {
+        showNotification('Already in queue!', 'info');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+
+window.shareTrack = function(trackId, event) {
+    if (event) event.stopPropagation();
+    document.getElementById('shareDropdown')?.remove();
+    let idx = -1;
+    if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
+    if (isNaN(idx) || !featuredTracks[idx]) return;
+    const track = getTrackInfo(featuredTracks[idx].url);
+    // Social platforms and SVG icons (X replaces Twitter)
+    const platforms = [
+        {
+            name: 'facebook',
+            url: (link) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#1877f3"><path d="M29 0h-26c-1.7 0-3 1.3-3 3v26c0 1.7 1.3 3 3 3h13v-12h-4v-5h4v-4c0-4.1 2.5-6.3 6.1-6.3 1.8 0 3.6.3 3.6.3v4h-2c-2 0-2.6 1.2-2.6 2.5v3h5l-1 5h-4v12h7c1.7 0 3-1.3 3-3v-26c0-1.7-1.3-3-3-3z"/></svg>`
+        },
+        {
+            name: 'x',
+            url: (link, text) => `https://x.com/intent/tweet?url=${encodeURIComponent(link)}&text=${encodeURIComponent(text)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 1200 1227" fill="#000"><path d="M1200 24.6L724.2 623.2 1196.6 1202.4h-273.2L600.2 823.2l-323.2 379.2H0l483.2-573.6L11.2 24.6h273.2l292.2 357.6L872.6 24.6zM900.8 1097.6h151.2L299.2 129.6H148z"/></svg>`
+        },
+        {
+            name: 'instagram',
+            url: (link) => `https://www.instagram.com/?url=${encodeURIComponent(link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#e1306c"><g><path d="M16 7.2a8.8 8.8 0 1 0 0 17.6 8.8 8.8 0 0 0 0-17.6zm0 14.4a5.6 5.6 0 1 1 0-11.2 5.6 5.6 0 0 1 0 11.2zm10.4-14.6a2.08 2.08 0 1 1-4.16 0 2.08 2.08 0 0 1 4.16 0zm5.92 2.12c-.13-2.62-.76-4.95-2.78-7.01C27.95.76 25.62.13 23 .01 20.37-.12 11.63-.12 9 .01 6.38.13 4.05.76 1.99 2.78.76 4.05.13 6.38.01 9c-.12 2.63-.12 11.37.01 14 .13 2.62.76 4.95 2.78 7.01C4.05 31.24 6.38 31.87 9 31.99c2.63.12 11.37.12 14-.01 2.62-.13 4.95-.76 7.01-2.78 2.02-2.06 2.65-4.39 2.78-7.01.12-2.63.12-11.37-.01-14zm-2.18 17.02a5.92 5.92 0 0 1-3.33 3.33c-2.3.91-7.76.7-10.91.7s-8.61.2-10.91-.7a5.92 5.92 0 0 1-3.33-3.33c-.91-2.3-.7-7.76-.7-10.91s-.2-8.61.7-10.91a5.92 5.92 0 0 1 3.33-3.33c2.3-.91 7.76-.7 10.91-.7s8.61-.2 10.91.7a5.92 5.92 0 0 1 3.33 3.33c.91 2.3.7 7.76.7 10.91s.2 8.61-.7 10.91z"/></g></svg>`
+        },
+        {
+            name: 'whatsapp',
+            url: (link, text) => `https://wa.me/?text=${encodeURIComponent(text + ' ' + link)}`,
+            icon: `<svg width="22" height="22" viewBox="0 0 32 32" fill="#25d366"><g><path d="M16 3c-7.2 0-13 5.8-13 13 0 2.3.6 4.5 1.7 6.5l-2.2 6.5 6.7-2.2c1.9 1 4.1 1.6 6.5 1.6 7.2 0 13-5.8 13-13s-5.8-13-13-13zm0 23.7c-2.1 0-4.1-.5-5.9-1.5l-.4-.2-4 1.3 1.3-3.9-.2-.4c-1-1.7-1.6-3.7-1.6-5.9 0-6.1 5-11 11-11s11 5 11 11-5 11-11 11zm6.1-8.3c-.3-.2-1.7-.8-2-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.2-.4-2.3-1.3-.8-.7-1.3-1.5-1.5-1.8-.2-.3 0-.4.1-.6.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2.1-.3 0-.1 0-.2-.1-.3-.1-.1-.7-1.7-.9-2.3-.2-.6-.4-.5-.6-.5-.2 0-.3 0-.5 0-.2 0-.4.1-.6.3-.2.2-.8.8-.8 2 0 1.2.8 2.3 1.1 2.6.2.3 1.6 2.5 3.9 3.4.5.2.9.4 1.2.5.5.2.9.2 1.2.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.1-1.1z"/></g></svg>`
+        }
+    ];
+    const shareLink = window.location.origin + window.location.pathname + `#track-${trackId}`;
+    const shareText = `Check out "${track.name}" by ${track.artist || 'Unknown Artist'}`;
+    const menuBtn = document.getElementById(`menu-${trackId}`);
+    let rect = menuBtn?.getBoundingClientRect();
+    let dropdownHeight = 40;
+    let top = rect ? rect.top + window.scrollY - dropdownHeight - 8 : 100;
+    let left = rect ? rect.left + window.scrollX : 100;
+    let dropdown = document.createElement('div');
+    dropdown.id = 'shareDropdown';
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = top + 'px';
+    dropdown.style.left = left + 'px';
+    dropdown.style.background = 'transparent';
+    dropdown.style.borderRadius = '8px';
+    dropdown.style.boxShadow = 'none';
+    dropdown.style.padding = '0.3rem 0.5rem';
+    dropdown.style.zIndex = 9999;
+    dropdown.style.display = 'flex';
+    dropdown.style.flexDirection = 'row';
+    dropdown.style.gap = '0.3rem';
+    dropdown.style.minWidth = 'unset';
+    dropdown.style.width = 'auto';
+    dropdown.style.height = 'auto';
+    dropdown.style.alignItems = 'center';
+    dropdown.style.justifyContent = 'center';
+    platforms.forEach(platform => {
+        let btn = document.createElement('a');
+        btn.href = platform.url(shareLink, shareText);
+        btn.target = '_blank';
+        btn.rel = 'noopener noreferrer';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.justifyContent = 'center';
+        btn.style.background = 'none';
+        btn.style.border = 'none';
+        btn.style.color = '#fff';
+        btn.style.fontWeight = '500';
+        btn.style.fontSize = '1.2rem';
+        btn.style.textDecoration = 'none';
+        btn.style.padding = '0.5rem 0.2rem';
+        btn.style.borderRadius = '6px';
+        btn.style.transition = 'background 0.2s';
+        btn.onmouseover = () => btn.style.background = '#181818';
+        btn.onmouseout = () => btn.style.background = 'none';
+        const iconWrapper = document.createElement('span');
+        iconWrapper.style.background = '#e0e0e0';
+        iconWrapper.style.borderRadius = '6px';
+        iconWrapper.style.padding = '4px';
+        iconWrapper.style.display = 'flex';
+        iconWrapper.style.alignItems = 'center';
+        iconWrapper.innerHTML = platform.icon;
+        btn.appendChild(iconWrapper);
+        dropdown.appendChild(btn);
+    });
+    setTimeout(() => {
+        document.addEventListener('mousedown', function handler(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.remove();
+                document.removeEventListener('mousedown', handler);
+            }
+        });
+    }, 10);
+    document.body.appendChild(dropdown);
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
+
+window.removeTrack = function(trackId) {
+    if (confirm('Are you sure you want to remove this track from featured?')) {
+        // Remove from DOM only for demo. Implement real removal as needed.
+        const card = document.getElementById(`menu-${trackId}`)?.closest('.spotify-track-card');
+        if (card) card.remove();
+        showNotification('Track removed from featured', 'success');
+    }
+    const menu = document.getElementById(`menu-${trackId}`);
+    if (menu) menu.style.display = 'none';
+};
             });
             console.log('Featured tracks rendered:', grid.children.length);
         }
