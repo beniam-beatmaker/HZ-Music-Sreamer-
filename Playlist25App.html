@@ -2760,11 +2760,23 @@ window.removeTrack = function(trackId) {
                     showStatus(`Removed \"${track.name}\" from liked tracks`, 'info');
                 } else {
                     // Like the track
+                    // Always ensure the liked track has a valid URL
+                    let url = track.url;
+                    // If not present, try to get from current playing audio element
+                    if (!url) {
+                        const audio = document.getElementById('playerAudio') || document.querySelector('audio');
+                        if (audio && audio.src) url = audio.src;
+                    }
+                    // If still not present, try popup audio
+                    if (!url) {
+                        const popupAudio = document.getElementById('popupAudio');
+                        if (popupAudio && popupAudio.src) url = popupAudio.src;
+                    }
                     const likedTrack = {
                         id: trackId,
                         name: track.name,
                         artist: track.artist || 'Unknown Artist',
-                        url: track.url,
+                        url: url,
                         likedAt: new Date().toISOString()
                     };
                     likedTracksObj[trackId] = {
