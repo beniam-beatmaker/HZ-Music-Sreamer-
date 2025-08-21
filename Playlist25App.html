@@ -2578,6 +2578,8 @@
                 let likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
                 let sharedLikedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
                 let simpleLikedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks_simple') || '[]');
+                // Patch: Always keep hertz_liked_tracks array in sync for Liked25App.html
+                let likedTracksArray = Array.isArray(sharedLikedTracks) ? sharedLikedTracks.filter(t => !!t.id) : [];
                 console.log('📦 Current liked tracks count:', Object.keys(likedTracksObj).length);
 
                 const isCurrentlyLiked = likedTracksObj[trackId];
@@ -2603,6 +2605,8 @@
                     });
                     // Remove from simpleLikedTracks by id
                     simpleLikedTracks = simpleLikedTracks.filter(t => t.id !== trackId);
+                    // Remove from hertz_liked_tracks array for Liked25App.html
+                    likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
                     likeBtn.classList.remove('liked');
                     likeBtn.style.color = '#b3b3b3';
                     syncPopupLikeBtn(false);
@@ -2614,32 +2618,29 @@
                         name: track.name,
                         artist: track.artist || 'Unknown Artist',
                         url: track.url,
+                        likedAt: new Date().toISOString()
+                    };
+                    likedTracksObj[trackId] = {
+                        ...likedTrack,
                         album: '',
-                        likedAt: new Date().toISOString(),
                         source: 'Playlist25App'
                     };
-                    likedTracksObj[trackId] = likedTrack;
                     // Only add if not already present (by id)
                     if (!sharedLikedTracks.some(t => t.id === trackId)) {
                         sharedLikedTracks.unshift({
-                            id: trackId,
-                            name: track.name,
-                            artist: track.artist || 'Unknown Artist',
-                            url: track.url,
-                            likedAt: likedTrack.likedAt,
+                            ...likedTrack,
                             source: 'Playlist25App'
                         });
                     }
                     // Add to simpleLikedTracks if not present
                     if (!simpleLikedTracks.some(t => t.id === trackId)) {
                         simpleLikedTracks.unshift({
-                            id: trackId,
-                            name: track.name,
-                            artist: track.artist || 'Unknown Artist',
-                            url: track.url,
-                            likedAt: likedTrack.likedAt
+                            ...likedTrack
                         });
                     }
+                    // Add to hertz_liked_tracks array for Liked25App.html (remove any old, then add new)
+                    likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
+                    likedTracksArray.unshift(likedTrack);
                     likeBtn.classList.add('liked');
                     likeBtn.style.color = '#ff6b6b';
                     syncPopupLikeBtn(true);
@@ -2650,12 +2651,11 @@
                 localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracksObj));
                 localStorage.setItem('hertzLikedTracks_backup', JSON.stringify(likedTracksObj));
                 localStorage.setItem('playlistLikedTracks', JSON.stringify(likedTracksObj));
-                localStorage.setItem('hertz_liked_tracks', JSON.stringify(sharedLikedTracks));
+                localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracksArray)); // PATCH: always update array for Liked25App.html
                 localStorage.setItem('hertz_liked_tracks_simple', JSON.stringify(simpleLikedTracks));
 
                 // Also save in legacy array format for compatibility
-                const likedTracksArray = Object.values(likedTracksObj);
-                localStorage.setItem('likedTracks', JSON.stringify(likedTracksArray));
+                localStorage.setItem('likedTracks', JSON.stringify(Object.values(likedTracksObj)));
 
                 // Update timestamp for cross-tab synchronization
                 localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
