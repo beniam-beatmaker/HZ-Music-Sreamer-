@@ -538,141 +538,173 @@
       });
     });
 
-    // Load liked tracks from localStorage
-    let likedTracks = [];
-    function loadLikedTracks() {
-      try {
-        likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
-      } catch {
-        likedTracks = [];
-      }
-    }
+    // --- Autoplay/user interaction logic (ported from Playlist25App.html) ---
+if (typeof window.userHasInteracted === 'undefined') {
+  window.userHasInteracted = false;
+}
+function enableAutoplay() {
+  if (!window.userHasInteracted) {
+    window.userHasInteracted = true;
+    try {
+      const silentAudio = new Audio();
+      silentAudio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAAAQQBgADAADAAxAAEAAEEiSgLDUAAA';
+      silentAudio.volume = 0;
+      silentAudio.play().catch(()=>{});
+    } catch (e) {}
+  }
+}
+function attemptAutoplay(audio, playPauseBtn) {
+  if (!window.userHasInteracted) {
+    return;
+  }
+  if (audio.readyState < 2) {
+    window.autoplayTimeout = setTimeout(() => {
+      attemptAutoplay(audio, playPauseBtn);
+    }, 200);
+    return;
+  }
+  audio.play().then(() => {
+    if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+  }).catch(()=>{});
+}
 
-    // Save liked tracks to localStorage
-    function saveLikedTracks() {
-      localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
-    }
+// Load liked tracks from localStorage
+let likedTracks = [];
+function loadLikedTracks() {
+  try {
+    likedTracks = JSON.parse(localStorage.getItem('hertz_liked_tracks') || '[]');
+  } catch {
+    likedTracks = [];
+  }
+}
 
-    // Add a track to liked tracks
-    function addLikedTrack(track) {
-      // Always ensure the liked track has a valid url (from url or audioUrl)
-      let url = track.url || track.audioUrl || '';
-      // If the track is from the DOM, try to get the data-track-url attribute
-      if (!url && track.id) {
-        const domItem = document.querySelector(`[data-track-id="${track.id}"]`);
-        if (domItem) {
-          url = domItem.getAttribute('data-track-url') || '';
-        }
-      }
-      // If still no url, try to request it from Playlist25App.html via postMessage
-      if (!url && track.id) {
-        window.addEventListener('message', function handleUrlMessage(e) {
-          if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
-            // Update the liked track with the received URL
-            likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
-            saveLikedTracks();
-            renderLikedTracks();
-            window.removeEventListener('message', handleUrlMessage);
-          }
-        });
-        // Send request to parent/opener (if exists)
-        try {
-          if (window.opener) {
-            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          } else if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          }
-        } catch {}
-      }
-      const likedTrack = {
-        ...track,
-        url: url,
-        likedAt: new Date().toISOString()
-      };
-      likedTracks.unshift(likedTrack);
-      saveLikedTracks();
-      renderLikedTracks();
-      return true;
-    }
+// Save liked tracks to localStorage
+function saveLikedTracks() {
+  localStorage.setItem('hertz_liked_tracks', JSON.stringify(likedTracks));
+}
 
-    // Remove a track from liked tracks
-    function removeLikedTrack(trackId) {
-      const index = likedTracks.findIndex(t => t.id === trackId);
-      if (index > -1) {
-        likedTracks.splice(index, 1);
+// Add a track to liked tracks
+function addLikedTrack(track) {
+  // Always ensure the liked track has a valid url (from url or audioUrl)
+  let url = track.url || track.audioUrl || '';
+  // If the track is from the DOM, try to get the data-track-url attribute
+  if (!url && track.id) {
+    const domItem = document.querySelector(`[data-track-id="${track.id}"]`);
+    if (domItem) {
+      url = domItem.getAttribute('data-track-url') || '';
+    }
+  }
+  // If still no url, try to request it from Playlist25App.html via postMessage
+  if (!url && track.id) {
+    window.addEventListener('message', function handleUrlMessage(e) {
+      if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
+        // Update the liked track with the received URL
+        likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
         saveLikedTracks();
         renderLikedTracks();
-        return true;
+        window.removeEventListener('message', handleUrlMessage);
       }
-      return false;
-    }
-
-    // Check if a track is liked
-    function isTrackLiked(trackId) {
-      return likedTracks.some(t => t.id === trackId);
-    }
-
-    // Render liked tracks list
-    function renderLikedTracks() {
-      const container = document.getElementById('likedTracksList');
-      if (likedTracks.length === 0) {
-        container.innerHTML = '<div class="empty-state">No liked songs yet. Start liking tracks from the music player!</div>';
-        return;
+    });
+    // Send request to parent/opener (if exists)
+    try {
+      if (window.opener) {
+        window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+      } else if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
       }
-      let html = '';
-      likedTracks.forEach(track => {
-        const likedDate = new Date(track.likedAt).toLocaleDateString();
-        // Show a warning if the track has no URL
-        const hasUrl = track.url && (track.url.startsWith('http://') || track.url.startsWith('https://'));
-        html += `
-          <div class="track-item pro-track" data-track-id="${track.id}" data-track-name="${track.name}" data-track-artist="${track.artist || 'Unknown Artist'}" data-track-url="${track.url || ''}" style="display:flex;align-items:center;gap:1.2rem;padding:1.1rem 1.5rem;background:#232526;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,0.10);cursor:pointer;transition:box-shadow 0.18s,background 0.18s;position:relative;">
-            <div class="track-cover" style="width:56px;height:56px;min-width:56px;min-height:56px;border-radius:10px;background:#181818;display:flex;align-items:center;justify-content:center;color:#FFD700;font-weight:bold;font-size:1.5rem;letter-spacing:2px;border:2px solid #FFD700;box-shadow:0 2px 8px rgba(0,0,0,0.13);">HZ</div>
-            <div class="track-info" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:0.2rem;">
-              <div class="track-title" style="color:#fff;font-size:1.08rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.name}</div>
-              <div class="track-artist" style="color:#b3b3b3;font-size:0.97rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.artist || 'Unknown Artist'}</div>
-              <div class="track-date" style="color:#888;font-size:0.85rem;margin-top:0.1rem;">Liked on ${likedDate}</div>
-              ${!hasUrl ? `<div style='color:#ff4081;font-size:0.92em;margin-top:0.2em;'>No online audio available</div>` : ''}
-            </div>
-            <button class="pro-play-btn" title="Play" style="background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(255,215,0,0.13);cursor:pointer;transition:background 0.18s;outline:none;margin-right:0.7rem;" ${!hasUrl ? 'disabled style="opacity:0.5;pointer-events:none;"' : ''}>
-              <svg width="20" height="20" fill="#181818" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path></svg>
-            </button>
-            <button class="remove-btn pro-remove-btn" title="Remove from liked" onclick="removeLikedTrack('${track.id}');event.stopPropagation();" style="background:none;border:none;color:#ff4081;font-size:1.3rem;position:absolute;top:12px;right:12px;cursor:pointer;opacity:0.7;transition:opacity 0.15s;"><svg width="18" height="18" fill="#ff4081" viewBox="0 0 16 16"><path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/></svg></button>
-          </div>
-        `;
+    } catch {}
+  }
+  const likedTrack = {
+    ...track,
+    url: url,
+    likedAt: new Date().toISOString()
+  };
+  likedTracks.unshift(likedTrack);
+  saveLikedTracks();
+  renderLikedTracks();
+  return true;
+}
+
+// Remove a track from liked tracks
+function removeLikedTrack(trackId) {
+  const index = likedTracks.findIndex(t => t.id === trackId);
+  if (index > -1) {
+    likedTracks.splice(index, 1);
+    saveLikedTracks();
+    renderLikedTracks();
+    return true;
+  }
+  return false;
+}
+
+// Check if a track is liked
+function isTrackLiked(trackId) {
+  return likedTracks.some(t => t.id === trackId);
+}
+
+// Render liked tracks list
+function renderLikedTracks() {
+  const container = document.getElementById('likedTracksList');
+  if (likedTracks.length === 0) {
+    container.innerHTML = '<div class="empty-state">No liked songs yet. Start liking tracks from the music player!</div>';
+    return;
+  }
+  let html = '';
+  likedTracks.forEach(track => {
+    const likedDate = new Date(track.likedAt).toLocaleDateString();
+    // Show a warning if the track has no URL
+    const hasUrl = track.url && (track.url.startsWith('http://') || track.url.startsWith('https://'));
+    html += `
+      <div class="track-item pro-track" data-track-id="${track.id}" data-track-name="${track.name}" data-track-artist="${track.artist || 'Unknown Artist'}" data-track-url="${track.url || ''}" style="display:flex;align-items:center;gap:1.2rem;padding:1.1rem 1.5rem;background:#232526;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,0.10);cursor:pointer;transition:box-shadow 0.18s,background 0.18s;position:relative;">
+        <div class="track-cover" style="width:56px;height:56px;min-width:56px;min-height:56px;border-radius:10px;background:#181818;display:flex;align-items:center;justify-content:center;color:#FFD700;font-weight:bold;font-size:1.5rem;letter-spacing:2px;border:2px solid #FFD700;box-shadow:0 2px 8px rgba(0,0,0,0.13);">HZ</div>
+        <div class="track-info" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:0.2rem;">
+          <div class="track-title" style="color:#fff;font-size:1.08rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.name}</div>
+          <div class="track-artist" style="color:#b3b3b3;font-size:0.97rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.artist || 'Unknown Artist'}</div>
+          <div class="track-date" style="color:#888;font-size:0.85rem;margin-top:0.1rem;">Liked on ${likedDate}</div>
+          ${!hasUrl ? `<div style='color:#ff4081;font-size:0.92em;margin-top:0.2em;'>No online audio available</div>` : ''}
+        </div>
+        <button class="pro-play-btn" title="Play" style="background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(255,215,0,0.13);cursor:pointer;transition:background 0.18s;outline:none;margin-right:0.7rem;" ${!hasUrl ? 'disabled style="opacity:0.5;pointer-events:none;"' : ''}>
+          <svg width="20" height="20" fill="#181818" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"></path></svg>
+        </button>
+        <button class="remove-btn pro-remove-btn" title="Remove from liked" onclick="removeLikedTrack('${track.id}');event.stopPropagation();" style="background:none;border:none;color:#ff4081;font-size:1.3rem;position:absolute;top:12px;right:12px;cursor:pointer;opacity:0.7;transition:opacity 0.15s;"><svg width="18" height="18" fill="#ff4081" viewBox="0 0 16 16"><path d="M2.146 2.146a.5.5 0 0 1 .708 0L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854a.5.5 0 0 1 0-.708z"/></svg></button>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+  // Add click event listeners to play track in sticky player
+  Array.from(container.getElementsByClassName('pro-track')).forEach(item => {
+    // Play on card or play button click, only if URL is present
+    item.addEventListener('click', function(e) {
+      if (e.target.closest('.remove-btn')) return;
+      const url = item.getAttribute('data-track-url');
+      if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
+      const track = {
+        id: item.getAttribute('data-track-id'),
+        name: item.getAttribute('data-track-name'),
+        artist: item.getAttribute('data-track-artist'),
+        url: url
+      };
+      enableAutoplay();
+      playTrackInStickyPlayer(track);
+    });
+    // Play on play button click
+    const playBtn = item.querySelector('.pro-play-btn');
+    if (playBtn) {
+      playBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const url = item.getAttribute('data-track-url');
+        if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
+        const track = {
+          id: item.getAttribute('data-track-id'),
+          name: item.getAttribute('data-track-name'),
+          artist: item.getAttribute('data-track-artist'),
+          url: url
+        };
+        enableAutoplay();
+        playTrackInStickyPlayer(track);
       });
-      container.innerHTML = html;
-      // Add click event listeners to play track in sticky player
-      Array.from(container.getElementsByClassName('pro-track')).forEach(item => {
-        // Play on card or play button click, only if URL is present
-        item.addEventListener('click', function(e) {
-          if (e.target.closest('.remove-btn')) return;
-          const url = item.getAttribute('data-track-url');
-          if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
-          const track = {
-            id: item.getAttribute('data-track-id'),
-            name: item.getAttribute('data-track-name'),
-            artist: item.getAttribute('data-track-artist'),
-            url: url
-          };
-          playTrackInStickyPlayer(track);
-        });
-        // Play on play button click
-        const playBtn = item.querySelector('.pro-play-btn');
-        if (playBtn) {
-          playBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const url = item.getAttribute('data-track-url');
-            if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
-            const track = {
-              id: item.getAttribute('data-track-id'),
-              name: item.getAttribute('data-track-name'),
-              artist: item.getAttribute('data-track-artist'),
-              url: url
-            };
-            playTrackInStickyPlayer(track);
-          });
-        }
-      });
+    }
+  });
     }
 
     // Play track in sticky player and show it
@@ -694,10 +726,9 @@
         audio.src = src;
       }
       audio.currentTime = 0;
-      audio.play().catch(()=>{});
-      // Update play/pause button
       const playPauseBtn = document.getElementById('stickyPlayPause');
-      playPauseBtn.textContent = '⏸️';
+      // Use robust autoplay logic
+      attemptAutoplay(audio, playPauseBtn);
       // Store current track for popup
       stickyPlayer.dataset.currentTrack = JSON.stringify(track);
       // Always ensure popup is hidden when new track is played
