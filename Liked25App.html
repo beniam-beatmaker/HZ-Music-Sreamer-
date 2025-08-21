@@ -556,7 +556,6 @@
     // Add a track to liked tracks
     function addLikedTrack(track) {
       // Always ensure the liked track has a valid url (from url or audioUrl)
-      // Always try to get the best possible URL for the track
       let url = track.url || track.audioUrl || '';
       // If the track is from the DOM, try to get the data-track-url attribute
       if (!url && track.id) {
@@ -564,6 +563,26 @@
         if (domItem) {
           url = domItem.getAttribute('data-track-url') || '';
         }
+      }
+      // If still no url, try to request it from Playlist25App.html via postMessage
+      if (!url && track.id) {
+        window.addEventListener('message', function handleUrlMessage(e) {
+          if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
+            // Update the liked track with the received URL
+            likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
+            saveLikedTracks();
+            renderLikedTracks();
+            window.removeEventListener('message', handleUrlMessage);
+          }
+        });
+        // Send request to parent/opener (if exists)
+        try {
+          if (window.opener) {
+            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          } else if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          }
+        } catch {}
       }
       const likedTrack = {
         ...track,
