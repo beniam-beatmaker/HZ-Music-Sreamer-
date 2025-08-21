@@ -2967,6 +2967,34 @@ window.removeTrack = function(trackId) {
                 }, 300);
             }, 3000);
         }
+
+    // Respond to Liked25App.html requests for track URLs
+    window.addEventListener('message', function(e) {
+        if (!e.data || e.data.type !== 'hertz-request-track-url' || !e.data.id) return;
+        // Find the liked track by id in all possible liked tracks arrays
+        let likedTracksArr = [];
+        try {
+            likedTracksArr = JSON.parse(localStorage.getItem('hertz_liked_tracks')) || [];
+        } catch {}
+        let track = likedTracksArr.find(t => t.id === e.data.id);
+        // If not found, try legacy storage
+        if (!track) {
+            let likedTracksObj = {};
+            try {
+                likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks')) || {};
+            } catch {}
+            track = likedTracksObj[e.data.id];
+        }
+        if (track && track.url) {
+            // Send the URL back to the requesting window
+            const msg = { type: 'hertz-track-url', id: e.data.id, url: track.url };
+            if (e.source && typeof e.source.postMessage === 'function') {
+                e.source.postMessage(msg, '*');
+            } else {
+                window.postMessage(msg, '*');
+            }
+        }
+    });
     </script>
 
     <!-- Copyright Footer -->
