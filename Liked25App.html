@@ -707,6 +707,25 @@ function renderLikedTracks() {
   });
     }
 
+    // --- Persistent handler for receiving track URLs from Playlist25App.html ---
+window.addEventListener('message', function handleUrlMessage(e) {
+  if (e.data && e.data.type === 'hertz-track-url' && e.data.id) {
+    // Update the likedTracks array and save
+    likedTracks = likedTracks.map(t => t.id === e.data.id ? { ...t, url: e.data.url } : t);
+    saveLikedTracks();
+    // If the sticky player is waiting for this track, play it now
+    const stickyPlayer = document.getElementById('stickyPlayer');
+    let currentTrack = null;
+    try {
+      currentTrack = JSON.parse(stickyPlayer.dataset.currentTrack || '{}');
+    } catch {}
+    if (currentTrack && currentTrack.id === e.data.id) {
+      // Play the track with the new URL
+      playTrackInStickyPlayer({ ...currentTrack, url: e.data.url }, 2);
+    }
+  }
+});
+
     // Play track in sticky player and show it
     function playTrackInStickyPlayer(track, recursionDepth = 0) {
       const stickyPlayer = document.getElementById('stickyPlayer');
@@ -718,19 +737,7 @@ function renderLikedTracks() {
       // Check if the URL is likely to be online (http/https)
       const isOnline = src.startsWith('http://') || src.startsWith('https://');
       if ((!src || !isOnline) && track.id && recursionDepth < 2) {
-        // Always request the correct URL from Playlist25App.html if possible
-        function handleUrlMessage(e) {
-          if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
-            // Update the track with the received URL and play
-            track.url = e.data.url;
-            likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
-            saveLikedTracks();
-            window.removeEventListener('message', handleUrlMessage);
-            // Play the track with the new URL (prevent infinite recursion)
-            playTrackInStickyPlayer(track, recursionDepth + 1);
-          }
-        }
-        window.addEventListener('message', handleUrlMessage);
+        // Request the correct URL from Playlist25App.html if possible
         try {
           if (window.opener) {
             window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
@@ -741,6 +748,8 @@ function renderLikedTracks() {
         // Show a loading message while waiting
         document.getElementById('playerTrackTitle').textContent = track.name + ' (Loading...)';
         document.getElementById('playerArtist').textContent = track.artist;
+        // Save the current track in stickyPlayer for the handler
+        stickyPlayer.dataset.currentTrack = JSON.stringify(track);
         return;
       }
       if (!src || !isOnline) {
