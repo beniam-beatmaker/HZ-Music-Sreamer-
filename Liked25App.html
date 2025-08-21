@@ -4,7 +4,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
   <!-- Single Popup Player (EXACT COPY from Offline25App.html) -->
-  <div class="popup-backdrop" id="popupPlayer" style="display:none;">
+  <style>
+<script> 
+<div class="popup-backdrop" id="popupPlayer" style="display:none;">
     <div class="popup-player">
       <button onclick="closePopupPlayer()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:#b3b3b3;font-size:24px;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.color='#b3b3b3';this.style.background='none'" title="Close">×</button>
       <button id="queueBtnPopup" class="popup-btn" aria-label="Queue" onclick="toggleQueue()" style="position:absolute;top:20px;left:20px;background:none;border:none;box-shadow:none;color:#1db954;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:8px;width:32px;height:32px;border-radius:50%;transition:all 0.2s;" onmouseover="this.style.background='rgba(29,185,84,0.1)'" onmouseout="this.style.background='none'" title="Queue">
@@ -66,6 +68,8 @@
       </div>
     </div>
   </div>
+</script>
+</style>
   <style> 
     .nav-dropdown .nav-btn:hover {
       background: #FFD70033;
