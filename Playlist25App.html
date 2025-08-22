@@ -2968,33 +2968,66 @@ window.removeTrack = function(trackId) {
             }, 3000);
         }
 
-    // Respond to Liked25App.html requests for track URLs
-    window.addEventListener('message', function(e) {
-        if (!e.data || e.data.type !== 'hertz-request-track-url' || !e.data.id) return;
-        // Find the liked track by id in all possible liked tracks arrays
-        let likedTracksArr = [];
+    // Respond to Liked25App.html requests for track URLs using BroadcastChannel (most robust), fallback to postMessage
+    (function() {
+        // Setup BroadcastChannel for cross-tab/page communication
+        let hertzChannel = null;
         try {
-            likedTracksArr = JSON.parse(localStorage.getItem('hertz_liked_tracks')) || [];
-        } catch {}
-        let track = likedTracksArr.find(t => t.id === e.data.id);
-        // If not found, try legacy storage
-        if (!track) {
-            let likedTracksObj = {};
-            try {
-                likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks')) || {};
-            } catch {}
-            track = likedTracksObj[e.data.id];
+            hertzChannel = new BroadcastChannel('hertz-liked-tracks');
+        } catch (e) {}
+
+
+        function sendTrackInfo(track) {
+            // Always send id, name, artist, url, and any other info available
+            const msg = {
+                type: 'hertz-track-url',
+                id: track.id,
+                name: track.name,
+                artist: track.artist,
+                url: track.url,
+                album: track.album || '',
+                likedAt: track.likedAt || '',
+                source: track.source || ''
+            };
+            if (hertzChannel) {
+                hertzChannel.postMessage(msg);
+            }
+            window.postMessage(msg, '*');
         }
-        if (track && track.url) {
-            // Send the URL back to the requesting window
-            const msg = { type: 'hertz-track-url', id: e.data.id, url: track.url };
-            if (e.source && typeof e.source.postMessage === 'function') {
-                e.source.postMessage(msg, '*');
-            } else {
-                window.postMessage(msg, '*');
+
+        function handleTrackUrlRequest(id) {
+            let likedTracksArr = [];
+            try {
+                likedTracksArr = JSON.parse(localStorage.getItem('hertz_liked_tracks')) || [];
+            } catch {}
+            let track = likedTracksArr.find(t => t.id === id);
+            if (!track) {
+                let likedTracksObj = {};
+                try {
+                    likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks')) || {};
+                } catch {}
+                track = likedTracksObj[id];
+            }
+            if (track && track.url) {
+                sendTrackInfo(track);
             }
         }
-    });
+
+        // Listen for requests via BroadcastChannel
+        if (hertzChannel) {
+            hertzChannel.addEventListener('message', function(e) {
+                if (e.data && e.data.type === 'hertz-request-track-url' && e.data.id) {
+                    handleTrackUrlRequest(e.data.id);
+                }
+            });
+        }
+        // Also listen for requests via postMessage (legacy)
+        window.addEventListener('message', function(e) {
+            if (e.data && e.data.type === 'hertz-request-track-url' && e.data.id) {
+                handleTrackUrlRequest(e.data.id);
+            }
+        });
+    })();
     </script>
 
     <!-- Copyright Footer -->
