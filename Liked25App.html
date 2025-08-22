@@ -569,21 +569,48 @@ function addLikedTrack(track) {
   }
   // If still no url, try to request it from Playlist25App.html via postMessage
   if (!url && track.id) {
-    window.addEventListener('message', function handleUrlMessage(e) {
-      if (e.data && e.data.type === 'hertz-track-url' && e.data.id === track.id && e.data.url) {
-        // Update the liked track with the received URL
-        likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: e.data.url } : t);
+    // Listen for URL via BroadcastChannel and postMessage
+    let urlReceived = false;
+    function handleUrlMessage(e) {
+      let data = e.data;
+      if (data && data.type === 'hertz-track-url' && data.id === track.id && data.url) {
+        urlReceived = true;
+        likedTracks = likedTracks.map(t => t.id === track.id ? { ...t, url: data.url } : t);
         saveLikedTracks();
         renderLikedTracks();
+        // If the sticky player is waiting for this track, play it now
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        if (stickyPlayer && stickyPlayer.dataset.currentTrack) {
+          let waitingTrack = JSON.parse(stickyPlayer.dataset.currentTrack);
+          if (waitingTrack.id === track.id) {
+            playTrackInStickyPlayer({ ...waitingTrack, url: data.url });
+          }
+        }
         window.removeEventListener('message', handleUrlMessage);
+        if (window.hertzLikedTracksChannel) {
+          window.hertzLikedTracksChannel.removeEventListener('message', handleUrlMessage);
+        }
       }
-    });
-    // Send request to parent/opener (if exists)
+    }
+    window.addEventListener('message', handleUrlMessage);
+    // BroadcastChannel support
+    if (!window.hertzLikedTracksChannel) {
+      try {
+        window.hertzLikedTracksChannel = new BroadcastChannel('hertz-liked-tracks');
+      } catch {}
+    }
+    if (window.hertzLikedTracksChannel) {
+      window.hertzLikedTracksChannel.addEventListener('message', handleUrlMessage);
+    }
+    // Send request to parent/opener (if exists) and via BroadcastChannel
     try {
       if (window.opener) {
         window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
       } else if (window.parent && window.parent !== window) {
         window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+      }
+      if (window.hertzLikedTracksChannel) {
+        window.hertzLikedTracksChannel.postMessage({ type: 'hertz-request-track-url', id: track.id });
       }
     } catch {}
   }
@@ -646,11 +673,10 @@ function renderLikedTracks() {
   container.innerHTML = html;
   // Add click event listeners to play track in sticky player
   Array.from(container.getElementsByClassName('pro-track')).forEach(item => {
-    // Play on card or play button click, only if URL is present
-    item.addEventListener('click', function(e) {
+    // Play on card or play button click
+    function handlePlay(e) {
       if (e.target.closest('.remove-btn')) return;
       const url = item.getAttribute('data-track-url');
-      if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
       const track = {
         id: item.getAttribute('data-track-id'),
         name: item.getAttribute('data-track-name'),
@@ -658,23 +684,49 @@ function renderLikedTracks() {
         url: url
       };
       enableAutoplay();
-      playTrackInStickyPlayer(track);
-    });
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        playTrackInStickyPlayer(track);
+      } else {
+        // If no URL, request it and play as soon as received
+        let played = false;
+        function tryPlayOnUrl(e) {
+          let data = e.data;
+          if (data && data.type === 'hertz-track-url' && data.id === track.id && data.url && !played) {
+            played = true;
+            playTrackInStickyPlayer({ ...track, url: data.url });
+            window.removeEventListener('message', tryPlayOnUrl);
+            if (window.hertzLikedTracksChannel) {
+              window.hertzLikedTracksChannel.removeEventListener('message', tryPlayOnUrl);
+            }
+          }
+        }
+        window.addEventListener('message', tryPlayOnUrl);
+        if (!window.hertzLikedTracksChannel) {
+          try {
+            window.hertzLikedTracksChannel = new BroadcastChannel('hertz-liked-tracks');
+          } catch {}
+        }
+        if (window.hertzLikedTracksChannel) {
+          window.hertzLikedTracksChannel.addEventListener('message', tryPlayOnUrl);
+          window.hertzLikedTracksChannel.postMessage({ type: 'hertz-request-track-url', id: track.id });
+        }
+        // Also send postMessage request
+        try {
+          if (window.opener) {
+            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          } else if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
+          }
+        } catch {}
+      }
+    }
+    item.addEventListener('click', handlePlay);
     // Play on play button click
     const playBtn = item.querySelector('.pro-play-btn');
     if (playBtn) {
       playBtn.addEventListener('click', function(e) {
         e.stopPropagation();
-        const url = item.getAttribute('data-track-url');
-        if (!url || !(url.startsWith('http://') || url.startsWith('https://'))) return;
-        const track = {
-          id: item.getAttribute('data-track-id'),
-          name: item.getAttribute('data-track-name'),
-          artist: item.getAttribute('data-track-artist'),
-          url: url
-        };
-        enableAutoplay();
-        playTrackInStickyPlayer(track);
+        handlePlay(e);
       });
     }
   });
