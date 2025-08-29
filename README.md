@@ -1,4 +1,4 @@
-# Hertz Music Streaming Website
+# HZ Music Streaming Website
 
 A modern, feature-rich music streaming web application with offline capabilities, playlist management, and a beautiful dark theme interface.
 
