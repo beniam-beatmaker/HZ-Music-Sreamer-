@@ -31,7 +31,7 @@
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 <meta name="theme-color" content="#ffffff">
-   
+
   <style>
   .card-display { background: linear-gradient(135deg, #232526 0%, #414345 100%); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 22px 28px 18px 28px; margin: 0 auto 18px auto; min-width: 270px; max-width: 340px; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; border: 1.5px solid #333; }
   .card-chip { width: 38px; height: 24px; background: linear-gradient(90deg, #e0e0e0 0%, #bdbdbd 100%); border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
@@ -1686,21 +1686,28 @@
 
     /* Copyright Footer */
     .copyright-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        background: rgba(18, 18, 18, 0.95);
-        color: var(--text-secondary);
-        text-align: center;
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-        z-index: 500; /* Lower than bottom nav so it stays behind */
-        backdrop-filter: blur(10px);
-        transition: background-color 0.3s ease, color 0.3s ease;
-        pointer-events: none; /* Prevents interaction while staying visible */
-        user-select: none; /* Prevents text selection */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: rgba(18, 18, 18, 0.97);
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.3rem 1.5rem 0.2rem 1.5rem;
+  font-size: 0.68rem;
+  line-height: 1.15;
+  z-index: 500;
+  backdrop-filter: blur(10px);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  pointer-events: auto;
+  user-select: none;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
+  gap: 0.15rem;
+  flex-wrap: nowrap;
     }
 
     .copyright-footer:hover {
@@ -1722,17 +1729,21 @@
 
     /* Hide copyright on very small screens to avoid overlap */
     @media (max-width: 480px) {
-        .copyright-footer {
-            display: none;
-        }
-
-        .main-content {
-            padding-bottom: 100px; /* Back to original on mobile */
-        }
-
-        .page-content {
-            padding-bottom: 120px; /* Back to original on mobile */
-        }
+    .copyright-footer {
+      font-size: 0.68rem;
+      padding: 0.3rem 0.3rem 0.15rem 0.3rem;
+      flex-direction: column;
+      gap: 0.12rem;
+    }
+    .copyright-footer span {
+      text-align: center;
+    }
+    .main-content {
+      padding-bottom: 100px;
+    }
+    .page-content {
+      padding-bottom: 120px;
+    }
     }
   </style>
 </head>
@@ -2293,7 +2304,8 @@
 
       <!-- Copyright Footer -->
       <div class="copyright-footer">
-        © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  <span style="display:block; word-break:break-word;">HZ Music Streamer. All rights reserved.</span>
+  <span style="display:block; word-break:break-word;">Founded &amp; Developed by <span style="color: #FFD700; font-weight: 600; word-break:break-word;">Beniam Endale Tedla</span></span>
       </div>
 
       </div>
@@ -5916,4 +5928,4 @@ videoOverlay.addEventListener('click', () => {
       </div>
     </div>
   </footer>
-</html> 
+</html>
