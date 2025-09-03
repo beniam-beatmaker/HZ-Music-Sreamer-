@@ -524,7 +524,147 @@
         color: #000;
         border-color: #FFD700;
     }
-  </style>
+
+    /* Responsive YouTube Player Sizing (Theater & Fullscreen) */
+#mediaPlayer {
+  position: relative;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: max-width 0.3s, width 0.3s;
+}
+#mediaPlayer.theater-mode {
+  max-width: 100vw;
+  width: 100vw;
+  border-radius: 0;
+  background: #181818;
+  z-index: 1200;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+}
+#mediaPlayer.fullscreen-mode {
+  position: fixed !important;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  background: #000 !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.media-player-video-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#playerIframe {
+  width: 100%;
+  max-width: 1280px;
+  aspect-ratio: 16 / 9;
+  min-height: 315px;
+  height: 56vw;
+  max-height: 72vh;
+  border-radius: 12px;
+  background: #000;
+  margin-bottom: 1rem;
+  display: block;
+  transition: width 0.3s, height 0.3s, max-width 0.3s, max-height 0.3s, border-radius 0.3s;
+}
+#mediaPlayer.theater-mode #playerIframe {
+  width: 100vw;
+  max-width: 100vw;
+  height: 56vw;
+  max-height: 80vh;
+  border-radius: 0;
+}
+#mediaPlayer.fullscreen-mode #playerIframe {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  aspect-ratio: unset !important;
+}
+
+/* Controls at bottom right INSIDE video area, like YouTube */
+.media-player-controls {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.media-player-controls .player-btn {
+  pointer-events: auto;
+  background: rgba(28,28,28,0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 0.5rem 0.7rem;
+  font-size: 1.25rem;
+  cursor: pointer;
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  font-weight: 600;
+  transition: none;
+  outline: none;
+}
+.media-player-controls .player-btn:focus {
+  outline: 2px solid #FFD700;
+}
+.media-player-controls .player-btn.active {
+  background: #FFD700;
+  color: #181818;
+}
+.media-player-controls .player-btn:hover,
+.media-player-controls .player-btn:active {
+  background: rgba(28,28,28,0.85); /* No color change on hover/click */
+  color: #fff;
+  transform: none;
+}
+.media-player-controls .player-btn span {
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .media-player-controls {
+    right: 8px;
+    bottom: 8px;
+  }
+}
+@media (max-width: 600px) {
+  .media-player-controls {
+    right: 4px;
+    bottom: 4px;
+  }
+}
+
+/* ...existing code... */
+    </style>
 </head>
 <body>
   <!-- Hamburger Menu -->
@@ -536,7 +676,7 @@
 
   <!-- Navigation Dropdown -->
   <div class="nav-dropdown" id="navDropdown">
-    <a href="index.html" class="nav-btn">🏠 Home</a>
+    <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
     <a href="Online25App.html" class="nav-btn active">🌐 Online</a>
     <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
     <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
@@ -552,10 +692,11 @@
 
       <!-- Navigation Buttons -->
       <div class="nav-buttons">
-        <a href="index.html" class="nav-btn">🏠 Home</a>
+        <a href="Hertz25App.html" class="nav-btn">🏠 Home</a>
         <a href="Online25App.html" class="nav-btn active">🌐 Online</a>
         <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
+        <a href="Favorites25App.html" class="nav-btn">⭐ Favorites</a>
         <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
@@ -571,8 +712,18 @@
       <div class="track-list">
         <h3 class="section-title">🎵 Now Playing</h3>
         <div class="media-player" id="mediaPlayer" style="display:none;">
+          <div class="media-player-video-container">
+            <iframe id="playerIframe" allow="autoplay" style="border:none;"></iframe>
+            <div class="media-player-controls">
+              <button id="theaterBtn" class="player-btn" title="Theater mode" tabindex="0">
+                <span id="theaterIcon">⛶</span>
+              </button>
+              <button id="fullscreenBtn" class="player-btn" title="Fullscreen" tabindex="0">
+                <span id="fullscreenIcon">⛶</span>
+              </button>
+            </div>
+          </div>
           <div class="track-title" id="playerTrackTitle" style="text-align:center; font-size:1.3rem; font-weight:bold; margin-bottom:1rem;"></div>
-          <iframe id="playerIframe" width="100%" height="100" style="border:none;" allow="autoplay"></iframe>
           <div><a id="lyricsLink" class="lyrics-link" href="#" target="_blank" style="display:none;">View Lyrics on YouTube</a></div>
         </div>
       </div>
@@ -1057,20 +1208,108 @@
     });
   });
 
+  // --- Theater & Fullscreen Controls ---
+(function() {
+  const mediaPlayer = document.getElementById('mediaPlayer');
+  const theaterBtn = document.getElementById('theaterBtn');
+  const fullscreenBtn = document.getElementById('fullscreenBtn');
+  const theaterIcon = document.getElementById('theaterIcon');
+  const fullscreenIcon = document.getElementById('fullscreenIcon');
+  let isTheater = false;
+  let isFullscreen = false;
+
+  // Toggle Theater Mode
+  function toggleTheater() {
+    if (isFullscreen) return; // Don't allow theater while fullscreen
+    isTheater = !isTheater;
+    if (isTheater) {
+      mediaPlayer.classList.add('theater-mode');
+      theaterBtn.classList.add('active');
+      theaterIcon.textContent = "🗗";
+    } else {
+      mediaPlayer.classList.remove('theater-mode');
+      theaterBtn.classList.remove('active');
+      theaterIcon.textContent = "⛶";
+    }
+  }
+
+  // Toggle Fullscreen Mode
+  function toggleFullscreen() {
+    if (!isFullscreen) {
+      // Enter fullscreen
+      const container = mediaPlayer.querySelector('.media-player-video-container');
+      if (container.requestFullscreen) {
+        container.requestFullscreen();
+      } else if (container.webkitRequestFullscreen) {
+        container.webkitRequestFullscreen();
+      } else if (container.msRequestFullscreen) {
+        container.msRequestFullscreen();
+      }
+      mediaPlayer.classList.add('fullscreen-mode');
+      fullscreenBtn.classList.add('active');
+      fullscreenIcon.textContent = "🡸";
+      isFullscreen = true;
+      // Remove theater mode if active
+      if (isTheater) {
+        isTheater = false;
+        mediaPlayer.classList.remove('theater-mode');
+        theaterBtn.classList.remove('active');
+        theaterIcon.textContent = "⛶";
+      }
+    } else {
+      // Exit fullscreen
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      mediaPlayer.classList.remove('fullscreen-mode');
+      fullscreenBtn.classList.remove('active');
+      fullscreenIcon.textContent = "⛶";
+      isFullscreen = false;
+    }
+  }
+
+  // Listen for fullscreen change to sync state
+  function onFullscreenChange() {
+    const fsElement = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+    if (!fsElement) {
+      mediaPlayer.classList.remove('fullscreen-mode');
+      fullscreenBtn.classList.remove('active');
+      fullscreenIcon.textContent = "⛶";
+      isFullscreen = false;
+    } else {
+      // If user enters fullscreen via browser, still show correct state
+      mediaPlayer.classList.add('fullscreen-mode');
+      fullscreenBtn.classList.add('active');
+      fullscreenIcon.textContent = "🡸";
+      isFullscreen = true;
+      // Remove theater mode if active
+      if (isTheater) {
+        isTheater = false;
+        mediaPlayer.classList.remove('theater-mode');
+        theaterBtn.classList.remove('active');
+        theaterIcon.textContent = "⛶";
+      }
+    }
+  }
+
+  if (theaterBtn) theaterBtn.onclick = toggleTheater;
+  if (fullscreenBtn) fullscreenBtn.onclick = toggleFullscreen;
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', onFullscreenChange);
+  document.addEventListener('msfullscreenchange', onFullscreenChange);
+})();
+
   // Initial render
   renderGenres();
   </script>
 
   <!-- Copyright Footer -->
-  <footer style="position: relative; bottom: 0; left: 0; right: 0; background: rgba(24, 24, 24, 0.95); border-top: 1px solid #404040; padding: 12px 16px; text-align: center; font-size: 0.75rem; color: #b3b3b3; margin-top: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-      <div>
-        © 2025 HZ Music Streamer. All rights reserved.
-      </div>
-      <div style="font-weight: 500; color: gold;">
-        Founded & Developed by <span style="color: #fff;">Beniam Endale Tedla</span>
-      </div>
-    </div>
-  </footer>
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #b3b3b3; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; z-index: 999;">
+    © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  </div>
 </body>
 </html>
