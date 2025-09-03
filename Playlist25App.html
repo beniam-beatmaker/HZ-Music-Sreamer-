@@ -6,18 +6,99 @@
     <title>Hertz-Playlists</title>
     <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
     <style>
+        /* Uniform featured track card sizing and alignment for all devices */
+        #spotifyTrackGrid {
+            align-items: stretch !important;
+        }
+        .spotify-track-card {
+            width: 120px !important;
+            min-width: 120px !important;
+            max-width: 120px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            box-sizing: border-box !important;
+            padding-bottom: 0.7rem !important;
+        }
+        .spotify-track-card .track-title {
+            margin-bottom: 0.2rem !important;
+        }
+        .spotify-track-card .track-artist {
+            margin-bottom: 0 !important;
+        }
+        .spotify-track-card .track-title:only-child {
+            margin-bottom: 0 !important;
+        }
+        .spotify-track-card img {
+            width: 70px !important;
+            height: 70px !important;
+            min-width: 70px !important;
+            min-height: 70px !important;
+            max-width: 70px !important;
+            max-height: 70px !important;
+            object-fit: cover !important;
+        }
+        @media (max-width: 600px) {
+            #spotifyTrackGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.7rem !important;
+                justify-items: center !important;
+                padding-left: 0 !important;
+            }
+            .spotify-track-card {
+                width: 110px !important;
+                min-width: 110px !important;
+                max-width: 110px !important;
+                padding-bottom: 0.5rem !important;
+            }
+            .spotify-track-card img {
+                width: 60px !important;
+                height: 60px !important;
+                min-width: 60px !important;
+                min-height: 60px !important;
+                max-width: 60px !important;
+                max-height: 60px !important;
+            }
+        }
+        /* Responsive tweaks for featured tracks on mobile */
+        @media (max-width: 600px) {
+            #spotifyTrackGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 0.7rem !important;
+                justify-items: start !important;
+                padding-left: 0.3rem !important;
+            }
+            .spotify-track-card {
+                min-width: 90px !important;
+                max-width: 110px !important;
+                padding: 0.7rem 0.3rem 0.6rem 0.3rem !important;
+            }
+            .spotify-track-card img {
+                width: 60px !important;
+                height: 60px !important;
+                border-radius: 12px !important;
+            }
+            .spotify-track-card div[style*='font-weight:600'] {
+                font-size: 0.85rem !important;
+            }
+        }
         /* COMPLETELY NEW VERSION - NO CACHE */
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
+        html, body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: #121212;
             color: #fff;
             min-height: 100vh;
+            min-width: 100vw;
+            width: 100vw;
+            height: 100vh;
             overflow-x: hidden;
         }
 
@@ -1222,24 +1303,24 @@
                                 const track = getTrackInfo(trackObj.url);
                                 const card = document.createElement('div');
                                 card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0.9rem 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:130px;max-width:150px;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                                card.innerHTML = `
-                                                        <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                                        <div style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;margin-bottom:${track.artist ? '0.2rem' : '0.7rem'};">${track.name}</div>
-                                                        ${track.artist ? `<div style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                                        <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                                        <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                                            <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>📝</span> Add to Queue
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                                                <span>🔗</span> Share
-                                                            </div>
-                                                            <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                                                <span>🗑️</span> Remove
-                                                            </div>
-                                                        </div>
-                                                `;
+                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:unset;max-width:unset;cursor:pointer;transition:transform 0.18s;position:relative;';
+                                card.innerHTML = `
+                                    <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                                    <div class="track-title" style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;">${track.name}</div>
+                                    ${track.artist ? `<div class='track-artist' style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
+                                    <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                                    <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                                        <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                            <span>📝</span> Add to Queue
+                                        </div>
+                                        <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                                            <span>🔗</span> Share
+                                        </div>
+                                        <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                                            <span>🗑️</span> Remove
+                                        </div>
+                                    </div>
+                                `;
                                 card.addEventListener('click', function() {
                                         console.log('🎪 Track card clicked:', idx);
                                         enableAutoplay();
@@ -3031,15 +3112,10 @@ window.removeTrack = function(trackId) {
     </script>
 
     <!-- Copyright Footer -->
-     <footer style="position: relative; bottom: 0; left: 0; right: 0; background: rgba(24, 24, 24, 0.95); border-top: 1px solid #404040; padding: 12px 16px; text-align: center; font-size: 0.75rem; color: #b3b3b3; margin-top: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-      <div>
-        © 2025 HZ Music Streamer. All rights reserved.
-      </div>
-      <div style="font-weight: 500; color: gold;">
-        Founded & Developed by <span style="color: #fff;">Beniam Endale Tedla</span>
-      </div>
-    </div>
-  </footer>
+    <footer style="text-align:center;padding:2rem 1rem 1rem 1rem;margin-top:3rem;border-top:1px solid #404040;background:rgba(24,24,24,0.8);backdrop-filter:blur(10px);">
+        <p style="margin:0;color:#b3b3b3;font-size:0.85rem;font-weight:400;">
+            © 2025 <span style="color:#FFD700;font-weight:600;">HZ</span> Music Platform. All rights reserved. | Developed & Founded by Beniam Endale Tedla
+        </p>
+    </footer>
 </body>
 </html>
