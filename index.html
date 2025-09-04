@@ -2082,6 +2082,22 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+          <div class="recent-track-item" onclick="playTrack('utopia1')">
+            <div class="recent-track-artwork"></div>
+            <div class="recent-track-info">
+              <div class="recent-track-name">Me And You!</div>
+              <div class="recent-track-artist">Utopia</div>
+            </div>
+            <div class="recent-track-time">Just now</div>
+          </div>
+          <div class="recent-track-item" onclick="playTrack('utopia2')">
+            <div class="recent-track-artwork"></div>
+            <div class="recent-track-info">
+              <div class="recent-track-name">Love, Peace, Unity</div>
+              <div class="recent-track-artist">Utopia</div>
+            </div>
+            <div class="recent-track-time">Just now</div>
+          </div>
           <div class="recent-track-item" onclick="playTrack('track1')">
             <div class="recent-track-artwork"></div>
             <div class="recent-track-info">
@@ -2129,6 +2145,60 @@
             </tr>
           </thead>
           <tbody>
+            <tr class="track-row" onclick="playTrack('utopia1')">
+              <td>
+                <div class="track-number">1</div>
+                <button class="track-play-btn">▶</button>
+              </td>
+              <td>
+                <div class="track-info">
+                  <div class="track-artwork"></div>
+                  <div class="track-details">
+                    <div class="track-name">Me And You!</div>
+                    <div class="track-artist">Utopia</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="track-album"></div>
+              </td>
+              <td>
+                <div class="track-duration">Just now</div>
+              </td>
+              <td>
+                <div class="track-actions">
+                  <button class="track-like-btn" onclick="toggleLike(this, event)">♡</button>
+                  <button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button>
+                </div>
+              </td>
+            </tr>
+            <tr class="track-row" onclick="playTrack('utopia2')">
+              <td>
+                <div class="track-number">2</div>
+                <button class="track-play-btn">▶</button>
+              </td>
+              <td>
+                <div class="track-info">
+                  <div class="track-artwork"></div>
+                  <div class="track-details">
+                    <div class="track-name">Love, Peace, Unity</div>
+                    <div class="track-artist">Utopia</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="track-album"></div>
+              </td>
+              <td>
+                <div class="track-duration">Just now</div>
+              </td>
+              <td>
+                <div class="track-actions">
+                  <button class="track-like-btn" onclick="toggleLike(this, event)">♡</button>
+                  <button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button>
+                </div>
+              </td>
+            </tr>
             <tr class="track-row" onclick="playTrack('popular1')">
               <td>
                 <div class="track-number">1</div>
@@ -2148,33 +2218,6 @@
               </td>
               <td>
                 <div class="track-duration">2 days ago</div>
-              </td>
-              <td>
-                <div class="track-actions">
-                  <button class="track-like-btn" onclick="toggleLike(this, event)">♡</button>
-                  <button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button>
-                </div>
-              </td>
-            </tr>
-            <tr class="track-row" onclick="playTrack('popular2')">
-              <td>
-                <div class="track-number">2</div>
-                <button class="track-play-btn">▶</button>
-              </td>
-              <td>
-                <div class="track-info">
-                  <div class="track-artwork"></div>
-                  <div class="track-details">
-                    <div class="track-name">Levitating</div>
-                    <div class="track-artist">Dua Lipa</div>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="track-album">Harry's House</div>
-              </td>
-              <td>
-                <div class="track-duration">1 week ago</div>
               </td>
               <td>
                 <div class="track-actions">
@@ -5675,6 +5718,49 @@ document.addEventListener('DOMContentLoaded', function() {
     (function() {
       function savePlayerState() {
         const audio = document.getElementById('playerAudio');
+      // Ensure Utopia tracks play and show sticky player
+      window.playTrack = function(trackId) {
+        // Custom logic for Utopia tracks
+        if (trackId === 'utopia1') {
+          // Add to allTracks if not present
+          if (!allTracks.find(t => t.id === 'utopia1')) {
+            allTracks.unshift({
+              id: 'utopia1',
+              name: 'Me And You! - Utopia',
+              title: 'Me And You!',
+              artist: 'Utopia',
+              url: 'https://storage.googleapis.com/hertz-music-folder/Me%20And%20You!%20Artist.%20Utopia.mp3',
+              cover: '',
+              album: '',
+              duration: ''
+            });
+          }
+          const idx = allTracks.findIndex(t => t.id === 'utopia1');
+          if (idx !== -1) loadTrack(idx, true);
+          return;
+        }
+        if (trackId === 'utopia2') {
+          if (!allTracks.find(t => t.id === 'utopia2')) {
+            allTracks.unshift({
+              id: 'utopia2',
+              name: 'Love, Peace, Unity - Utopia',
+              title: 'Love, Peace, Unity',
+              artist: 'Utopia',
+              url: 'https://storage.googleapis.com/hertz-music-folder/Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3',
+              cover: '',
+              album: '',
+              duration: ''
+            });
+          }
+          const idx = allTracks.findIndex(t => t.id === 'utopia2');
+          if (idx !== -1) loadTrack(idx, true);
+          return;
+        }
+        // Fallback to original logic if not utopia tracks
+        if (typeof window.playTrackFromCard === 'function') {
+          window.playTrackFromCard(trackId);
+        }
+      };
         const state = {
           track: window.currentTrack || null,
           currentTime: audio ? audio.currentTime : 0,
