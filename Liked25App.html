@@ -364,20 +364,45 @@
 #stickyPlayer .controls {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-left: 10px;
+  height: 100%;
 }
 #stickyPlayer button {
-  background: none;
-  border: none;
-  color: #fff;
-  font-size: 1.3rem;
+  background: none !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 1.15rem !important;
   cursor: pointer;
-  padding: 0 4px;
-  transition: color 0.18s;
+  padding: 0 6px !important;
+  height: 32px !important;
+  width: 32px !important;
+  border-radius: 6px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none !important;
 }
 #stickyPlayer button:active {
+  color: #FFD700 !important;
+}
+#stickyPlayer #stickyPlayPause {
+  background: none !important;
+  box-shadow: none !important;
+}
+#stickyPlayer #stickyPlayPause svg {
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#stickyTime {
   color: #FFD700;
+  font-size: 0.98rem;
+  margin-left: 10px;
+  min-width: 60px;
+  text-align: right;
+  font-family: monospace;
+  font-weight: 600;
 }
     /* --- Popup Player Redesign --- */
 #popupPlayer {
