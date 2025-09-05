@@ -1245,6 +1245,19 @@
 
         // CLEAN TRACKS DATA
         const featuredTracks = [
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Me%20And%20You!%20Artist.%20Utopia.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3' },
             { url: 'https://storage.googleapis.com/hertz-music-folder/afro-dancehall-music.mp3' },
             { url: 'https://storage.googleapis.com/hertz-music-folder/background-music.mp3' },
             { url: 'https://storage.googleapis.com/hertz-music-folder/background-theme.mp3' },
@@ -1259,23 +1272,14 @@
             { url: 'https://storage.googleapis.com/hertz-music-folder/hip-hop-music.mp3' },
             { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-chill.mp3' },
             { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-hiphop.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-music.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3' }
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-music.mp3' }
        ];
 
         function getTrackInfo(url) {
             const fileName = decodeURIComponent(url.split('/').pop());
             let name = fileName.replace(/\.(mp3|wav)$/i, '');
+            // Remove _FULL_SONG_MusicGPT (case-insensitive, with or without underscores)
+            name = name.replace(/_?FULL[_ ]?SONG[_ ]?MusicGPT/i, '').replace(/_+/g, ' ').replace(/\s{2,}/g, ' ').trim();
             let artist = '';
             if (/Prod\. Tedla/i.test(name)) {
                 artist = 'Prod. Tedla';
@@ -1300,39 +1304,62 @@
             const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
 
             featuredTracks.forEach((trackObj, idx) => {
-                                const track = getTrackInfo(trackObj.url);
-                                const card = document.createElement('div');
-                                card.className = 'spotify-track-card';
-                                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:unset;max-width:unset;cursor:pointer;transition:transform 0.18s;position:relative;';
-                                card.innerHTML = `
-                                    <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
-                                    <div class="track-title" style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;">${track.name}</div>
-                                    ${track.artist ? `<div class='track-artist' style='color:gold;font-size:0.98rem;text-align:center;'>${track.artist}</div>` : ''}
-                                    <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
-                                    <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
-                                        <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                            <span>📝</span> Add to Queue
-                                        </div>
-                                        <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
-                                            <span>🔗</span> Share
-                                        </div>
-                                        <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
-                                            <span>🗑️</span> Remove
-                                        </div>
-                                    </div>
-                                `;
-                                card.addEventListener('click', function() {
-                                        console.log('🎪 Track card clicked:', idx);
-                                        enableAutoplay();
-                                        loadTrack(idx, true);
-                                });
-                                card.addEventListener('mouseover', function() {
-                                        card.style.transform = 'scale(1.04)';
-                                });
-                                card.addEventListener('mouseout', function() {
-                                        card.style.transform = 'scale(1)';
-                                });
-                                grid.appendChild(card);
+                let track = getTrackInfo(trackObj.url);
+                // Custom logic for the two new tracks
+                let customTitle = track.name;
+                let customArtist = track.artist;
+                let customArtistHtml = '';
+                // Me And You! Artist. Utopia
+                if (trackObj.url.includes('Me%20And%20You!%20Artist.%20Utopia.mp3')) {
+                    customTitle = track.name.replace(/ ?Artist\.? ?Utopia/i, '<span style="color:gold;">Utopia</span>');
+                    customArtistHtml = '';
+                }
+                // Love,Peace,Unity_FULL_SONG_MusicGPT
+                else if (trackObj.url.includes('Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3')) {
+                    // Remove 'Artist.' if present, and add Utopia in gold
+                    customTitle = track.name.replace(/ ?Artist\.?/i, '').replace(/_/g, ' ').replace(/\s{2,}/g, ' ').trim() + ' <span style="color:gold;">Utopia</span>';
+                    customArtistHtml = '';
+                } else {
+                    if (customArtist) {
+                        customArtistHtml = `<div class='track-artist' style='color:gold;font-size:0.98rem;text-align:center;'>${customArtist}</div>`;
+                    }
+                }
+                const card = document.createElement('div');
+                card.className = 'spotify-track-card';
+                card.style = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem 0 0.7rem;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-width:unset;max-width:unset;cursor:pointer;transition:transform 0.18s;position:relative;';
+                card.innerHTML = `
+                    <img src="${hzLogoDataUrl}" alt="HZ Logo" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                    <div class="track-title" style="font-weight:600;color:#fff;font-size:1.08rem;text-align:center;">${customTitle}</div>
+                    ${customArtistHtml}
+                    <button onclick="event.stopPropagation();toggleTrackMenu('ft${idx}')" style="position:absolute;top:10px;right:10px;background:none;border:none;color:#b3b3b3;font-size:1.2rem;cursor:pointer;padding:4px;z-index:2;" title="More options">⋮</button>
+                    <div id="menu-ft${idx}" class="track-menu-popup" style="display:none;position:absolute;right:10px;top:38px;background:#2a2a2a;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.4);z-index:1000;min-width:180px;border:1px solid #404040;">
+                        <div onclick="event.stopPropagation();addToQueue('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                            <span>📝</span> Add to Queue
+                        </div>
+                        <div onclick="event.stopPropagation();shareTrack('ft${idx}', event)" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;">
+                            <span>🔗</span> Share
+                        </div>
+                        <div onclick="event.stopPropagation();removeTrack('ft${idx}')" class="track-menu-option" style="padding:0.7rem 1rem;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:0.5rem;color:#f44336;">
+                            <span>🗑️</span> Remove
+                        </div>
+                    </div>
+                `;
+                card.addEventListener('click', function() {
+                    console.log('🎪 Track card clicked:', idx);
+                    if (window.playTrack) {
+                        window.playTrack(idx);
+                    } else {
+                        enableAutoplay();
+                        loadTrack(idx, true);
+                    }
+                });
+                card.addEventListener('mouseover', function() {
+                    card.style.transform = 'scale(1.04)';
+                });
+                card.addEventListener('mouseout', function() {
+                    card.style.transform = 'scale(1)';
+                });
+                grid.appendChild(card);
 // --- 3-dot menu support for featured tracks ---
 window.toggleTrackMenu = function(trackId) {
     document.querySelectorAll('.track-menu-popup').forEach(menu => {
@@ -3114,7 +3141,7 @@ window.removeTrack = function(trackId) {
     <!-- Copyright Footer -->
     <footer style="text-align:center;padding:2rem 1rem 1rem 1rem;margin-top:3rem;border-top:1px solid #404040;background:rgba(24,24,24,0.8);backdrop-filter:blur(10px);">
         <p style="margin:0;color:#b3b3b3;font-size:0.85rem;font-weight:400;">
-            © 2025 <span style="color:#FFD700;font-weight:600;">HZ</span> Music Platform. All rights reserved. | Developed & Founded by Beniam Endale Tedla
+            © 2025 <span style="color:#FFD700;font-weight:600;">HZ</span> Music Platform. All rights reserved. | Developed &  by Beniam Endale Tedla
         </p>
     </footer>
 </body>
