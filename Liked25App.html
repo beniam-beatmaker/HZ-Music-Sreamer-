@@ -353,6 +353,19 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  max-width: 100vw;
+  width: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+@media (max-width: 600px) {
+  #stickyPlayer {
+    padding: 0 6px !important;
+  }
+  #stickyPlayer .title {
+    font-size: 0.97rem;
+    max-width: 60vw;
+  }
 }
 #stickyPlayer .artist {
   color: #b3b3b3;
