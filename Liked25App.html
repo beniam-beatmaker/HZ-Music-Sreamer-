@@ -1041,7 +1041,7 @@ function renderLikedTracks() {
     const hasUrl = track.url && (track.url.startsWith('http://') || track.url.startsWith('https://'));
     html += `
       <div class="track-item pro-track" data-track-id="${track.id}" data-track-name="${track.name}" data-track-artist="${track.artist || 'Unknown Artist'}" data-track-url="${track.url || ''}" style="display:flex;align-items:center;gap:1.2rem;padding:1.1rem 1.5rem;background:#232526;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,0.10);cursor:pointer;transition:box-shadow 0.18s,background 0.18s;position:relative;">
-        <div class="track-cover" style="width:56px;height:56px;min-width:56px;min-height:56px;border-radius:10px;background:#181818;display:flex;align-items:center;justify-content:center;color:#FFD700;font-weight:bold;font-size:1.5rem;letter-spacing:2px;border:2px solid #FFD700;box-shadow:0 2px 8px rgba(0,0,0,0.13);">HZ</div>
+        <div class="track-cover" style="width:56px;height:56px;min-width:56px;min-height:56px;border-radius:10px;background:#181818;display:flex;align-items:center;justify-content:center;color:#FFD700;font-weight:bold;font-size:1.5rem;letter-spacing:2px;border:2px solid #FFD700;box-shadow:0 2px 8px rgba(255,215,0,0.13);">HZ</div>
         <div class="track-info" style="flex:1;min-width:0;display:flex;flex-direction:column;gap:0.2rem;">
           <div class="track-title" style="color:#fff;font-size:1.08rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.name}</div>
           <div class="track-artist" style="color:#b3b3b3;font-size:0.97rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${track.artist || 'Unknown Artist'}</div>
