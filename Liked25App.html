@@ -545,6 +545,7 @@
     const prevBtn = document.getElementById('stickyPrev');
     const closeBtn = document.getElementById('stickyClose');
     const audio = document.getElementById('playerAudio');
+    const timeDisplay = document.getElementById('stickyTime');
     let currentTrackIndex = -1;
     function updatePlayPauseIcon() {
       playPauseBtn.textContent = audio.paused ? '▶️' : '⏸️';
@@ -579,7 +580,23 @@
       stickyPlayer.style.display = 'none';
       audio.pause();
     });
-    // When a track is played, update index
+    // Live track time display logic
+const updateStickyTime = () => {
+  if (!audio || !timeDisplay) return;
+  const format = s => {
+    if (!isFinite(s)) return '0:00';
+    const m = Math.floor(s/60);
+    const sec = Math.floor(s%60);
+    return `${m}:${sec.toString().padStart(2,'0')}`;
+  };
+  timeDisplay.textContent = `${format(audio.currentTime)} / ${format(audio.duration||0)}`;
+};
+setInterval(updateStickyTime, 500);
+audio.addEventListener('timeupdate', updateStickyTime);
+audio.addEventListener('loadedmetadata', updateStickyTime);
+audio.addEventListener('play', updateStickyTime);
+audio.addEventListener('pause', updateStickyTime);
+// When a track is played, update index
     window.playTrackInStickyPlayer = function(track, recursionDepth = 0) {
       const stickyPlayer = document.getElementById('stickyPlayer');
       const audio = document.getElementById('playerAudio');
@@ -1128,7 +1145,7 @@ window.addEventListener('message', function handleUrlMessage(e) {
         audio.src = src;
       }
       audio.currentTime = 0;
-      audio.play(); // Always play the selected track
+      audio.play();
       stickyPlayer.dataset.currentTrack = JSON.stringify(track);
       document.getElementById('popupPlayer').style.display = 'none';
     }
