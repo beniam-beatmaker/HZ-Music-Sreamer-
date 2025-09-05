@@ -321,27 +321,23 @@
     /* --- Sticky Player Redesign --- */
 #stickyPlayer {
   position: fixed;
-  left: 50%;
-  bottom: 24px;
-  transform: translateX(-50%);
-  width: 340px;
-  height: 64px;
-  background: rgba(24,24,24,0.98);
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-  display: flex;
-  align-items: center;
-  z-index: 9999;
-  padding: 0 18px;
-  transition: box-shadow 0.18s, background 0.18s;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  transform: none !important;
+  width: 100vw !important;
+  min-width: 100vw !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  border-radius: 0 !important;
+  padding: 0 18px !important;
+  box-shadow: 0 -2px 16px rgba(0,0,0,0.13);
 }
 #stickyPlayer .cover {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: #181818 url('HZ.png') center/cover no-repeat;
-  margin-right: 14px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 8px !important;
+  margin-right: 12px !important;
 }
 #stickyPlayer .info {
   flex: 1;
@@ -480,7 +476,7 @@
   </div>
 
   <!-- Sticky Player (copied and adapted from Playlist25App.html for professional look/functionality) -->
-  <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#232526 100%);border-top:1px solid #404040;padding:0.7rem 2rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);height:72px;min-height:72px;max-height:80px;">
+  <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#232526 100%);border-top:1px solid #404040;padding:0.7rem 2rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);height:44px;min-height:44px;max-height:80px;">
   <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:100%;cursor:pointer;">
       <div class="player-controls" style="display:flex;align-items:center;gap:1.1rem;">
   <button class="player-btn" id="stickyPrev" title="Previous" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9198;</button>
@@ -1192,6 +1188,7 @@ window.addEventListener('message', function handleUrlMessage(e) {
       const popupAudio = document.getElementById('popupAudio');
       // Try to get the track info from the sticky player if available
       let track = null;
+
       try {
         const stickyPlayer = document.getElementById('stickyPlayer');
         if (stickyPlayer && stickyPlayer.dataset.currentTrack) {
