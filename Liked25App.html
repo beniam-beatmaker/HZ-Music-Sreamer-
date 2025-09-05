@@ -343,23 +343,93 @@
   <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#232526 100%);border-top:1px solid #404040;padding:0.7rem 2rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);height:72px;min-height:72px;max-height:80px;">
   <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:100%;cursor:pointer;">
       <div class="player-controls" style="display:flex;align-items:center;gap:1.1rem;">
-        <button class="player-btn" id="prevBtn" title="Previous" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9198;</button>
-        <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="width:54px;height:54px;border-radius:50%;font-size:1.5rem;background:#1db954;color:#fff;border:none;box-shadow:0 2px 8px rgba(29,185,84,0.18);transition:background 0.2s;">&#10073;&#10073;</button>
-        <button class="player-btn" id="nextBtn" title="Next" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9197;</button>
+  <button class="player-btn" id="stickyPrev" title="Previous" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9198;</button>
+  <button class="player-btn" id="stickyPlayPause" title="Play/Pause" style="width:54px;height:54px;border-radius:50%;font-size:1.5rem;background:#1db954;color:#fff;border:none;box-shadow:0 2px 8px rgba(29,185,84,0.18);transition:background 0.2s;">▶️</button>
+  <button class="player-btn" id="stickyNext" title="Next" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9197;</button>
         <button class="player-btn player-loop" id="loopBtn" title="Loop" style="width:38px;height:38px;border-radius:50%;font-size:1.1rem;background:#232526;color:#FFD700;border:none;box-shadow:0 2px 8px rgba(255,215,0,0.12);transition:background 0.2s;">&#128257;</button>
         <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="width:38px;height:38px;border-radius:50%;font-size:1.1rem;background:#232526;color:#FFD700;border:none;box-shadow:0 2px 8px rgba(255,215,0,0.12);transition:background 0.2s;">&#128256;</button>
         <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
         <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
       </div>
       <span class="player-title" id="playerTrackTitle"></span>
+  <span id="playerArtist" style="margin-left:0.7rem;color:#b3b3b3;font-size:0.98em;"></span>
       <div style="display:flex;align-items:center;gap:0.7rem;width:320px;max-width:90%;">
         <span id="currentTime" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
         <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="flex:1;">
         <span id="duration" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
       </div>
       <button id="likeBtn" title="Like Track">&#10084;</button>
+  <button id="stickyClose" title="Close Player" style="margin-left:1.2rem;background:none;border:none;color:#b3b3b3;font-size:1.3rem;cursor:pointer;">✖</button>
     </div>
     <audio id="playerAudio" style="display:none;" preload="metadata"></audio>
+  <script>
+  // Sticky player controls
+  document.addEventListener('DOMContentLoaded', function() {
+    const stickyPlayer = document.getElementById('stickyPlayer');
+    const playPauseBtn = document.getElementById('stickyPlayPause');
+    const nextBtn = document.getElementById('stickyNext');
+    const prevBtn = document.getElementById('stickyPrev');
+    const closeBtn = document.getElementById('stickyClose');
+    const audio = document.getElementById('playerAudio');
+    let currentTrackIndex = -1;
+    function updatePlayPauseIcon() {
+      playPauseBtn.textContent = audio.paused ? '▶️' : '⏸️';
+    }
+    playPauseBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+      updatePlayPauseIcon();
+    });
+    audio.addEventListener('play', updatePlayPauseIcon);
+    audio.addEventListener('pause', updatePlayPauseIcon);
+    nextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (likedTracks.length > 0) {
+        currentTrackIndex = (currentTrackIndex + 1) % likedTracks.length;
+        playTrackInStickyPlayer(likedTracks[currentTrackIndex]);
+      }
+    });
+    prevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      if (likedTracks.length > 0) {
+        currentTrackIndex = (currentTrackIndex - 1 + likedTracks.length) % likedTracks.length;
+        playTrackInStickyPlayer(likedTracks[currentTrackIndex]);
+      }
+    });
+    closeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      stickyPlayer.style.display = 'none';
+      audio.pause();
+    });
+    // When a track is played, update index
+    window.playTrackInStickyPlayer = function(track) {
+      const idx = likedTracks.findIndex(t => t.id === track.id);
+      if (idx !== -1) currentTrackIndex = idx;
+      // ...existing code...
+      stickyPlayer.style.display = 'flex';
+      document.getElementById('playerTrackTitle').textContent = track.name;
+      document.getElementById('playerArtist').textContent = track.artist;
+      let src = track.url && track.url.trim() ? track.url : '';
+      const isOnline = src.startsWith('http://') || src.startsWith('https://');
+      if (!src || !isOnline) {
+        alert('This track is only available offline and cannot be played in the browser.');
+        src = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+      }
+      if (audio.src !== src) {
+        audio.src = src;
+      }
+      audio.currentTime = 0;
+      audio.play();
+      stickyPlayer.dataset.currentTrack = JSON.stringify(track);
+      document.getElementById('popupPlayer').style.display = 'none';
+      updatePlayPauseIcon();
+    }
+  });
+  </script>
   </div>
   <script>
   // Hamburger Menu Functionality (copied/adapted from Playlist25App.html)
@@ -780,41 +850,13 @@ function renderLikedTracks() {
         url: url
       };
       enableAutoplay();
-      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        playTrackInStickyPlayer(track);
-      } else {
-        // If no URL, request it and play as soon as received
-        let played = false;
-        function tryPlayOnUrl(e) {
-          let data = e.data;
-          if (data && data.type === 'hertz-track-url' && data.id === track.id && data.url && !played) {
-            played = true;
-            playTrackInStickyPlayer({ ...track, url: data.url });
-            window.removeEventListener('message', tryPlayOnUrl);
-            if (window.hertzLikedTracksChannel) {
-              window.hertzLikedTracksChannel.removeEventListener('message', tryPlayOnUrl);
-            }
-          }
-        }
-        window.addEventListener('message', tryPlayOnUrl);
-        if (!window.hertzLikedTracksChannel) {
-          try {
-            window.hertzLikedTracksChannel = new BroadcastChannel('hertz-liked-tracks');
-          } catch {}
-        }
-        if (window.hertzLikedTracksChannel) {
-          window.hertzLikedTracksChannel.addEventListener('message', tryPlayOnUrl);
-          window.hertzLikedTracksChannel.postMessage({ type: 'hertz-request-track-url', id: track.id });
-        }
-        // Also send postMessage request
-        try {
-          if (window.opener) {
-            window.opener.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          } else if (window.parent && window.parent !== window) {
-            window.parent.postMessage({ type: 'hertz-request-track-url', id: track.id }, '*');
-          }
-        } catch {}
+      // Always update currentTrackIndex for navigation controls
+      const idx = likedTracks.findIndex(t => t.id === track.id);
+      if (idx !== -1) {
+        window.currentTrackIndex = idx;
       }
+      // Always attempt to play the track, even if URL is missing
+      playTrackInStickyPlayer(track);
     }
     item.addEventListener('click', handlePlay);
     // Play on play button click
