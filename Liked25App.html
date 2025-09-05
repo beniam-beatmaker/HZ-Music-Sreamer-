@@ -4,6 +4,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
   <style>
+    /* Track Card Sizing for Liked Page (matches Spotify/Apple Music) */
+    .liked-track-card {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      background: #232526;
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      padding: 0.8rem 1.2rem;
+      margin-bottom: 1.1rem;
+      min-height: 72px;
+      max-height: 80px;
+      width: 100%;
+      transition: box-shadow 0.2s;
+    }
+    .liked-track-card:hover {
+      box-shadow: 0 4px 16px rgba(29,185,84,0.18);
+      background: #282828;
+    }
+    .liked-track-cover {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .liked-track-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+    }
+    .liked-track-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .liked-track-artist {
+      font-size: 0.95rem;
+      color: #b3b3b3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     /* --- Professional, Appealing, Unified CSS --- */
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -244,14 +292,14 @@
   </div>
 
   <!-- Sticky Player (copied and adapted from Playlist25App.html for professional look/functionality) -->
-  <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#282828 100%);border-top:1px solid #404040;padding:0.5rem 1.5rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);">
-    <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:36px;cursor:pointer;">
-      <div class="player-controls">
-        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
-        <button class="player-btn" id="playPauseBtn" title="Always Playing">&#10073;&#10073;</button>
-        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
-        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
-        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
+  <div class="sticky-player" id="stickyPlayer" style="position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(90deg,#181818 0%,#232526 100%);border-top:1px solid #404040;padding:0.7rem 2rem;display:flex;align-items:center;gap:1.5rem;box-shadow:0 -2px 16px rgba(0,0,0,0.18);height:72px;min-height:72px;max-height:80px;">
+  <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:100%;cursor:pointer;">
+      <div class="player-controls" style="display:flex;align-items:center;gap:1.1rem;">
+        <button class="player-btn" id="prevBtn" title="Previous" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9198;</button>
+        <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="width:54px;height:54px;border-radius:50%;font-size:1.5rem;background:#1db954;color:#fff;border:none;box-shadow:0 2px 8px rgba(29,185,84,0.18);transition:background 0.2s;">&#10073;&#10073;</button>
+        <button class="player-btn" id="nextBtn" title="Next" style="width:44px;height:44px;border-radius:50%;font-size:1.3rem;background:#232526;color:#fff;border:none;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:background 0.2s;">&#9197;</button>
+        <button class="player-btn player-loop" id="loopBtn" title="Loop" style="width:38px;height:38px;border-radius:50%;font-size:1.1rem;background:#232526;color:#FFD700;border:none;box-shadow:0 2px 8px rgba(255,215,0,0.12);transition:background 0.2s;">&#128257;</button>
+        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="width:38px;height:38px;border-radius:50%;font-size:1.1rem;background:#232526;color:#FFD700;border:none;box-shadow:0 2px 8px rgba(255,215,0,0.12);transition:background 0.2s;">&#128256;</button>
         <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
         <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
       </div>
