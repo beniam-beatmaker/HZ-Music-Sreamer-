@@ -492,6 +492,59 @@
   border: none;
   cursor: pointer;
 }
+/* --- Sticky Player Button Color & Functionality --- */
+stickyPlayerStyle.innerHTML += `
+#stickyPlayer button, #stickyPlayer #stickyPlayPause, #stickyPlayer #stickyLoop, #stickyPlayer #stickyShuffle {
+  background: none !important;
+  color: #fff !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+#stickyPlayer button:active {
+  color: #FFD700 !important;
+}
+`;
+    /* --- Popup Player Time Bar Like Spotify/Soundcloud --- */
+popupPlayerStyle.innerHTML += `
+#popupPlayer .time-bar {
+  width: 90%;
+  margin: 18px auto 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#popupPlayer .time-current {
+  color: #FFD700;
+  font-size: 1.01rem;
+  font-family: monospace;
+  font-weight: 600;
+  min-width: 48px;
+  text-align: left;
+}
+#popupPlayer .time-total {
+  color: #b3b3b3;
+  font-size: 1.01rem;
+  font-family: monospace;
+  font-weight: 600;
+  min-width: 48px;
+  text-align: right;
+}
+#popupPlayer .progress {
+  flex: 1;
+  height: 4px;
+  background: #333;
+  border-radius: 2px;
+  position: relative;
+}
+#popupPlayer .progress-filled {
+  height: 100%;
+  background: #FFD700;
+  border-radius: 2px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+`;
   </style>
 </head>
 <body>
