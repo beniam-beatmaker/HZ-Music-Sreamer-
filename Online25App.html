@@ -683,6 +683,7 @@
     <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
     <a href="Account25App.html" class="nav-btn">👤 Account</a>
     <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+   
   </div>
 
   <div class="container">
@@ -700,6 +701,7 @@
         <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
+        
       </div>
 
       <!-- Search -->
@@ -713,14 +715,9 @@
         <h3 class="section-title">🎵 Now Playing</h3>
         <div class="media-player" id="mediaPlayer" style="display:none;">
           <div class="media-player-video-container">
-            <iframe id="playerIframe" allow="autoplay" style="border:none;"></iframe>
+            <iframe id="playerIframe" allow="autoplay" allowfullscreen style="border:none;"></iframe>
             <div class="media-player-controls">
-              <button id="theaterBtn" class="player-btn" title="Theater mode" tabindex="0">
-                <span id="theaterIcon">⛶</span>
-              </button>
-              <button id="fullscreenBtn" class="player-btn" title="Fullscreen" tabindex="0">
-                <span id="fullscreenIcon">⛶</span>
-              </button>
+              <!-- Fullscreen button removed; use YouTube player's native fullscreen button -->
             </div>
           </div>
           <div class="track-title" id="playerTrackTitle" style="text-align:center; font-size:1.3rem; font-weight:bold; margin-bottom:1rem;"></div>
@@ -752,24 +749,6 @@
 
   // --- Local tracks for genre/like/featured display ---
   const tracks = [
-    {
-      title: "Billie Eilish - bad guy",
-      artist: "Billie Eilish",
-      genre: "Pop",
-      youtubeId: "DyDfgMOUjCI",
-      img: "https://i.scdn.co/image/ab67616d0000b273b8e2f6b3e7e7e3e8e8e8",
-      likes: 120,
-      featured: true
-    },
-    {
-      title: "The Weeknd - Blinding Lights",
-      artist: "The Weeknd",
-      genre: "Pop",
-      youtubeId: "fHI8X4OXluQ",
-      img: "https://i1.sndcdn.com/artworks-000652232857-4n7j7d-t500x500.jpg",
-      likes: 200,
-      featured: true
-    },
     {
       title: "Imagine Dragons - Believer",
       artist: "Imagine Dragons",
@@ -1023,15 +1002,27 @@
     iframe.src = '';
     setTimeout(() => {
       iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+      // Poll for error message in iframe
+      let errorCheckInterval = setInterval(() => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          if (doc && doc.body && doc.body.innerText.match(/Error 153|Video player configuration error|embedding disabled/i)) {
+            clearInterval(errorCheckInterval);
+            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
+            document.getElementById('mediaPlayer').style.display = 'none';
+            alert('This video cannot be played here. It will open in YouTube.');
+          }
+        } catch (e) {
+          // Cross-origin, can't access, so rely on YouTube's own fallback
+        }
+      }, 1000);
     }, 50);
     const lyricsLink = document.getElementById('lyricsLink');
     lyricsLink.href = `https://www.youtube.com/results?search_query=${encodeURIComponent(title + ' lyrics')}`;
     lyricsLink.style.display = 'inline';
-    // Restore the user's search text in the search bar
     if (window.lastSearchText !== undefined) {
       searchInput.value = window.lastSearchText;
     }
-    // Set the document title to the video title
     document.title = title + " - Hertz";
   }
 
@@ -1211,7 +1202,6 @@
   // --- Theater & Fullscreen Controls ---
 (function() {
   const mediaPlayer = document.getElementById('mediaPlayer');
-  const theaterBtn = document.getElementById('theaterBtn');
   const fullscreenBtn = document.getElementById('fullscreenBtn');
   const theaterIcon = document.getElementById('theaterIcon');
   const fullscreenIcon = document.getElementById('fullscreenIcon');
@@ -1296,8 +1286,19 @@
     }
   }
 
-  if (theaterBtn) theaterBtn.onclick = toggleTheater;
-  if (fullscreenBtn) fullscreenBtn.onclick = toggleFullscreen;
+  // Removed theaterBtn functionality
+  if (fullscreenBtn) fullscreenBtn.onclick = function() {
+    const iframe = document.getElementById('playerIframe');
+    if (iframe.requestFullscreen) {
+      iframe.requestFullscreen();
+    } else if (iframe.mozRequestFullScreen) {
+      iframe.mozRequestFullScreen();
+    } else if (iframe.webkitRequestFullscreen) {
+      iframe.webkitRequestFullscreen();
+    } else if (iframe.msRequestFullscreen) {
+      iframe.msRequestFullscreen();
+    }
+  };
   document.addEventListener('fullscreenchange', onFullscreenChange);
   document.addEventListener('webkitfullscreenchange', onFullscreenChange);
   document.addEventListener('msfullscreenchange', onFullscreenChange);
@@ -1308,15 +1309,8 @@
   </script>
 
   <!-- Copyright Footer -->
-  <footer style="position: relative; bottom: 0; left: 0; right: 0; background: rgba(24, 24, 24, 0.95); border-top: 1px solid #404040; padding: 12px 16px; text-align: center; font-size: 0.75rem; color: #b3b3b3; margin-top: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-      <div>
-        © 2025 HZ Music Streamer. All rights reserved.
-      </div>
-      <div style="font-weight: 500; color: gold;">
-        Founded & Developed by <span style="color: #fff;">Beniam Endale Tedla</span>
-      </div>
-    </div>
-  </footer>
+  <div style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); color: #b3b3b3; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; z-index: 999;">
+    © 2025 <span style="color: #FFD700; font-weight: 600;">Hertz</span> Music Platform by Beniam Endale Tedla. All rights reserved.
+  </div>
 </body>
 </html>
