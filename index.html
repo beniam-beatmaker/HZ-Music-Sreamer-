@@ -1142,14 +1142,11 @@
 
         .sticky-player #likeBtn {
           font-size: 1.2rem;
-          color: #FFD700;
+          color: rgba(255,255,255,0.4);
           transition: color 0.2s;
         }
         .sticky-player #likeBtn.liked {
-          color: #FFD700;
-          color: #FFD700;
-          color: #FFD700;
-          color: #FFD700;
+          color: #ff4444 !important;
         }
 
         @media (max-width: 600px) {
@@ -1229,13 +1226,11 @@
 
         .sticky-player #likeBtn {
           font-size: 1.7rem;
-          color: #ffb700;
+          color: rgba(255,255,255,0.4);
           transition: color 0.2s;
         }
         .sticky-player #likeBtn.liked {
-          color: #1db954;
-        }
-            }
+          color: #ff4444 !important;
         }
 
         .track-section {
@@ -2248,8 +2243,19 @@
           };
         }
       });
-    </script>
-      </div>
+        // Add sticky track info update function
+        function updateStickyTrackInfo(trackId) {
+          var trackData = window.trackData || {};
+          var track = trackData[trackId];
+          var infoSpan = document.getElementById('stickyTrackInfo');
+          if (track && infoSpan) {
+            infoSpan.textContent = track.title + ' — ' + track.artist;
+          } else if (infoSpan) {
+            infoSpan.textContent = '';
+          }
+        }
+        </script>
+    </div>
 
       <!-- Recently Played Tracks -->
       <div class="recently-played-tracks">
@@ -2840,20 +2846,21 @@
           <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="width:92vw;max-width:420px;margin:6px 0 2px 0;height:4px;accent-color:#FFD700;">
         </div>
   <span class="player-title" id="playerTrackTitle" style="font-size:0.9em;color:#FFD700;margin-bottom:2px;"></span>
-        <div class="player-controls" style="gap:0.4rem;padding:2px 6px;">
-          <button class="player-btn" id="prevBtn" title="Previous" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:22px;height:22px;font-size:0.95rem;">&#9198;</button>
-          <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:26px;height:26px;font-size:1rem;">&#9654;</button>
-          <button class="player-btn" id="nextBtn" title="Next" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:22px;height:22px;font-size:0.95rem;">&#9197;</button>
-          <button class="player-btn player-loop" id="loopBtn" title="Loop" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:20px;height:20px;font-size:0.9rem;">&#128257;</button>
-          <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:20px;height:20px;font-size:0.9rem;">&#128256;</button>
-          <label for="volumeRange" style="margin-left:0.2rem;color:#FFD700;font-size:0.8em;">Vol</label>
-          <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:32px;accent-color:#FFD700;">
-          <button id="likeBtn" title="Like" style="margin-left:0.2rem;background:none;border:none;cursor:pointer;font-size:1rem;color:#FFD700;transition:color 0.2s;">&#10084;</button>
+        <div class="player-controls" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;padding:8px 16px;">
+          <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:44px;height:44px;font-size:1.3rem;">&#128256;</button>
+          <button class="player-btn" id="prevBtn" title="Previous" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:56px;height:56px;font-size:1.7rem;">&#9198;</button>
+          <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:56px;height:56px;font-size:1.7rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);">&#9654;</button>
+          <button class="player-btn" id="nextBtn" title="Next" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:56px;height:56px;font-size:1.7rem;">&#9197;</button>
+          <button class="player-btn player-loop" id="loopBtn" title="Loop" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:44px;height:44px;font-size:1.3rem;">&#128257;</button>
+          <button id="likeBtn" title="Like" style="margin-left:1.2rem;background:none;border:none;cursor:pointer;font-size:1.7rem;color:rgba(255,255,255,0.4);transition:color 0.2s;">&#10084;</button>
+        </div>
+        <div style="width:100%;text-align:center;margin-top:4px;">
+          <span id="stickyTrackInfo" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
         </div>
       </div>
     <audio id="playerAudio" class="player-audio"></audio>
       <script>
-        // Sticky player controls
+          // Sticky player controls
         document.addEventListener('DOMContentLoaded', function() {
           var playerAudio = document.getElementById('playerAudio');
           var playPauseBtn = document.getElementById('playPauseBtn');
@@ -2861,12 +2868,16 @@
           var prevBtn = document.getElementById('prevBtn');
           var loopBtn = document.getElementById('loopBtn');
           var shuffleBtn = document.getElementById('shuffleBtn');
+          var likeBtn = document.getElementById('likeBtn');
           var volumeRange = document.getElementById('volumeRange');
           var trackOrder = [
-            'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
-            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'vision', 'faith', 'yettobe'
+            'Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
+            'Focus', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
+            'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
           ];
           var currentTrackIndex = 0;
+          var isShuffled = false;
+          var currentTrackId = '';
 
           // Play/Pause
           playPauseBtn.addEventListener('click', function() {
@@ -2895,29 +2906,88 @@
             }
           });
 
-          // Loop
+          // Loop - Toggle between blue and golden
           loopBtn.addEventListener('click', function() {
             playerAudio.loop = !playerAudio.loop;
-            loopBtn.style.background = playerAudio.loop ? 'linear-gradient(135deg,#1db954 0%,#0077ff 100%)' : 'linear-gradient(135deg,#00e6ff 0%,#0077ff 100%)';
+            if (playerAudio.loop) {
+              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
+              loopBtn.style.color = '#fff';
+            } else {
+              loopBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
+              loopBtn.style.color = '#FFD700';
+            }
           });
 
-          // Shuffle
+          // Shuffle - Toggle between blue and golden
           shuffleBtn.addEventListener('click', function() {
-            // Shuffle the track order except current
-            var currentTrack = trackOrder[currentTrackIndex];
-            var rest = trackOrder.slice();
-            rest.splice(currentTrackIndex, 1);
-            for (let i = rest.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [rest[i], rest[j]] = [rest[j], rest[i]];
+            isShuffled = !isShuffled;
+            if (isShuffled) {
+              shuffleBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
+              shuffleBtn.style.color = '#fff';
+              // Shuffle the track order except current
+              var currentTrack = trackOrder[currentTrackIndex];
+              var rest = trackOrder.slice();
+              rest.splice(currentTrackIndex, 1);
+              for (let i = rest.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [rest[i], rest[j]] = [rest[j], rest[i]];
+              }
+              trackOrder = [currentTrack].concat(rest);
+            } else {
+              shuffleBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
+              shuffleBtn.style.color = '#FFD700';
+              // Restore original order
+              trackOrder = [
+                'Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
+                'Focus', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
+                'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
+              ];
             }
-            trackOrder = [currentTrack].concat(rest);
+          });
+
+          // Like Button - Toggle red color and save to localStorage
+          likeBtn.addEventListener('click', function() {
+            if (!currentTrackId) return;
+
+            const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+            const playerTrackTitle = document.getElementById('playerTrackTitle');
+            const trackTitle = playerTrackTitle ? playerTrackTitle.textContent : currentTrackId;
+
+            if (likedTracks[currentTrackId]) {
+              // Unlike the track
+              delete likedTracks[currentTrackId];
+              likeBtn.style.color = 'rgba(255,255,255,0.4)';
+              likeBtn.classList.remove('liked');
+              console.log(`💔 Removed "${currentTrackId}" from liked tracks`);
+            } else {
+              // Like the track
+              likedTracks[currentTrackId] = {
+                id: currentTrackId,
+                title: trackTitle,
+                likedAt: new Date().toISOString(),
+                url: playerAudio.src
+              };
+              likeBtn.style.color = '#ff4444';
+              likeBtn.classList.add('liked');
+              console.log(`❤️ Added "${currentTrackId}" to liked tracks`);
+            }
+
+            localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracks));
+            localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+
+            // Update liked songs count in account page if it exists
+            const likedSongsCountElement = document.getElementById('likedSongsCount');
+            if (likedSongsCountElement) {
+              likedSongsCountElement.textContent = Object.keys(likedTracks).length;
+            }
           });
 
           // Volume
-          volumeRange.addEventListener('input', function() {
-            playerAudio.volume = parseFloat(volumeRange.value);
-          });
+          if (volumeRange) {
+            volumeRange.addEventListener('input', function() {
+              playerAudio.volume = parseFloat(volumeRange.value);
+            });
+          }
 
           // Update play/pause button on audio events
           playerAudio.addEventListener('play', function() {
@@ -2932,6 +3002,19 @@
             if (!playerAudio.loop && currentTrackIndex < trackOrder.length - 1) {
               currentTrackIndex++;
               playTrack(trackOrder[currentTrackIndex]);
+            }
+          };
+
+          // Function to update like button state when track changes
+          window.updateLikeButtonState = function(trackId) {
+            currentTrackId = trackId;
+            const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+            if (likedTracks[trackId]) {
+              likeBtn.style.color = '#ff4444';
+              likeBtn.classList.add('liked');
+            } else {
+              likeBtn.style.color = 'rgba(255,255,255,0.4)';
+              likeBtn.classList.remove('liked');
             }
           };
 
@@ -2990,6 +3073,7 @@
         playerAudio.pause();
         playerAudio.src = track.url;
         playerTrackTitle.textContent = track.title + ' - ' + track.artist;
+        updateStickyTrackInfo(trackId);
         stickyPlayer.style.display = 'flex';
         playerAudio.load();
         playerAudio.play();
@@ -4236,8 +4320,9 @@
       const content = document.getElementById('likedSongsContent');
       if (!content) return;
 
-      // Get liked songs from localStorage or other storage
-      const likedSongs = JSON.parse(localStorage.getItem('hertzLikedTracks') || '[]');
+      // Get liked songs from localStorage - stored as object
+      const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const likedSongs = Object.values(likedTracksObj);
 
       if (likedSongs.length === 0) {
         content.innerHTML = `
@@ -4251,16 +4336,17 @@
           </div>
         `;
       } else {
-        let songsHtml = '<div class="track-list"><h3 class="section-title">Your Liked Songs</h3>';
+        let songsHtml = '<div class="track-list"><h3 class="section-title">Your Liked Songs ❤️</h3>';
 
         likedSongs.forEach((song, index) => {
+          const likedDate = song.likedAt ? new Date(song.likedAt).toLocaleDateString() : 'Recently';
           songsHtml += `
-            <div class="track-item">
-              <div class="track-info">
-                <div class="track-title">${song.title || song.name}</div>
-                <div class="track-artist">${song.artist || 'Unknown Artist'}</div>
+            <div class="track-item" style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; transition: background 0.2s;" onmouseover="this.style.background='#282828'" onmouseout="this.style.background='transparent'">
+              <div class="track-info" style="flex: 1;">
+                <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${song.title || song.id}</div>
+                <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">Liked on ${likedDate}</div>
               </div>
-              <button class="play-btn" onclick="playLikedSong('${song.id || index}')">Play</button>
+              <button class="play-btn" onclick="playTrack('${song.id}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
             </div>
           `;
         });
@@ -4268,6 +4354,8 @@
         songsHtml += '</div>';
         content.innerHTML = songsHtml;
       }
+
+      console.log(`❤️ Loaded ${likedSongs.length} liked songs`);
     }
 
     function loadAccountInfo() {
@@ -4277,7 +4365,8 @@
       const savedUserData = JSON.parse(localStorage.getItem('hertzUser') || '{}');
 
       // Load user stats from localStorage
-      const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '[]');
+      const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const likedTracks = Object.values(likedTracksObj);
       const username = savedUserData.name || localStorage.getItem('hertzUsername') || 'Music Lover';
       const memberSince = localStorage.getItem('hertzMemberSince') || 'January 2025';
       const userEmail = savedUserData.email || localStorage.getItem('hertzUserEmail') || 'user@hertz.music';
@@ -6450,7 +6539,87 @@
         let trackUrl = '';
         let trackTitle = '';
         let trackArtist = '';
-        if (trackId === 'bliss') {
+
+        // Popular tracks from the track list
+        if (trackId === 'Made It') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Made%20It.mp3';
+          trackArtist = 'Prod. Tedla';
+          trackTitle = 'Made It - ' + trackArtist;
+        } else if (trackId === 'Nector') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Nector.mp3';
+          trackArtist = 'Prod. Tedla';
+          trackTitle = 'Nector - ' + trackArtist;
+        } else if (trackId === 'Blossom') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Blossom.wav';
+          trackArtist = 'Prod. Nexus';
+          trackTitle = 'Blossom - ' + trackArtist;
+        } else if (trackId === 'Mach 1') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3';
+          trackArtist = 'Prod. Phantom';
+          trackTitle = 'Mach 1 - ' + trackArtist;
+        } else if (trackId === 'Echo') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Echo.wav';
+          trackArtist = 'Neon Gloww';
+          trackTitle = 'Echo - ' + trackArtist;
+        } else if (trackId === 'Lights') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Lights.wav';
+          trackArtist = 'Bezzie';
+          trackTitle = 'Lights - ' + trackArtist;
+        } else if (trackId === 'Smilin') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav';
+          trackArtist = 'Melody-Soull';
+          trackTitle = 'Smilin - ' + trackArtist;
+        } else if (trackId === 'Buckets') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Buckets.wav';
+          trackArtist = 'Bezzie';
+          trackTitle = 'Buckets - ' + trackArtist;
+        } else if (trackId === 'Sweet') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Sweet.wav';
+          trackArtist = 'Bezzie';
+          trackTitle = 'Sweet - ' + trackArtist;
+        } else if (trackId === 'Persistence') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav';
+          trackArtist = 'Neo';
+          trackTitle = 'Persistence - ' + trackArtist;
+        } else if (trackId === 'Focus') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Focus.wav';
+          trackArtist = 'Desiree';
+          trackTitle = 'Focus - ' + trackArtist;
+        } else if (trackId === 'Wop!!!') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3';
+          trackArtist = 'Klevv';
+          trackTitle = 'Wop!!! - ' + trackArtist;
+        } else if (trackId === 'Mind') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mind.wav';
+          trackArtist = 'Desiree';
+          trackTitle = 'Mind - ' + trackArtist;
+        } else if (trackId === 'Huh') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Huh.wav';
+          trackArtist = 'Prod. Legacy';
+          trackTitle = 'Huh - ' + trackArtist;
+        } else if (trackId === 'Soul') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Soul.wav';
+          trackArtist = 'Desiree';
+          trackTitle = 'Soul - ' + trackArtist;
+        } else if (trackId === 'Step') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Step.wav';
+          trackArtist = 'Desiree';
+          trackTitle = 'Step - ' + trackArtist;
+        } else if (trackId === 'Vibes') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3';
+          trackArtist = 'Bezzie';
+          trackTitle = 'Vibes - ' + trackArtist;
+        } else if (trackId === 'Future') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Future.wav';
+          trackArtist = 'Pegasus';
+          trackTitle = 'Future - ' + trackArtist;
+        } else if (trackId === 'Promise') {
+          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3';
+          trackArtist = 'Desiree';
+          trackTitle = 'Promise - ' + trackArtist;
+
+        // Original tracks for backward compatibility
+        } else if (trackId === 'bliss') {
           trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3';
           trackArtist = 'Nebula';
           trackTitle = 'Bliss - ' + trackArtist;
@@ -6471,14 +6640,21 @@
           trackArtist = 'Phantom';
           trackTitle = 'Vibes - ' + trackArtist;
         }
+
         if (trackUrl && playerAudio && playerTrackTitle) {
           playerAudio.src = trackUrl;
           playerTrackTitle.textContent = trackTitle;
           stickyPlayer.style.display = 'flex';
           playerAudio.play();
-            // Set up autoplay for next track
+
+          // Update like button state for the new track
+          if (typeof updateLikeButtonState === 'function') {
+            updateLikeButtonState(trackId);
+          }
+
+            // Set up autoplay for next track - updated track order
             playerAudio.onended = function() {
-              const trackOrder = ['bliss', 'hustle', 'vibes', 'utopia1', 'utopia2'];
+              const trackOrder = ['Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence', 'Focus', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'];
               const currentIndex = trackOrder.indexOf(trackId);
               if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
                 // Call playTrack recursively for full autoplay chain
@@ -6492,7 +6668,7 @@
 
     function playAllTracks() {
       console.log('Playing all tracks');
-      playTrack('popular1');
+      playTrack('Made It');
     }
 
     function toggleLike(button, event) {
