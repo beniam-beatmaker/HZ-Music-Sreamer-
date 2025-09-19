@@ -57,23 +57,23 @@
     --accent-color: #1db954;
   }
   [data-theme="green"] {
-    --bg-main: #1db954;
-    --bg-secondary: #1ed760;
-    --bg-tertiary: #b2f5c5;
-    --text-primary: #181818;
+    --bg-main: #0d5c2a;
+    --bg-secondary: #116b33;
+    --bg-tertiary: #1a7a3d;
+    --text-primary: #ffffff;
     --accent-color: #1db954;
   }
   [data-theme="ocean-blue"] {
-    --bg-main: #185a9d;
-    --bg-secondary: #43cea2;
-    --bg-tertiary: #0a2540;
+    --bg-main: #0a2d4f;
+    --bg-secondary: #1a4d66;
+    --bg-tertiary: #051829;
     --text-primary: #ffffff;
     --accent-color: #3ec6ff;
   }
   [data-theme="purple-vibes"] {
-    --bg-main: #7b2ff2;
-    --bg-secondary: #f357a8;
-    --bg-tertiary: #4f2c91;
+    --bg-main: #2d1157;
+    --bg-secondary: #4a1c73;
+    --bg-tertiary: #1a0d33;
     --text-primary: #ffffff;
     --accent-color: #e040fb;
   }
@@ -96,6 +96,8 @@
     min-height: 100vh;
     overflow-x: hidden;
     line-height: 1.6;
+    margin: 0;
+    padding: 0;
   }
 
   .container {
@@ -112,8 +114,8 @@
     background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 15%, var(--bg-main) 100%);
     min-height: 100vh;
     overflow-y: auto;
-    border-radius: 8px 8px 0 0;
-    margin: 8px 8px 0 8px;
+    border-radius: 0;
+    margin: 0;
   }
 
     /* Spotify Header */
@@ -3520,192 +3522,9 @@
     </script>
       </div>
 
-      <!-- Recently Played Tracks -->
-      <div class="recently-played-tracks">
-        <div class="recently-played-header">
-          <h2 class="track-list-title">Recently played</h2>
-        </div>
-        <div class="recently-played-list">
-          <div class="recent-track-item" onclick="playTrack('utopia1')">
-            <div class="recent-track-artwork"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Me And You!</div>
-              <div class="recent-track-artist">Utopia</div>
-            </div>
-            <div class="recent-track-time">Just now</div>
-          </div>
-          <div class="recent-track-item" onclick="playTrack('utopia2')">
-            <div class="recent-track-artwork"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Love, Peace, Unity</div>
-              <div class="recent-track-artist">Utopia</div>
-            </div>
-            <div class="recent-track-time">Just now</div>
-          </div>
-          <div class="recent-track-item" onclick="playTrack('bliss')">
-            <div class="recent-track-artwork"><img src="https://storage.googleapis.com/hertz-music-folder/Bliss.jpg" alt="Bliss cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Bliss</div>
-              <div class="recent-track-artist">Nebula</div>
-            </div>
-            <div class="recent-track-time">2 hours ago</div>
-          </div>
-          <!-- Shape of You moved to bottom -->
-          <div class="recent-track-item" onclick="playTrack('hustle')">
-            <div class="recent-track-artwork"><img src="https://storage.googleapis.com/hertz-music-folder/Hustle.jpg" alt="Hustle cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Hustle</div>
-              <div class="recent-track-artist">Echo</div>
-            </div>
-            <div class="recent-track-time">3 days ago</div>
-          </div>
-          <div class="recent-track-item" onclick="playTrack('track2')">
-            <div class="recent-track-artwork"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Shape of You</div>
-              <div class="recent-track-artist">Ed Sheeran</div>
-            </div>
-            <div class="recent-track-time">Yesterday</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Popular Tracks List -->
-      <div class="track-list-container">
-        <div class="track-list-header">
-          <h2 class="track-list-title">Popular tracks</h2>
-          <div class="track-list-controls">
-            <button class="play-all-btn" onclick="playAllTracks()" title="Play all">▶</button>
-          </div>
-        </div>
 
-        <table class="track-table">
-          <thead class="track-table-header">
-            <tr>
-              <th>#</th>
-              <th>Title</th>
-              <th>Album</th>
-              <th>Date added</th>
-              <th>⏱</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr class="track-row" onclick="playTrack('bliss')">
-                <td>
-                  <div class="track-number">1</div>
-                  <button class="track-play-btn">▶</button>
-                </td>
-                <td>
-                  <div class="track-info">
-                    <div class="track-artwork"><img src="https://storage.googleapis.com/hertz-music-folder/Bliss.jpg" alt="Bliss cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-                    <div class="track-details">
-                      <div class="track-name">Bliss</div>
-                      <div class="track-artist">Nebula</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="track-album">Single</div>
-                </td>
-                <td>
-                  <div class="track-duration">Just now</div>
-                </td>
-                <td>
-                  <div class="track-actions">
-                    <button class="track-like-btn" onclick="toggleLike(this, event)">♡</button>
-                    <button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="track-row" onclick="playTrack('hustle')">
-                <td>
-                  <div class="track-number">2</div>
-                  <button class="track-play-btn">▶</button>
-                </td>
-                <td>
-                  <div class="track-info">
-                    <div class="track-artwork"><img src="https://storage.googleapis.com/hertz-music-folder/Hustle.jpg" alt="Hustle cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-                    <div class="track-details">
-                      <div class="track-name">Hustle</div>
-                      <div class="track-artist">Echo</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                <tr class="track-row" onclick="playTrack('vibes')">
-  <td>
-    <div class="track-number">2</div>
-    <button class="track-play-btn">▶</button>
-  </td>
-  <td>
-    <div class="track-info">
-      <div class="track-artwork"><img src="https://storage.googleapis.com/hertz-music-folder/Vibes.jpg" alt="Vibes cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-      <div class="track-details">
-        <div class="track-name">Vibes</div>
-        <div class="track-artist">Phantom</div>
-      </div>
-    </div>
-  </td>
-  <td>
-    <div class="track-album">Single</div>
-  </td>
-  <td>
-    <div class="track-duration">Just now</div>
-  </td>
-  <td></td>
-</tr>
-                  <div class="track-album">Single</div>
-                </td>
-                <td>
-                  <div class="track-duration">Just now</div>
-                </td>
-                <td>
-                  <div class="track-actions">
-                    <button class="track-like-btn" onclick="toggleLike(this, event)">♡</button>
-                    <button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button>
-                  </div>
-                </td>
-              </tr>
-              <tr class="track-row" onclick="playTrack('utopia1')">
-                <td>
-                  <div class="track-number">3</div>
-                  <button class="track-play-btn">▶</button>
-                </td>
-                <td>
-                  <div class="track-info">
-                    <div class="track-artwork"></div>
-                    <div class="track-details">
-                      <div class="track-name">Me And You!</div>
-                      <div class="track-artist">Utopia</div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div class="track-album"></div>
-                </td>
-                <td>
-                  <div class="track-duration">Just now</div>
-                </td>
-      };
-    } catch (err) {
-      if (err?.name === 'NotFoundError') {
-        deviceListDiv.innerHTML = '<div style="color:#e17055;">No device selected.</div>';
-      } else if (!navigator.bluetooth) {
-        deviceListDiv.innerHTML = '<div style="color:#e17055;">Bluetooth not available in this browser. Please use Chrome, Edge, or a supported browser and enable Bluetooth.</div>';
-      } else {
-        deviceListDiv.innerHTML = `<div style="color:#e17055;">Bluetooth error: ${err.message || err}</div>`;
-      }
-    }
-  });
-  closeBtn.addEventListener('click', function() {
-    popup.style.display = 'none';
-  });
-  // Hide popup if clicking outside modal
-  popup.addEventListener('mousedown', function(e) {
-    if (e.target === popup) popup.style.display = 'none';
-  });
-});
-</script>
+
 
             <div style="margin-top: 1.5rem;">
               <label style="display: block; color: var(--accent-color); font-weight: bold; margin-bottom: 0.5rem; transition: color 0.3s ease;">Crossfade Duration</label>
