@@ -2257,6 +2257,62 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+              <div class="recent-track-item" onclick="playTrack('Made It')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Made It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Made It</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Nector')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Nector cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Nector</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Blossom')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Blossom</div>
+                  <div class="recent-track-artist">Prod. Nexus</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Mach 1')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Mach 1</div>
+                  <div class="recent-track-artist">Prod. Phantom</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Echo')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Echo</div>
+                  <div class="recent-track-artist">Neon Gloww</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Lights')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Lights</div>
+                  <div class="recent-track-artist">Bezzie</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
+              <div class="recent-track-item" onclick="playTrack('Smilin')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Smilin</div>
+                  <div class="recent-track-artist">Melody-Soull</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+              </div>
             <div class="recent-track-item" onclick="playTrack('Buckets')">
               <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Heart cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
               <div class="recent-track-info">
@@ -2400,183 +2456,232 @@
             </tr>
           </thead>
           <tbody>
+                <tr class="track-row" onclick="playTrack('Made It')">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Made It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Made It</div><div class="track-artist">Prod. Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Nector')">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Nector cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nector</div><div class="track-artist">Prod. Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Blossom')">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Blossom</div><div class="track-artist">Prod. Nexus</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Mach 1')">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Mach 1</div><div class="track-artist">Prod. Phantom</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Echo')">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Echo</div><div class="track-artist">Neon Gloww</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Lights')">
+                  <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Lights</div><div class="track-artist">Bezzie</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playTrack('Smilin')">
+                  <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Smilin</div><div class="track-artist">Melody-Soull</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
               <tr class="track-row" onclick="playTrack('Buckets')">
-                <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">8</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Heart cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Buckets</div><div class="track-artist">Bezzie</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Sweet')">
-                <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Heart cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sweet</div><div class="track-artist">Bezzie</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
             <tr class="track-row" onclick="playTrack('Persistence')">
-              <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">10</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Persistence</div><div class="track-artist">Neo</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('Focus')">
-              <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">11</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Bright cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Focus</div><div class="track-artist">Desiree</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('Wop!!!')">
-              <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">12</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Wavy beach" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Wop!!!</div><div class="track-artist">Klevv</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
               <tr class="track-row" onclick="playTrack('Mind')">
-                <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">13</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Mind</div><div class="track-artist">Desiree</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Huh')">
-                <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">14</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Huh</div><div class="track-artist">Prod. Legacy</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Soul')">
-                <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">15</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Soul</div><div class="track-artist">Desiree</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Step')">
-                <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">16</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Step</div><div class="track-artist">Desiree</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Vibes')">
-                <td><div class="track-number">8</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">17</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Vibes</div><div class="track-artist">Bezzie</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Future')">
-                <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">18</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Future</div><div class="track-artist">Pegasus</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Promise')">
-                <td><div class="track-number">10</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">19</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Promise</div><div class="track-artist">Desiree</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Bliss')">
-                <td><div class="track-number">11</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">20</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Bliss</div><div class="track-artist">Echo</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('Hustle')">
-                <td><div class="track-number">12</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">21</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Hustle</div><div class="track-artist">NeoXX</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
               <tr class="track-row" onclick="playTrack('808-Symph')">
-                <td><div class="track-number">13</div><button class="track-play-btn">▶</button></td>
+                <td><div class="track-number">22</div><button class="track-play-btn">▶</button></td>
                 <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">808-Symph</div><div class="track-artist">Molly-Able</div></div></div></td>
                 <td><div class="track-album">Single</div></td>
                 <td><div class="track-duration">Just now</div></td>
                 <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
               </tr>
             <tr class="track-row" onclick="playTrack('shine')">
-              <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">23</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80" alt="Wavy beach" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Shine</div><div class="track-artist">Bezzie</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('heart')">
-              <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">24</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="King in golden throne" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Heart</div><div class="track-artist">T-Glow</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('nova')">
-              <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">25</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Space with dark purple hertz sine wave" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nova</div><div class="track-artist">Prod. Boltz</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('pushit')">
-              <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">26</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://static.vecteezy.com/system/resources/previews/026/781/389/non_2x/gym-interior-background-of-dumbbells-on-rack-in-fitness-and-workout-room-photo.jpg" alt="Workout gym" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Push It</div><div class="track-artist">B-Gallop</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('bright')">
-              <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">27</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Galaxy cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Bright</div><div class="track-artist">Soul-Ful</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('whisper')">
-              <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">28</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Whisper - close up lips" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Whisper</div><div class="track-artist">Molly-Able</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('lord')">
-              <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">29</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="Lord - crown" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Lord</div><div class="track-artist">Sweet-Soul</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('smile')">
-              <td><div class="track-number">8</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">30</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=400&q=80" alt="Smile - smiling face" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Smile</div><div class="track-artist">Amie-Rain</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('vision')">
-              <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">31</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="Whisper - close up lips" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Vision</div><div class="track-artist">C-All</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('faith')">
-              <td><div class="track-number">10</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">32</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="Faith - praying hands" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Faith</div><div class="track-artist">B-I-R-M-P</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
             <tr class="track-row" onclick="playTrack('yettobe')">
-              <td><div class="track-number">11</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-number">33</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Yet to be</div><div class="track-artist">Bey-Erus</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
@@ -2838,6 +2943,20 @@
       const playerAudio = document.getElementById('playerAudio');
       const playerTrackTitle = document.getElementById('playerTrackTitle');
       let trackData = {
+  'Blossom': { id: 'Blossom', url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Mach 1': { id: 'Mach 1', url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Echo': { id: 'Echo', url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Lights': { id: 'Lights', url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Smilin': { id: 'Smilin', url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Made It': { id: 'Made It', url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Nector': { id: 'Nector', url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Mach 1': { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Echo': { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Lights': { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+  'Smilin': { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+    'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+    'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
   'Buckets': { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
   'Sweet': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
   'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
@@ -2932,12 +3051,14 @@
         <h3>Search</h3>
         <button class="search-close-btn" onclick="closeSearchPopup()">×</button>
         <div class="search-container">
-          <input type="text" id="popupSearchInput" class="search-box"
-                 placeholder="What do you want to listen to?"
-                 oninput="handleSearchInput(this.value)"
-                 onblur="hidePopupSearchSuggestions()"
-                 onfocus="showPopupSearchSuggestions(this.value)">
-          <div class="search-icon">🔍</div>
+     <input type="text" id="popupSearchInput" class="search-box"
+       placeholder="What do you want to listen to?"
+       oninput="showSearchSuggestions(this.value)"
+       onblur="hideSearchSuggestions()"
+       onfocus="showSearchSuggestions(this.value)">
+     <div class="search-icon">🔍</div>
+     <div id="searchSuggestions" class="search-suggestions" style="position:absolute;top:48px;left:0;width:100%;z-index:1000;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,0.10);display:none;"></div>
+  <div id="searchSuggestions" class="search-suggestions" style="position:fixed;top:120px;left:50%;transform:translateX(-50%);width:400px;max-width:90vw;z-index:9999;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 2px 16px rgba(0,0,0,0.20);display:none;"></div>
         </div>
       </div>
 
@@ -4960,12 +5081,44 @@
 
     function showSearchSuggestions(query) {
       const suggestionsDiv = document.getElementById('searchSuggestions');
-      if (!query || query.length < 2) {
-        suggestionsDiv.style.display = 'none';
+      suggestionsDiv.style.display = 'block';
+      if (!query || query.trim().length === 0) {
+        suggestionsDiv.innerHTML = '<div style="padding:16px;text-align:center;color:#b3b3b3;">Type a track or artist name...</div>';
         return;
       }
 
-      const results = searchHertzTracks(query).slice(0, 8); // Limit to 8 suggestions
+      let results = [];
+      // Use all tracks from trackData for suggestions
+      if (typeof trackData !== 'undefined') {
+        results = Object.values(trackData).filter(track => {
+          if (!track || !track.title || !track.artist) return false;
+          const q = query.toLowerCase();
+          return track.title.toLowerCase().includes(q) || track.artist.toLowerCase().includes(q);
+        }).slice(0, 8);
+      }
+      // Always show suggestionsDiv
+      suggestionsDiv.style.display = 'block';
+      let htmlSuggestions = '';
+      if (results.length > 0) {
+        htmlSuggestions += '<div style="max-height:320px;overflow-y:auto;">';
+        results.forEach(track => {
+          htmlSuggestions += `
+            <div class="suggestion-item" onclick="playTrack('${track.id}');hideSearchSuggestions();" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:background 0.2s;"
+                 onmouseover="this.style.background='#333'" onmouseout="this.style.background='#232526'">
+              <img src="${track.cover}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+              <div style="flex:1;min-width:0;">
+                <div style="color:#fff;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.title}</div>
+                <div style="color:#b3b3b3;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
+              </div>
+              <div style="color:#1db954;font-size:1.3rem;margin-left:8px;">▶</div>
+            </div>
+          `;
+        });
+        htmlSuggestions += '</div>';
+      } else {
+        htmlSuggestions += '<div style="padding:16px;text-align:center;color:#b3b3b3;">No matching tracks found.</div>';
+      }
+      suggestionsDiv.innerHTML = htmlSuggestions;
       const genres = getHertzGenres().filter(genre =>
         genre.toLowerCase().includes(query.toLowerCase())
       ).slice(0, 3);
@@ -4976,42 +5129,26 @@
       }
 
       let html = '';
-
-      // Add genre suggestions
-      if (genres.length > 0) {
-        html += '<div style="padding: 8px 12px; color: #1db954; font-weight: bold; font-size: 0.9rem; border-bottom: 1px solid #404040;">Genres</div>';
-        genres.forEach(genre => {
-          html += `
-            <div class="suggestion-item" onclick="selectSuggestion('${genre}')" style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #404040; transition: background 0.2s;"
-                 onmouseover="this.style.background='#404040'" onmouseout="this.style.background='transparent'">
-              <span style="color: #1db954;">🎵</span> ${genre}
-            </div>
-          `;
-        });
-      }
-
-      // Add track suggestions
       if (results.length > 0) {
-        if (genres.length > 0) {
-          html += '<div style="padding: 8px 12px; color: #1db954; font-weight: bold; font-size: 0.9rem; border-bottom: 1px solid #404040;">Tracks</div>';
-        }
+        html += '<div style="max-height:320px;overflow-y:auto;">';
         results.forEach(track => {
           html += `
-            <div class="suggestion-item" onclick="playSuggestionTrack('${track.id}')" style="padding: 8px 12px; cursor: pointer; border-bottom: 1px solid #404040; transition: background 0.2s; display: flex; align-items: center; gap: 8px;"
-                 onmouseover="this.style.background='#404040'" onmouseout="this.style.background='transparent'">
-              <img src="${track.cover}" style="width: 32px; height: 32px; border-radius: 4px; object-fit: cover;">
-              <div>
-                <div style="color: #fff; font-weight: 500;">${track.title}</div>
-                <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist} • ${track.genre}</div>
+            <div class="suggestion-item" onclick="playSuggestionTrack('${track.id}')" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:background 0.2s;"
+                 onmouseover="this.style.background='#333'" onmouseout="this.style.background='#232526'">
+              <img src="${track.cover}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+              <div style="flex:1;min-width:0;">
+                <div style="color:#fff;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.title}</div>
+                <div style="color:#b3b3b3;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
               </div>
-              <div style="margin-left: auto; color: #1db954; font-size: 1.2rem;">▶</div>
+              <div style="color:#1db954;font-size:1.3rem;margin-left:8px;">▶</div>
             </div>
           `;
         });
+        html += '</div>';
+      } else {
+        html += '<div style="padding:16px;text-align:center;color:#b3b3b3;">No matching tracks found.</div>';
       }
-
       suggestionsDiv.innerHTML = html;
-      suggestionsDiv.style.display = 'block';
     }
 
     function hideSearchSuggestions() {
@@ -5024,9 +5161,11 @@
     }
 
     function selectSuggestion(suggestion) {
-      const searchInput = document.getElementById('mainSearchInput');
-      searchInput.value = suggestion;
-      searchHertz();
+      const popupSearchInput = document.getElementById('popupSearchInput');
+      if (popupSearchInput) {
+        popupSearchInput.value = suggestion;
+        showSearchSuggestions(suggestion);
+      }
     }
 
     function displaySearchResults(results, query) {
