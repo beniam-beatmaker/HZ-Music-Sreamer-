@@ -3718,6 +3718,7 @@
       console.log('🎯 DOM Content Loaded - Initializing...');
       initializeUserData(); // Initialize user settings and account data
       initializeDemoData(); // Add some demo data if none exists
+      cleanupUnwantedTracks(); // Remove specific unwanted tracks
       initializeHamburgerMenu();
       initializeBottomNavigation();
       renderSpotifyTrackCards();
@@ -3729,6 +3730,11 @@
       if (typeof updateStorageIndicator === 'function') {
         updateStorageIndicator();
       }
+
+      // Initialize like buttons with correct state
+      setTimeout(() => {
+        initializeLikeButtons();
+      }, 100); // Small delay to ensure DOM is fully rendered
     });
 
     // Add demo data for testing if no user data exists
@@ -3742,46 +3748,7 @@
 
         // Add some demo liked tracks
         const demoTracks = {
-          'demo1': {
-            id: 'demo1',
-            title: 'Midnight Dreams',
-            artist: 'Luna Echo',
-            album: 'Nocturnal Vibes',
-            duration: '3:45',
-            likedAt: new Date(Date.now() - 86400000).toISOString() // 1 day ago
-          },
-          'demo2': {
-            id: 'demo2',
-            title: 'Electric Thunder',
-            artist: 'Storm Riders',
-            album: 'Lightning Strikes',
-            duration: '4:12',
-            likedAt: new Date(Date.now() - 172800000).toISOString() // 2 days ago
-          },
-          'demo3': {
-            id: 'demo3',
-            title: 'Ocean Waves',
-            artist: 'Calm Spirits',
-            album: 'Peaceful Journey',
-            duration: '5:30',
-            likedAt: new Date(Date.now() - 259200000).toISOString() // 3 days ago
-          },
-          'demo4': {
-            id: 'demo4',
-            title: 'City Lights',
-            artist: 'Urban Soul',
-            album: 'Metropolitan',
-            duration: '3:28',
-            likedAt: new Date(Date.now() - 345600000).toISOString() // 4 days ago
-          },
-          'demo5': {
-            id: 'demo5',
-            title: 'Mountain High',
-            artist: 'Nature Call',
-            album: 'Wilderness',
-            duration: '4:55',
-            likedAt: new Date(Date.now() - 432000000).toISOString() // 5 days ago
-          }
+          // Demo tracks removed per user request
         };
 
         localStorage.setItem('hertzLikedTracks', JSON.stringify(demoTracks));
@@ -3819,7 +3786,46 @@
         // Add some tracked listening time (5 hours = 18000 seconds)
         localStorage.setItem('hertzTotalListeningTime', '18000');
 
-        console.log('✅ Demo data added: 5 liked tracks, 2 playlists, 3 artists, 5 hours listening time');
+        console.log('✅ Demo data added: 0 liked tracks, 2 playlists, 3 artists, 5 hours listening time');
+      }
+    }
+
+    // Clean up specific unwanted tracks from localStorage
+    function cleanupUnwantedTracks() {
+      try {
+        const unwantedTrackIds = ['demo1', 'demo2', 'demo3', 'demo4', 'demo5'];
+        const unwantedTrackTitles = ['midnight dreams', 'electric thunder', 'ocean waves', 'city lights', 'mountain high'];
+
+        let likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+        let tracksRemoved = 0;
+
+        // Remove by specific IDs
+        unwantedTrackIds.forEach(id => {
+          if (likedTracks[id]) {
+            delete likedTracks[id];
+            tracksRemoved++;
+          }
+        });
+
+        // Remove by title (case-insensitive)
+        Object.keys(likedTracks).forEach(trackId => {
+          const track = likedTracks[trackId];
+          const trackTitle = (track.title || track.name || '').toLowerCase();
+
+          if (unwantedTrackTitles.includes(trackTitle)) {
+            delete likedTracks[trackId];
+            tracksRemoved++;
+          }
+        });
+
+        if (tracksRemoved > 0) {
+          localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracks));
+          localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+          console.log(`🗑️ Cleaned up ${tracksRemoved} unwanted tracks from liked songs`);
+        }
+
+      } catch (error) {
+        console.error('❌ Error cleaning up unwanted tracks:', error);
       }
     }
 
@@ -4135,6 +4141,9 @@
       const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
       const likedSongs = Object.values(likedTracksObj);
 
+      console.log('🔍 Loading liked songs:', likedSongs.length, 'tracks found');
+      console.log('📊 Liked tracks data:', likedTracksObj);
+
       if (likedSongs.length === 0) {
         content.innerHTML = `
           <div style="text-align: center; padding: 3rem; color: #b3b3b3;">
@@ -4150,14 +4159,21 @@
         let songsHtml = '<div class="track-list"><h3 class="section-title">Your Liked Songs ❤️</h3>';
 
         likedSongs.forEach((song, index) => {
-          const likedDate = song.likedAt ? new Date(song.likedAt).toLocaleDateString() : 'Recently';
+          // Use the correct property names from saveLikedTrackWithFullData
+          const likedDate = song.timestamp ? new Date(song.timestamp).toLocaleDateString() : 'Recently';
+          const trackTitle = song.name || song.title || song.id || 'Unknown Track';
+          const trackArtist = song.artist || 'Unknown Artist';
+
           songsHtml += `
             <div class="track-item" style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; transition: background 0.2s;" onmouseover="this.style.background='#282828'" onmouseout="this.style.background='transparent'">
+              <button class="track-like-btn liked" onclick="removeLikedTrack('${song.id}')" style="background: none; border: none; color: #ffd700; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; margin-right: 12px;" onmouseover="this.style.color='#ff4444'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='#ffd700'; this.style.transform='scale(1)'" title="Remove from liked songs">♥</button>
               <div class="track-info" style="flex: 1;">
-                <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${song.title || song.id}</div>
-                <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">Liked on ${likedDate}</div>
+                <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${trackTitle}</div>
+                <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">${trackArtist} • Liked on ${likedDate}</div>
               </div>
-              <button class="play-btn" onclick="playTrack('${song.id}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
+              <div class="track-actions" style="display: flex; gap: 8px; align-items: center;">
+                <button class="play-btn" onclick="playTrack('${song.id}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
+              </div>
             </div>
           `;
         });
@@ -6020,6 +6036,8 @@
       try {
         let likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
 
+        console.log('💾 Saving liked track:', track);
+
         // Enhance track data with metadata if available
         const allTracksMetadata = [
           ...hertzMetadata.featured,
@@ -6028,31 +6046,37 @@
         ];
 
         const trackMetadata = allTracksMetadata.find(t => t.id === track.id);
+        console.log('🔍 Found metadata for track:', trackMetadata);
 
         // Save comprehensive track data
-        likedTracks[track.id] = {
+        const savedTrack = {
           id: track.id,
           name: trackMetadata?.title || track.title || track.name,
+          title: trackMetadata?.title || track.title || track.name, // Include both for compatibility
           artist: trackMetadata?.artist || track.artist,
           cover: trackMetadata?.cover || track.cover,
           genre: trackMetadata?.genre || track.genre || 'Unknown',
           url: track.url || trackMetadata?.url, // Prefer uploaded MP3, fallback to metadata URL
           mp3: track.url, // Store as MP3 for backward compatibility
           timestamp: Date.now(),
+          likedAt: Date.now(), // Add both timestamp formats for compatibility
           source: 'hertz_app', // Track where it was liked from
-          likedFrom: window.location.pathname || 'Hertz App.html'
+          likedFrom: window.location.pathname || 'Hertz25App.html'
         };
+
+        likedTracks[track.id] = savedTrack;
 
         localStorage.setItem('hertzLikedTracks', JSON.stringify(likedTracks));
         localStorage.setItem('hertzLikedTracks_backup', JSON.stringify(likedTracks));
 
-        console.log('✅ Saved liked track with full data:', track.name || trackMetadata?.title);
+        console.log('✅ Saved liked track with full data:', savedTrack);
+        console.log('📊 Total liked tracks:', Object.keys(likedTracks).length);
 
         // Trigger update event for other tabs
         localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
 
         // Show notification
-        showLikeNotification(track.name || trackMetadata?.title, 'liked');
+        showLikeNotification(savedTrack.name, 'liked');
       } catch (error) {
         console.error('❌ Error saving liked track:', error);
       }
@@ -6061,7 +6085,10 @@
     function removeLikedTrackWithFullData(trackId) {
       try {
         let likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
-        const trackName = likedTracks[trackId]?.name;
+        const trackName = likedTracks[trackId]?.name || likedTracks[trackId]?.title;
+
+        console.log('🗑️ Removing liked track:', trackId, trackName);
+        console.log('📊 Before removal, total tracks:', Object.keys(likedTracks).length);
 
         if (likedTracks[trackId]) {
           delete likedTracks[trackId];
@@ -6069,15 +6096,58 @@
           localStorage.setItem('hertzLikedTracks_backup', JSON.stringify(likedTracks));
 
           console.log('✅ Removed liked track:', trackId);
+          console.log('📊 After removal, total tracks:', Object.keys(likedTracks).length);
 
           // Trigger update event for other tabs
           localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
 
           // Show notification
           showLikeNotification(trackName, 'unliked');
+        } else {
+          console.log('⚠️ Track not found in liked tracks:', trackId);
         }
       } catch (error) {
         console.error('❌ Error removing liked track:', error);
+      }
+    }
+
+    // Function to remove track from liked songs popup and update UI
+    function removeLikedTrack(trackId) {
+      try {
+        console.log('🗑️ Removing track from liked songs popup:', trackId);
+
+        // Remove from localStorage using existing function
+        removeLikedTrackWithFullData(trackId);
+
+        // Update the like buttons in the main interface if visible
+        const likeButtons = document.querySelectorAll('.track-like-btn');
+        likeButtons.forEach(button => {
+          const trackRow = button.closest('.track-row');
+          const recentTrackItem = button.closest('.recent-track-item');
+
+          let buttonTrackId = null;
+
+          if (trackRow) {
+            const onclickAttr = trackRow.getAttribute('onclick');
+            buttonTrackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+          } else if (recentTrackItem) {
+            const onclickAttr = recentTrackItem.getAttribute('onclick');
+            buttonTrackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+          }
+
+          if (buttonTrackId === trackId) {
+            button.classList.remove('liked');
+            button.innerHTML = '♡';
+            button.style.color = '#a7a7a7';
+          }
+        });
+
+        // Refresh the liked songs popup display
+        loadLikedSongs();
+
+        console.log('✅ Successfully removed track and updated UI');
+      } catch (error) {
+        console.error('❌ Error in removeLikedTrack:', error);
       }
     }
 
@@ -6171,6 +6241,76 @@
           }
         }, 300);
       }, 3000);
+    }
+
+    // Update liked songs count in profile stats
+    function updateLikedSongsCount() {
+      try {
+        const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+        const likedSongsCount = Object.keys(likedTracksObj).length;
+
+        const likedSongsElement = document.getElementById('likedSongsCount');
+        if (likedSongsElement) {
+          likedSongsElement.textContent = likedSongsCount;
+        }
+
+        console.log(`📊 Updated liked songs count: ${likedSongsCount}`);
+      } catch (error) {
+        console.error('❌ Error updating liked songs count:', error);
+      }
+    }
+
+    // Initialize like buttons with correct state on page load
+    function initializeLikeButtons() {
+      try {
+        const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+        console.log('🎯 Initializing like buttons with liked tracks:', Object.keys(likedTracksObj));
+
+        // Get all like buttons in both sections
+        const likeButtons = document.querySelectorAll('.track-like-btn');
+
+        likeButtons.forEach(button => {
+          // Get track info from the parent element
+          const trackRow = button.closest('.track-row');
+          const recentTrackItem = button.closest('.recent-track-item');
+
+          let trackId = null;
+          let trackName = null;
+
+          if (trackRow) {
+            // Popular tracks section
+            const onclickAttr = trackRow.getAttribute('onclick');
+            trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+            trackName = trackRow.querySelector('.track-name')?.textContent || 'Unknown Track';
+          } else if (recentTrackItem) {
+            // Recently played section
+            const onclickAttr = recentTrackItem.getAttribute('onclick');
+            trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+            trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
+          }
+
+          // Generate fallback ID if none found (same logic as toggleLike)
+          if (!trackId && trackName) {
+            trackId = trackName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+          }
+
+          // Set button state based on whether track is liked
+          if (trackId && likedTracksObj[trackId]) {
+            button.classList.add('liked');
+            button.innerHTML = '♥';
+            button.style.color = '#ffd700';
+            console.log('✅ Set liked state for:', trackId, trackName);
+          } else {
+            button.classList.remove('liked');
+            button.innerHTML = '♡';
+            button.style.color = '#a7a7a7';
+          }
+        });
+
+        console.log(`🎯 Initialized ${likeButtons.length} like buttons`);
+      } catch (error) {
+        console.error('❌ Error initializing like buttons:', error);
+      }
     }
 
     // Add like button event listener
@@ -6497,14 +6637,80 @@
     function toggleLike(button, event) {
       event.stopPropagation();
 
+      // Get track info from the clicked row or recent track item
+      const trackRow = event.target.closest('.track-row');
+      const recentTrackItem = event.target.closest('.recent-track-item');
+
+      let trackName, trackArtist, trackId, trackInfo;
+
+      if (trackRow) {
+        // Popular tracks section
+        trackName = trackRow.querySelector('.track-name')?.textContent || 'Unknown Track';
+        trackArtist = trackRow.querySelector('.track-artist')?.textContent || 'Unknown Artist';
+        // Get track ID from onclick attribute
+        const onclickAttr = trackRow.getAttribute('onclick');
+        trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+      } else if (recentTrackItem) {
+        // Recently played section
+        trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
+        trackArtist = recentTrackItem.querySelector('.recent-track-artist')?.textContent || 'Unknown Artist';
+        // Get track ID from onclick attribute
+        const onclickAttr = recentTrackItem.getAttribute('onclick');
+        trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+      } else {
+        // Fallback
+        trackName = 'Unknown Track';
+        trackArtist = 'Unknown Artist';
+        trackId = null;
+      }
+
+      // Generate fallback ID if none found
+      if (!trackId) {
+        trackId = trackName.toLowerCase().replace(/\s+/g, '').replace(/[^a-z0-9]/g, '');
+      }
+
+      console.log('❤️ Toggle like for:', { trackId, trackName, trackArtist });
+
+      // Create track info object
+      trackInfo = {
+        id: trackId,
+        title: trackName,
+        name: trackName,
+        artist: trackArtist
+      };
+
       if (button.classList.contains('liked')) {
+        // Unlike the track
         button.classList.remove('liked');
         button.innerHTML = '♡';
         button.style.color = '#a7a7a7';
+
+        // Remove from localStorage and Liked25App.html
+        removeLikedTrackWithFullData(trackId);
+
+        // Show notification
+        showLikeNotification(trackName, 'unliked');
       } else {
+        // Like the track
         button.classList.add('liked');
         button.innerHTML = '♥';
-        button.style.color = '#1db954';
+        button.style.color = '#ffd700';
+
+        // Save to localStorage and sync to Liked25App.html
+        saveLikedTrackWithFullData(trackInfo);
+
+        // Show notification
+        showLikeNotification(trackName, 'liked');
+      }
+
+      // Update liked songs count in the profile stats
+      updateLikedSongsCount();
+
+      // Refresh the liked songs popup if it's currently open
+      const likedPopup = document.getElementById('likedPageOverlay');
+      if (likedPopup && likedPopup.classList.contains('show')) {
+        console.log('🔄 Refreshing liked songs popup');
+        loadLikedSongs();
       }
     }
 
