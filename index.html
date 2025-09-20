@@ -4166,13 +4166,13 @@
 
           songsHtml += `
             <div class="track-item" style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; transition: background 0.2s;" onmouseover="this.style.background='#282828'" onmouseout="this.style.background='transparent'">
-              <button class="track-like-btn liked" onclick="removeLikedTrack('${song.id}')" style="background: none; border: none; color: #ffd700; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; margin-right: 12px;" onmouseover="this.style.color='#ff4444'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='#ffd700'; this.style.transform='scale(1)'" title="Remove from liked songs">♥</button>
-              <div class="track-info" style="flex: 1;">
+              <button class="track-like-btn liked" onclick="event.stopPropagation(); removeLikedTrack('${song.id}')" style="background: none; border: none; color: #ffd700; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; margin-right: 12px;" onmouseover="this.style.color='#ff4444'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='#ffd700'; this.style.transform='scale(1)'" title="Remove from liked songs">♥</button>
+              <div class="track-info" onclick="playTrack('${song.id}')" style="flex: 1; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                 <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${trackTitle}</div>
                 <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">${trackArtist} • Liked on ${likedDate}</div>
               </div>
               <div class="track-actions" style="display: flex; gap: 8px; align-items: center;">
-                <button class="play-btn" onclick="playTrack('${song.id}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
+                <button class="play-btn" onclick="event.stopPropagation(); playTrack('${song.id}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
               </div>
             </div>
           `;
