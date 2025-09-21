@@ -4311,7 +4311,14 @@
       const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
       const likedSongs = Object.values(likedTracksObj);
 
-      console.log('🔍 Loading liked songs:', likedSongs.length, 'tracks found');
+      // Sort tracks by timestamp in descending order (most recent first)
+      likedSongs.sort((a, b) => {
+        const timeA = a.timestamp || a.likedAt || 0;
+        const timeB = b.timestamp || b.likedAt || 0;
+        return timeB - timeA; // Descending order (newest first)
+      });
+
+      console.log('🔍 Loading liked songs:', likedSongs.length, 'tracks found (sorted by most recent)');
       console.log('📊 Liked tracks data:', likedTracksObj);
 
       if (likedSongs.length === 0) {
