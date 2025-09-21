@@ -2348,7 +2348,7 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
-              <div class="recent-track-item" onclick="playTrack('Times')">
+              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Times'); window.playTrack('Times'); console.log('After calling window.playTrack');">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Times cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Times</div>
@@ -2357,7 +2357,7 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="playTrack('Prime')">
+              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Prime'); window.playTrack('Prime'); console.log('After calling window.playTrack');">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80" alt="Prime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Prime</div>
@@ -2384,7 +2384,7 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="playTrack('Aint Nough Dreamzz')">
+              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Aint Nough Dreamzz'); window.playTrack('Aint Nough Dreamzz'); console.log('After calling window.playTrack');">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Aint Nough Dreamzz cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Aint Nough Dreamzz</div>
@@ -2641,7 +2641,7 @@
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playTrack('Aint Nough Dreamzz')">
+                <tr class="track-row" onclick="console.log('Clicked Aint Nough Dreamzz - Popular'); try { playTrack('Aint Nough Dreamzz'); } catch(e) { console.error('Error calling playTrack:', e); }">
                   <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Aint Nough Dreamzz cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Aint Nough Dreamzz</div><div class="track-artist">Stage Rolla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
@@ -2956,6 +2956,125 @@
       </div>
     <audio id="playerAudio" class="player-audio"></audio>
       <script>
+          // Global track playback function - needs to be accessible to onclick handlers
+          function playTrack(trackId) {
+            console.log('🎵 playTrack called with:', trackId);
+
+            const stickyPlayer = document.getElementById('stickyPlayer');
+            const playerAudio = document.getElementById('playerAudio');
+            const playerTrackTitle = document.getElementById('playerTrackTitle');
+
+            let trackUrl = '';
+            let trackTitle = '';
+            let trackArtist = '';
+
+            // All tracks - complete list
+            if (trackId === 'Times') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Times.wav';
+              trackArtist = 'Stat Cross';
+              trackTitle = 'Times - ' + trackArtist;
+            } else if (trackId === 'Prime') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Prime.wav';
+              trackArtist = 'SlattZ';
+              trackTitle = 'Prime - ' + trackArtist;
+            } else if (trackId === 'Aint Nough Dreamzz') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav';
+              trackArtist = 'Stage Rolla';
+              trackTitle = 'Aint Nough Dreamzz - ' + trackArtist;
+            } else if (trackId === 'Made It') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Made%20It.mp3';
+              trackArtist = 'Prod. Tedla';
+              trackTitle = 'Made It - ' + trackArtist;
+            } else if (trackId === 'Nector') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Nector.mp3';
+              trackArtist = 'Prod. Tedla';
+              trackTitle = 'Nector - ' + trackArtist;
+            } else if (trackId === 'Blossom') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Blossom.wav';
+              trackArtist = 'Prod. Nexus';
+              trackTitle = 'Blossom - ' + trackArtist;
+            } else if (trackId === 'Mach 1') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3';
+              trackArtist = 'Prod. Phantom';
+              trackTitle = 'Mach 1 - ' + trackArtist;
+            } else if (trackId === 'Echo') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Echo.wav';
+              trackArtist = 'Neon Gloww';
+              trackTitle = 'Echo - ' + trackArtist;
+            } else if (trackId === 'Lights') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Lights.wav';
+              trackArtist = 'Bezzie';
+              trackTitle = 'Lights - ' + trackArtist;
+            } else if (trackId === 'Smilin') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav';
+              trackArtist = 'Melody-Soull';
+              trackTitle = 'Smilin - ' + trackArtist;
+            } else if (trackId === 'Buckets') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Buckets.wav';
+              trackArtist = 'Bezzie';
+              trackTitle = 'Buckets - ' + trackArtist;
+            } else if (trackId === 'Sweet') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Sweet.wav';
+              trackArtist = 'Bezzie';
+              trackTitle = 'Sweet - ' + trackArtist;
+            } else if (trackId === 'Persistence') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav';
+              trackArtist = 'Neo';
+              trackTitle = 'Persistence - ' + trackArtist;
+            } else if (trackId === 'Focus') {
+              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Focus.wav';
+              trackArtist = 'Desiree';
+              trackTitle = 'Focus - ' + trackArtist;
+            }
+
+            if (trackUrl && playerAudio && playerTrackTitle) {
+              console.log('✅ Setting up audio:', { trackUrl, trackTitle });
+
+              playerAudio.pause();
+              playerAudio.src = trackUrl;
+              playerTrackTitle.textContent = trackTitle;
+
+              if (stickyPlayer) {
+                stickyPlayer.style.display = 'flex';
+              }
+
+              playerAudio.load();
+              playerAudio.play().then(() => {
+                console.log('✅ Audio playback started successfully');
+              }).catch(error => {
+                console.error('❌ Audio playback failed:', error);
+              });
+
+              // Set up autoplay for next track
+              playerAudio.onended = function() {
+                const trackOrder = ['Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin'];
+                const currentIndex = trackOrder.indexOf(trackId);
+                if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
+                  playTrack(trackOrder[currentIndex + 1]);
+                }
+              };
+            } else {
+              console.error('❌ Missing elements or track not found:', { trackId, trackUrl, hasPlayerAudio: !!playerAudio });
+            }
+          }
+
+          // Explicitly add to window object to ensure global access
+          window.playTrack = playTrack;
+
+          // Test function accessibility
+          console.log('playTrack function defined:', typeof window.playTrack);
+          console.log('playTrack function available globally:', typeof playTrack);
+
+          // Test if function can be called directly
+          setTimeout(() => {
+            console.log('Testing function call after DOM load...');
+            if (window.playTrack) {
+              console.log('✅ window.playTrack is accessible');
+            } else {
+              console.error('❌ window.playTrack is NOT accessible');
+            }
+          }, 1000);
+
           // Sticky player controls
         document.addEventListener('DOMContentLoaded', function() {
           var playerAudio = document.getElementById('playerAudio');
@@ -2967,7 +3086,7 @@
           var likeBtn = document.getElementById('likeBtn');
           var volumeRange = document.getElementById('volumeRange');
           var trackOrder = [
-            'Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
+            'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
             'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
             'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
           ];
@@ -3085,6 +3204,9 @@
       const playerAudio = document.getElementById('playerAudio');
       const playerTrackTitle = document.getElementById('playerTrackTitle');
       let trackData = {
+  'Times': { id: 'Times', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
+  'Prime': { id: 'Prime', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
+  'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
   'Blossom': { id: 'Blossom', url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
   'Mach 1': { id: 'Mach 1', url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
   'Echo': { id: 'Echo', url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
@@ -6542,144 +6664,9 @@
       });
     })();
 
-    // Track list interaction functions
-    function playTrack(trackId) {
-        const stickyPlayer = document.getElementById('stickyPlayer');
-        const playerAudio = document.getElementById('playerAudio');
-        const playerTrackTitle = document.getElementById('playerTrackTitle');
-        let trackUrl = '';
-        let trackTitle = '';
-        let trackArtist = '';
-
-        // Popular tracks from the track list
-        if (trackId === 'Made It') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Made%20It.mp3';
-          trackArtist = 'Prod. Tedla';
-          trackTitle = 'Made It - ' + trackArtist;
-        } else if (trackId === 'Nector') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Nector.mp3';
-          trackArtist = 'Prod. Tedla';
-          trackTitle = 'Nector - ' + trackArtist;
-        } else if (trackId === 'Blossom') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Blossom.wav';
-          trackArtist = 'Prod. Nexus';
-          trackTitle = 'Blossom - ' + trackArtist;
-        } else if (trackId === 'Mach 1') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3';
-          trackArtist = 'Prod. Phantom';
-          trackTitle = 'Mach 1 - ' + trackArtist;
-        } else if (trackId === 'Echo') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Echo.wav';
-          trackArtist = 'Neon Gloww';
-          trackTitle = 'Echo - ' + trackArtist;
-        } else if (trackId === 'Lights') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Lights.wav';
-          trackArtist = 'Bezzie';
-          trackTitle = 'Lights - ' + trackArtist;
-        } else if (trackId === 'Smilin') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav';
-          trackArtist = 'Melody-Soull';
-          trackTitle = 'Smilin - ' + trackArtist;
-        } else if (trackId === 'Buckets') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Buckets.wav';
-          trackArtist = 'Bezzie';
-          trackTitle = 'Buckets - ' + trackArtist;
-        } else if (trackId === 'Sweet') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Sweet.wav';
-          trackArtist = 'Bezzie';
-          trackTitle = 'Sweet - ' + trackArtist;
-        } else if (trackId === 'Persistence') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav';
-          trackArtist = 'Neo';
-          trackTitle = 'Persistence - ' + trackArtist;
-        } else if (trackId === 'Focus') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Focus.wav';
-          trackArtist = 'Desiree';
-          trackTitle = 'Focus - ' + trackArtist;
-        } else if (trackId === 'Wop!!!') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3';
-          trackArtist = 'Klevv';
-          trackTitle = 'Wop!!! - ' + trackArtist;
-        } else if (trackId === 'Mind') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mind.wav';
-          trackArtist = 'Desiree';
-          trackTitle = 'Mind - ' + trackArtist;
-        } else if (trackId === 'Huh') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Huh.wav';
-          trackArtist = 'Prod. Legacy';
-          trackTitle = 'Huh - ' + trackArtist;
-        } else if (trackId === 'Soul') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Soul.wav';
-          trackArtist = 'Desiree';
-          trackTitle = 'Soul - ' + trackArtist;
-        } else if (trackId === 'Step') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Step.wav';
-          trackArtist = 'Desiree';
-          trackTitle = 'Step - ' + trackArtist;
-        } else if (trackId === 'Vibes') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3';
-          trackArtist = 'Bezzie';
-          trackTitle = 'Vibes - ' + trackArtist;
-        } else if (trackId === 'Future') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Future.wav';
-          trackArtist = 'Pegasus';
-          trackTitle = 'Future - ' + trackArtist;
-        } else if (trackId === 'Promise') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3';
-          trackArtist = 'Desiree';
-          trackTitle = 'Promise - ' + trackArtist;
-
-        // Original tracks for backward compatibility
-        } else if (trackId === 'bliss') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3';
-          trackArtist = 'Nebula';
-          trackTitle = 'Bliss - ' + trackArtist;
-        } else if (trackId === 'hustle') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3';
-          trackArtist = 'Echo';
-          trackTitle = 'Hustle - ' + trackArtist;
-        } else if (trackId === 'utopia1') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Me%20And%20You!%20Artist.%20Utopia.mp3';
-          trackArtist = 'Utopia';
-          trackTitle = 'Me And You! - ' + trackArtist;
-        } else if (trackId === 'utopia2') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3';
-          trackArtist = 'Utopia';
-          trackTitle = 'Love, Peace, Unity - ' + trackArtist;
-        } else if (trackId === 'vibes') {
-          trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3';
-          trackArtist = 'Phantom';
-          trackTitle = 'Vibes - ' + trackArtist;
-        }
-
-        if (trackUrl && playerAudio && playerTrackTitle) {
-          playerAudio.src = trackUrl;
-          playerTrackTitle.textContent = trackTitle;
-          stickyPlayer.style.display = 'flex';
-          playerAudio.play();
-
-          // Update like button state for the new track
-          if (typeof updateLikeButtonState === 'function') {
-            updateLikeButtonState(trackId);
-          }
-
-            // Set up autoplay for next track - updated track order
-            playerAudio.onended = function() {
-              const trackOrder = ['Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence', 'Focus', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'];
-              const currentIndex = trackOrder.indexOf(trackId);
-              if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
-                // Call playTrack recursively for full autoplay chain
-                playTrack(trackOrder[currentIndex + 1]);
-              }
-            };
-        } else {
-          if (stickyPlayer) stickyPlayer.style.display = 'flex';
-        }
-    }
-
     function playAllTracks() {
       console.log('Playing all tracks');
-      playTrack('Made It');
+      playTrack('Times');
     }
 
     function toggleLike(button, event) {
