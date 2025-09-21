@@ -1231,7 +1231,7 @@
           transition: color 0.2s;
         }
         .sticky-player #likeBtn.liked {
-          color: #ff4444 !important;
+          color: #ffd700 !important;
         }
 
         @media (max-width: 600px) {
@@ -1315,7 +1315,7 @@
           transition: color 0.2s;
         }
         .sticky-player #likeBtn.liked {
-          color: #ff4444 !important;
+          color: #ffd700 !important;
         }
 
         .track-section {
@@ -2956,6 +2956,9 @@
       </div>
     <audio id="playerAudio" class="player-audio"></audio>
       <script>
+          // Global variables for sticky player like functionality
+          var currentTrackId = '';
+
           // Global track playback function - needs to be accessible to onclick handlers
           function playTrack(trackId) {
             console.log('🎵 playTrack called with:', trackId);
@@ -3092,7 +3095,6 @@
           ];
           var currentTrackIndex = 0;
           var isShuffled = false;
-          var currentTrackId = '';
 
           // Play/Pause
           playPauseBtn.addEventListener('click', function() {
@@ -3188,7 +3190,7 @@
             currentTrackId = trackId;
             const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
             if (likedTracks[trackId]) {
-              likeBtn.style.color = '#ff4444';
+              likeBtn.style.color = '#ffd700';
               likeBtn.classList.add('liked');
             } else {
               likeBtn.style.color = 'rgba(255,255,255,0.4)';
@@ -3260,6 +3262,27 @@
         stickyPlayer.style.display = 'flex';
         playerAudio.load();
         playerAudio.play();
+
+        // Set current track ID for like button functionality
+        currentTrackId = trackId;
+
+        // Update like button state
+        if (typeof updateLikeButtonState === 'function') {
+          updateLikeButtonState(trackId);
+        } else {
+          // Fallback: update like button state directly
+          const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+          const likeBtn = document.getElementById('likeBtn');
+          if (likeBtn) {
+            if (likedTracks[trackId]) {
+              likeBtn.style.color = '#ffd700';
+              likeBtn.classList.add('liked');
+            } else {
+              likeBtn.style.color = 'rgba(255,255,255,0.4)';
+              likeBtn.classList.remove('liked');
+            }
+          }
+        }
       } else {
         if (stickyPlayer) stickyPlayer.style.display = 'none';
       }
@@ -6353,20 +6376,80 @@
     }
 
     function toggleCurrentTrackLike() {
-      if (!allTracks[currentIndex]) return;
-
-      const track = allTracks[currentIndex];
-
-      if (isTrackLiked(track)) {
-        // Unlike: remove from synced storage
-        removeLikedTrackWithFullData(track.id);
-      } else {
-        // Like: save with full data to synced storage
-        saveLikedTrackWithFullData(track);
+      if (!currentTrackId) {
+        console.log('⚠️ No current track to like/unlike');
+        return;
       }
 
-      // Update UI
-      updateLikeBtn(track);
+      console.log('❤️ Toggling like for current track:', currentTrackId);
+
+      // Get the like button element
+      const likeBtn = document.getElementById('likeBtn');
+      if (!likeBtn) {
+        console.log('⚠️ Like button not found');
+        return;
+      }
+
+      // Get track data from the trackData object in the playTrack function
+      const trackData = {
+        'Times': { id: 'Times', title: 'Times', name: 'Times', artist: 'Stat Cross' },
+        'Prime': { id: 'Prime', title: 'Prime', name: 'Prime', artist: 'SlattZ' },
+        'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', name: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+        'Made It': { id: 'Made It', title: 'Made It', name: 'Made It', artist: 'Prod. Tedla' },
+        'Nector': { id: 'Nector', title: 'Nector', name: 'Nector', artist: 'Prod. Tedla' },
+        'Blossom': { id: 'Blossom', title: 'Blossom', name: 'Blossom', artist: 'Prod. Nexus' },
+        'Mach 1': { id: 'Mach 1', title: 'Mach 1', name: 'Mach 1', artist: 'Prod. Phantom' },
+        'Echo': { id: 'Echo', title: 'Echo', name: 'Echo', artist: 'Neon Gloww' },
+        'Lights': { id: 'Lights', title: 'Lights', name: 'Lights', artist: 'Bezzie' },
+        'Smilin': { id: 'Smilin', title: 'Smilin', name: 'Smilin', artist: 'Melody-Soull' },
+        'Buckets': { id: 'Buckets', title: 'Buckets', name: 'Buckets', artist: 'Bezzie' },
+        'Sweet': { id: 'Sweet', title: 'Sweet', name: 'Sweet', artist: 'Bezzie' },
+        'Persistence': { id: 'Persistence', title: 'Persistence', name: 'Persistence', artist: 'Neo' },
+        'Focus': { id: 'Focus', title: 'Focus', name: 'Focus', artist: 'Desiree' }
+      };
+
+      const currentTrack = trackData[currentTrackId];
+      if (!currentTrack) {
+        console.log('⚠️ Track data not found for:', currentTrackId);
+        return;
+      }
+
+      // Check if track is currently liked
+      const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const isLiked = !!likedTracks[currentTrackId];
+
+      if (isLiked) {
+        // Unlike: remove from liked tracks
+        console.log('💔 Unliking track:', currentTrackId);
+        removeLikedTrackWithFullData(currentTrackId);
+
+        // Update button state
+        likeBtn.style.color = 'rgba(255,255,255,0.4)';
+        likeBtn.classList.remove('liked');
+        likeBtn.innerHTML = '&#10084;'; // Empty heart
+
+        // Show notification
+        showLikeNotification(currentTrack.title, 'unliked');
+      } else {
+        // Like: add to liked tracks
+        console.log('❤️ Liking track:', currentTrackId);
+        saveLikedTrackWithFullData(currentTrack);
+
+        // Update button state
+        likeBtn.style.color = '#ffd700';
+        likeBtn.classList.add('liked');
+        likeBtn.innerHTML = '&#10084;'; // Filled heart
+
+        // Show notification
+        showLikeNotification(currentTrack.title, 'liked');
+      }
+
+      // Refresh the liked songs popup if it's currently open
+      const likedPopup = document.getElementById('likedPageOverlay');
+      if (likedPopup && likedPopup.classList.contains('show')) {
+        console.log('🔄 Refreshing liked songs popup from sticky player');
+        loadLikedSongs();
+      }
     }
 
     // Show like/unlike notification
