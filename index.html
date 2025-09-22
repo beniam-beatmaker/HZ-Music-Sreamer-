@@ -2001,9 +2001,289 @@
       padding-bottom: 120px;
     }
     }
+
+    /* Terms and Conditions Modal Styles */
+    .terms-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .terms-modal {
+      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+      border-radius: 16px;
+      max-width: 90vw;
+      max-height: 90vh;
+      width: 800px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      border: 1px solid #333;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .terms-header {
+      background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+      color: #000;
+      padding: 20px 30px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      border-bottom: 2px solid #333;
+    }
+
+    .terms-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 30px;
+      color: #fff;
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+
+    .terms-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terms-content::-webkit-scrollbar-track {
+      background: #2d2d2d;
+      border-radius: 4px;
+    }
+
+    .terms-content::-webkit-scrollbar-thumb {
+      background: #FFD700;
+      border-radius: 4px;
+    }
+
+    .terms-content h3 {
+      color: #FFD700;
+      font-size: 1.2rem;
+      margin: 25px 0 15px 0;
+      font-weight: 600;
+    }
+
+    .terms-content p {
+      margin-bottom: 15px;
+      text-align: justify;
+    }
+
+    .terms-content strong {
+      color: #FFD700;
+      font-weight: 600;
+    }
+
+    .terms-footer {
+      background: #2d2d2d;
+      padding: 25px 30px;
+      border-top: 1px solid #333;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .terms-agreement {
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 215, 0, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .terms-checkbox {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      margin-top: 2px;
+      accent-color: #FFD700;
+      cursor: pointer;
+    }
+
+    .terms-agreement-text {
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .terms-buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .terms-btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 140px;
+    }
+
+    .terms-btn.accept {
+      background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+      color: #000;
+    }
+
+    .terms-btn.accept:hover:not(:disabled) {
+      background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .terms-btn.accept:disabled {
+      background: #666;
+      color: #999;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .terms-btn.decline {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #666;
+    }
+
+    .terms-btn.decline:hover {
+      background: #ff4444;
+      border-color: #ff4444;
+      transform: translateY(-2px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .terms-modal {
+        max-width: 95vw;
+        max-height: 95vh;
+      }
+
+      .terms-header {
+        padding: 15px 20px;
+        font-size: 1.3rem;
+      }
+
+      .terms-content {
+        padding: 20px;
+        font-size: 0.9rem;
+      }
+
+      .terms-footer {
+        padding: 20px;
+      }
+
+      .terms-buttons {
+        flex-direction: column;
+      }
+
+      .terms-btn {
+        width: 100%;
+      }
+    }
+
+    /* App blocking overlay when terms not accepted */
+    .app-blocked {
+      pointer-events: none;
+      filter: blur(3px);
+      opacity: 0.3;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Terms and Conditions Modal for Users Without Accounts -->
+  <div id="termsOverlay" class="terms-overlay" style="display: flex;">
+    <div class="terms-modal">
+      <div class="terms-header">
+        Terms and Conditions
+      </div>
+      <div class="terms-content">
+        <h3>AGREEMENT TO OUR LEGAL TERMS</h3>
+        <p><strong>Last updated September 14, 2025</strong></p>
+
+        <p>We are <strong>HZ Music Streamer</strong> ("Company," "we," "us," "our"), a company registered in Australia at Tuart Hill, Perth, Western Australia 6060.</p>
+
+        <p>We operate the website <strong>https://hz-streams.com</strong> (the "Site"), the mobile application <strong>HZ Music Streamer</strong> (the "App"), as well as any other related products and services that refer or link to these legal terms (the "Legal Terms") (collectively, the "Services").</p>
+
+        <p>You can contact us by phone at <strong>0400695328</strong>, email at <strong>hertz@hertzynet.com</strong>, or by mail to <strong>8/27 Clarence St, Tuart Hill, WA, Perth, Western Australia 6060, Australia</strong>.</p>
+
+        <p>These Legal Terms constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you"), and HZ Music Streamer, concerning your access to and use of the Services. You agree that by accessing the Services, <strong>you have read, understood, and agreed to be bound by all of these Legal Terms</strong>. IF YOU DO NOT AGREE WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU MUST DISCONTINUE USE IMMEDIATELY.</p>
+
+        <p>We will provide you with prior notice of any scheduled changes to the Services you are using. The modified Legal Terms will become effective upon posting or notifying you by <strong>hertz@hertzynet.com</strong>, as stated in the email message. By continuing to use the Services after the effective date of any changes, you agree to be bound by the modified terms.</p>
+
+        <p><strong>The Services are intended for users who are at least 13 years of age.</strong> All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Services. If you are a minor, you must have your parent or guardian read and agree to these Legal Terms prior to you using the Services.</p>
+
+        <h3>1. OUR SERVICES</h3>
+        <p>The information provided when using the Services is not intended for distribution to or use by any person or entity in any jurisdiction or country where such distribution or use would be contrary to law or regulation or which would subject us to any registration requirement within such jurisdiction or country.</p>
+
+        <h3>2. INTELLECTUAL PROPERTY RIGHTS</h3>
+        <p><strong>Our intellectual property:</strong> We are the owner or the licensee of all intellectual property rights in our Services, including all source code, databases, functionality, software, website designs, audio, video, text, photographs, and graphics in the Services (collectively, the "Content"), as well as the trademarks, service marks, and logos contained therein (the "Marks").</p>
+
+        <p>Our Content and Marks are protected by copyright and trademark laws (and various other intellectual property rights and unfair competition laws) and treaties around the world.</p>
+
+        <h3>3. USER REPRESENTATIONS</h3>
+        <p>By using the Services, you represent and warrant that: (1) all registration information you submit will be true, accurate, current, and complete; (2) you will maintain the accuracy of such information; (3) you have the legal capacity and agree to comply with these Legal Terms; (4) you are not under the age of 13; (5) you will not access the Services through automated means; (6) you will not use the Services for any illegal purpose; and (7) your use will not violate any applicable law.</p>
+
+        <h3>4. SUBSCRIPTIONS</h3>
+        <p><strong>Billing and Renewal:</strong> Your subscription will continue and automatically renew unless canceled. You consent to our charging your payment method on a recurring basis without requiring your prior approval for each recurring charge, until such time as you cancel the applicable order. The length of your billing cycle is monthly.</p>
+
+        <p><strong>Cancellation:</strong> Users can both delete their account - causing the deletion of their monthly subscription or users can contact support to request account deletion. Your cancellation will take effect at the end of the current paid term. If you have any questions or are unsatisfied with our Services, please email us at <strong>hertz@hertzynet.com</strong>.</p>
+
+        <h3>5. AI-GENERATED MUSIC DISCLOSURE</h3>
+        <p><strong>HZ Music Streamer</strong> features a curated selection of tracks that have been developed using advanced artificial intelligence technologies, including MusicGPT. These AI-generated compositions are created with the same care and ethical standards that guide our platform's artist-first philosophy.</p>
+
+        <p>By using HZ Music Streamer, you acknowledge and accept that:</p>
+        <p>• Some tracks available on the platform are generated or co-created using AI tools such as MusicGPT.<br>
+        • These AI-generated works are protected under applicable copyright laws and are the intellectual property of HZ-STREAMS and/or its designated licensors.<br>
+        • Trademark registration for these works and associated branding is currently in progress, and users agree to respect all future trademark protections once granted.<br>
+        • Use, reproduction, or distribution of these tracks outside the platform without explicit permission is strictly prohibited.</p>
+
+        <h3>6. PROHIBITED ACTIVITIES</h3>
+        <p>You may not access or use the Services for any purpose other than that for which we make the Services available. As a user of the Services, you agree not to:</p>
+        <p>• Systematically retrieve data or other content from the Services to create or compile, directly or indirectly, a collection, compilation, database, or directory without written permission from us.<br>
+        • Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive account information such as user passwords.<br>
+        • Circumvent, disable, or otherwise interfere with security-related features of the Services.<br>
+        • Use any information obtained from the Services in order to harass, abuse, or harm another person.<br>
+        • Upload or transmit viruses, Trojan horses, or other material that interferes with any party's uninterrupted use and enjoyment of the Services.<br>
+        • Engage in any automated use of the system, such as using scripts to send comments or messages.<br>
+        • Attempt to impersonate another user or person or use the username of another user.</p>
+
+        <h3>CONTACT US</h3>
+        <p>If you have any questions about these Terms and Conditions, please contact us at:</p>
+        <p><strong>Email:</strong> hertz@hertzynet.com<br>
+        <strong>Phone:</strong> 0400695328<br>
+        <strong>Address:</strong> 8/27 Clarence St, Tuart Hill, WA, Perth, Western Australia 6060, Australia</p>
+      </div>
+      <div class="terms-footer">
+        <div class="terms-agreement">
+          <input type="checkbox" id="termsCheckbox" class="terms-checkbox">
+          <label for="termsCheckbox" class="terms-agreement-text">
+            I have read, understood, and agree to be bound by these Terms and Conditions. I confirm that I am at least 13 years of age and have the legal capacity to enter into this agreement.
+          </label>
+        </div>
+        <div class="terms-buttons">
+          <button id="termsAcceptBtn" class="terms-btn accept" disabled>Accept & Continue</button>
+          <button id="termsDeclineBtn" class="terms-btn decline">Decline</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- App Container (will be blocked if terms not accepted) -->
+  <div id="appContainer" class="app-blocked">
 
   <!-- Mini Video Player Overlay & Container (from Offline25App.html) -->
   <style>
@@ -7158,6 +7438,334 @@
     // Initialize greeting
     updateGreeting();
 
+  </script>
+
+  </div> <!-- End App Container -->
+
+  <script>
+    console.log('🚨 TERMS ENFORCEMENT ACTIVE - Modal shown by default, will be hidden only if user has account or accepted terms');
+    console.log('📋 ACCOUNT LOGIC: "Music Lover" = NO account, any other username = HAS account');
+
+    // Immediate Terms Check - Run as soon as script loads
+    (function() {
+      console.log('🚨 IMMEDIATE TERMS CHECK');
+
+      // Check for account data - "Music Lover" is not a real account
+      const userData = localStorage.getItem('hertzUser');
+      const username = localStorage.getItem('hertzUsername');
+      const termsAccepted = localStorage.getItem('hertzTermsAccepted');
+      const hasAccount = !!(userData || (username && username !== 'Music Lover'));
+
+      console.log('📊 Immediate Check:', {
+        userData: !!userData,
+        username: username,
+        hasAccount: hasAccount,
+        termsAccepted: termsAccepted,
+        isMusicLover: username === 'Music Lover'
+      });
+
+      // If user has account OR has accepted terms, hide modal and unblock app
+      if (hasAccount || termsAccepted) {
+        console.log('✅ USER CLEARED - Hiding terms modal and unblocking app');
+        setTimeout(() => {
+          const modal = document.getElementById('termsOverlay');
+          const appContainer = document.getElementById('appContainer');
+
+          if (modal) {
+            modal.style.display = 'none';
+            console.log('✅ MODAL HIDDEN');
+          }
+
+          if (appContainer) {
+            appContainer.classList.remove('app-blocked');
+            appContainer.style.filter = '';
+            appContainer.style.opacity = '';
+            appContainer.style.pointerEvents = '';
+            console.log('✅ APP UNBLOCKED');
+          }
+        }, 10);
+      } else {
+        console.log('🚨 NO ACCOUNT AND NO TERMS ACCEPTED - Modal remains visible');
+      }
+    })();    // Terms and Conditions Management
+    class TermsManager {
+      constructor() {
+        this.termsAccepted = localStorage.getItem('hertzTermsAccepted');
+        this.hasAccount = this.checkUserAccount();
+        console.log('🔍 TermsManager Debug:', {
+          termsAccepted: this.termsAccepted,
+          hasAccount: this.hasAccount,
+          hertzUser: localStorage.getItem('hertzUser'),
+          hertzUsername: localStorage.getItem('hertzUsername')
+        });
+        this.init();
+      }
+
+      checkUserAccount() {
+        // Check if user has an account - "Music Lover" is not a real account
+        const userData = localStorage.getItem('hertzUser');
+        const username = localStorage.getItem('hertzUsername');
+        const hasAccount = !!(userData || (username && username !== 'Music Lover'));
+        console.log('👤 Account Check:', {
+          userData: !!userData,
+          username: username,
+          isRealAccount: hasAccount,
+          isMusicLover: username === 'Music Lover'
+        });
+        return hasAccount;
+      }
+
+      init() {
+        console.log('🎯 TermsManager.init() called');
+
+        // Always setup event listeners first
+        this.setupEventListeners();
+
+        // Check current status
+        const hasAccount = this.checkUserAccount();
+        const termsAccepted = localStorage.getItem('hertzTermsAccepted');
+
+        console.log('📊 Init Check:', {
+          hasAccount: hasAccount,
+          termsAccepted: !!termsAccepted
+        });
+
+        // If user has account OR has accepted terms, hide modal and unblock app
+        if (hasAccount || termsAccepted) {
+          console.log('✅ USER CLEARED - Hiding modal and unblocking app');
+          setTimeout(() => {
+            this.hideTermsModal();
+            this.unblockApp();
+          }, 50);
+        } else {
+          console.log('🚨 NO ACCOUNT AND NO TERMS - Modal remains visible');
+          // Ensure app stays blocked (it should already be blocked by default)
+          this.blockApp();
+        }
+      }
+
+      showTermsModal() {
+        const modal = document.getElementById('termsOverlay');
+        if (modal) {
+          modal.style.display = 'flex';
+          console.log('📋 Terms modal displayed');
+        } else {
+          console.error('❌ Terms modal element not found!');
+        }
+      }
+
+      hideTermsModal() {
+        const modal = document.getElementById('termsOverlay');
+        if (modal) {
+          modal.style.display = 'none';
+          console.log('📋 Terms modal hidden');
+        }
+      }
+
+      blockApp() {
+        const appContainer = document.getElementById('appContainer');
+        if (appContainer) {
+          appContainer.classList.add('app-blocked');
+          console.log('🚫 App blocked');
+        } else {
+          console.error('❌ App container element not found!');
+        }
+      }
+
+      unblockApp() {
+        const appContainer = document.getElementById('appContainer');
+        if (appContainer) {
+          appContainer.classList.remove('app-blocked');
+          console.log('✅ App unblocked');
+        }
+      }
+
+      setupEventListeners() {
+        const checkbox = document.getElementById('termsCheckbox');
+        const acceptBtn = document.getElementById('termsAcceptBtn');
+        const declineBtn = document.getElementById('termsDeclineBtn');
+
+        // Enable/disable accept button based on checkbox
+        checkbox.addEventListener('change', () => {
+          acceptBtn.disabled = !checkbox.checked;
+        });
+
+        // Accept button click
+        acceptBtn.addEventListener('click', () => {
+          if (checkbox.checked) {
+            this.acceptTerms();
+          }
+        });
+
+        // Decline button click
+        declineBtn.addEventListener('click', () => {
+          this.declineTerms();
+        });
+
+        // Allow clicking on label to toggle checkbox
+        document.getElementById('termsCheckbox').addEventListener('change', () => {
+          acceptBtn.disabled = !document.getElementById('termsCheckbox').checked;
+        });
+      }
+
+      acceptTerms() {
+        console.log('✅ Terms accepted by user');
+        localStorage.setItem('hertzTermsAccepted', 'true');
+        localStorage.setItem('hertzTermsAcceptedDate', new Date().toISOString());
+
+        this.hideTermsModal();
+        this.unblockApp();
+
+        // Show success notification
+        this.showNotification('Terms accepted! Welcome to HZ Music Streamer!', 'success');
+      }
+
+      declineTerms() {
+        console.log('❌ Terms declined by user');
+        this.showNotification('Terms declined. You cannot use HZ Music Streamer without accepting the terms.', 'error');
+
+        // Redirect away from the app or show alternative message
+        setTimeout(() => {
+          if (confirm('You must accept the Terms and Conditions to use HZ Music Streamer. Would you like to review them again?')) {
+            // Keep modal open for another attempt
+          } else {
+            window.location.href = 'https://hz-streams.com';
+          }
+        }, 2000);
+      }
+
+      showNotification(message, type) {
+        // Create notification element
+        const notification = document.createElement('div');
+        notification.style.cssText = `
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background: ${type === 'success' ? 'linear-gradient(135deg, #1db954 0%, #17a74a 100%)' : 'linear-gradient(135deg, #ff4444 0%, #cc0000 100%)'};
+          color: white;
+          padding: 15px 25px;
+          border-radius: 8px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+          z-index: 11000;
+          font-weight: 600;
+          font-size: 0.95rem;
+          max-width: 350px;
+          word-wrap: break-word;
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+        `;
+
+        notification.innerHTML = message;
+        document.body.appendChild(notification);
+
+        // Animate in
+        setTimeout(() => {
+          notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // Animate out and remove
+        setTimeout(() => {
+          notification.style.transform = 'translateX(100%)';
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.parentNode.removeChild(notification);
+            }
+          }, 300);
+        }, type === 'success' ? 3000 : 5000);
+      }
+
+      // Method to reset terms (for testing or admin purposes)
+      resetTerms() {
+        localStorage.removeItem('hertzTermsAccepted');
+        localStorage.removeItem('hertzTermsAcceptedDate');
+        console.log('🔄 Terms reset - user will see modal on next visit');
+      }
+    }
+
+    // Initialize Terms Manager when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 DOM Content Loaded - Initializing TermsManager');
+      window.termsManager = new TermsManager();
+    });
+
+    // Backup initialization in case DOMContentLoaded already fired
+    if (document.readyState === 'loading') {
+      // DOM is still loading, wait for DOMContentLoaded
+    } else {
+      // DOM is already loaded, initialize immediately
+      console.log('🚀 DOM Already Loaded - Initializing TermsManager');
+      setTimeout(() => {
+        if (!window.termsManager) {
+          window.termsManager = new TermsManager();
+        }
+      }, 100);
+    }
+
+    // EMERGENCY FALLBACK - Ensure proper terms enforcement
+    setTimeout(() => {
+      console.log('🚨 EMERGENCY FALLBACK CHECK');
+
+      const userData = localStorage.getItem('hertzUser');
+      const username = localStorage.getItem('hertzUsername');
+      const termsAccepted = localStorage.getItem('hertzTermsAccepted');
+      const hasAccount = !!(userData || (username && username !== 'Music Lover'));
+
+      const modal = document.getElementById('termsOverlay');
+      const appContainer = document.getElementById('appContainer');
+
+      console.log('📊 Emergency Check:', {
+        username: username,
+        hasAccount: hasAccount,
+        termsAccepted: !!termsAccepted,
+        isMusicLover: username === 'Music Lover',
+        modalVisible: modal ? modal.style.display !== 'none' : false
+      });
+
+      // If user has account OR accepted terms, hide modal and unblock app
+      if (hasAccount || termsAccepted) {
+        console.log('✅ EMERGENCY - User cleared, hiding modal');
+        if (modal) {
+          modal.style.display = 'none';
+        }
+        if (appContainer) {
+          appContainer.classList.remove('app-blocked');
+          appContainer.style.filter = '';
+          appContainer.style.opacity = '';
+          appContainer.style.pointerEvents = '';
+        }
+      } else {
+        console.log('🚨 EMERGENCY - No account and no terms, ensuring modal visible');
+        if (modal) {
+          modal.style.display = 'flex';
+          modal.style.zIndex = '99999';
+        }
+        if (appContainer) {
+          appContainer.classList.add('app-blocked');
+        }
+      }
+    }, 2000);
+
+    // For testing purposes - expose functions to console
+    window.resetTerms = () => {
+      if (window.termsManager) {
+        window.termsManager.resetTerms();
+        window.location.reload();
+      }
+    };
+
+    // Force show terms for testing (regardless of account status)
+    window.forceShowTerms = () => {
+      localStorage.removeItem('hertzTermsAccepted');
+      localStorage.removeItem('hertzUser');
+      localStorage.removeItem('hertzUsername');
+      if (window.termsManager) {
+        window.termsManager.showTermsModal();
+        window.termsManager.blockApp();
+      } else {
+        console.log('Reinitializing TermsManager...');
+        window.termsManager = new TermsManager();
+      }
+    };
   </script>
 </body>
 </html>
