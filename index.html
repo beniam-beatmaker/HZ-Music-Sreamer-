@@ -1696,6 +1696,46 @@
         padding: 0 1.5rem 2rem 1.5rem;
     }
 
+    /* Search Suggestions Styling */
+    .search-suggestions {
+        scrollbar-width: thin;
+        scrollbar-color: #666 #232526;
+    }
+
+    .search-suggestions::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .search-suggestions::-webkit-scrollbar-track {
+        background: #232526;
+        border-radius: 0 0 12px 0;
+    }
+
+    .search-suggestions::-webkit-scrollbar-thumb {
+        background: #666;
+        border-radius: 3px;
+    }
+
+    .search-suggestions::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+
+    .suggestion-item {
+        transition: all 0.2s ease;
+        border-left: 3px solid transparent;
+    }
+
+    .suggestion-item:hover {
+        border-left-color: var(--accent-color) !important;
+        background: #333 !important;
+        transform: translateX(2px) !important;
+    }
+
+    .suggestion-item:last-child {
+        border-bottom: none;
+        border-radius: 0 0 12px 12px;
+    }
+
     .search-categories {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -3239,7 +3279,7 @@
           // Global variables for sticky player like functionality
           var currentTrackId = '';
 
-          // Global track playback function - needs to be accessible to onclick handlers
+          // Global track playback function - uses trackData object for all tracks
           function playTrack(trackId) {
             console.log('🎵 playTrack called with:', trackId);
 
@@ -3247,68 +3287,53 @@
             const playerAudio = document.getElementById('playerAudio');
             const playerTrackTitle = document.getElementById('playerTrackTitle');
 
-            let trackUrl = '';
-            let trackTitle = '';
-            let trackArtist = '';
+            // Get track data from the trackData object
+            let trackData = {
+              'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
+              'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
+              'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+              'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus' },
+              'Mach 1': { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom' },
+              'Echo': { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww' },
+              'Lights': { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie' },
+              'Smilin': { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull' },
+              'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla' },
+              'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla' },
+              'Buckets': { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', title: 'Buckets', artist: 'Bezzie' },
+              'Sweet': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', title: 'Sweet', artist: 'Bezzie' },
+              'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo' },
+              'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree' },
+              'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV' },
+              'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms' },
+              'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' },
+              'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree' },
+              'Huh': { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', title: 'Huh', artist: 'Prod. Legacy' },
+              'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
+              'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree' },
+              'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie' },
+              'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus' },
+              'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
+              'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
+              'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
+              '808-Symph': { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', title: '808-Symph', artist: 'Molly-Able' },
+              'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
+              'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
+              'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
+              'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' },
+              'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
+              'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
+              'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
+              'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
+            };
 
-            // All tracks - complete list
-            if (trackId === 'Times') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Times.wav';
-              trackArtist = 'Stat Cross';
-              trackTitle = 'Times - ' + trackArtist;
-            } else if (trackId === 'Prime') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Prime.wav';
-              trackArtist = 'SlattZ';
-              trackTitle = 'Prime - ' + trackArtist;
-            } else if (trackId === 'Aint Nough Dreamzz') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav';
-              trackArtist = 'Stage Rolla';
-              trackTitle = 'Aint Nough Dreamzz - ' + trackArtist;
-            } else if (trackId === 'Made It') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Made%20It.mp3';
-              trackArtist = 'Prod. Tedla';
-              trackTitle = 'Made It - ' + trackArtist;
-            } else if (trackId === 'Nector') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Nector.mp3';
-              trackArtist = 'Prod. Tedla';
-              trackTitle = 'Nector - ' + trackArtist;
-            } else if (trackId === 'Blossom') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Blossom.wav';
-              trackArtist = 'Prod. Nexus';
-              trackTitle = 'Blossom - ' + trackArtist;
-            } else if (trackId === 'Mach 1') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3';
-              trackArtist = 'Prod. Phantom';
-              trackTitle = 'Mach 1 - ' + trackArtist;
-            } else if (trackId === 'Echo') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Echo.wav';
-              trackArtist = 'Neon Gloww';
-              trackTitle = 'Echo - ' + trackArtist;
-            } else if (trackId === 'Lights') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Lights.wav';
-              trackArtist = 'Bezzie';
-              trackTitle = 'Lights - ' + trackArtist;
-            } else if (trackId === 'Smilin') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav';
-              trackArtist = 'Melody-Soull';
-              trackTitle = 'Smilin - ' + trackArtist;
-            } else if (trackId === 'Buckets') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Buckets.wav';
-              trackArtist = 'Bezzie';
-              trackTitle = 'Buckets - ' + trackArtist;
-            } else if (trackId === 'Sweet') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Sweet.wav';
-              trackArtist = 'Bezzie';
-              trackTitle = 'Sweet - ' + trackArtist;
-            } else if (trackId === 'Persistence') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav';
-              trackArtist = 'Neo';
-              trackTitle = 'Persistence - ' + trackArtist;
-            } else if (trackId === 'Focus') {
-              trackUrl = 'https://storage.googleapis.com/hertz-music-folder/Focus.wav';
-              trackArtist = 'Desiree';
-              trackTitle = 'Focus - ' + trackArtist;
+            const track = trackData[trackId];
+            if (!track) {
+              console.error('❌ Track not found:', trackId);
+              return;
             }
+
+            const trackUrl = track.url;
+            const trackTitle = track.title + ' - ' + track.artist;
 
             if (trackUrl && playerAudio && playerTrackTitle) {
               console.log('✅ Setting up audio:', { trackUrl, trackTitle });
@@ -3328,9 +3353,9 @@
                 console.error('❌ Audio playback failed:', error);
               });
 
-              // Set up autoplay for next track
+              // Set up autoplay for next track (all available tracks)
               playerAudio.onended = function() {
-                const trackOrder = ['Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin'];
+                const trackOrder = Object.keys(trackData);
                 const currentIndex = trackOrder.indexOf(trackId);
                 if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
                   playTrack(trackOrder[currentIndex + 1]);
@@ -3370,8 +3395,8 @@
           var volumeRange = document.getElementById('volumeRange');
           var trackOrder = [
             'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
-            'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
-            'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
+            'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
+            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile'
           ];
           var currentTrackIndex = 0;
           var isShuffled = false;
@@ -3627,8 +3652,7 @@
        onblur="hideSearchSuggestions()"
        onfocus="showSearchSuggestions(this.value)">
      <div class="search-icon">🔍</div>
-     <div id="searchSuggestions" class="search-suggestions" style="position:absolute;top:48px;left:0;width:100%;z-index:1000;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 2px 8px rgba(0,0,0,0.10);display:none;"></div>
-  <div id="searchSuggestions" class="search-suggestions" style="position:fixed;top:120px;left:50%;transform:translateX(-50%);width:400px;max-width:90vw;z-index:9999;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 2px 16px rgba(0,0,0,0.20);display:none;"></div>
+     <div id="searchSuggestions" class="search-suggestions" style="position:absolute;top:48px;left:0;width:100%;z-index:1000;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 4px 16px rgba(0,0,0,0.25);border:1px solid #333;border-top:none;display:none;max-height:350px;overflow-y:auto;"></div>
         </div>
       </div>
 
@@ -5477,74 +5501,114 @@
 
     function showSearchSuggestions(query) {
       const suggestionsDiv = document.getElementById('searchSuggestions');
+      if (!suggestionsDiv) return;
+
       suggestionsDiv.style.display = 'block';
+
       if (!query || query.trim().length === 0) {
         suggestionsDiv.innerHTML = '<div style="padding:16px;text-align:center;color:#b3b3b3;">Type a track or artist name...</div>';
         return;
       }
 
       let results = [];
-      // Use all tracks from trackData for suggestions
-      if (typeof trackData !== 'undefined') {
-        results = Object.values(trackData).filter(track => {
-          if (!track || !track.title || !track.artist) return false;
-          const q = query.toLowerCase();
-          return track.title.toLowerCase().includes(q) || track.artist.toLowerCase().includes(q);
-        }).slice(0, 8);
-      }
-      // Always show suggestionsDiv
+
+      // Get local tracks from the existing trackData object (defined in playTrack function)
+      const localTracks = {
+        // Core tracks
+        'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+        'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz' },
+
+        // Additional tracks from trackData
+        'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Alternative' },
+        'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+        'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
+        'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' }
+      };
+
+      // Filter tracks based on search query
+      const q = query.toLowerCase();
+      results = Object.values(localTracks).filter(track => {
+        return track.title.toLowerCase().includes(q) ||
+               track.artist.toLowerCase().includes(q) ||
+               (track.genre && track.genre.toLowerCase().includes(q));
+      }).slice(0, 8); // Increased from 6 to 8 to show more results      // Always show suggestionsDiv
       suggestionsDiv.style.display = 'block';
+
       let htmlSuggestions = '';
       if (results.length > 0) {
-        htmlSuggestions += '<div style="max-height:320px;overflow-y:auto;">';
+        htmlSuggestions += '<div style="max-height:280px;overflow-y:auto;border-radius:0 0 12px 12px;">';
         results.forEach(track => {
           htmlSuggestions += `
-            <div class="suggestion-item" onclick="playTrack('${track.id}');hideSearchSuggestions();" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:background 0.2s;"
-                 onmouseover="this.style.background='#333'" onmouseout="this.style.background='#232526'">
-              <img src="${track.cover}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+            <div class="suggestion-item"
+                 onclick="playLocalTrack('${track.id}');hideSearchSuggestions();"
+                 style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:all 0.2s ease;"
+                 onmouseover="this.style.background='#333';this.style.transform='translateX(2px)'"
+                 onmouseout="this.style.background='#232526';this.style.transform='translateX(0)'">
+              <img src="${track.cover}"
+                   style="width:45px;height:45px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-shrink:0;">
               <div style="flex:1;min-width:0;">
-                <div style="color:#fff;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.title}</div>
-                <div style="color:#b3b3b3;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
+                <div style="color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">${track.title}</div>
+                <div style="color:#b3b3b3;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
               </div>
-              <div style="color:#1db954;font-size:1.3rem;margin-left:8px;">▶</div>
+              <div style="color:#1db954;font-size:1.4rem;margin-left:8px;opacity:0.8;transition:opacity 0.2s;"
+                   onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">▶</div>
             </div>
           `;
         });
         htmlSuggestions += '</div>';
       } else {
-        htmlSuggestions += '<div style="padding:16px;text-align:center;color:#b3b3b3;">No matching tracks found.</div>';
+        htmlSuggestions += '<div style="padding:20px;text-align:center;color:#b3b3b3;font-size:0.95rem;">No matching tracks found in your library.</div>';
       }
+
       suggestionsDiv.innerHTML = htmlSuggestions;
-      const genres = getHertzGenres().filter(genre =>
-        genre.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 3);
+    }
 
-      if (results.length === 0 && genres.length === 0) {
-        suggestionsDiv.style.display = 'none';
-        return;
+    // Function to play local tracks from search suggestions
+    function playLocalTrack(trackId) {
+      console.log('🎵 Playing local track from search:', trackId);
+
+      // Close the search popup
+      if (typeof closeSearchPopup === 'function') {
+        closeSearchPopup();
       }
 
-      let html = '';
-      if (results.length > 0) {
-        html += '<div style="max-height:320px;overflow-y:auto;">';
-        results.forEach(track => {
-          html += `
-            <div class="suggestion-item" onclick="playSuggestionTrack('${track.id}')" style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:background 0.2s;"
-                 onmouseover="this.style.background='#333'" onmouseout="this.style.background='#232526'">
-              <img src="${track.cover}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
-              <div style="flex:1;min-width:0;">
-                <div style="color:#fff;font-weight:600;font-size:1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.title}</div>
-                <div style="color:#b3b3b3;font-size:0.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
-              </div>
-              <div style="color:#1db954;font-size:1.3rem;margin-left:8px;">▶</div>
-            </div>
-          `;
-        });
-        html += '</div>';
+      // Call the existing playTrack function which handles the sticky player
+      if (typeof playTrack === 'function') {
+        playTrack(trackId);
+      } else if (typeof window.playTrack === 'function') {
+        window.playTrack(trackId);
       } else {
-        html += '<div style="padding:16px;text-align:center;color:#b3b3b3;">No matching tracks found.</div>';
+        console.error('playTrack function not found');
       }
-      suggestionsDiv.innerHTML = html;
     }
 
     function hideSearchSuggestions() {
