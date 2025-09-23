@@ -3714,10 +3714,7 @@
         </div>
 
         <!-- Search Results -->
-        <div class="search-results" id="searchResults">
-          <div class="search-results-header">Search results</div>
-          <div id="searchResultsList"></div>
-        </div>
+        <!-- Search Results removed -->
       </div>
     </div>
   </div>
@@ -4408,8 +4405,10 @@
 
       if (overlay && input) {
         overlay.style.display = 'flex';
+        // Always show genres and recent searches when opening
+        document.getElementById('browseCategories').style.display = 'block';
+        document.getElementById('recentSearches').style.display = 'block';
         loadRecentSearches();
-        // Focus the input after animation
         setTimeout(() => {
           input.focus();
         }, 100);
@@ -4431,20 +4430,17 @@
     // Enhanced search functionality
     function handleSearchInput(query) {
       const trimmedQuery = query.trim();
-      const searchResults = document.getElementById('searchResults');
       const browseCategories = document.getElementById('browseCategories');
       const recentSearches = document.getElementById('recentSearches');
 
       if (trimmedQuery.length > 0) {
-        // Show search results, hide categories and recent searches
-        searchResults.classList.add('active');
+        // Hide categories and recent searches
         browseCategories.style.display = 'none';
         recentSearches.style.display = 'none';
-        performSearch(trimmedQuery);
       } else {
-        // Show categories and recent searches, hide search results
-        searchResults.classList.remove('active');
+        // Show categories and recent searches
         browseCategories.style.display = 'block';
+        recentSearches.style.display = 'block';
         loadRecentSearches();
       }
     }
@@ -4499,11 +4495,102 @@
     }
 
     function searchCategory(category) {
-      console.log('🎵 Searching category:', category);
-      const input = document.getElementById('popupSearchInput');
-      input.value = category;
-      handleSearchInput(category);
-      saveRecentSearch(category);
+  console.log('🎵 Searching category:', category);
+  const input = document.getElementById('popupSearchInput');
+  input.value = category;
+  handleSearchInput(category);
+  saveRecentSearch(category);
+
+  // Show genre popup with tracks of this genre
+  showGenrePopup(category);
+// ...existing code...
+// Genre Popup Implementation
+function showGenrePopup(genre) {
+  // Remove any existing genre popup
+  let oldPopup = document.getElementById('genrePopupOverlay');
+  if (oldPopup) oldPopup.remove();
+
+  // Get local tracks from showSearchSuggestions (same as used for suggestions)
+  const localTracks = {
+    'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+    'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+    'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+    'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+    'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+    'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+    'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+    'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+    'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+    'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+    'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz' },
+    'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Alternative' },
+    'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+    'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+    'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+    'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
+    'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+    'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+    'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+    'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+    '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+    'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+    'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+    'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+    'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' }
+  };
+
+  // Filter tracks by genre
+  const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase());
+
+  // Create popup HTML
+  const popup = document.createElement('div');
+  popup.id = 'genrePopupOverlay';
+  popup.style.position = 'fixed';
+  popup.style.top = '0';
+  popup.style.left = '0';
+  popup.style.width = '100vw';
+  popup.style.height = '100vh';
+  popup.style.background = 'rgba(18,18,18,0.97)';
+  popup.style.zIndex = '3000';
+  popup.style.display = 'flex';
+  popup.style.alignItems = 'center';
+  popup.style.justifyContent = 'center';
+
+  popup.innerHTML = `
+    <div style="background:var(--bg-primary);border-radius:18px;max-width:480px;width:90vw;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,0.5);padding:2rem 1.5rem;position:relative;">
+      <button onclick="document.getElementById('genrePopupOverlay').remove()" style="position:absolute;top:18px;right:18px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;">×</button>
+      <h2 style="color:var(--accent-color);font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:1.2rem;">${genre} Tracks</h2>
+      <div style="display:flex;flex-direction:column;gap:1rem;">
+        ${tracks.length > 0 ? tracks.map(track => `
+          <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
+            <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
+            <div style='flex:1;min-width:0;'>
+              <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
+              <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
+            </div>
+            <button onclick="window.playTrack && window.playTrack('${track.id}')" style='background:linear-gradient(135deg,#FFD700,#FFA500);color:#181818;font-weight:700;border:none;border-radius:50%;width:38px;height:38px;font-size:1.2rem;cursor:pointer;box-shadow:0 2px 8px rgba(255,215,0,0.18);'>▶</button>
+          </div>
+        `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No tracks found for this genre.</div>`}
+      </div>
+    </div>
+  `;
+
+  popup.onclick = function(e) {
+    if (e.target === popup) popup.remove();
+  };
+
+  document.body.appendChild(popup);
+}
     }
 
     function selectSearchResult(type, title) {
