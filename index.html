@@ -3658,13 +3658,7 @@
 
       <div class="search-content">
         <!-- Recent Searches -->
-        <div class="recent-searches" id="recentSearches" style="display: none;">
-          <div class="recent-searches-header">
-            <span>Recent searches</span>
-            <button class="clear-recent-btn" onclick="clearRecentSearches()">Clear recent searches</button>
-          </div>
-          <div id="recentSearchesList"></div>
-        </div>
+        <!-- Recent Searches removed -->
 
         <!-- Browse Categories -->
         <div class="browse-categories" id="browseCategories">
@@ -4481,13 +4475,14 @@
       ];
 
       const resultsHtml = mockResults.map(result => `
-        <div class="search-result-item" onclick="selectSearchResult('${result.type}', '${result.title}')">
+        <div class="search-result-item track-card" style="position:relative;" onclick="${result.type === 'track' ? `playTrack('${result.title.split(' -')[0]}');closeSearchPopup();` : `selectSearchResult('${result.type}', '${result.title}')`}">
           <div class="search-result-icon">${result.icon}</div>
           <div class="search-result-info">
             <div class="search-result-title">${result.title}</div>
             <div class="search-result-subtitle">${result.subtitle}</div>
           </div>
-          <button class="search-result-action">Play</button>
+          ${result.type === 'track' ? `<button class='search-result-action' onclick=\"event.stopPropagation();playTrack('${result.title.split(' -')[0]}');closeSearchPopup();\">Play</button>` : `<button class='search-result-action'>Play</button>`}
+          ${result.type === 'track' ? `<button class='track-menu-btn' style='position:absolute;top:10px;right:10px;' onclick=\"event.stopPropagation();showTrackMenu(event, '${result.title.split(' -')[0]}')\">⋯</button>` : ''}
         </div>
       `).join('');
 
@@ -4595,8 +4590,11 @@ function showGenrePopup(genre) {
 
     function selectSearchResult(type, title) {
       console.log('▶️ Selected search result:', type, title);
-      alert(`Playing: ${title}`);
-      // In a real app, this would start playing the selected item
+      if (type === 'track') {
+        playTrack(title.split(' -')[0]); // Use the track name before ' -' for mock results
+      } else {
+        alert(`Playing: ${title}`);
+      }
       closeSearchPopup();
     }
 
@@ -7273,24 +7271,22 @@ function showGenrePopup(genre) {
     function showTrackMenu(event) {
       event.stopPropagation();
 
-      // Get track info from the clicked row or recent track item
-      const trackRow = event.target.closest('.track-row');
-      const recentTrackItem = event.target.closest('.recent-track-item');
+      let trackName = arguments.length > 1 ? arguments[1] : undefined;
+      let trackArtist = 'Unknown Artist';
 
-      let trackName, trackArtist;
-
-      if (trackRow) {
-        // Popular tracks section
-        trackName = trackRow.querySelector('.track-name')?.textContent || 'Unknown Track';
-        trackArtist = trackRow.querySelector('.track-artist')?.textContent || 'Unknown Artist';
-      } else if (recentTrackItem) {
-        // Recently played section
-        trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
-        trackArtist = recentTrackItem.querySelector('.recent-track-artist')?.textContent || 'Unknown Artist';
-      } else {
-        // Fallback
-        trackName = 'Unknown Track';
-        trackArtist = 'Unknown Artist';
+      if (!trackName) {
+        // Get track info from the clicked row or recent track item
+        const trackRow = event.target.closest('.track-row');
+        const recentTrackItem = event.target.closest('.recent-track-item');
+        if (trackRow) {
+          trackName = trackRow.querySelector('.track-name')?.textContent || 'Unknown Track';
+          trackArtist = trackRow.querySelector('.track-artist')?.textContent || 'Unknown Artist';
+        } else if (recentTrackItem) {
+          trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
+          trackArtist = recentTrackItem.querySelector('.recent-track-artist')?.textContent || 'Unknown Artist';
+        } else {
+          trackName = 'Unknown Track';
+        }
       }
 
       // Create context menu
