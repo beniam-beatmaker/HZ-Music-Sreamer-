@@ -3378,47 +3378,47 @@
           // Global track playback function - uses trackData object for all tracks
           // Move trackData to global scope so all playTrack calls use the same object
           window.hertzTrackData = window.hertzTrackData || {
-            'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
-            'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80' },
-            'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80' },
-            'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Rev', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
-            'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
-            'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Slim Star', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
-            'Tribz': { url: 'https://storage.googleapis.com/hertz-music-folder/Tribz.wav', title: 'Tribz', artist: 'Prophetic Blair', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
-            'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
-            'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
-            'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus' },
-            'Mach 1': { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom' },
-            'Echo': { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww' },
-            'Lights': { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie' },
-            'Smilin': { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull' },
-            'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla' },
-            'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla' },
-            'Buckets': { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', title: 'Buckets', artist: 'Bezzie' },
-            'Sweet': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', title: 'Sweet', artist: 'Bezzie' },
-            'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo' },
-            'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree' },
-            'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV' },
-            'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms' },
-            'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' },
-            'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree' },
-            'Huh': { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', title: 'Huh', artist: 'Prod. Legacy' },
-            'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
-            'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree' },
-            'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie' },
-            'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus' },
-            'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
-            'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
-            'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
-            '808-Symph': { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', title: '808-Symph', artist: 'Molly-Able' },
-            'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
-            'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
-            'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
-            'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' },
-            'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
-            'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
-            'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
-            'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' },
+            'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross', genre: 'Hip-Hop' },
+            'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+            'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+            'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Rev', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+            'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+            'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Slim Star', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+            'Tribz': { url: 'https://storage.googleapis.com/hertz-music-folder/Tribz.wav', title: 'Tribz', artist: 'Prophetic Blair', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Rap' },
+            'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'Trap' },
+            'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', genre: 'R&B' },
+            'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus', genre: 'Chill' },
+            'Mach 1': { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom', genre: 'Electronic' },
+            'Echo': { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww', genre: 'Ambient' },
+            'Lights': { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie', genre: 'Pop' },
+            'Smilin': { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull', genre: 'Soul' },
+            'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla', genre: 'Hip-Hop' },
+            'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla', genre: 'Trap' },
+            'Buckets': { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', title: 'Buckets', artist: 'Bezzie', genre: 'Hip-Hop' },
+            'Sweet': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', title: 'Sweet', artist: 'Bezzie', genre: 'R&B' },
+            'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo', genre: 'Motivational' },
+            'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree', genre: 'Lo-Fi' },
+            'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV', genre: 'Jazz' },
+            'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms', genre: 'Alternative' },
+            'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv', genre: 'Hip-Hop' },
+            'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree', genre: 'Lo-Fi' },
+            'Huh': { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', title: 'Huh', artist: 'Prod. Legacy', genre: 'Trap' },
+            'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree', genre: 'Soul' },
+            'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree', genre: 'Dance' },
+            'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie', genre: 'Chill' },
+            'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus', genre: 'Electronic' },
+            'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree', genre: 'R&B' },
+            'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo', genre: 'Ambient' },
+            'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX', genre: 'Motivational' },
+            '808-Symph': { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', title: '808-Symph', artist: 'Molly-Able', genre: 'Electronic' },
+            'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie', genre: 'Pop' },
+            'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow', genre: 'R&B' },
+            'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz', genre: 'Electronic' },
+            'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop', genre: 'Hip-Hop' },
+            'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful', genre: 'Pop' },
+            'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able', genre: 'Ambient' },
+            'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul', genre: 'Soul' },
+            'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain', genre: 'Pop' },
             // 6 new tracks
             'Lost In The Moment': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Lost%20In%20The%20Moment.mp3',
@@ -3745,41 +3745,57 @@
               <span class="search-category-icon">🎵</span>
               <span class="search-category-title">Pop</span>
             </div>
-            <div class="search-category" onclick="searchCategory('rock')" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
-              <span class="search-category-icon">🎸</span>
-              <span class="search-category-title">Rock</span>
-            </div>
             <div class="search-category" onclick="searchCategory('hip-hop')" style="background: linear-gradient(135deg, #45b7d1, #96c93d);">
               <span class="search-category-icon">🎤</span>
-              <span class="search-category-title">Hip-Hop</span>
+              <span class="search-category-title">Hip Hop</span>
             </div>
-            <div class="search-category" onclick="searchCategory('electronic')" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-              <span class="search-category-icon">🎛️</span>
-              <span class="search-category-title">Electronic</span>
+            <div class="search-category" onclick="searchCategory('r&b')" style="background: linear-gradient(135deg, #b06ab3, #4568dc);">
+              <span class="search-category-icon">💖</span>
+              <span class="search-category-title">R&B</span>
             </div>
-            <div class="search-category" onclick="searchCategory('jazz')" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
-              <span class="search-category-icon">🎺</span>
-              <span class="search-category-title">Jazz</span>
+            <div class="search-category" onclick="searchCategory('rap')" style="background: linear-gradient(135deg, #f7971e, #ffd200);">
+              <span class="search-category-icon">🎤</span>
+              <span class="search-category-title">Rap</span>
             </div>
-            <div class="search-category" onclick="searchCategory('classical')" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-              <span class="search-category-icon">🎼</span>
-              <span class="search-category-title">Classical</span>
+            <div class="search-category" onclick="searchCategory('soul')" style="background: linear-gradient(135deg, #ff5858, #f09819);">
+              <span class="search-category-icon">🧡</span>
+              <span class="search-category-title">Soul</span>
             </div>
-            <div class="search-category" onclick="searchCategory('indie')" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
-              <span class="search-category-icon">🎹</span>
-              <span class="search-category-title">Indie</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('country')" style="background: linear-gradient(135deg, #fa709a, #fee140);">
-              <span class="search-category-icon">🤠</span>
-              <span class="search-category-title">Country</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('reggae')" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
-              <span class="search-category-icon">🌴</span>
-              <span class="search-category-title">Reggae</span>
+            <div class="search-category" onclick="searchCategory('chill')" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
+              <span class="search-category-icon">❄️</span>
+              <span class="search-category-title">Chill</span>
             </div>
             <div class="search-category" onclick="searchCategory('ambient')" style="background: linear-gradient(135deg, #d299c2, #fef9d7);">
-              <span class="search-category-icon">🌙</span>
+              <span class="search-category-icon">🌌</span>
               <span class="search-category-title">Ambient</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('electronic')" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+              <span class="search-category-icon">🎧</span>
+              <span class="search-category-title">Electronic</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('trap')" style="background: linear-gradient(135deg, #ff512f, #dd2476);">
+              <span class="search-category-icon">🪩</span>
+              <span class="search-category-title">Trap</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('jazz')" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+              <span class="search-category-icon">🎷</span>
+              <span class="search-category-title">Jazz</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('lo-fi')" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+              <span class="search-category-icon">📻</span>
+              <span class="search-category-title">Lo-Fi</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('motivational')" style="background: linear-gradient(135deg, #f7971e, #ffd200);">
+              <span class="search-category-icon">💪</span>
+              <span class="search-category-title">Motivational</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('dance')" style="background: linear-gradient(135deg, #fa709a, #fee140);">
+              <span class="search-category-icon">🕺</span>
+              <span class="search-category-title">Dance</span>
+            </div>
+            <div class="search-category" onclick="searchCategory('alternative')" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
+              <span class="search-category-icon">🎸</span>
+              <span class="search-category-title">Alternative</span>
             </div>
           </div>
         </div>
@@ -4568,6 +4584,52 @@
     function searchCategory(category) {
   console.log('🎵 Searching category:', category);
   // Only show genre popup, do not update suggestions or search input
+  if (category.toLowerCase() === 'hip-hop') {
+    // Show only tracks labeled as Hip-Hop in the suggestions
+    const suggestionsDiv = document.getElementById('searchSuggestions');
+    if (!suggestionsDiv) return;
+    suggestionsDiv.style.display = 'block';
+    const localTracks = {};
+    Object.keys(window.hertzTrackData).forEach(id => {
+      const t = window.hertzTrackData[id];
+      if ((t.genre || '').toLowerCase() === 'hip-hop') {
+        localTracks[id] = {
+          id: id,
+          title: t.title || id,
+          artist: t.artist || '',
+          cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+          genre: t.genre || 'Hip-Hop'
+        };
+      }
+    });
+    let results = Object.values(localTracks);
+    let htmlSuggestions = '';
+    if (results.length > 0) {
+      htmlSuggestions += '<div style="max-height:280px;overflow-y:auto;border-radius:0 0 12px 12px;">';
+      results.forEach(track => {
+        htmlSuggestions += `
+          <div class="suggestion-item" onclick="playLocalTrack('${track.id}');hideSearchSuggestions();"
+               style="padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid #333;background:#232526;transition:all 0.2s ease;"
+               onmouseover="this.style.background='#333';this.style.transform='translateX(2px)'"
+               onmouseout="this.style.background='#232526';this.style.transform='translateX(0)';">
+            <img src="${track.cover}"
+                 style="width:45px;height:45px;border-radius:8px;object-fit:cover;box-shadow:0 2px 8px rgba(0,0,0,0.15);flex-shrink:0;">
+            <div style="flex:1;min-width:0;">
+              <div style="color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">${track.title}</div>
+              <div style="color:#b3b3b3;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
+            </div>
+            <div style="color:#1db954;font-size:1.4rem;margin-left:8px;opacity:0.8;transition:opacity 0.2s;"
+                 onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">▶</div>
+          </div>
+        `;
+      });
+      htmlSuggestions += '</div>';
+    } else {
+      htmlSuggestions += '<div style="padding:20px;text-align:center;color:#b3b3b3;font-size:0.95rem;">No Hip-Hop tracks found in your library.</div>';
+    }
+    suggestionsDiv.innerHTML = htmlSuggestions;
+    return;
+  }
   showGenrePopup(category);
 // ...existing code...
 // Genre Popup Implementation
@@ -4576,30 +4638,21 @@ function showGenrePopup(genre) {
   let oldPopup = document.getElementById('genrePopupOverlay');
   if (oldPopup) oldPopup.remove();
 
-  // Dynamically build localTracks from window.hertzTrackData for the specified tracks
-  const ids = ['Nights', 'Tribz', 'Rhymes', 'Good Woman', 'You My Vibe'];
-  const genreDefaults = {
-    'Nights': 'Hip-Hop',
-    'Tribz': 'Rap',
-    'Rhymes': 'Hip-Hop',
-    'Good Woman': 'R&B',
-    'You My Vibe': 'Soul'
-  };
+  // Use all tracks from window.hertzTrackData and filter by genre
   const localTracks = {};
-  ids.forEach(id => {
-    if (window.hertzTrackData[id]) {
-      const t = window.hertzTrackData[id];
-      localTracks[id] = {
-        id: id,
-        title: t.title || id,
-        artist: t.artist || '',
-        cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-        genre: t.genre || genreDefaults[id] || 'Other'
-      };
-    }
+  Object.keys(window.hertzTrackData).forEach(id => {
+    const t = window.hertzTrackData[id];
+    localTracks[id] = {
+      id: id,
+      title: t.title || id,
+      artist: t.artist || '',
+      cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+      genre: t.genre || 'Other'
+    };
   });
 
   // Filter tracks by genre
+  const hiphopTracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === 'hip-hop');
   const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase());
 
   // Create popup HTML
@@ -4621,16 +4674,32 @@ function showGenrePopup(genre) {
       <button onclick="document.getElementById('genrePopupOverlay').remove()" style="position:absolute;top:18px;right:18px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;">×</button>
       <h2 style="color:var(--accent-color);font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:1.2rem;">${genre} Tracks</h2>
       <div style="display:flex;flex-direction:column;gap:1rem;">
-        ${tracks.length > 0 ? tracks.map(track => `
-          <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
-            <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
-            <div style='flex:1;min-width:0;'>
-              <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
-              <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
+        <div style='margin-bottom:1.2rem;'>
+          <h3 style="color:#fff;font-size:1.15rem;font-weight:600;margin-bottom:0.5rem;">Hip Hop</h3>
+          ${hiphopTracks.length > 0 ? hiphopTracks.map(track => `
+            <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
+              <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
+              <div style='flex:1;min-width:0;'>
+                <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
+                <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
+              </div>
+              <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
             </div>
-            <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
-          </div>
-        `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No tracks found for this genre.</div>`}
+          `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No Hip Hop tracks found.</div>`}
+        </div>
+        <div>
+          <h3 style="color:#fff;font-size:1.15rem;font-weight:600;margin-bottom:0.5rem;">${genre}</h3>
+          ${tracks.length > 0 ? tracks.map(track => `
+            <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
+              <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
+              <div style='flex:1;min-width:0;'>
+                <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
+                <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
+              </div>
+              <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
+            </div>
+          `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No tracks found for this genre.</div>`}
+        </div>
       </div>
     </div>
   `;
