@@ -3366,9 +3366,7 @@
           <button class="player-btn player-loop" id="loopBtn" title="Loop" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:36px;height:36px;font-size:1.1rem;">&#128257;</button>
           <button id="likeBtn" title="Like" style="margin-left:0.6rem;background:none;border:none;cursor:pointer;font-size:1.5rem;color:rgba(255,255,255,0.4);transition:color 0.2s, box-shadow 0.3s ease, filter 0.3s ease;">&#10084;</button>
         </div>
-        <div style="width:100%;text-align:center;margin-top:4px;">
-          <span id="stickyTrackInfo" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
-        </div>
+        <!-- Removed duplicate track name display below sticky player -->
       </div>
     <audio id="playerAudio" class="player-audio"></audio>
       <script>
@@ -3420,49 +3418,11 @@
             'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul', genre: 'Soul' },
             'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain', genre: 'Pop' },
             // 6 new tracks
-            'Lost In The Moment': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Lost%20In%20The%20Moment.mp3',
-              title: 'Lost In The Moment',
-              artist: 'Nova Lane',
-              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-              genre: 'Pop'
-            },
-            'Gravity': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Gravity.mp3',
-              title: 'Gravity',
-              artist: 'Echo Smith',
-              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-              genre: 'Electronic'
-            },
-            'Sunset Drive': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Sunset%20Drive.mp3',
-              title: 'Sunset Drive',
-              artist: 'Mia Torres',
-              cover: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
-              genre: 'Chill'
-            },
-            'Dreamcatcher': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Dreamcatcher.mp3',
-              title: 'Dreamcatcher',
-              artist: 'Liam Rivers',
-              cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80',
-              genre: 'Ambient'
-            },
-            'Neon Nights': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Neon%20Nights.mp3',
-              title: 'Neon Nights',
-              artist: 'Ava King',
-              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-              genre: 'Electronic'
-            },
-            'Starlight': {
-              url: 'https://storage.googleapis.com/hertz-music-folder/Starlight.mp3',
-              title: 'Starlight',
-              artist: 'Orion Skye',
-              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
-              genre: 'Pop'
+
             }
-          };
+
+
+
 
           function playTrack(trackId) {
             console.log('🎵 playTrack called with:', trackId);
@@ -4651,11 +4611,10 @@ function showGenrePopup(genre) {
     };
   });
 
-  // Filter tracks by genre
-  const hiphopTracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === 'hip-hop');
-  const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase());
+  // Filter tracks by genre and only include those with a valid url
+  const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase() && window.hertzTrackData[track.id] && window.hertzTrackData[track.id].url);
 
-  // Create popup HTML
+  // Create popup HTML (same design as Hip Hop, but for any genre)
   const popup = document.createElement('div');
   popup.id = 'genrePopupOverlay';
   popup.style.position = 'fixed';
@@ -4674,32 +4633,16 @@ function showGenrePopup(genre) {
       <button onclick="document.getElementById('genrePopupOverlay').remove()" style="position:absolute;top:18px;right:18px;background:none;border:none;color:#fff;font-size:2rem;cursor:pointer;">×</button>
       <h2 style="color:var(--accent-color);font-size:1.5rem;font-weight:700;text-align:center;margin-bottom:1.2rem;">${genre} Tracks</h2>
       <div style="display:flex;flex-direction:column;gap:1rem;">
-        <div style='margin-bottom:1.2rem;'>
-          <h3 style="color:#fff;font-size:1.15rem;font-weight:600;margin-bottom:0.5rem;">Hip Hop</h3>
-          ${hiphopTracks.length > 0 ? hiphopTracks.map(track => `
-            <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
-              <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
-              <div style='flex:1;min-width:0;'>
-                <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
-                <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
-              </div>
-              <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
+        ${tracks.length > 0 ? tracks.map(track => `
+          <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
+            <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
+            <div style='flex:1;min-width:0;'>
+              <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
+              <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
             </div>
-          `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No Hip Hop tracks found.</div>`}
-        </div>
-        <div>
-          <h3 style="color:#fff;font-size:1.15rem;font-weight:600;margin-bottom:0.5rem;">${genre}</h3>
-          ${tracks.length > 0 ? tracks.map(track => `
-            <div style='display:flex;align-items:center;gap:1rem;background:#232526;border-radius:10px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);'>
-              <img src='${track.cover}' style='width:54px;height:54px;border-radius:8px;object-fit:cover;'>
-              <div style='flex:1;min-width:0;'>
-                <div style='color:#fff;font-weight:600;font-size:1.08rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.title}</div>
-                <div style='color:#b3b3b3;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'>${track.artist} • ${track.genre}</div>
-              </div>
-              <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
-            </div>
-          `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No tracks found for this genre.</div>`}
-        </div>
+            <button class='track-menu-btn' style='background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${track.id}')">⋯</button>
+          </div>
+        `).join('') : `<div style='color:#b3b3b3;text-align:center;font-size:1rem;'>No tracks found for this genre.</div>`}
       </div>
     </div>
   `;
@@ -5715,31 +5658,23 @@ function showGenrePopup(genre) {
       suggestionsDiv.style.display = 'block';
 
       if (!query || query.trim().length === 0) {
-        suggestionsDiv.innerHTML = '<div style="padding:16px;text-align:center;color:#b3b3b3;">Type a track or artist name...</div>';
+        suggestionsDiv.innerHTML = '';
         return;
       }
 
       let results = [];
 
-      // Dynamically build localTracks from window.hertzTrackData for the specified tracks
-      const ids = ['Nights', 'Tribz', 'Rhymes', 'Good Woman', 'You My Vibe'];
-      const genreDefaults = {
-        'Nights': 'Hip-Hop',
-        'Tribz': 'Rap',
-        'Rhymes': 'Hip-Hop',
-        'Good Woman': 'R&B',
-        'You My Vibe': 'Soul'
-      };
+      // Dynamically build localTracks from window.hertzTrackData for all tracks
       const localTracks = {};
-      ids.forEach(id => {
-        if (window.hertzTrackData[id]) {
-          const t = window.hertzTrackData[id];
+      Object.keys(window.hertzTrackData).forEach(id => {
+        const t = window.hertzTrackData[id];
+        if (t.url) {
           localTracks[id] = {
             id: id,
             title: t.title || id,
             artist: t.artist || '',
             cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-            genre: t.genre || genreDefaults[id] || 'Other'
+            genre: t.genre || 'Other'
           };
         }
       });
