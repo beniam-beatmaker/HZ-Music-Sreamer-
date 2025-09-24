@@ -3424,37 +3424,43 @@
               url: 'https://storage.googleapis.com/hertz-music-folder/Lost%20In%20The%20Moment.mp3',
               title: 'Lost In The Moment',
               artist: 'Nova Lane',
-              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+              genre: 'Pop'
             },
             'Gravity': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Gravity.mp3',
               title: 'Gravity',
               artist: 'Echo Smith',
-              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+              genre: 'Electronic'
             },
             'Sunset Drive': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Sunset%20Drive.mp3',
               title: 'Sunset Drive',
               artist: 'Mia Torres',
-              cover: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80',
+              genre: 'Chill'
             },
             'Dreamcatcher': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Dreamcatcher.mp3',
               title: 'Dreamcatcher',
               artist: 'Liam Rivers',
-              cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80',
+              genre: 'Ambient'
             },
             'Neon Nights': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Neon%20Nights.mp3',
               title: 'Neon Nights',
               artist: 'Ava King',
-              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+              genre: 'Electronic'
             },
             'Starlight': {
               url: 'https://storage.googleapis.com/hertz-music-folder/Starlight.mp3',
               title: 'Starlight',
               artist: 'Orion Skye',
-              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80'
+              cover: 'https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80',
+              genre: 'Pop'
             }
           };
 
@@ -4570,44 +4576,28 @@ function showGenrePopup(genre) {
   let oldPopup = document.getElementById('genrePopupOverlay');
   if (oldPopup) oldPopup.remove();
 
-  // Get local tracks from showSearchSuggestions (same as used for suggestions)
-  const localTracks = {
-    'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
-    'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
-    'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
-    'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz' },
-    'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Alternative' },
-    'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
-    'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
-    'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
-    'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
-    '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' }
+  // Dynamically build localTracks from window.hertzTrackData for the specified tracks
+  const ids = ['Nights', 'Tribz', 'Rhymes', 'Good Woman', 'You My Vibe'];
+  const genreDefaults = {
+    'Nights': 'Hip-Hop',
+    'Tribz': 'Rap',
+    'Rhymes': 'Hip-Hop',
+    'Good Woman': 'R&B',
+    'You My Vibe': 'Soul'
   };
+  const localTracks = {};
+  ids.forEach(id => {
+    if (window.hertzTrackData[id]) {
+      const t = window.hertzTrackData[id];
+      localTracks[id] = {
+        id: id,
+        title: t.title || id,
+        artist: t.artist || '',
+        cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
+        genre: t.genre || genreDefaults[id] || 'Other'
+      };
+    }
+  });
 
   // Filter tracks by genre
   const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase());
@@ -5664,6 +5654,13 @@ function showGenrePopup(genre) {
 
       // Dynamically build localTracks from window.hertzTrackData for the specified tracks
       const ids = ['Nights', 'Tribz', 'Rhymes', 'Good Woman', 'You My Vibe'];
+      const genreDefaults = {
+        'Nights': 'Hip-Hop',
+        'Tribz': 'Rap',
+        'Rhymes': 'Hip-Hop',
+        'Good Woman': 'R&B',
+        'You My Vibe': 'Soul'
+      };
       const localTracks = {};
       ids.forEach(id => {
         if (window.hertzTrackData[id]) {
@@ -5673,7 +5670,7 @@ function showGenrePopup(genre) {
             title: t.title || id,
             artist: t.artist || '',
             cover: t.cover || 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80',
-            genre: t.genre || ''
+            genre: t.genre || genreDefaults[id] || 'Other'
           };
         }
       });
