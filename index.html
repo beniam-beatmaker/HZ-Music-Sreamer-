@@ -1141,29 +1141,54 @@
             padding-bottom: 100px;
         }
 
-        /* Hide sticky player on very small screens when bottom nav is visible */
-        @media (max-width: 480px) {
-            .sticky-player {
+        /* Main sticky player styles for all screen sizes */
+        .sticky-player {
             position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 80px;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
             z-index: 2000;
             background: linear-gradient(90deg, #232526 0%, #414345 100%);
             box-shadow: 0 0 32px 0 rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
-            border-radius: 18px 18px 0 0;
-            padding: 10px 10px 8px 10px;
+            border-radius: 18px;
+            padding: 12px 16px 10px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: box-shadow 0.2s, background 0.2s;
+            transition: all 0.3s ease, box-shadow 0.2s, background 0.2s;
             font-family: 'Segoe UI', Arial, sans-serif;
             color: #fff;
-            min-width: 220px;
-            max-width: 100vw;
+            min-width: 300px;
+            max-width: 500px;
+            width: 90vw;
             margin: 0 auto;
             border: 2px solid #0a174e;
             animation: stickyPlayerFadeIn 0.4s;
+            opacity: 0.95;
+        }
+
+        .sticky-player:hover {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 0 40px 0 rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Hide sticky player on very small screens when bottom nav is visible */
+        @media (max-width: 480px) {
+            .sticky-player {
+            left: 0;
+            right: 0;
+            bottom: 80px;
+            transform: none;
+            border-radius: 18px 18px 0 0;
+            padding: 10px 10px 8px 10px;
+            min-width: 220px;
+            max-width: 100vw;
+            width: 100%;
+        }
+
+        .sticky-player:hover {
+            transform: translateY(-2px);
         }
 
         @keyframes stickyPlayerFadeIn {
@@ -1918,6 +1943,537 @@
         }
     }
 
+    /* App Selection Popup Styles */
+    .app-selection-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(18, 18, 18, 0.95);
+        z-index: 2000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .app-selection-popup {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        border-radius: 20px;
+        padding: 2rem;
+        max-width: 450px;
+        width: 90vw;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        border: 1px solid #333;
+        position: relative;
+        animation: popupSlideIn 0.3s ease-out;
+    }
+
+    @keyframes popupSlideIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .app-selection-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .app-selection-title {
+        color: var(--accent-color);
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .app-selection-subtitle {
+        color: #b3b3b3;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .app-selection-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: transparent;
+        border: none;
+        color: #a7a7a7;
+        font-size: 1.8rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .app-selection-close:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.1);
+        transform: scale(1.1);
+    }
+
+    .app-selection-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .app-selection-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .app-selection-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.2);
+    }
+
+    .app-selection-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #ffffff;
+        flex-shrink: 0;
+    }
+
+    .app-selection-icon.online {
+        background: linear-gradient(135deg, #1db954 0%, #1ed760 100%);
+    }
+
+    .app-selection-icon.offline {
+        background: linear-gradient(135deg, #e22134 0%, #ff4757 100%);
+    }
+
+    .app-selection-icon.playlist {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    }
+
+    .app-selection-info {
+        flex: 1;
+    }
+
+    .app-selection-name {
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .app-selection-description {
+        color: #b3b3b3;
+        font-size: 0.85rem;
+        line-height: 1.3;
+    }
+
+    .app-selection-arrow {
+        color: #a7a7a7;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .app-selection-item:hover .app-selection-arrow {
+        color: var(--accent-color);
+        transform: translateX(3px);
+    }
+
+    @media (max-width: 480px) {
+        .app-selection-popup {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+
+        .app-selection-item {
+            padding: 0.8rem;
+            gap: 0.8rem;
+        }
+
+        .app-selection-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+
+        .app-selection-name {
+            font-size: 1rem;
+        }
+    }
+
+    /* Individual App Overlay Styles */
+    .app-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 3000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .app-container {
+        background: var(--bg-main);
+        border-radius: 20px;
+        max-width: 95vw;
+        max-height: 95vh;
+        width: 900px;
+        height: 600px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        border: 1px solid #333;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: scale(0.9) translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+    }
+
+    .app-header {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #B8860B 100%);
+        color: #000;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #333;
+    }
+
+    .app-title {
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .app-close-btn {
+        background: transparent;
+        border: none;
+        color: #000;
+        font-size: 2rem;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .app-close-btn:hover {
+        background: rgba(0, 0, 0, 0.1);
+        transform: scale(1.1);
+    }
+
+    .app-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 2rem;
+        background: var(--bg-main);
+    }
+
+    .app-feature-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .app-feature-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .app-feature-card:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--accent-color);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.1);
+    }
+
+    .app-feature-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #ffffff;
+    }
+
+    .app-feature-title {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .app-feature-description {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .app-action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .app-btn {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #B8860B 100%);
+        color: #000;
+        border: none;
+        padding: 0.8rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .app-btn:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .app-btn.secondary {
+        background: transparent;
+        color: var(--text-primary);
+        border: 2px solid var(--border-color);
+    }
+
+    .app-btn.secondary:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent-color);
+    }
+
+    @media (max-width: 768px) {
+        .app-container {
+            width: 95vw;
+            height: 90vh;
+            margin: 2.5vh;
+        }
+
+        .app-header {
+            padding: 1rem 1.5rem;
+        }
+
+        .app-content {
+            padding: 1.5rem;
+        }
+
+        .app-feature-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .app-action-buttons {
+            flex-direction: column;
+        }
+    }
+
+    /* Online App Content Styles */
+    .online-search-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .online-search-container {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .online-search-box {
+        flex: 1;
+        padding: 0.8rem;
+        border: 2px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .online-search-box:focus {
+        border-color: var(--accent-color);
+        background: var(--bg-tertiary);
+    }
+
+    .online-search-btn {
+        background: var(--accent-color);
+        color: #000;
+        border: none;
+        padding: 0.8rem 1.2rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .online-search-btn:hover {
+        background: #FFA500;
+        transform: translateY(-1px);
+    }
+
+    .online-search-results {
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-secondary);
+    }
+
+
+
+    .online-track-item {
+        padding: 0.8rem;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        transition: all 0.2s ease;
+    }
+
+    .online-track-item:hover {
+        background: var(--bg-tertiary);
+    }
+
+    .online-track-item:last-child {
+        border-bottom: none;
+    }
+
+    .online-track-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 6px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+
+    .online-track-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .online-track-name {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.95rem;
+        margin-bottom: 0.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .online-track-artist {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .online-track-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .online-like-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+    }
+
+    .online-like-btn:hover,
+    .online-like-btn.liked {
+        color: #ffd700;
+    }
+
+    .online-play-btn {
+        background: var(--accent-color);
+        color: #000;
+        border: none;
+        padding: 0.3rem 0.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .online-play-btn:hover {
+        background: #FFA500;
+        transform: scale(1.05);
+    }
+
+    .online-loading {
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 2rem;
+        font-style: italic;
+    }
+
     /* Page Overlay for liked, account, settings */
     .page-overlay {
         position: fixed;
@@ -2239,6 +2795,73 @@
       pointer-events: none;
       filter: blur(3px);
       opacity: 0.3;
+    }
+
+    /* Online Popup Styles - Matching Online25App.html */
+    .online-search-suggestions {
+      position: absolute;
+      background: #2a2a2a;
+      color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1001;
+      width: 100%;
+      max-width: 500px;
+      max-height: 300px;
+      overflow-y: auto;
+      font-size: 1rem;
+      border: 1px solid #404040;
+      top: 100%;
+      left: 0;
+      display: none;
+    }
+
+    .online-suggestion-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      padding: 0.7rem 1rem;
+      border-bottom: 1px solid #333;
+    }
+
+    .online-suggestion-item:hover,
+    .online-suggestion-item.active {
+      background: #1db954 !important;
+      color: #181818 !important;
+    }
+
+    .online-suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .online-suggestion-item img {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .online-suggestion-info {
+      flex: 1;
+    }
+
+    .online-suggestion-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .online-suggestion-channel {
+      font-size: 0.95em;
+      color: #b3b3b3;
+    }
+
+    .online-suggestion-item:hover .online-suggestion-channel {
+      color: #181818;
+    }
+
+    .online-search-container {
+      position: relative;
     }
   </style>
 </head>
@@ -3193,11 +3816,11 @@
           <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
-          <div class="content-card content-card-small">
-            <div class="card-image card-image-small"><img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80" alt="New Releases cover" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
-            <h3 class="card-title card-title-small">New Releases</h3>
-            <p class="card-description card-description-small">Catch all the latest music from artists you follow</p>
-          </div>
+          <div class="content-card content-card-small" onclick="openLikedPage(); event.stopPropagation();" style="cursor: pointer;">
+          <div class="card-image card-image-small"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
+          <h3 class="card-title card-title-small">Liked Songs</h3>
+          <p class="card-description card-description-small" id="likedSongsCountCard">0 liked songs</p>
+        </div>
           <div class="content-card content-card-small">
             <div class="card-image card-image-small"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Lovely Mix cover" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
             <h3 class="card-title card-title-small">Lovely Mix</h3>
@@ -3597,6 +4220,14 @@
       </div>
       <div class="bottom-nav-label">Search</div>
     </button>
+    <button class="bottom-nav-item" onclick="openAppSelectionPopup()">
+      <div class="bottom-nav-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+        </svg>
+      </div>
+      <div class="bottom-nav-label">More</div>
+    </button>
     <button class="bottom-nav-item" onclick="openLikedPage()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -3692,6 +4323,189 @@
 
         <!-- Search Results -->
         <!-- Search Results removed -->
+      </div>
+    </div>
+  </div>
+
+  <!-- App Selection Popup Overlay -->
+  <div class="app-selection-overlay" id="appSelectionOverlay" onclick="closeAppSelectionPopup(event)">
+    <div class="app-selection-popup" onclick="event.stopPropagation()">
+      <button class="app-selection-close" onclick="closeAppSelectionPopup()">×</button>
+
+      <div class="app-selection-header">
+        <h2 class="app-selection-title">More Options</h2>
+        <p class="app-selection-subtitle">Choose which HZ Music experience you want</p>
+      </div>
+
+      <div class="app-selection-grid">
+        <div class="app-selection-item" onclick="openOnlineApp()">
+          <div class="app-selection-icon online">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+            </svg>
+          </div>
+          <div class="app-selection-info">
+            <div class="app-selection-name">Online Music</div>
+            <div class="app-selection-description">Stream music from the cloud with internet connection</div>
+          </div>
+          <div class="app-selection-arrow">→</div>
+        </div>
+
+        <div class="app-selection-item" onclick="openOfflineApp()">
+          <div class="app-selection-icon offline">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.82.62-3.49 1.64-4.83L9 11.5v.5c0 1.1.9 2 2 2h2v2h2v2h-3l-3-3v-2l5.83-5.83C15.49 9.38 16 10.61 16 12c0 2.21-1.79 4-4 4z"/>
+            </svg>
+          </div>
+          <div class="app-selection-info">
+            <div class="app-selection-name">Offline Music</div>
+            <div class="app-selection-description">Listen to downloaded music without internet</div>
+          </div>
+          <div class="app-selection-arrow">→</div>
+        </div>
+
+        <div class="app-selection-item" onclick="openPlaylistApp()">
+          <div class="app-selection-icon playlist">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
+            </svg>
+          </div>
+          <div class="app-selection-info">
+            <div class="app-selection-name">Playlist Manager</div>
+            <div class="app-selection-description">Create, edit, and organize your music playlists</div>
+          </div>
+          <div class="app-selection-arrow">→</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Online Music App Overlay -->
+  <div class="app-overlay" id="onlineAppOverlay" onclick="closeAppOverlay('onlineAppOverlay', event)">
+    <div class="app-container" onclick="event.stopPropagation()">
+      <div class="app-header">
+        <h2 class="app-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+          </svg>
+          Online Music Streaming
+        </h2>
+        <button class="app-close-btn" onclick="closeAppOverlay('onlineAppOverlay')">×</button>
+      </div>
+      <div class="app-content">
+        <!-- Search Section -->
+        <div class="online-search-section">
+          <div class="online-search-container">
+            <input type="text" id="onlineSearchInput" class="online-search-box"
+                   placeholder="🔍 Search for music videos on YouTube..."
+                   autocomplete="off">
+            <div id="onlineSearchSuggestions" class="online-search-suggestions"></div>
+          </div>
+        </div>
+
+        <!-- YouTube Video Player -->
+        <div class="online-video-player" id="onlineVideoPlayer" style="display:none;">
+          <div class="online-video-container">
+            <iframe id="onlinePlayerIframe" allow="autoplay" allowfullscreen style="border:none; width:100%; height:300px; border-radius:12px;"></iframe>
+          </div>
+          <div class="online-track-title" id="onlinePlayerTrackTitle" style="text-align:center; font-size:1.2rem; font-weight:bold; margin-top:1rem; color:#fff;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline Music App Overlay -->
+  <div class="app-overlay" id="offlineAppOverlay" onclick="closeAppOverlay('offlineAppOverlay', event)">
+    <div class="app-container" onclick="event.stopPropagation()">
+      <div class="app-header">
+        <h2 class="app-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.82.62-3.49 1.64-4.83L9 11.5v.5c0 1.1.9 2 2 2h2v2h2v2h-3l-3-3v-2l5.83-5.83C15.49 9.38 16 10.61 16 12c0 2.21-1.79 4-4 4z"/>
+          </svg>
+          Offline Music Player
+        </h2>
+        <button class="app-close-btn" onclick="closeAppOverlay('offlineAppOverlay')">×</button>
+      </div>
+      <div class="app-content">
+        <div class="app-feature-grid">
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #e22134, #ff4757);">📱</div>
+            <div class="app-feature-title">No Internet Required</div>
+            <div class="app-feature-description">Listen to your downloaded music anywhere, anytime without needing an internet connection.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">💾</div>
+            <div class="app-feature-title">Local Storage</div>
+            <div class="app-feature-description">Store thousands of songs directly on your device with smart compression technology.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">⚡</div>
+            <div class="app-feature-title">Battery Optimized</div>
+            <div class="app-feature-description">Efficient playback engine that maximizes battery life during extended listening sessions.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">🎬</div>
+            <div class="app-feature-title">Video Playback</div>
+            <div class="app-feature-description">Watch music videos and visual content offline with our integrated video player.</div>
+          </div>
+        </div>
+        <div class="app-action-buttons">
+          <button class="app-btn" onclick="window.open('Offline25App.html', '_blank')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Launch Offline App
+          </button>
+          <button class="app-btn secondary" onclick="closeAppOverlay('offlineAppOverlay')">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Playlist Manager App Overlay -->
+  <div class="app-overlay" id="playlistAppOverlay" onclick="closeAppOverlay('playlistAppOverlay', event)">
+    <div class="app-container" onclick="event.stopPropagation()">
+      <div class="app-header">
+        <h2 class="app-title">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
+          </svg>
+          Playlist Manager
+        </h2>
+        <button class="app-close-btn" onclick="closeAppOverlay('playlistAppOverlay')">×</button>
+      </div>
+      <div class="app-content">
+        <div class="app-feature-grid">
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">📋</div>
+            <div class="app-feature-title">Advanced Playlist Tools</div>
+            <div class="app-feature-description">Create, edit, and organize playlists with drag-and-drop functionality and smart suggestions.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">🔄</div>
+            <div class="app-feature-title">Auto-Sync</div>
+            <div class="app-feature-description">Seamlessly sync playlists across all your devices and platforms in real-time.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">📊</div>
+            <div class="app-feature-title">Analytics & Insights</div>
+            <div class="app-feature-description">Track listening patterns, discover trends, and get detailed insights about your music habits.</div>
+          </div>
+          <div class="app-feature-card">
+            <div class="app-feature-icon" style="background: linear-gradient(135deg, #f97316, #fb923c);">🎯</div>
+            <div class="app-feature-title">Smart Recommendations</div>
+            <div class="app-feature-description">AI-powered suggestions to enhance your playlists based on mood, genre, and listening context.</div>
+          </div>
+        </div>
+        <div class="app-action-buttons">
+          <button class="app-btn" onclick="window.open('Playlist25App.html', '_blank')">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Launch Playlist Manager
+          </button>
+          <button class="app-btn secondary" onclick="closeAppOverlay('playlistAppOverlay')">
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -4344,9 +5158,10 @@
       const activeMap = {
         'home': 0,
         'search': 1,
-        'liked': 2,
-        'account': 3,
-        'settings': 4
+        'more': 2,
+        'liked': 3,
+        'account': 4,
+        'settings': 5
       };
 
       if (activeMap[activeTab] !== undefined) {
@@ -4664,6 +5479,73 @@ function showGenrePopup(genre) {
       }
     }
 
+    // App Selection Popup Functions
+    function openAppSelectionPopup() {
+      console.log('📱 Opening more options popup');
+      updateBottomNavActive('more');
+
+      const overlay = document.getElementById('appSelectionOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    function closeAppSelectionPopup(event) {
+      // Only close if clicking on overlay, not the popup content
+      if (!event || event.target.classList.contains('app-selection-overlay') || event.target.classList.contains('app-selection-close')) {
+        console.log('❌ Closing app selection popup');
+        const overlay = document.getElementById('appSelectionOverlay');
+        if (overlay) {
+          overlay.style.display = 'none';
+        }
+        updateBottomNavActive('home');
+      }
+    }
+
+    function openOnlineApp() {
+      console.log('🌐 Opening Online Music Popup');
+      closeAppSelectionPopup();
+      const overlay = document.getElementById('onlineAppOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        // Initialize online app features when opened
+        setTimeout(() => {
+          initializeOnlineApp();
+        }, 100);
+      }
+    }
+
+    function openOfflineApp() {
+      console.log('📱 Opening Offline Music Popup');
+      closeAppSelectionPopup();
+      const overlay = document.getElementById('offlineAppOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    function openPlaylistApp() {
+      console.log('📋 Opening Playlist Manager Popup');
+      closeAppSelectionPopup();
+      const overlay = document.getElementById('playlistAppOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+      }
+    }
+
+    // Close individual app overlays
+    function closeAppOverlay(overlayId, event) {
+      // Only close if clicking on overlay background or close button, not the content
+      if (!event || event.target.classList.contains('app-overlay') || event.target.classList.contains('app-close-btn')) {
+        console.log(`❌ Closing app overlay: ${overlayId}`);
+        const overlay = document.getElementById(overlayId);
+        if (overlay) {
+          overlay.style.display = 'none';
+        }
+        updateBottomNavActive('home');
+      }
+    }
+
     function closePage(overlayId) {
       console.log(`❌ Closing page: ${overlayId}`);
       const overlay = document.getElementById(overlayId);
@@ -4674,7 +5556,7 @@ function showGenrePopup(genre) {
     }
 
     function closeAllOverlays() {
-      const overlays = document.querySelectorAll('.page-overlay, .search-popup-overlay');
+      const overlays = document.querySelectorAll('.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay');
       overlays.forEach(overlay => {
         overlay.style.display = 'none';
       });
@@ -4691,7 +5573,163 @@ function showGenrePopup(genre) {
       // Function kept for compatibility but functionality moved to handleSearchInput
     }
 
-    // Page Content Loading Functions
+    // Online App Functionality - Matching Online25App.html implementation
+    const YT_API_KEYS = [
+      'AIzaSyAdRN2jhOaF6ul_mSz_xQGXSyqlTvRhSXQ',
+      'AIzaSyAp60G0VgTBwhz32wQMK7hHdsBtg0LyAsM'
+    ];
+    let ytApiKeyIndex = 0;
+    let onlineYtSuggestions = [];
+    let onlineSearchTimeout = null;
+    let onlineSelectedIndex = -1;
+
+    function getYTApiKey() {
+      const key = YT_API_KEYS[ytApiKeyIndex];
+      ytApiKeyIndex = (ytApiKeyIndex + 1) % YT_API_KEYS.length;
+      return key;
+    }
+
+    async function onlineFetchYTSuggestions(query) {
+      if (!query) {
+        onlineYtSuggestions = [];
+        onlineRenderSuggestions();
+        return;
+      }
+      let success = false;
+      for (let i = 0; i < YT_API_KEYS.length; i++) {
+        try {
+          const key = getYTApiKey();
+          const resp = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=7&q=${encodeURIComponent(query)}&key=${key}`);
+          const data = await resp.json();
+          if (data && data.items) {
+            onlineYtSuggestions = (data.items || []).map(item => ({
+              title: item.snippet.title,
+              videoId: item.id.videoId,
+              channel: item.snippet.channelTitle,
+              thumb: item.snippet.thumbnails && item.snippet.thumbnails.default ? item.snippet.thumbnails.default.url : ''
+            }));
+            success = true;
+            break;
+          }
+        } catch (e) {
+          // Try next key
+        }
+      }
+      if (!success) onlineYtSuggestions = [];
+      onlineRenderSuggestions();
+    }
+
+
+
+    function onlineRenderSuggestions() {
+      const suggestionsContainer = document.getElementById('onlineSearchSuggestions');
+      if (!suggestionsContainer) return;
+
+      if (!onlineYtSuggestions.length) {
+        suggestionsContainer.style.display = 'none';
+        return;
+      }
+
+      suggestionsContainer.style.display = 'block';
+      suggestionsContainer.innerHTML = onlineYtSuggestions.map((s, i) => `
+        <div class="online-suggestion-item${i===onlineSelectedIndex?' active':''}" data-index="${i}" onclick="onlinePlaySuggestion(${i})">
+          <img src="${s.thumb}" alt="">
+          <div>
+            <div class="online-suggestion-title">${s.title}</div>
+            <div class="online-suggestion-channel">${s.channel}</div>
+          </div>
+        </div>
+      `).join('');
+    }    function onlinePlaySuggestion(idx) {
+      if (!onlineYtSuggestions[idx]) return;
+      onlinePlayYouTubeVideo(onlineYtSuggestions[idx].videoId, onlineYtSuggestions[idx].title);
+
+      // Hide suggestions
+      const suggestionsContainer = document.getElementById('onlineSearchSuggestions');
+      if (suggestionsContainer) suggestionsContainer.style.display = 'none';
+
+      // Clear search input
+      const searchInput = document.getElementById('onlineSearchInput');
+      if (searchInput) searchInput.value = onlineYtSuggestions[idx].title;
+    }
+
+    function onlinePlayYouTubeVideo(videoId, title) {
+      // Show video player in popup (matching Online25App.html behavior)
+      const videoPlayer = document.getElementById('onlineVideoPlayer');
+      const iframe = document.getElementById('onlinePlayerIframe');
+      const titleElement = document.getElementById('onlinePlayerTrackTitle');
+
+      if (videoPlayer && iframe && titleElement) {
+        videoPlayer.style.display = 'block';
+        titleElement.textContent = title;
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+        // Scroll to video player
+        videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function onlineHandleSearchInput() {
+      clearTimeout(onlineSearchTimeout);
+      onlineSelectedIndex = -1; // Reset selection when typing
+      onlineSearchTimeout = setTimeout(() => {
+        const query = document.getElementById('onlineSearchInput')?.value?.trim();
+        if (query && query.length > 1) {
+          onlineFetchYTSuggestions(query);
+        } else {
+          onlineYtSuggestions = [];
+          onlineRenderSuggestions();
+        }
+      }, 300);
+    }
+
+    // Initialize online app when overlay opens
+    function initializeOnlineApp() {
+      // Add event listener to search input
+      const searchInput = document.getElementById('onlineSearchInput');
+      if (searchInput) {
+        searchInput.removeEventListener('input', onlineHandleSearchInput); // Remove any existing listeners
+        searchInput.addEventListener('input', onlineHandleSearchInput);
+        searchInput.addEventListener('focus', function() {
+          const query = searchInput.value?.trim();
+          if (query && query.length > 1) {
+            onlineFetchYTSuggestions(query);
+          }
+        });
+        searchInput.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowDown' && onlineYtSuggestions.length) {
+            onlineSelectedIndex = (onlineSelectedIndex + 1) % onlineYtSuggestions.length;
+            onlineRenderSuggestions();
+            e.preventDefault();
+          } else if (e.key === 'ArrowUp' && onlineYtSuggestions.length) {
+            onlineSelectedIndex = (onlineSelectedIndex - 1 + onlineYtSuggestions.length) % onlineYtSuggestions.length;
+            onlineRenderSuggestions();
+            e.preventDefault();
+          } else if (e.key === 'Enter') {
+            if (onlineYtSuggestions.length && onlineSelectedIndex >= 0) {
+              onlinePlaySuggestion(onlineSelectedIndex);
+              e.preventDefault();
+            } else if (onlineYtSuggestions.length) {
+              onlinePlaySuggestion(0);
+              e.preventDefault();
+            }
+          }
+        });
+        searchInput.addEventListener('blur', function() {
+          // Hide suggestions after a short delay to allow clicks
+          setTimeout(() => {
+            const suggestionsContainer = document.getElementById('onlineSearchSuggestions');
+            if (suggestionsContainer) suggestionsContainer.style.display = 'none';
+          }, 200);
+        });
+      }
+
+      // Clear any existing content
+      const resultsContainer = document.getElementById('onlineSearchResults');
+      if (resultsContainer) {
+        resultsContainer.innerHTML = '';
+      }
+    }    // Page Content Loading Functions
     function loadLikedSongs() {
       const content = document.getElementById('likedSongsContent');
       if (!content) return;
@@ -7566,6 +8604,33 @@ function showGenrePopup(genre) {
 
   </div> <!-- End App Container -->
 
+  <!-- Sticky Player HTML (added for seamless playback state persistence) -->
+  <div class="sticky-player" id="stickyPlayer" style="display:none; flex-direction:column;">
+    <div style="width:100%;display:flex;flex-direction:column;align-items:center;min-height:70px;max-height:90px;">
+      <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:2px;">
+        <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+          <span id="currentTime" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+          <span style="margin:0 6px;color:#fff;">/</span>
+          <span id="duration" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+        </div>
+        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="width:92vw;max-width:420px;margin:6px 0 2px 0;height:4px;accent-color:#FFD700;">
+      </div>
+      <span class="player-title" id="playerTrackTitle" style="font-size:0.9em;color:#FFD700;margin-bottom:2px;"></span>
+      <div class="player-controls" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;padding:8px 16px;">
+        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
+        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
+        <button class="player-btn" id="playPauseBtn" title="Play/Pause">&#9654;</button>
+        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
+        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
+        <button id="likeBtn" title="Like" style="margin-left:0.6rem;background:none;border:none;cursor:pointer;font-size:1.5rem;color:rgba(255,255,255,0.4);transition:color 0.2s, box-shadow 0.3s ease, filter 0.3s ease;">&#10084;</button>
+      </div>
+      <div style="width:100%;text-align:center;margin-top:4px;">
+        <span id="stickyTrackInfo" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
+      </div>
+    </div>
+    <audio id="playerAudio" class="player-audio"></audio>
+  </div>
+
   <script>
     console.log('🚨 TERMS ENFORCEMENT ACTIVE - Modal shown by default, will be hidden only if user has account or accepted terms');
     console.log('📋 ACCOUNT LOGIC: "Music Lover" = NO account, any other username = HAS account');
@@ -7891,6 +8956,118 @@ function showGenrePopup(genre) {
       }
     };
   </script>
+// Add this style for popups (add to <head> or before </body>):
+<style>
+  .nav-popup {
+    position: fixed;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(24,24,24,0.92);
+    z-index: 2000;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeInNavPopup 0.18s;
+  }
+  @keyframes fadeInNavPopup {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .nav-popup-content {
+    background: #232526;
+    color: #fff;
+    border-radius: 18px;
+    min-width: 320px;
+    max-width: 95vw;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+    text-align: center;
+    position: relative;
+  }
+  .nav-popup-content h3 {
+    color: #FFD700;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .nav-popup-content button {
+    margin-top: 1.2rem;
+    padding: 0.6rem 2.2rem;
+    border-radius: 30px;
+    background: gold;
+    color: #181818;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-popup-content button:hover {
+    background: #0066ff;
+    color: #fff;
+  }
+</style>
+<div id="onlinePopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Online Music</h3>
+    <!-- Add your online music functions/components here -->
+    <p>Stream and discover trending tracks online.</p>
+    <button onclick="closeNavPopup('onlinePopup')">Close</button>
+  </div>
+</div>
+<div id="offlinePopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Offline Music</h3>
+    <!-- Add your offline music functions/components here -->
+    <p>Access your downloaded tracks and listen offline.</p>
+    <button onclick="closeNavPopup('offlinePopup')">Close</button>
+  </div>
+</div>
+<div id="playlistPopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Your Playlists</h3>
+    <!-- Add your playlist functions/components here -->
+    <p>View, create, and manage your playlists.</p>
+    <button onclick="closeNavPopup('playlistPopup')">Close</button>
+  </div>
+</div>
+<!-- Example: Liked and Account popups already exist or are handled elsewhere -->
+
+<!-- Add these popups before </body> (if not already present): -->
+<div id="onlinePopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Online Music</h3>
+    <p>Stream and discover trending tracks online.</p>
+    <button onclick="closeNavPopup('onlinePopup')">Close</button>
+  </div>
+</div>
+<div id="offlinePopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Offline Music</h3>
+    <p>Access your downloaded tracks and listen offline.</p>
+    <button onclick="closeNavPopup('offlinePopup')">Close</button>
+  </div>
+</div>
+<div id="playlistPopup" class="nav-popup" style="display:none;">
+  <div class="nav-popup-content">
+    <h3>Your Playlists</h3>
+    <p>View, create, and manage your playlists.</p>
+    <button onclick="closeNavPopup('playlistPopup')">Close</button>
+  </div>
+</div>
+
+// Add this script before </body>:
+<script>
+  function openNavPopup(popupId) {
+    document.querySelectorAll('.nav-popup').forEach(p => p.style.display = 'none');
+    document.getElementById(popupId).style.display = 'flex';
+  }
+  function closeNavPopup(popupId) {
+    document.getElementById(popupId).style.display = 'none';
+  }
+  document.getElementById('onlineBtn').onclick = function() { openNavPopup('onlinePopup'); };
+  document.getElementById('offlineBtn').onclick = function() { openNavPopup('offlinePopup'); };
+  document.getElementById('playlistBtn').onclick = function() { openNavPopup('playlistPopup'); };
+</script>
+
 </body>
 </html>
 <script>
@@ -7946,5 +9123,147 @@ videoOverlay.addEventListener('click', () => {
 
 // Example usage: showMiniVideoPlayer('path/to/video.mp4');
 // You can call showMiniVideoPlayer with the video URL to open the popup player.
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  function updateLikedSongsCountCard() {
+    try {
+      const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const count = Object.keys(likedTracksObj).length;
+      const likedSongsCountCard = document.getElementById('likedSongsCountCard');
+      if (likedSongsCountCard) {
+        likedSongsCountCard.textContent = count + ' liked songs';
+      }
+    } catch (e) {}
+  }
+  updateLikedSongsCountCard();
+
+  // Update count if liked songs change in other tabs/windows
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'hertzLikedTracks' || e.key === 'hertzLikedTracksUpdate') {
+      updateLikedSongsCountCard();
+    }
+  });
+
+  // Also update after like/unlike actions
+  window.updateLikedSongsCountCard = updateLikedSongsCountCard;
+});
+</script>
+
+<script>
+// Enhanced sticky player with scroll tracking and smooth following
+document.addEventListener('DOMContentLoaded', function() {
+  const stickyPlayer = document.getElementById('stickyPlayer');
+  const playerAudio = document.getElementById('playerAudio');
+  let isPlayerVisible = false;
+  let scrollTimeout = null;
+  let lastScrollY = window.scrollY;
+
+  // Track scroll position and update player visibility
+  function handleScroll() {
+    if (!stickyPlayer || stickyPlayer.style.display === 'none') return;
+
+    const currentScrollY = window.scrollY;
+    const scrollingDown = currentScrollY > lastScrollY;
+    const scrollingUp = currentScrollY < lastScrollY;
+
+    // Clear any existing timeout
+    clearTimeout(scrollTimeout);
+
+    // Only show the player if audio is playing or paused (but loaded)
+    const isAudioActive = playerAudio && (
+      !playerAudio.paused ||
+      (playerAudio.currentTime > 0 && playerAudio.readyState >= 2)
+    );
+
+    if (isAudioActive && stickyPlayer.style.display !== 'none') {
+      // Make player more visible when scrolling
+      stickyPlayer.style.opacity = '1';
+      stickyPlayer.style.transform = window.innerWidth <= 480 ?
+        'translateY(-2px)' : 'translateX(-50%) translateY(-2px)';
+
+      // Set timeout to reduce opacity when scrolling stops
+      scrollTimeout = setTimeout(() => {
+        if (stickyPlayer.style.display !== 'none') {
+          stickyPlayer.style.opacity = '0.95';
+          stickyPlayer.style.transform = window.innerWidth <= 480 ?
+            'translateY(0px)' : 'translateX(-50%) translateY(0px)';
+        }
+      }, 1000);
+    }
+
+    lastScrollY = currentScrollY;
+  }
+
+  // Enhanced player visibility management
+  function updatePlayerVisibility() {
+    if (!stickyPlayer || !playerAudio) return;
+
+    const isAudioActive = !playerAudio.paused ||
+      (playerAudio.currentTime > 0 && playerAudio.readyState >= 2);
+
+    if (isAudioActive && stickyPlayer.style.display === 'none') {
+      // Show player when audio becomes active
+      stickyPlayer.style.display = 'flex';
+      stickyPlayer.style.opacity = '0';
+
+      // Smooth fade in
+      setTimeout(() => {
+        stickyPlayer.style.transition = 'all 0.3s ease';
+        stickyPlayer.style.opacity = '0.95';
+      }, 50);
+
+      isPlayerVisible = true;
+
+      // Add scroll tracking
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    } else if (!isAudioActive && isPlayerVisible) {
+      // Hide player when audio stops
+      stickyPlayer.style.opacity = '0';
+
+      setTimeout(() => {
+        if (!playerAudio.paused && playerAudio.currentTime === 0) {
+          stickyPlayer.style.display = 'none';
+          isPlayerVisible = false;
+          window.removeEventListener('scroll', handleScroll);
+        }
+      }, 300);
+    }
+  }
+
+  // Enhanced hover effects
+  if (stickyPlayer) {
+    stickyPlayer.addEventListener('mouseenter', function() {
+      this.style.opacity = '1';
+      this.style.transform = window.innerWidth <= 480 ?
+        'translateY(-4px)' : 'translateX(-50%) translateY(-4px)';
+    });
+
+    stickyPlayer.addEventListener('mouseleave', function() {
+      this.style.opacity = '0.95';
+      this.style.transform = window.innerWidth <= 480 ?
+        'translateY(0px)' : 'translateX(-50%) translateY(0px)';
+    });
+  }
+
+  // Monitor audio state changes
+  if (playerAudio) {
+    playerAudio.addEventListener('play', updatePlayerVisibility);
+    playerAudio.addEventListener('pause', updatePlayerVisibility);
+    playerAudio.addEventListener('loadstart', updatePlayerVisibility);
+    playerAudio.addEventListener('ended', updatePlayerVisibility);
+
+    // Handle window resize for responsive behavior
+    window.addEventListener('resize', function() {
+      if (stickyPlayer && stickyPlayer.style.display !== 'none') {
+        stickyPlayer.style.transform = window.innerWidth <= 480 ?
+          'translateY(0px)' : 'translateX(-50%) translateY(0px)';
+      }
+    });
+  }
+
+  // Initialize player state
+  updatePlayerVisibility();
+});
 </script>
 </html>
