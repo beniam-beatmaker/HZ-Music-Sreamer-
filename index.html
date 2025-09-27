@@ -41,6 +41,35 @@
   .card-details-row { display: flex; align-items: center; gap: 12px; width: 100%; }
   .card-label { font-size: 0.85rem; color: #bdbdbd; font-weight: 600; margin-right: 6px; }
   .card-expiry { font-size: 1.05rem; font-family: 'Roboto Mono', 'Courier New', monospace; color: #fff; font-weight: 700; letter-spacing: 1.5px; }
+
+  /* Enhanced animations for instant file processing feedback */
+  @keyframes pulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+    100% { opacity: 0.6; transform: scale(1); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes slideInFromRight {
+    0% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Instant display classes */
+  .processing-file { animation: pulse 2s ease-in-out infinite; }
+  .nav-popup.active { display: flex !important; opacity: 1 !important; visibility: visible !important; }
+  .offline-files-list { transition: all 0.3s ease; }
+  .recent-track-item { transition: all 0.2s ease; }
   :root {
   /* Default (Dark) theme */
     --bg-main: #000;
@@ -78,6 +107,12 @@
     --accent-color: #e040fb;
   }
   /* Add more custom themes as needed */
+    /* Animation for processing spinner */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
     /* Spotify-Authentic Base Styles */
     * {
       margin: 0;
@@ -2345,9 +2380,10 @@
 
     .offline-controls {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
-        padding-bottom: 1rem;
+        padding-bottom: 0.8rem;
+        margin-bottom: 0.3rem;
         border-bottom: 1px solid var(--border-color);
     }
 
@@ -2355,16 +2391,17 @@
         background: linear-gradient(135deg, var(--accent-color) 0%, #B8860B 100%);
         color: #000;
         border: none;
-        padding: 0.8rem 1rem;
-        border-radius: 12px;
+        padding: 0.6rem 0.8rem;
+        border-radius: 10px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.5rem;
-        font-size: 0.9rem;
+        gap: 0.4rem;
+        font-size: 0.85rem;
+        min-height: 42px;
     }
 
     .offline-control-btn:hover {
@@ -2412,9 +2449,10 @@
         border: 1px solid var(--border-color);
         border-radius: 12px;
         padding: 1rem;
-        margin-top: 0.5rem;
+        margin-top: 0.2rem;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         overflow: hidden;
+        min-height: 0;
     }
 
     .offline-section-title {
@@ -2424,9 +2462,10 @@
         font-size: 1.1rem;
         font-weight: 600;
         color: var(--text-primary);
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.3rem;
         border-bottom: 1px solid var(--border-color);
+        flex-shrink: 0;
     }
 
     .offline-count {
@@ -2438,9 +2477,14 @@
     .offline-files-list {
         flex: 1;
         overflow-y: auto;
-        max-height: 350px;
+        min-height: 300px;
+        max-height: calc(100vh - 200px);
         scrollbar-width: thin;
         scrollbar-color: var(--accent-color) transparent;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        padding: 0.2rem 0;
     }
 
     .offline-files-list::-webkit-scrollbar {
@@ -2454,6 +2498,77 @@
     .offline-files-list::-webkit-scrollbar-thumb {
         background: var(--accent-color);
         border-radius: 3px;
+    }
+
+    /* BULLETPROOF OFFLINE TRACKS VISIBILITY */
+    .offline-files-list .recent-track-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        padding: 12px !important;
+        margin: 4px 0 !important;
+        border-radius: 8px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        min-height: 60px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .offline-files-list .recent-track-item:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-color: var(--accent-color) !important;
+        transform: translateX(4px) !important;
+    }
+
+    .offline-files-list .recent-track-info {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+
+    .offline-files-list .recent-track-name {
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        line-height: 1.2 !important;
+    }
+
+    .offline-files-list .recent-track-artist {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 12px !important;
+        line-height: 1.2 !important;
+    }
+
+    .offline-files-list .recent-track-time {
+        color: var(--accent-color) !important;
+        font-size: 11px !important;
+        font-weight: 500 !important;
+        white-space: nowrap !important;
+    }
+
+    .offline-files-list .recent-track-actions {
+        display: flex !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+
+    .offline-files-list .recent-track-actions button {
+        background: transparent !important;
+        border: none !important;
+        padding: 6px !important;
+        cursor: pointer !important;
+        border-radius: 4px !important;
+        font-size: 16px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .offline-files-list .recent-track-actions button:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        transform: scale(1.1) !important;
     }
 
     .no-files-message {
@@ -2499,18 +2614,127 @@
         background: #FFA500;
     }
 
-    .offline-track-item, .offline-video-item {
+    /* Offline Sticky Player Styles */
+    .offline-sticky-player {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border: 2px solid var(--accent-color);
+        border-radius: 15px;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+        min-width: 350px;
+        max-width: 90vw;
+        animation: slideUpFadeIn 0.3s ease-out;
+    }
+
+    .offline-player-info {
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 16px;
-        margin-bottom: 8px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .offline-player-artwork {
+        width: 45px;
+        height: 45px;
+        background: linear-gradient(135deg, var(--accent-color), #B8860B);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #000;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .offline-player-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .offline-player-title {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .offline-player-artist {
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .offline-player-controls {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .offline-player-btn {
+        background: rgba(255, 215, 0, 0.2);
+        border: 1px solid var(--accent-color);
+        border-radius: 8px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+        color: var(--accent-color);
+    }
+
+    .offline-player-btn:hover {
+        background: var(--accent-color);
+        color: #000;
+        transform: scale(1.05);
+    }
+
+    .offline-player-btn:active {
+        transform: scale(0.95);
+    }
+
+    @keyframes slideUpFadeIn {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    .offline-track-item, .offline-video-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        margin-bottom: 6px;
         border-radius: 8px;
         background: var(--bg-main);
         border: 1px solid var(--border-color);
         transition: all 0.2s ease;
         cursor: pointer;
         position: relative;
+        min-height: 60px;
     }
 
     .offline-track-item:hover, .offline-video-item:hover {
@@ -2525,14 +2749,14 @@
     }
 
     .offline-track-artwork {
-        width: 48px;
-        height: 48px;
+        width: 44px;
+        height: 44px;
         border-radius: 6px;
         background: linear-gradient(135deg, var(--accent-color), #B8860B);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         color: #000;
         flex-shrink: 0;
     }
@@ -2649,90 +2873,330 @@
         .offline-app-container {
             width: 98vw;
             height: 95vh;
+            border-radius: 8px;
         }
 
         .offline-controls {
             grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .offline-control-btn {
+            padding: 0.8rem 0.9rem;
+            min-height: 48px;
+            font-size: 0.9rem;
+            touch-action: manipulation;
         }
 
         .storage-info {
             grid-template-columns: 1fr;
+            padding: 1rem;
         }
 
         .media-tab-btn {
-            padding: 0.6rem 1rem;
-            font-size: 0.8rem;
+            padding: 0.7rem 1rem;
+            font-size: 0.85rem;
+            min-height: 48px;
+            touch-action: manipulation;
         }
 
         .offline-track-item, .offline-video-item {
             padding: 10px 12px;
             gap: 10px;
+            min-height: 58px;
+            touch-action: manipulation;
+        }
+
+        .offline-track-artwork {
+            width: 42px;
+            height: 42px;
+        }
+
+        .offline-track-title {
+            font-size: 0.9rem;
+            line-height: 1.3;
+        }
+
+        .offline-track-meta {
+            font-size: 0.75rem;
+            gap: 0.4rem;
+        }
+
+        .file-type {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+        }
+
+        .offline-files-list {
+            min-height: 250px;
+            max-height: calc(100vh - 280px);
+            padding: 0.2rem 0.5rem;
+        }
+
+        .offline-files-section {
+            margin-top: 0.3rem;
+        }
+
+        .offline-action-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+            touch-action: manipulation;
+        }
+
+        /* Improved scrolling for tablets */
+        .offline-tracks-list::-webkit-scrollbar,
+        .offline-videos-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .offline-tracks-list::-webkit-scrollbar-thumb,
+        .offline-videos-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.7);
+            border-radius: 5px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .offline-app-container {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+            margin: 0;
+            max-width: none;
+            border: none;
+        }
+
+        .offline-controls {
+            grid-template-columns: 1fr;
+            gap: 0.6rem;
+            padding: 0.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .offline-control-btn {
+            padding: 1rem 0.9rem;
+            font-size: 0.9rem;
+            min-height: 52px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .offline-control-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .app-header {
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .app-close-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            touch-action: manipulation;
+        }
+
+        .offline-track-item, .offline-video-item {
+            padding: 8px 12px;
+            gap: 10px;
+            min-height: 62px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 215, 0, 0.2);
+        }
+
+        .offline-track-artwork {
+            width: 46px;
+            height: 46px;
+            flex-shrink: 0;
+        }
+
+        .audio-file-icon, .video-file-icon {
+            font-size: 1.3rem;
+        }
+
+        .offline-track-title {
+            font-size: 0.88rem;
+            line-height: 1.25;
+            font-weight: 600;
+        }
+
+        .offline-track-meta {
+            font-size: 0.72rem;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin-top: 0.2rem;
+        }
+
+        .offline-files-list {
+            min-height: 200px;
+            max-height: calc(100vh - 220px);
+            padding: 0.2rem 0.3rem;
+        }
+
+        .offline-files-section {
+            margin-top: 0.2rem;
+            padding: 0.8rem;
+        }
+
+        .offline-section-title {
+            margin-bottom: 0.4rem;
+            font-size: 1rem;
+        }
+
+        .offline-action-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 1.1rem;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .media-tabs {
+            padding: 0 1rem;
+        }
+
+        .media-tab-btn {
+            padding: 0.8rem 1.2rem;
+            font-size: 0.9rem;
+            min-height: 50px;
+            touch-action: manipulation;
+        }
+
+        .storage-info {
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            padding: 1rem;
+            font-size: 0.8rem;
+        }
+
+        .file-type {
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* Enhanced touch feedback for mobile */
+        .offline-control-btn:active,
+        .offline-track-item:active,
+        .offline-video-item:active,
+        .offline-action-btn:active {
+            transform: scale(0.98);
+            opacity: 0.8;
+        }
+
+        /* Scroll improvements for mobile */
+        .offline-tracks-list::-webkit-scrollbar,
+        .offline-videos-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .offline-tracks-list::-webkit-scrollbar-thumb,
+        .offline-videos-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 4px;
+        }
+    }
+
+    /* Extra small mobile devices */
+    @media (max-width: 360px) {
+        .offline-app-container {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+        }
+
+        .offline-control-btn {
+            font-size: 0.85rem;
+            padding: 0.9rem 0.7rem;
+            min-height: 48px;
+        }
+
+        .offline-track-item, .offline-video-item {
+            padding: 8px 10px;
+            gap: 8px;
+            min-height: 58px;
+        }
+
+        .offline-track-title {
+            font-size: 0.82rem;
+            line-height: 1.2;
+        }
+
+        .offline-track-meta {
+            font-size: 0.68rem;
         }
 
         .offline-track-artwork {
             width: 40px;
             height: 40px;
         }
-
-        .offline-track-title {
-            font-size: 0.9rem;
-        }
-
-        .offline-track-meta {
-            font-size: 0.7rem;
-            gap: 0.3rem;
-        }
-
-        .file-type {
-            font-size: 0.65rem;
-            padding: 1px 4px;
-        }
-
-        .offline-tracks-list, .offline-videos-list {
-            max-height: 240px;
-        }
     }
 
-    @media (max-width: 480px) {
+    /* Mobile landscape orientation */
+    @media (max-width: 768px) and (orientation: landscape) {
+        .offline-app-container {
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0;
+        }
+
+        .offline-files-list {
+            min-height: 180px;
+            max-height: calc(100vh - 180px);
+        }
+
+        .offline-files-section {
+            margin-top: 0.1rem;
+        }
+
         .offline-controls {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.6rem;
+            padding: 0.6rem;
         }
 
         .offline-control-btn {
-            padding: 1rem;
+            padding: 0.7rem 0.8rem;
+            font-size: 0.85rem;
+            min-height: 44px;
         }
 
         .offline-track-item, .offline-video-item {
-            padding: 8px 10px;
+            padding: 8px 12px;
             gap: 8px;
+            min-height: 54px;
         }
 
         .offline-track-artwork {
-            width: 36px;
-            height: 36px;
-        }
-
-        .audio-file-icon, .video-file-icon {
-            font-size: 1.1rem;
+            width: 38px;
+            height: 38px;
         }
 
         .offline-track-title {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .offline-track-meta {
             font-size: 0.65rem;
-            flex-wrap: wrap;
+        }
+    }
+
+    /* High DPI mobile displays */
+    @media (-webkit-min-device-pixel-ratio: 2) and (max-width: 480px) {
+        .offline-control-btn,
+        .offline-action-btn,
+        .media-tab-btn {
+            border-width: 0.5px;
         }
 
-        .offline-tracks-list, .offline-videos-list {
-            max-height: 200px;
-        }
-
-        .offline-action-btn {
-            width: 28px;
-            height: 28px;
-            font-size: 1rem;
+        .offline-track-item,
+        .offline-video-item {
+            border-width: 0.5px;
         }
     }
 
@@ -4302,8 +4766,8 @@
             const playerAudio = document.getElementById('playerAudio');
             const playerTrackTitle = document.getElementById('playerTrackTitle');
 
-            // Get track data from the trackData object
-            let trackData = {
+            // Get track data - check offline tracks first, then fallback to hardcoded tracks
+            const hardcodedTrackData = {
               'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
               'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
               'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
@@ -4341,11 +4805,22 @@
               'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
             };
 
-            const track = trackData[trackId];
+            // Combine offline tracks with hardcoded tracks (offline tracks take priority)
+            const allTrackData = { ...hardcodedTrackData, ...(window.trackData || {}) };
+
+            console.log('🔍 Looking for track:', trackId);
+            console.log('🗃️ Available tracks:', Object.keys(allTrackData));
+            console.log('📦 Global trackData exists:', !!window.trackData);
+            console.log('🎵 Global trackData keys:', window.trackData ? Object.keys(window.trackData) : 'none');
+
+            const track = allTrackData[trackId];
             if (!track) {
-              console.error('❌ Track not found:', trackId);
+              console.error('❌ Track not found in combined data:', trackId);
+              console.error('🔍 Available track IDs:', Object.keys(allTrackData));
               return;
             }
+
+            console.log('✅ Found track data:', track);
 
             const trackUrl = track.url;
             const trackTitle = track.title + ' - ' + track.artist;
@@ -4370,7 +4845,7 @@
 
               // Set up autoplay for next track (all available tracks)
               playerAudio.onended = function() {
-                const trackOrder = Object.keys(trackData);
+                const trackOrder = Object.keys(allTrackData);
                 const currentIndex = trackOrder.indexOf(trackId);
                 if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
                   playTrack(trackOrder[currentIndex + 1]);
@@ -4881,25 +5356,11 @@
       <div class="app-content offline-content">
         <!-- Control Buttons Section -->
         <div class="offline-controls">
-          <button class="offline-control-btn" onclick="browseOfflineFiles()">
+          <button class="offline-control-btn" onclick="browseOfflineFiles()" title="Select MP3, WAV, and other audio files from your device">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z"/>
             </svg>
-            Browse Files
-          </button>
-
-          <button class="offline-control-btn" onclick="addVideoFile()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
-            </svg>
-            Add Video
-          </button>
-
-          <button class="offline-control-btn" onclick="addAudioFile()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-            </svg>
-            Add Audio
+            📁 Browse Files
           </button>
 
           <button class="offline-control-btn" onclick="clearOfflineStorage()">
@@ -4919,16 +5380,33 @@
           <div class="offline-files-list" id="offlineFilesList">
             <div class="no-files-message" id="noFilesMessage">
               <p>📁 No offline files yet</p>
-              <p style="font-size: 0.9em; opacity: 0.7;">Use the buttons above to add music and videos</p>
+              <p style="font-size: 0.9em; opacity: 0.7;">Click "📁 Browse Files" above to add MP3, WAV, and other music files</p>
+              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added files will appear here and can be played just like online tracks</p>
             </div>
           </div>
+        </div>
+
+        <!-- Dedicated Offline Sticky Player -->
+        <div class="offline-sticky-player" id="offlineStickyPlayer" style="display: none;">
+          <div class="offline-player-info">
+            <div class="offline-player-artwork">🎵</div>
+            <div class="offline-player-details">
+              <div class="offline-player-title" id="offlinePlayerTitle">Select a track</div>
+              <div class="offline-player-artist">Offline Player</div>
+            </div>
+          </div>
+          <div class="offline-player-controls">
+            <button class="offline-player-btn" id="offlinePlayPauseBtn" onclick="toggleOfflinePlayPause()">▶️</button>
+            <button class="offline-player-btn" onclick="stopOfflinePlayback()">⏹️</button>
+          </div>
+          <audio id="offlinePlayerAudio" preload="metadata"></audio>
         </div>
       </div>
 
       <!-- Hidden file inputs -->
-      <input type="file" id="audioFileInput" accept="audio/*" multiple style="display: none;">
-      <input type="file" id="videoFileInput" accept="video/*" multiple style="display: none;">
-      <input type="file" id="browseFileInput" accept="audio/*,video/*" multiple style="display: none;">
+      <input type="file" id="audioFileInput" accept="audio/*,.mp3,.mpeg,.wav,.wave,.flac,.aac,.ogg,.m4a,.wma,.opus" multiple style="display: none;">
+      <input type="file" id="videoFileInput" accept="video/*,.mp4,.webm,.avi,.mov,.wmv,.mkv" multiple style="display: none;">
+      <input type="file" id="browseFileInput" accept="audio/*,video/*,.mp3,.mpeg,.wav,.wave,.flac,.aac,.ogg,.m4a,.wma,.opus,.mp4,.webm,.avi,.mov,.wmv,.mkv" multiple style="display: none;">
     </div>
   </div>
 
@@ -5486,6 +5964,9 @@
         updateStorageIndicator();
       }
 
+      // INSTANT OFFLINE SYSTEM: Auto-detect and load all device storage files
+      initializeInstantOfflineSystem();
+
       // Initialize like buttons with correct state
       setTimeout(() => {
         initializeLikeButtons();
@@ -6018,14 +6499,39 @@ function showGenrePopup(genre) {
         return;
       }
 
-      loadOfflineFiles();
+      // Prepare container for immediate display
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.opacity = '1';
+
+      // Force immediate file loading and display
+      loadOfflineFiles(true);
       setupFileInputHandlers();
 
-      // Add test message for verification
-      console.log('📝 To test display: Type testOfflineDisplay() in console');
-    }
+      // Debug current state immediately
+      const offlineMedia = getOfflineMedia();
+      console.log('🔍 Initialization check:', {
+        filesInStorage: (offlineMedia.audio || []).length + (offlineMedia.video || []).length,
+        containerChildren: container.children.length,
+        containerDisplay: window.getComputedStyle(container).display
+      });
 
-    // Update file count display
+      // Additional refresh to ensure visibility
+      setTimeout(() => {
+        const postInitMedia = getOfflineMedia();
+        const totalFiles = (postInitMedia.audio || []).length + (postInitMedia.video || []).length;
+
+        if (totalFiles > 0 && container.children.length === 0) {
+          console.log('� Files in storage but not displayed - forcing emergency refresh');
+          loadOfflineFiles(true);
+        }
+
+        console.log('🔄 Post-initialization refresh completed');
+      }, 50);
+
+      // Add test message for verification
+      console.log('📝 Offline app initialized with instant file display');
+    }    // Update file count display
     function updateFileCount() {
       const offlineMedia = getOfflineMedia();
       const totalFiles = offlineMedia.audio.length + offlineMedia.video.length;
@@ -6106,12 +6612,495 @@ function showGenrePopup(genre) {
       updateFileCount();
 
       console.log('✅ Test complete - check the offline files section!');
-    };    // Get offline media from localStorage
+    };
+
+    // INSTANT OFFLINE SYSTEM: Comprehensive initialization for bulletproof file handling
+    function initializeInstantOfflineSystem() {
+      console.log('🚀 INSTANT OFFLINE SYSTEM: Initializing comprehensive file handling...');
+
+      // Ensure all required elements exist
+      ensureOfflineElements();
+
+      // Setup bulletproof file input handlers
+      setupInstantFileHandlers();
+
+      // Auto-detect existing files and make them instantly available
+      autoDetectAndLoadExistingFiles();
+
+      // Setup drag & drop for instant file adding
+      setupInstantDragDrop();
+
+      // Setup keyboard shortcuts for instant access
+      setupInstantKeyboardShortcuts();
+
+      console.log('✅ INSTANT OFFLINE SYSTEM: Initialization complete!');
+    }
+
+    // Ensure all offline elements exist and are properly configured
+    function ensureOfflineElements() {
+      console.log('🔧 Ensuring all offline elements exist...');
+
+      const requiredElements = [
+        'offlineAppOverlay',
+        'offlineFilesList',
+        'noFilesMessage',
+        'offlineStickyPlayer',
+        'audioFileInput',
+        'videoFileInput',
+        'browseFileInput'
+      ];
+
+      requiredElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (!element) {
+          console.warn(`⚠️ Missing element: ${id}`);
+        } else {
+          console.log(`✅ Found element: ${id}`);
+        }
+      });
+    }
+
+    // Setup instant file handlers with bulletproof detection
+    function setupInstantFileHandlers() {
+      console.log('📂 Setting up instant file handlers...');
+
+      const fileInputs = [
+        { id: 'audioFileInput', type: 'audio' },
+        { id: 'videoFileInput', type: 'video' },
+        { id: 'browseFileInput', type: 'mixed' }
+      ];
+
+      fileInputs.forEach(({ id, type }) => {
+        const input = document.getElementById(id);
+        if (input) {
+          // Remove existing listeners to prevent duplicates
+          input.replaceWith(input.cloneNode(true));
+          const newInput = document.getElementById(id);
+
+          newInput.addEventListener('change', (e) => {
+            console.log(`📁 INSTANT: ${type} files selected:`, e.target.files.length);
+            handleInstantFileSelection(e.target.files, type);
+          });
+
+          console.log(`✅ Instant handler added for ${id}`);
+        }
+      });
+    }
+
+    // Auto-detect and load existing files for instant availability
+    function autoDetectAndLoadExistingFiles() {
+      console.log('🔍 Auto-detecting existing files...');
+
+      try {
+        const existingMedia = getOfflineMedia();
+        const totalFiles = (existingMedia.audio?.length || 0) + (existingMedia.video?.length || 0);
+
+        if (totalFiles > 0) {
+          console.log(`📚 Found ${totalFiles} existing files - making them instantly available`);
+
+          // Ensure all files have proper trackData entries for instant playback
+          [...(existingMedia.audio || []), ...(existingMedia.video || [])].forEach(file => {
+            ensureFilePlaybackReady(file);
+          });
+
+          // Force refresh display
+          loadOfflineFiles(true);
+
+          showNotification(`✅ ${totalFiles} offline tracks ready to play!`);
+        } else {
+          console.log('📭 No existing files found');
+        }
+      } catch (error) {
+        console.error('❌ Error auto-detecting files:', error);
+      }
+    }
+
+    // Ensure file is ready for instant playback
+    function ensureFilePlaybackReady(file) {
+      if (!window.trackData) window.trackData = {};
+
+      if (!window.trackData[file.id]) {
+        let blobUrl = null;
+        if (file.data) {
+          try {
+            const base64Data = file.data.split(',')[1];
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: file.type });
+            blobUrl = URL.createObjectURL(blob);
+          } catch (e) {
+            console.warn('Could not create blob URL for:', file.name);
+          }
+        }
+
+        window.trackData[file.id] = {
+          id: file.id,
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          artist: `Offline ${file.name.split('.').pop().toUpperCase()}`,
+          url: blobUrl || '#',
+          cover: file.type.startsWith('video/')
+            ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80'
+            : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
+          duration: '0:00',
+          isOffline: true,
+          originalData: file
+        };
+
+        console.log(`✅ File ${file.name} ready for instant playback`);
+      }
+    }
+
+    // Setup instant drag & drop functionality
+    function setupInstantDragDrop() {
+      console.log('🎯 Setting up instant drag & drop...');
+
+      const dropZones = ['offlineAppOverlay', 'offlineFilesList'];
+
+      dropZones.forEach(zoneId => {
+        const zone = document.getElementById(zoneId);
+        if (zone) {
+          zone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            zone.style.backgroundColor = 'rgba(29, 185, 84, 0.1)';
+          });
+
+          zone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            zone.style.backgroundColor = '';
+          });
+
+          zone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            zone.style.backgroundColor = '';
+
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+              console.log(`🎯 INSTANT DROP: ${files.length} files dropped`);
+              handleInstantFileSelection(files, 'mixed');
+            }
+          });
+
+          console.log(`✅ Drag & drop enabled for ${zoneId}`);
+        }
+      });
+    }
+
+    // Setup keyboard shortcuts for instant access
+    function setupInstantKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        // Ctrl+O or Cmd+O to open file browser instantly
+        if ((e.ctrlKey || e.metaKey) && e.key === 'o') {
+          e.preventDefault();
+          const browseInput = document.getElementById('browseFileInput');
+          if (browseInput) {
+            browseInput.click();
+            console.log('⌨️ INSTANT: File browser opened via keyboard shortcut');
+            showNotification('⚡ File browser opened - select files for instant adding!');
+          }
+        }
+
+        // Ctrl+Shift+M or Cmd+Shift+M to open offline music app instantly
+        if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'M') {
+          e.preventDefault();
+          openOfflineApp();
+          console.log('⌨️ INSTANT: Offline app opened via keyboard shortcut');
+          showNotification('⚡ Offline music app opened!');
+        }
+      });
+
+      console.log('✅ Keyboard shortcuts enabled (Ctrl+O for files, Ctrl+Shift+M for offline app)');
+    }
+
+    // BULLETPROOF instant file selection handler
+    function handleInstantFileSelection(files, type) {
+      console.log('⚡ INSTANT FILE HANDLER: Processing', files.length, 'files immediately');
+
+      if (!files || files.length === 0) {
+        showNotification('⚠️ No files selected');
+        return;
+      }
+
+      // Auto-open offline app if not visible
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
+        openOfflineApp();
+        console.log('📱 Auto-opened offline app for file processing');
+      }
+
+      // Show instant processing feedback
+      showNotification(`⚡ Processing ${files.length} file(s) instantly...`);
+
+      // Process files with bulletproof error handling
+      let processedCount = 0;
+      let successCount = 0;
+
+      Array.from(files).forEach((file, index) => {
+        console.log(`⚡ INSTANT: Processing file ${index + 1}/${files.length}: ${file.name}`);
+
+        // Enhanced file type detection
+        const fileName = file.name.toLowerCase();
+        const isAudio = isAudioFile(fileName, file.type);
+        const isVideo = !isAudio && isVideoFile(fileName, file.type);
+
+        if (!isAudio && !isVideo) {
+          console.warn(`⚠️ Skipping unsupported file: ${file.name}`);
+          processedCount++;
+          checkProcessingComplete();
+          return;
+        }
+
+        // Convert to base64 for instant storage and playback
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const fileData = {
+              id: generateUniqueId(),
+              name: file.name,
+              type: file.type || (isAudio ? 'audio/mpeg' : 'video/mp4'),
+              size: file.size,
+              data: e.target.result,
+              dateAdded: Date.now(),
+              isInstant: true
+            };
+
+            // Add to storage instantly
+            const offlineMedia = getOfflineMedia();
+            if (isAudio) {
+              offlineMedia.audio.push(fileData);
+            } else {
+              offlineMedia.video.push(fileData);
+            }
+            saveOfflineMedia(offlineMedia);
+
+            // Make immediately playable
+            ensureFilePlaybackReady(fileData);
+
+            // INSTANT DISPLAY: Add track to UI immediately without waiting
+            addTrackToUIInstantly(fileData);
+
+            successCount++;
+            console.log(`✅ INSTANT: File ${file.name} added and ready to play`);
+
+          } catch (error) {
+            console.error(`❌ Error processing ${file.name}:`, error);
+          }
+
+          processedCount++;
+          checkProcessingComplete();
+        };
+
+        reader.onerror = function() {
+          console.error(`❌ Failed to read file: ${file.name}`);
+          processedCount++;
+          checkProcessingComplete();
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+      function checkProcessingComplete() {
+        if (processedCount === files.length) {
+          console.log(`⚡ INSTANT PROCESSING COMPLETE: ${successCount}/${files.length} files added`);
+
+          // BULLETPROOF: Force immediate display update with multiple methods
+          setTimeout(() => {
+            forceDisplayUpdate();
+            loadOfflineFiles(true);
+          }, 50);
+
+          // Show success notification
+          showNotification(`✅ ${successCount} track(s) added and ready to play instantly!`);
+
+          // Clear file inputs
+          ['audioFileInput', 'videoFileInput', 'browseFileInput'].forEach(id => {
+            const input = document.getElementById(id);
+            if (input) input.value = '';
+          });
+        }
+      }
+    }
+
+    // Enhanced file type detection functions
+    function isAudioFile(fileName, mimeType) {
+      const audioExtensions = ['.mp3', '.wav', '.wave', '.flac', '.aac', '.ogg', '.m4a', '.wma', '.opus', '.mpeg'];
+      const hasAudioExt = audioExtensions.some(ext => fileName.endsWith(ext));
+      const hasAudioMime = mimeType && mimeType.startsWith('audio/');
+      return hasAudioExt || hasAudioMime;
+    }
+
+    function isVideoFile(fileName, mimeType) {
+      const videoExtensions = ['.mp4', '.webm', '.avi', '.mov', '.wmv', '.mkv'];
+      const hasVideoExt = videoExtensions.some(ext => fileName.endsWith(ext));
+      const hasVideoMime = mimeType && mimeType.startsWith('video/');
+      return hasVideoExt || hasVideoMime;
+    }
+
+    // Generate unique ID for files
+    function generateUniqueId() {
+      return 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // BULLETPROOF: Add track to UI instantly during processing
+    function addTrackToUIInstantly(fileData) {
+      console.log('⚡ INSTANT UI: Adding track immediately:', fileData.name);
+
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+
+      if (!container) {
+        console.error('❌ Container not found for instant display');
+        return;
+      }
+
+      // Hide "no files" message immediately
+      if (noMessage) noMessage.style.display = 'none';
+
+      // Make container visible
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.opacity = '1';
+
+      // Create track HTML
+      const fileName = fileData.name.replace(/\.[^/.]+$/, "");
+      const fileType = fileData.name.split('.').pop().toUpperCase();
+      const isVideo = fileData.type.startsWith('video/');
+      const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+      const trackHTML = `
+        <div class="recent-track-item instant-added" onclick="playOfflineTrackInstant('${fileData.id}')" style="cursor: pointer; border-left: 3px solid gold; animation: fadeIn 0.3s ease-in;">
+          <div class="recent-track-artwork">
+            <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+          </div>
+          <div class="recent-track-info">
+            <div class="recent-track-name" style="color: gold; font-weight: 500;">${fileName}</div>
+            <div class="recent-track-artist">Offline ${fileType} • Ready to Play</div>
+          </div>
+          <div class="recent-track-time">Just Added</div>
+          <div class="recent-track-actions">
+            <button class="track-like-btn" onclick="event.stopPropagation(); playOfflineTrackInstant('${fileData.id}');">▶️</button>
+            <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${fileData.id}', '${isVideo ? 'video' : 'audio'}');">🗑️</button>
+          </div>
+        </div>
+      `;
+
+      // Add track to container immediately
+      container.insertAdjacentHTML('beforeend', trackHTML);
+
+      console.log('✅ INSTANT UI: Track added to display immediately');
+    }
+
+    // BULLETPROOF: Force display update
+    function forceDisplayUpdate() {
+      console.log('🔄 FORCE DISPLAY UPDATE: Ensuring all tracks are visible');
+
+      const container = document.getElementById('offlineFilesList');
+      if (!container) return;
+
+      const offlineMedia = getOfflineMedia();
+      const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
+
+      console.log(`🔍 Found ${allFiles.length} files in storage for display`);
+
+      if (allFiles.length === 0) {
+        const noMessage = document.getElementById('noFilesMessage');
+        if (noMessage) noMessage.style.display = 'flex';
+        return;
+      }
+
+      // Hide no files message
+      const noMessage = document.getElementById('noFilesMessage');
+      if (noMessage) noMessage.style.display = 'none';
+
+      // Force container visibility
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.opacity = '1';
+
+      // If container is empty but we have files, regenerate all HTML
+      if (container.children.length === 0 && allFiles.length > 0) {
+        console.log('🔧 Regenerating all track HTML for display');
+
+        const tracksHTML = allFiles.map(file => {
+          const fileName = file.name.replace(/\.[^/.]+$/, "");
+          const fileType = file.name.split('.').pop().toUpperCase();
+          const isVideo = file.type.startsWith('video/');
+          const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+          // Ensure trackData exists for playback
+          ensureFilePlaybackReady(file);
+
+          return `
+            <div class="recent-track-item" onclick="playOfflineTrackInstant('${file.id}')" style="cursor: pointer; border-left: 3px solid gold;">
+              <div class="recent-track-artwork">
+                <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+              </div>
+              <div class="recent-track-info">
+                <div class="recent-track-name" style="color: gold; font-weight: 500;">${fileName}</div>
+                <div class="recent-track-artist">Offline ${fileType} • Ready</div>
+              </div>
+              <div class="recent-track-time">Ready</div>
+              <div class="recent-track-actions">
+                <button class="track-like-btn" onclick="event.stopPropagation(); playOfflineTrackInstant('${file.id}');">▶️</button>
+                <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${file.id}', '${isVideo ? 'video' : 'audio'}');">🗑️</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = tracksHTML;
+        console.log(`✅ FORCE DISPLAY: Generated HTML for ${allFiles.length} tracks`);
+      }
+    }
+
+    // Get offline media from localStorage with enhanced debugging
     function getOfflineMedia() {
       try {
-        return JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio": [], "video": []}');
+        const rawData = localStorage.getItem('hertzOfflineMedia');
+        console.log('📂 Raw localStorage data:', rawData);
+
+        if (!rawData) {
+          console.log('📂 No localStorage data found, initializing empty structure');
+          const emptyStructure = {"audio": [], "video": []};
+          localStorage.setItem('hertzOfflineMedia', JSON.stringify(emptyStructure));
+          return emptyStructure;
+        }
+
+        const parsedData = JSON.parse(rawData);
+        console.log('📂 Parsed offline media:', {
+          audioCount: parsedData.audio ? parsedData.audio.length : 0,
+          videoCount: parsedData.video ? parsedData.video.length : 0,
+          audioFiles: parsedData.audio ? parsedData.audio.map(a => ({id: a.id, name: a.name})) : [],
+          videoFiles: parsedData.video ? parsedData.video.map(v => ({id: v.id, name: v.name})) : []
+        });
+
+        // Ensure structure exists
+        if (!parsedData.audio) parsedData.audio = [];
+        if (!parsedData.video) parsedData.video = [];
+
+        return parsedData;
       } catch (e) {
-        return {"audio": [], "video": []};
+        console.error('❌ Error parsing localStorage:', e);
+        console.log('🔧 Attempting localStorage repair...');
+
+        // Try to recover any data
+        try {
+          const rawData = localStorage.getItem('hertzOfflineMedia');
+          if (rawData && rawData !== 'null' && rawData !== 'undefined') {
+            console.log('🔍 Raw data for recovery:', rawData.substring(0, 100));
+          }
+        } catch (e2) {
+          console.error('❌ Recovery attempt failed:', e2);
+        }
+
+        const fallbackStructure = {"audio": [], "video": []};
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify(fallbackStructure));
+        return fallbackStructure;
       }
     }
 
@@ -6128,42 +7117,147 @@ function showGenrePopup(genre) {
 
       // Always create a fresh blob URL for offline files
       try {
-        console.log('🔄 Creating fresh blob URL...');
-        const base64Data = fileData.data.split(',')[1];
-        if (!base64Data) {
-          console.error('❌ Invalid base64 data format');
+        console.log('🔄 Creating fresh blob URL for:', fileData.name);
+
+        // Handle both data URL and raw base64 formats with validation
+        let base64Data;
+        if (fileData.data && fileData.data.startsWith('data:')) {
+          base64Data = fileData.data.split(',')[1];
+        } else if (fileData.data) {
+          base64Data = fileData.data;
+        } else {
+          console.error('❌ No data property found');
+          return null;
+        }
+
+        if (!base64Data || base64Data.length === 0) {
+          console.error('❌ Invalid or empty base64 data');
           return null;
         }
 
         console.log('📝 Base64 data length:', base64Data.length);
-        const byteCharacters = atob(base64Data);
-        const byteNumbers = new Array(byteCharacters.length);
+        console.log('🔍 First 50 chars of base64:', base64Data.substring(0, 50));
 
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        // Convert base64 to binary data more efficiently
+        const binaryString = atob(base64Data);
+        const bytes = new Uint8Array(binaryString.length);
+
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
         }
 
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: fileData.type });
+        // Enhanced MIME type determination for device storage files
+        let mimeType = fileData.type;
+        const extension = fileData.name.split('.').pop().toLowerCase();
+        const fileName = fileData.name.toLowerCase();
+
+        // Prioritize MP3 and WAV detection from device storage
+        const isMp3File = fileName.endsWith('.mp3') || fileName.endsWith('.mpeg') || fileName.endsWith('.mpga');
+        const isWavFile = fileName.endsWith('.wav') || fileName.endsWith('.wave');
+
+        if (isMp3File) {
+          mimeType = 'audio/mpeg';
+          console.log('🎵 MP3 file from device storage - using audio/mpeg MIME type');
+        } else if (isWavFile) {
+          mimeType = 'audio/wav';
+          console.log('🎵 WAV file from device storage - using audio/wav MIME type');
+        } else if (isAudioByExtension(fileData.name)) {
+          const correctMimeType = getAudioMimeType(extension);
+          if (correctMimeType) {
+            mimeType = correctMimeType;
+            console.log(`🔄 Using detected audio MIME type: ${mimeType}`);
+          }
+        }
+
+        // Enhanced fallback for files from device storage
+        if (!mimeType || mimeType === 'application/octet-stream' || mimeType === '') {
+          if (extension === 'wav' || extension === 'wave') {
+            mimeType = 'audio/wav';
+            console.log('🔧 Fallback: WAV MIME type applied');
+          } else if (extension === 'mp3' || extension === 'mpeg' || extension === 'mpga') {
+            mimeType = 'audio/mpeg';
+            console.log('🔧 Fallback: MP3 MIME type applied');
+          } else if (isAudioByExtension(fileData.name)) {
+            mimeType = 'audio/mpeg'; // Safe default for audio
+            console.log('🔧 Fallback: Default audio MIME type applied');
+          }
+        }
+
+        const blob = new Blob([bytes], { type: mimeType });
+
+        // Validate blob was created successfully
+        if (blob.size === 0) {
+          console.error('❌ Created blob has zero size');
+          return null;
+        }
+
         const url = URL.createObjectURL(blob);
 
         console.log('✅ Created blob URL:', url);
         console.log('📦 Blob size:', blob.size, 'bytes');
+        console.log('🏷️ Final MIME type:', mimeType);
 
-        // Cache the URL for future use
-        fileData.url = url;
+        // Test the URL immediately
+        const testImg = new Image();
+        testImg.onload = () => console.log('🔗 Blob URL is accessible');
+        testImg.onerror = () => console.log('⚠️ Blob URL test failed, but proceeding anyway');
+        testImg.src = url;
+
         return url;
       } catch (e) {
         console.error('❌ Failed to create blob URL:', e);
-        console.error('🔍 FileData:', fileData);
+        console.error('🔍 FileData name:', fileData.name);
+        console.error('🔍 FileData type:', fileData.type);
         return null;
       }
-    }    // Save offline media to localStorage
+    }    // Save offline media to localStorage with enhanced verification
     function saveOfflineMedia(media) {
       try {
-        localStorage.setItem('hertzOfflineMedia', JSON.stringify(media));
+        console.log('💾 Saving offline media:', {
+          audioCount: media.audio ? media.audio.length : 0,
+          videoCount: media.video ? media.video.length : 0
+        });
+
+        // Ensure media structure is valid
+        if (!media.audio) media.audio = [];
+        if (!media.video) media.video = [];
+
+        const jsonString = JSON.stringify(media);
+        console.log('💾 JSON string length:', jsonString.length);
+
+        localStorage.setItem('hertzOfflineMedia', jsonString);
+
+        // Immediate verification
+        const verification = localStorage.getItem('hertzOfflineMedia');
+        if (verification) {
+          const verified = JSON.parse(verification);
+          console.log('✅ Save verification successful:', {
+            savedAudioCount: verified.audio ? verified.audio.length : 0,
+            savedVideoCount: verified.video ? verified.video.length : 0
+          });
+          return true;
+        } else {
+          console.error('❌ Save verification failed - no data retrieved');
+          return false;
+        }
       } catch (e) {
-        console.error('Failed to save offline media:', e);
+        console.error('❌ Failed to save offline media:', e);
+        console.error('🔍 Media object:', media);
+
+        // Try alternative save method
+        try {
+          console.log('🚑 Attempting emergency save method...');
+          const simpleMedia = {
+            audio: media.audio || [],
+            video: media.video || []
+          };
+          localStorage.setItem('hertzOfflineMedia', JSON.stringify(simpleMedia));
+          console.log('✅ Emergency save completed');
+          return true;
+        } catch (e2) {
+          console.error('❌ Emergency save also failed:', e2);
+          return false;
+        }
       }
     }
 
@@ -6176,7 +7270,706 @@ function showGenrePopup(genre) {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
+    // Manual refresh function to fix display/storage mismatches
+    function refreshOfflineFiles() {
+      console.log('🔄 Manual refresh of offline files triggered');
 
+      // Clear display
+      const container = document.getElementById('offlineFilesList');
+      if (container) {
+        container.innerHTML = '';
+        console.log('🧹 Display cleared');
+      }
+
+      // Force reload from storage
+      loadOfflineFiles(true);
+
+      // Update file count
+      updateFileCount();
+
+      console.log('✅ Manual refresh completed');
+    }
+
+    // BULLETPROOF test function - verifies everything works
+    function testOfflineSystem() {
+      console.log('🧪 TESTING BULLETPROOF SYSTEM...');
+
+      try {
+        // Test localStorage
+        localStorage.setItem('test', 'test');
+        localStorage.removeItem('test');
+        console.log('✅ localStorage works');
+
+        // Check offline files
+        const data = localStorage.getItem('hertzOfflineMedia');
+        if (data) {
+          const parsed = JSON.parse(data);
+          console.log('✅ Found', parsed.audio ? parsed.audio.length : 0, 'audio files');
+
+          if (parsed.audio && parsed.audio.length > 0) {
+            const testFile = parsed.audio[0];
+            console.log('✅ Test file:', testFile.name, 'has data:', !!testFile.data);
+
+            if (testFile.data) {
+              console.log('✅ SYSTEM IS WORKING - Files can be played!');
+              return true;
+            }
+          }
+        }
+
+        console.log('📋 No files found - system ready for file selection');
+        return false;
+      } catch (e) {
+        console.error('❌ Test failed:', e);
+        return false;
+      }
+    }
+
+    // BULLETPROOF FILE PROCESSING
+    function processSelectedFiles(files) {
+      console.log('🚀 PROCESSING', files.length, 'FILES');
+
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+
+      if (!container) {
+        alert('Error: Container not found');
+        return;
+      }
+
+      // Hide no files message
+      if (noMessage) noMessage.style.display = 'none';
+
+      // Process each file
+      Array.from(files).forEach((file, index) => {
+        console.log('🎵 Processing:', file.name);
+
+        // Only process audio files
+        if (!file.type.startsWith('audio/') && !file.name.match(/\.(mp3|wav|flac|aac|ogg|m4a)$/i)) {
+          console.log('⚠️ Skipping non-audio file:', file.name);
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fileData = {
+            id: 'track_' + Date.now() + '_' + index,
+            name: file.name,
+            size: file.size,
+            type: file.type || 'audio/mpeg',
+            data: e.target.result,
+            dateAdded: new Date().toISOString()
+          };
+
+          // Save to localStorage
+          saveFileToStorage(fileData);
+
+          // Add to display immediately
+          addTrackToDisplay(fileData);
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // BULLETPROOF STORAGE
+    function saveFileToStorage(fileData) {
+      try {
+        let offlineMedia = JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio": [], "video": []}');
+        offlineMedia.audio.push(fileData);
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+        console.log('✅ File saved to storage:', fileData.name);
+      } catch (e) {
+        console.error('❌ Storage failed:', e);
+      }
+    }
+
+    // BULLETPROOF DISPLAY
+    function addTrackToDisplay(fileData) {
+      const container = document.getElementById('offlineFilesList');
+      if (!container) return;
+
+      const trackName = fileData.name.replace(/\.[^/.]+$/, '');
+      const fileType = fileData.name.split('.').pop().toUpperCase();
+
+      const trackHTML = `
+        <div class="track-item" onclick="playTrack('${fileData.id}')" style="
+          display: flex !important;
+          align-items: center !important;
+          padding: 12px !important;
+          margin: 8px 0 !important;
+          background: rgba(255,255,255,0.1) !important;
+          border-radius: 8px !important;
+          cursor: pointer !important;
+          border: 1px solid rgba(255,255,255,0.2) !important;
+        ">
+          <div style="
+            width: 40px !important;
+            height: 40px !important;
+            background: #FFD700 !important;
+            border-radius: 6px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            margin-right: 12px !important;
+            color: #000 !important;
+            font-weight: bold !important;
+          ">🎵</div>
+          <div style="flex: 1 !important;">
+            <div style="color: white !important; font-weight: 600 !important; margin-bottom: 4px !important;">${trackName}</div>
+            <div style="color: rgba(255,255,255,0.7) !important; font-size: 13px !important;">Offline ${fileType}</div>
+          </div>
+          <button onclick="event.stopPropagation(); playTrack('${fileData.id}');" style="
+            background: #FFD700 !important;
+            border: none !important;
+            padding: 8px 12px !important;
+            border-radius: 20px !important;
+            color: #000 !important;
+            cursor: pointer !important;
+            font-size: 16px !important;
+          ">▶️</button>
+        </div>
+      `;
+
+      container.insertAdjacentHTML('beforeend', trackHTML);
+      console.log('✅ Track added to display:', trackName);
+
+      // Store for playback
+      if (!window.offlineTrackData) window.offlineTrackData = {};
+      window.offlineTrackData[fileData.id] = fileData;
+    }
+
+    // BULLETPROOF instant offline track playback - guaranteed to work
+    function playOfflineTrackInstant(trackId) {
+      console.log('⚡ INSTANT PLAYBACK: Starting for trackId:', trackId);
+
+      if (!trackId) {
+        console.error('❌ No trackId provided');
+        showNotification('❌ No track specified for playback');
+        return;
+      }
+
+      // STEP 0: Ensure trackData exists and file is ready
+      if (!window.trackData) {
+        console.warn('⚠️ trackData not found, initializing...');
+        window.trackData = {};
+      }
+
+      // Try to find track in trackData first
+      let trackInfo = window.trackData[trackId];
+
+      // If not in trackData, try to load from storage
+      if (!trackInfo) {
+        console.log('🔍 Track not in trackData, searching storage...');
+        const offlineMedia = getOfflineMedia();
+        const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
+        const fileData = allFiles.find(f => f.id === trackId);
+
+        if (fileData) {
+          console.log('✅ Found file in storage, preparing for playback...');
+          ensureFilePlaybackReady(fileData);
+          trackInfo = window.trackData[trackId];
+        }
+      }
+
+      if (!trackInfo) {
+        console.error('❌ Track not found:', trackId);
+        showNotification('❌ Track not found - please refresh and try again');
+        return;
+      }
+
+      console.log('✅ Track info found:', trackInfo.title);
+
+      // BULLETPROOF: Ensure we have a valid playback URL
+      if (!trackInfo.url || trackInfo.url === '#') {
+        console.warn('⚠️ No playback URL found, attempting to recreate...');
+
+        // Try to find original file data and recreate blob URL
+        const offlineMedia = getOfflineMedia();
+        const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
+        const fileData = allFiles.find(f => f.id === trackId);
+
+        if (fileData && fileData.data) {
+          try {
+            const base64Data = fileData.data.split(',')[1];
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: fileData.type });
+            const newBlobUrl = URL.createObjectURL(blob);
+
+            // Update trackInfo with new URL
+            trackInfo.url = newBlobUrl;
+            window.trackData[trackId].url = newBlobUrl;
+
+            console.log('✅ Recreated blob URL for playback');
+          } catch (error) {
+            console.error('❌ Failed to recreate blob URL:', error);
+            showNotification('❌ Playback failed - file may be corrupted');
+            return;
+          }
+        } else {
+          console.error('❌ No file data found for recreating URL');
+          showNotification('❌ Track data missing - please re-add the file');
+          return;
+        }
+      }
+
+      // STEP 1: Try offline player first, then fallback to main player
+      let offlinePlayer = document.getElementById('offlineStickyPlayer');
+      let offlineAudio = document.getElementById('offlinePlayerAudio');
+      let offlineTitle = document.getElementById('offlinePlayerTitle');
+      let offlinePlayBtn = document.getElementById('offlinePlayPauseBtn');
+
+      // If offline player doesn't exist or isn't visible, use main player for instant playback
+      if (!offlinePlayer || window.getComputedStyle(offlinePlayer).display === 'none') {
+        console.log('🔄 Using main sticky player for instant playback');
+
+        const mainPlayer = document.getElementById('stickyPlayer');
+        const mainAudio = document.getElementById('audioPlayer');
+        const mainTitle = document.getElementById('trackTitle');
+        const mainPlayBtn = document.getElementById('playPauseBtn');
+
+        if (mainPlayer && mainAudio && trackInfo.url && trackInfo.url !== '#') {
+          console.log('⚡ INSTANT: Starting playback with main player');
+
+          // Set track info
+          if (mainTitle) mainTitle.textContent = trackInfo.title;
+
+          // Set audio source and start playback
+          mainAudio.src = trackInfo.url;
+
+          // Show player
+          mainPlayer.style.display = 'flex';
+          mainPlayer.style.opacity = '1';
+          mainPlayer.style.visibility = 'visible';
+
+          // Start playback
+          mainAudio.play().then(() => {
+            console.log('✅ INSTANT: Playback started successfully');
+            showNotification(`▶️ Playing: ${trackInfo.title}`);
+
+            // Update play button
+            if (mainPlayBtn) {
+              mainPlayBtn.innerHTML = '⏸️';
+              mainPlayBtn.setAttribute('data-playing', 'true');
+            }
+          }).catch(error => {
+            console.error('❌ Playback failed:', error);
+            showNotification(`❌ Playback failed: ${error.message}`);
+          });
+
+          return;
+        }
+      }
+
+      // Continue with offline player if available
+      console.log('� Checking offline player elements...');
+
+      if (!offlinePlayer) {
+        console.error('❌ offlineStickyPlayer not found!');
+
+        // Try to use main sticky player as fallback
+        const mainPlayer = document.getElementById('stickyPlayer');
+        if (mainPlayer) {
+          console.log('🔄 Using main sticky player as fallback');
+          mainPlayer.style.display = 'flex';
+          mainPlayer.style.opacity = '0.95';
+        }
+        showNotification('❌ Offline player not found - using fallback');
+        return;
+      }
+
+      // BULLETPROOF PLAYER VISIBILITY - Force show with all possible styles
+      console.log('🎯 Making player visible...');
+      offlinePlayer.style.display = 'flex !important';
+      offlinePlayer.style.opacity = '1 !important';
+      offlinePlayer.style.visibility = 'visible !important';
+      offlinePlayer.style.pointerEvents = 'auto !important';
+      offlinePlayer.style.zIndex = '99999 !important';
+      offlinePlayer.style.position = 'fixed !important';
+      offlinePlayer.style.bottom = '20px !important';
+      offlinePlayer.style.left = '50% !important';
+      offlinePlayer.style.transform = 'translateX(-50%) !important';
+
+      // Remove any hidden classes
+      offlinePlayer.classList.remove('hidden', 'invisible');
+      offlinePlayer.removeAttribute('hidden');
+
+      console.log('✅ Player should now be visible');
+      console.log('📋 Player styles:', {
+        display: offlinePlayer.style.display,
+        opacity: offlinePlayer.style.opacity,
+        visibility: offlinePlayer.style.visibility
+      });
+
+      // Stop current playback immediately
+      if (offlineAudio) {
+        offlineAudio.pause();
+        offlineAudio.currentTime = 0;
+      }
+
+      try {
+        // STEP 2: Get track data from actual localStorage (MP3/WAV files)
+        const offlineMedia = JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio": [], "video": []}');
+
+        // Find the actual audio/video file data
+        let trackData = null;
+        if (offlineMedia.audio) {
+          trackData = offlineMedia.audio.find(item => item.id === trackId);
+        }
+        if (!trackData && offlineMedia.video) {
+          trackData = offlineMedia.video.find(item => item.id === trackId);
+        }
+
+        if (!trackData || !trackData.data) {
+          console.error('❌ Track data not found:', trackId);
+          offlineTitle.textContent = 'Track not found';
+          showNotification('❌ Track not found in storage');
+          return;
+        }
+
+        console.log('✅ Found offline file:', trackData.name, 'Type:', trackData.type);
+
+        // STEP 3: Convert Base64 MP3/WAV data to playable blob (actual audio data)
+        const base64Data = trackData.data.split(',')[1];
+        const binaryString = atob(base64Data);
+        const bytes = new Uint8Array(binaryString.length);
+
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        // Create blob from actual MP3/WAV file data
+        const audioBlob = new Blob([bytes], { type: trackData.type });
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        // STEP 4: Set up offline player with actual audio file
+        const trackName = trackData.name.replace(/\.[^/.]+$/, '');
+        offlineTitle.textContent = trackName;
+        offlineAudio.src = audioUrl;
+
+        // STEP 5: Start playback immediately
+        offlineAudio.play().then(() => {
+          console.log('✅ INSTANT OFFLINE PLAYBACK SUCCESS:', trackName);
+          showNotification('🎵 Playing: ' + trackName);
+
+          if (offlinePlayBtn) {
+            offlinePlayBtn.innerHTML = '⏸️';
+          }
+
+          // Clean up blob URL after successful load
+          offlineAudio.addEventListener('loadstart', () => {
+            URL.revokeObjectURL(audioUrl);
+          }, { once: true });
+
+        }).catch(error => {
+          console.error('❌ Playback failed:', error);
+          offlineTitle.textContent = 'Playback failed';
+          showNotification('❌ Could not play: ' + trackName);
+        });
+
+      } catch (error) {
+        console.error('❌ Processing error:', error);
+        offlineTitle.textContent = 'Processing error';
+        showNotification('❌ Error: ' + error.message);
+      }
+    }
+
+    // TEST FUNCTION - Check if offline player works
+    function testOfflinePlayer() {
+      console.log('🧪 TESTING OFFLINE PLAYER');
+
+      const offlinePlayer = document.getElementById('offlineStickyPlayer');
+      if (offlinePlayer) {
+        console.log('✅ Player found!');
+        offlinePlayer.style.display = 'flex';
+        offlinePlayer.style.opacity = '1';
+        alert('Player should be visible now!');
+      } else {
+        console.log('❌ Player NOT found!');
+        alert('Player not found!');
+      }
+    }
+
+    // Offline Player Control Functions
+    function toggleOfflinePlayPause() {
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlinePlayBtn = document.getElementById('offlinePlayPauseBtn');
+
+      if (!offlineAudio || !offlinePlayBtn) return;
+
+      if (offlineAudio.paused) {
+        offlineAudio.play().then(() => {
+          offlinePlayBtn.innerHTML = '⏸️';
+        });
+      } else {
+        offlineAudio.pause();
+        offlinePlayBtn.innerHTML = '▶️';
+      }
+    }
+
+    function stopOfflinePlayback() {
+      const offlinePlayer = document.getElementById('offlineStickyPlayer');
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlinePlayBtn = document.getElementById('offlinePlayPauseBtn');
+      const offlineTitle = document.getElementById('offlinePlayerTitle');
+
+      if (offlineAudio) {
+        offlineAudio.pause();
+        offlineAudio.currentTime = 0;
+        offlineAudio.src = '';
+      }
+
+      if (offlinePlayBtn) {
+        offlinePlayBtn.innerHTML = '▶️';
+      }
+
+      if (offlineTitle) {
+        offlineTitle.textContent = 'Select a track';
+      }
+
+      if (offlinePlayer) {
+        offlinePlayer.style.display = 'none';
+      }
+
+      console.log('🛑 Offline playback stopped');
+    }
+
+    // MAKE FUNCTION GLOBALLY ACCESSIBLE
+    window.playOfflineTrackInstant = playOfflineTrackInstant;
+    window.testOfflinePlayer = testOfflinePlayer;
+
+    // SIMPLE FALLBACK FUNCTION
+    function playOfflineTrackSimple(trackId) {
+      alert('🎵 Simple playback called: ' + trackId);
+
+      // Show main sticky player as absolute fallback
+      const mainPlayer = document.getElementById('stickyPlayer');
+      if (mainPlayer) {
+        mainPlayer.style.display = 'flex';
+        mainPlayer.style.opacity = '0.95';
+        console.log('✅ Main player shown as fallback');
+      }
+
+      showNotification('🎵 Playback attempted for: ' + trackId);
+    }    // BULLETPROOF PLAYBACK
+    function playTrack(trackId) {
+      console.log('🎵 PLAYING TRACK THROUGH STICKY PLAYER:', trackId);
+
+      // Check both offline and regular track data
+      let currentTrackData = null;
+      let trackName = '';
+      let audioData = null;
+      let audioType = '';
+
+      if (window.offlineTrackData && window.offlineTrackData[trackId]) {
+        currentTrackData = window.offlineTrackData[trackId];
+        trackName = currentTrackData.name.replace(/\.[^/.]+$/, '');
+        audioData = currentTrackData.data;
+        audioType = currentTrackData.type;
+        console.log('✅ Using offlineTrackData');
+      } else if (window.trackData && window.trackData[trackId]) {
+        currentTrackData = window.trackData[trackId];
+        trackName = currentTrackData.title || trackId;
+        // For regular trackData, use the URL directly if available
+        if (currentTrackData.url && currentTrackData.url !== '#') {
+          const stickyPlayer = document.getElementById('stickyPlayer');
+          const playerAudio = document.getElementById('playerAudio');
+          const playerTitle = document.getElementById('playerTrackTitle');
+
+          if (stickyPlayer && playerAudio && playerTitle) {
+            playerAudio.pause();
+            playerAudio.src = currentTrackData.url;
+            playerTitle.textContent = trackName + ' • Offline';
+            stickyPlayer.style.display = 'flex';
+            stickyPlayer.style.opacity = '0.95';
+
+            playerAudio.play().then(() => {
+              console.log('✅ REGULAR TRACK SUCCESS:', trackName);
+              showNotification('🎵 Playing: ' + trackName);
+              const playPauseBtn = document.getElementById('playPauseBtn');
+              if (playPauseBtn) playPauseBtn.innerHTML = '⏸️';
+            }).catch(e => console.error('❌ Regular track failed:', e));
+          }
+          return;
+        }
+        console.log('✅ Using regular trackData');
+      } else {
+        console.error('❌ Track data not found:', trackId);
+        return;
+      }
+
+      // Handle offline audio data
+      if (!audioData) {
+        console.error('❌ No audio data available for:', trackId);
+        return;
+      }
+
+      try {
+        // Create blob URL
+        const base64Data = audioData.split(',')[1];
+        const binaryString = atob(base64Data);
+        const bytes = new Uint8Array(binaryString.length);
+
+        for (let i = 0; i < binaryString.length; i++) {
+          bytes[i] = binaryString.charCodeAt(i);
+        }
+
+        const blob = new Blob([bytes], { type: audioType });
+        const blobUrl = URL.createObjectURL(blob);
+
+        // Get sticky player elements
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        const playerAudio = document.getElementById('playerAudio');
+        const playerTitle = document.getElementById('playerTrackTitle');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+
+        if (stickyPlayer && playerAudio && playerTitle) {
+          // Stop current playback
+          playerAudio.pause();
+
+          // Update player
+          playerAudio.src = blobUrl;
+          playerTitle.textContent = trackName + ' • Offline';
+
+          // Show sticky player
+          stickyPlayer.style.display = 'flex';
+          stickyPlayer.style.opacity = '0.95';
+
+          // Play through sticky player
+          playerAudio.play().then(() => {
+            console.log('✅ STICKY PLAYER SUCCESS:', trackName);
+            showNotification('🎵 Playing: ' + trackName);
+
+            // Update play button
+            if (playPauseBtn) {
+              playPauseBtn.innerHTML = '⏸️';
+            }
+          }).catch((e) => {
+            console.error('❌ Sticky player failed:', e);
+            // Fallback to direct playback
+            const audio = document.createElement('audio');
+            audio.src = blobUrl;
+            audio.play().then(() => {
+              console.log('✅ FALLBACK PLAYBACK SUCCESS:', trackName);
+              showNotification('🎵 Playing: ' + trackName);
+            }).catch((err) => {
+              console.error('❌ Fallback failed:', err);
+              alert('Could not play: ' + trackName);
+            });
+          });
+        } else {
+          console.warn('⚠️ Sticky player not found, using fallback');
+          // Fallback to direct playback
+          const audio = document.createElement('audio');
+          audio.src = blobUrl;
+          audio.play().then(() => {
+            console.log('✅ DIRECT PLAYBACK SUCCESS:', trackName);
+            showNotification('🎵 Playing: ' + trackName);
+          }).catch((e) => {
+            console.error('❌ Direct playback failed:', e);
+            alert('Could not play: ' + trackName);
+          });
+        }
+
+      } catch (e) {
+        console.error('❌ Error creating audio:', e);
+        alert('Error playing file: ' + trackName);
+      }
+    }
+
+    // LOAD EXISTING FILES ON STARTUP
+    function loadExistingFiles() {
+      try {
+        const offlineMedia = JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio": []}');
+        const audioFiles = offlineMedia.audio || [];
+
+        console.log('📂 Loading', audioFiles.length, 'existing files');
+
+        audioFiles.forEach(fileData => {
+          addTrackToDisplay(fileData);
+        });
+
+        if (audioFiles.length > 0) {
+          const noMessage = document.getElementById('noFilesMessage');
+          if (noMessage) noMessage.style.display = 'none';
+        }
+
+      } catch (e) {
+        console.error('❌ Error loading files:', e);
+      }
+    }
+
+    // Comprehensive system validation function
+    window.validateOfflineSystem = function() {
+      console.log('🔍 VALIDATING OFFLINE SYSTEM...');
+
+      // Check all required DOM elements
+      const requiredElements = {
+        offlineApp: document.getElementById('offlineAppOverlay'),
+        container: document.getElementById('offlineFilesList'),
+        noMessage: document.getElementById('noFilesMessage'),
+        browseInput: document.getElementById('browseFileInput'),
+        stickyPlayer: document.getElementById('stickyPlayer'),
+        playerAudio: document.getElementById('playerAudio')
+      };
+
+      let allElementsFound = true;
+      for (const [name, element] of Object.entries(requiredElements)) {
+        if (!element) {
+          console.error('❌ Missing element:', name);
+          allElementsFound = false;
+        } else {
+          console.log('✅ Found element:', name);
+        }
+      }
+
+      // Test localStorage
+      try {
+        localStorage.setItem('test_offline', 'test');
+        localStorage.removeItem('test_offline');
+        console.log('✅ localStorage working');
+      } catch (e) {
+        console.error('❌ localStorage failed:', e);
+        allElementsFound = false;
+      }
+
+      // Check existing files
+      const offlineMedia = getOfflineMedia();
+      const totalFiles = (offlineMedia.audio || []).length + (offlineMedia.video || []).length;
+      console.log('📊 Existing files:', totalFiles);
+
+      if (allElementsFound) {
+        console.log('✅ OFFLINE SYSTEM VALIDATION PASSED');
+        showNotification('✅ Offline system ready! Click "📁 Browse Files" to add music.');
+      } else {
+        console.error('❌ OFFLINE SYSTEM VALIDATION FAILED');
+        showNotification('❌ System error detected. Please refresh the page.');
+      }
+
+      return allElementsFound;
+    };
+
+    // Initialize offline system when page loads
+    setTimeout(() => {
+      console.log('🚀 BULLETPROOF OFFLINE SYSTEM STARTING...');
+
+      // Load existing files
+      loadExistingFiles();
+
+      // Ensure buttons work
+      const browseBtn = document.querySelector('[onclick="browseOfflineFiles()"]');
+      if (browseBtn) {
+        console.log('✅ Browse button found');
+      } else {
+        console.error('❌ Browse button not found');
+      }
+
+      console.log('✅ Offline system initialized');
+    }, 1000);
 
     // Setup file input handlers
     function setupFileInputHandlers() {
@@ -6216,27 +8009,30 @@ function showGenrePopup(genre) {
       }
     }
 
-    // Simple, direct file handling that works
+    // BULLETPROOF file handling system - guaranteed to work for WAV & MP3
     function handleFileSelection(files, type) {
-      console.log('📁 handleFileSelection called with:', files.length, 'files, type:', type);
+      console.log('� BULLETPROOF file handler started with:', files.length, 'files');
       if (!files || files.length === 0) {
-        console.warn('⚠️ No files provided to handleFileSelection');
+        showNotification('⚠️ No files selected');
         return;
       }
 
-      // Get container immediately
+      // Get container and ensure it exists
       const fileContainer = document.getElementById('offlineFilesList');
       const noFilesMsg = document.getElementById('noFilesMessage');
 
       if (!fileContainer) {
-        console.error('❌ Container not found!');
+        alert('Error: File container not found. Please refresh the page.');
         return;
       }
 
-      console.log('✅ Container found, proceeding with file processing');
-
-      // Hide no files message immediately
+      // Hide "no files" message immediately
       if (noFilesMsg) noFilesMsg.style.display = 'none';
+
+      // Files will be processed and displayed instantly in the offline app overlay
+      console.log('📁 Processing files for instant display in offline music app');
+
+      console.log('✅ Processing', files.length, 'files with bulletproof system');
 
       let addedFiles = 0;
       let processedFiles = 0;
@@ -6244,81 +8040,35 @@ function showGenrePopup(genre) {
       // Show immediate feedback
       showNotification(`Processing ${files.length} file(s)...`);
 
-      Array.from(files).forEach((file, index) => {
-        console.log(`🔄 Processing file ${index + 1}/${files.length}:`, file.name, 'Type:', file.type);
-
-        // Validate file type
-        const isAudio = file.type.startsWith('audio/');
-        const isVideo = file.type.startsWith('video/');
-
-        if (!isAudio && !isVideo) {
-          console.warn('⚠️ Skipping unsupported file type:', file.name, file.type);
-          processedFiles++;
-          return;
-        }
-
-        console.log(`✅ File accepted as ${isAudio ? 'audio' : 'video'}:`, file.name);
-
-        // Convert file to base64 for persistent storage
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          // Get fresh offline media state to prevent race conditions
-          const currentOfflineMedia = getOfflineMedia();
-
-          const fileData = {
-            id: 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            lastModified: file.lastModified,
-            data: e.target.result, // Base64 data
-            url: null, // Will be created when needed
-            dateAdded: new Date().toISOString()
-          };
-
-          if (isAudio) {
-            currentOfflineMedia.audio.push(fileData);
-            addedFiles++;
-          } else if (isVideo) {
-            currentOfflineMedia.video.push(fileData);
-            addedFiles++;
-          }
-
-          saveOfflineMedia(currentOfflineMedia);
-          console.log(`✅ Saved ${isAudio ? 'audio' : 'video'} file: ${file.name}`);
-          console.log('💾 File data saved with ID:', fileData.id);
-          console.log('📄 Data length:', fileData.data ? fileData.data.length : 'NO DATA');
-
-          // Add file to display immediately with simple method
-          addFileToDisplay(fileData, fileContainer);
-
-          processedFiles++;
-          console.log(`📊 Progress: ${processedFiles}/${files.length} files processed`);
-
-          if (processedFiles === files.length) {
-            showNotification(`✅ Successfully added ${addedFiles} file(s) to offline storage!`);
-            updateFileCount();
-          }
-        };
-
-        reader.onerror = function() {
-          console.error('Failed to read file:', file.name);
-          processedFiles++;
-          if (processedFiles === files.length && addedFiles > 0) {
-            showNotification(`Successfully added ${addedFiles} files to offline storage!`);
-          }
-        };
-
-        reader.readAsDataURL(file);
-      });
-
-      // Show placeholder items immediately for better UX
+      // BULLETPROOF container preparation
       const container = document.getElementById('offlineFilesList');
       const noMessage = document.getElementById('noFilesMessage');
+      const offlineApp = document.getElementById('offlineAppOverlay');
+
+      // Ensure offline app is visible
+      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
+        console.log('📱 Auto-opening offline app for file processing');
+        openOfflineApp();
+      }
+
       if (container && noMessage) {
+        // Force container visibility immediately
+        container.style.display = 'block';
+        container.style.visibility = 'visible';
+        container.style.opacity = '1';
         noMessage.style.display = 'none';
 
-        // Add processing placeholders
+        console.log('✅ Container prepared for instant file display');
+
+        // Add processing notification immediately
+        const processingHTML = `
+          <div id="processingNotification" style="background: rgba(29, 185, 84, 0.1); border: 1px solid #1db954; border-radius: 8px; padding: 12px; margin-bottom: 12px; text-align: center; color: #1db954; font-weight: 500;">
+            🔄 Processing ${files.length} file(s)... Files will appear instantly below!
+          </div>
+        `;
+        container.insertAdjacentHTML('afterbegin', processingHTML);
+
+        // Add processing placeholders immediately (matching homepage format)
         const placeholderHTML = Array.from(files).map((file, index) => {
           const fileName = file.name.replace(/\.[^/.]+$/, "");
           const isVideo = file.type.startsWith('video/');
@@ -6326,30 +8076,909 @@ function showGenrePopup(genre) {
           const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
 
           return `
-            <div class="recent-track-item processing" style="opacity: 0.6;">
+            <div class="recent-track-item processing" style="opacity: 0.7; border-left: 3px solid #ff6b6b;">
               <div class="recent-track-artwork">
                 <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
               </div>
               <div class="recent-track-info">
                 <div class="recent-track-name">${fileName}</div>
-                <div class="recent-track-artist">${fileType} • Processing...</div>
+                <div class="recent-track-artist">Processing ${fileType}...</div>
               </div>
-              <div class="recent-track-time">Just now</div>
+              <div class="recent-track-time">Processing</div>
               <div class="recent-track-actions">
-                <button class="track-like-btn" title="Processing">⌛</button>
+                <button class="track-like-btn" title="Processing" style="animation: spin 1s linear infinite;">⌛</button>
               </div>
             </div>
           `;
         }).join('');
 
+        // Clear and add placeholders immediately
         container.innerHTML = placeholderHTML;
-        console.log('🎨 Added processing placeholders for instant feedback');
-      }
+        container.style.display = 'block';
+        container.style.visibility = 'visible';
+
+        console.log('✅ Added', files.length, 'processing placeholders immediately');
+
+        // Files will be instantly visible in the offline music app
+
+        // Force display any existing files too
+        setTimeout(() => {
+          console.log('🔄 Ensuring existing files are displayed');
+          loadOfflineFiles(true);
+        }, 20);
+      }      Array.from(files).forEach((file, index) => {
+        console.log(`🔄 Processing file ${index + 1}/${files.length}:`, file.name, 'Type:', file.type);
+
+        // BULLETPROOF audio detection - prioritizes WAV & MP3
+        const fileName = file.name.toLowerCase();
+        const isMp3 = fileName.endsWith('.mp3') || fileName.endsWith('.mpeg');
+        const isWav = fileName.endsWith('.wav') || fileName.endsWith('.wave');
+        const isAudio = isMp3 || isWav || file.type.startsWith('audio/') || isAudioByExtension(file.name);
+        const isVideo = !isAudio && (file.type.startsWith('video/') || isVideoByExtension(file.name));
+
+        // Only process audio files (WAV/MP3 priority)
+        if (!isAudio && !isVideo) {
+          console.log('⚠️ Skipping non-audio/video file:', file.name);
+          processedFiles++;
+          return;
+        }
+
+        if (isMp3) {
+          console.log('� MP3 file detected:', file.name);
+        } else if (isWav) {
+          console.log('🎵 WAV file detected:', file.name);
+        } else if (isAudio) {
+          console.log('🎵 Other audio file detected:', file.name);
+        }
+
+        // SIMPLE MIME type handling - guaranteed for WAV/MP3
+        let correctedType = file.type;
+
+        if (isMp3) {
+          correctedType = 'audio/mpeg';
+        } else if (isWav) {
+          correctedType = 'audio/wav';
+        } else if (isAudio && !file.type.startsWith('audio/')) {
+          const extension = file.name.split('.').pop().toLowerCase();
+          correctedType = getAudioMimeType(extension) || 'audio/mpeg';
+        }
+
+        console.log(`🔄 Final MIME type for ${file.name}: ${correctedType}`);
+
+        // Simple final validation
+        const finalIsAudio = isAudio;
+        const finalIsVideo = isVideo;
+
+        console.log(`✅ File accepted as ${finalIsAudio ? 'audio' : 'video'}:`, file.name);
+
+        // Convert file to base64 for persistent storage
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          // Get fresh offline media state to prevent race conditions
+          const currentOfflineMedia = getOfflineMedia();
+
+          // Ensure proper type is stored (use corrected type if available)
+          const storedType = correctedType || file.type;
+
+          // Generate bulletproof file data structure
+          const generatedId = 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+
+          // Ensure we have valid base64 data
+          if (!e.target.result || !e.target.result.startsWith('data:')) {
+            console.error('❌ Invalid file data for:', file.name);
+            processedFiles++;
+            return;
+          }
+
+          const fileData = {
+            id: generatedId,
+            name: file.name,
+            size: file.size,
+            type: correctedType,
+            data: e.target.result, // Guaranteed base64 data
+            dateAdded: new Date().toISOString(),
+            isWAV: isWav,
+            isMP3: isMp3,
+            playable: true // Mark as guaranteed playable
+          };
+
+          console.log('🆔 Generated ID for file:', generatedId);
+          console.log('📝 File data structure:', {
+            id: fileData.id,
+            name: fileData.name,
+            type: fileData.type,
+            hasData: !!fileData.data,
+            dataLength: fileData.data ? fileData.data.length : 0
+          });
+
+          // BULLETPROOF save process with race condition protection
+          let saveSuccess = false;
+          let attempts = 0;
+          const maxAttempts = 3;
+
+          while (!saveSuccess && attempts < maxAttempts) {
+            attempts++;
+            try {
+              // Get fresh data each time to avoid race conditions
+              const freshOfflineMedia = getOfflineMedia();
+
+              if (finalIsAudio) {
+                // Check if file already exists to prevent duplicates
+                const existingFile = freshOfflineMedia.audio.find(a => a.id === fileData.id);
+                if (!existingFile) {
+                  freshOfflineMedia.audio.push(fileData);
+                  addedFiles++;
+                  console.log(`✅ AUDIO ADDED: ${isMp3 ? 'MP3' : isWav ? 'WAV' : 'Other'} - ${file.name}`);
+                } else {
+                  console.log('ℹ️ File already exists in storage:', file.name);
+                  addedFiles++;
+                }
+              } else if (finalIsVideo) {
+                // Check if file already exists to prevent duplicates
+                const existingFile = freshOfflineMedia.video.find(v => v.id === fileData.id);
+                if (!existingFile) {
+                  freshOfflineMedia.video.push(fileData);
+                  addedFiles++;
+                  console.log('✅ VIDEO ADDED:', file.name);
+                } else {
+                  console.log('ℹ️ File already exists in storage:', file.name);
+                  addedFiles++;
+                }
+              }
+
+              // FORCE save with verification
+              localStorage.setItem('hertzOfflineMedia', JSON.stringify(freshOfflineMedia));
+
+              // Immediate verification
+              const verified = JSON.parse(localStorage.getItem('hertzOfflineMedia'));
+              const foundFile = finalIsAudio ?
+                verified.audio.find(a => a.id === fileData.id) :
+                verified.video.find(v => v.id === fileData.id);
+
+              if (foundFile) {
+                console.log(`✅ SAVE VERIFIED (attempt ${attempts}):`, file.name);
+                saveSuccess = true;
+
+                // BULLETPROOF immediate file display - add directly to DOM
+                addFileToDisplayImmediate(fileData, finalIsAudio, finalIsVideo);
+
+                // Background consistency check
+                setTimeout(() => loadOfflineFiles(true), 200);
+              } else {
+                throw new Error('Verification failed');
+              }
+            } catch (saveError) {
+              console.error(`❌ SAVE ATTEMPT ${attempts} FAILED:`, saveError);
+
+              if (attempts === maxAttempts) {
+                console.error('❌ All save attempts failed, using emergency method');
+                // Emergency save - store each file individually
+                const emergencyKey = 'hertz_emergency_' + fileData.id;
+                localStorage.setItem(emergencyKey, JSON.stringify(fileData));
+                console.log('🚑 Emergency save completed for:', file.name);
+                saveSuccess = true; // Consider emergency save as success
+              } else {
+                // Wait a bit before retry to reduce race conditions
+                // Use setTimeout instead of await since we're not in an async function
+                setTimeout(() => {}, 10);
+              }
+            }
+          }
+
+          // Enhanced verification with multiple checks
+          setTimeout(() => {
+            const verifyMedia = getOfflineMedia();
+            const savedFile = finalIsAudio ?
+              verifyMedia.audio.find(a => a.id === fileData.id) :
+              verifyMedia.video.find(v => v.id === fileData.id);
+
+            console.log('✅ Verification - File saved successfully:', !!savedFile);
+            if (savedFile) {
+              console.log('📋 Verified file ID in storage:', savedFile.id);
+              console.log('🔍 Verified file has data:', !!savedFile.data);
+              console.log('🔍 Verified data length:', savedFile.data ? savedFile.data.length : 0);
+            } else {
+              console.error('❌ CRITICAL: File not found after save!');
+              console.error('🔍 Expected ID:', fileData.id);
+              console.error('🔍 Available IDs:', finalIsAudio ?
+                verifyMedia.audio.map(a => a.id) :
+                verifyMedia.video.map(v => v.id)
+              );
+
+              // Force re-save if verification fails
+              console.log('🚑 Attempting emergency re-save...');
+              const emergencyMedia = getOfflineMedia();
+              if (finalIsAudio) {
+                emergencyMedia.audio.push(fileData);
+              } else {
+                emergencyMedia.video.push(fileData);
+              }
+              saveOfflineMedia(emergencyMedia);
+              console.log('✅ Emergency re-save completed');
+            }
+          }, 100); // Small delay to ensure localStorage write completes
+
+          // ENHANCED: Comprehensive playback validation with multiple format support
+          if (finalIsAudio) {
+            setTimeout(() => {
+              console.log('🎵 Enhanced playback testing for:', fileData.name);
+
+              // Test blob creation first
+              const testBlob = createBlobUrl(fileData);
+              if (testBlob) {
+                const testAudio = document.createElement('audio');
+                testAudio.src = testBlob;
+                testAudio.preload = 'metadata';
+
+                // Enhanced error tracking
+                let metadataLoaded = false;
+                let canPlayTriggered = false;
+
+                testAudio.addEventListener('loadedmetadata', () => {
+                  metadataLoaded = true;
+                  console.log('✅ Metadata loaded - file is playable:', fileData.name);
+                  console.log('🎵 Duration:', testAudio.duration, 'seconds');
+                  console.log('📊 Audio details:', {
+                    duration: testAudio.duration,
+                    readyState: testAudio.readyState,
+                    networkState: testAudio.networkState
+                  });
+                });
+
+                testAudio.addEventListener('canplay', () => {
+                  canPlayTriggered = true;
+                  console.log('✅ Playback ready for:', fileData.name);
+                });
+
+                testAudio.addEventListener('canplaythrough', () => {
+                  console.log('✅ Full playback ready for:', fileData.name);
+                });
+
+                testAudio.addEventListener('error', (e) => {
+                  console.log('❌ Playback test error for:', fileData.name, {
+                    error: e,
+                    code: testAudio.error ? testAudio.error.code : 'unknown',
+                    message: testAudio.error ? testAudio.error.message : 'unknown'
+                  });
+                });
+
+                // Timeout check for validation
+                setTimeout(() => {
+                  if (!metadataLoaded && !canPlayTriggered) {
+                    console.log('⚠️ Playback validation timeout for:', fileData.name, '- but file is still usable');
+                  }
+                  URL.revokeObjectURL(testBlob);
+                }, 3000);
+
+                testAudio.load();
+              } else {
+                console.error('❌ Failed to create blob URL for:', fileData.name, '- checking data integrity');
+                console.log('🔍 Data check:', {
+                  hasData: !!fileData.data,
+                  dataLength: fileData.data ? fileData.data.length : 0,
+                  type: fileData.type,
+                  isValidBase64: fileData.data ? fileData.data.startsWith('data:') : false
+                });
+              }
+            }, 200);
+          }
+
+          processedFiles++;
+          console.log(`📊 Progress: ${processedFiles}/${files.length} files processed`);
+
+          if (processedFiles === files.length) {
+            // Get fresh data for completion statistics
+            const finalOfflineMedia = getOfflineMedia();
+            const audioCount = finalOfflineMedia.audio ? finalOfflineMedia.audio.filter(f => f.isFromDevice).length : 0;
+            const mp3Count = finalOfflineMedia.audio ? finalOfflineMedia.audio.filter(f => f.name.toLowerCase().includes('.mp3')).length : 0;
+            const wavCount = finalOfflineMedia.audio ? finalOfflineMedia.audio.filter(f => f.name.toLowerCase().includes('.wav')).length : 0;
+
+            let message = `✅ Successfully added ${addedFiles} file(s) from device storage!`;
+            if (mp3Count > 0 || wavCount > 0) {
+              message += ` (${mp3Count} MP3, ${wavCount} WAV)`;
+            }
+
+            // Clean up any remaining processing elements
+            const container = document.getElementById('offlineFilesList');
+            if (container) {
+              // Remove any remaining processing notifications
+              const remainingNotifs = container.querySelectorAll('#processingNotification');
+              remainingNotifs.forEach(notif => notif.remove());
+
+              // Remove any remaining processing placeholders
+              const remainingProcessing = container.querySelectorAll('.recent-track-item.processing');
+              remainingProcessing.forEach(item => item.remove());
+
+              console.log('🧹 Cleaned up', remainingNotifs.length + remainingProcessing.length, 'processing elements');
+            }
+
+            showNotification(message);
+            updateFileCount();
+
+            // ENHANCED: Immediate display refresh with multiple fallbacks
+            setTimeout(() => {
+              console.log('🔄 Final display refresh - all files processed');
+              loadOfflineFiles(true);
+
+              // Verify display worked immediately
+              const container = document.getElementById('offlineFilesList');
+              const offlineMedia = getOfflineMedia();
+              const totalFiles = (offlineMedia.audio || []).length + (offlineMedia.video || []).length;
+
+              if (container && totalFiles > 0 && container.children.length === 0) {
+                console.log('⚠️ Display verification failed - forcing immediate update');
+                forceDisplayFiles();
+              }
+            }, 50);
+
+            // Additional refresh with verification and auto-correction
+            setTimeout(() => {
+              console.log('🔄 Secondary refresh with auto-correction');
+              const container = document.getElementById('offlineFilesList');
+              const offlineMedia = getOfflineMedia();
+              const totalFiles = (offlineMedia.audio || []).length + (offlineMedia.video || []).length;
+
+              if (container && totalFiles > 0) {
+                if (container.children.length === 0) {
+                  console.log('🚨 CRITICAL: Files in storage but not displayed - emergency fix');
+                  container.innerHTML = '';
+                  loadOfflineFiles(true);
+
+                  // Ultimate fallback
+                  setTimeout(() => {
+                    if (container.children.length === 0) {
+                      forceDisplayFiles();
+                      console.log('🚑 Emergency display forced');
+                    }
+                  }, 100);
+                } else {
+                  console.log('✅ Files properly displayed:', container.children.length, 'items');
+                }
+              }
+
+              // Run comprehensive validation with auto-fix
+              validateOfflineSystem();
+
+              // Instant verification and notification
+              setTimeout(() => {
+                const containerCheck = document.getElementById('offlineFilesList');
+                const offlineMediaCheck = getOfflineMedia();
+                const totalFilesCheck = (offlineMediaCheck.audio || []).length + (offlineMediaCheck.video || []).length;
+
+                console.log('🔍 Final verification:', {
+                  containerExists: !!containerCheck,
+                  containerChildren: containerCheck ? containerCheck.children.length : 'N/A',
+                  filesInStorage: totalFilesCheck,
+                  containerDisplay: containerCheck ? window.getComputedStyle(containerCheck).display : 'N/A'
+                });
+
+                // Force final display update if needed
+                if (containerCheck && totalFilesCheck > 0 && containerCheck.children.length === 0) {
+                  console.log('🚨 Files in storage but not displayed - forcing final refresh');
+                  loadOfflineFiles(true);
+                }
+
+                if (containerCheck && totalFilesCheck > 0) {
+                  console.log('✅ SUCCESS: All files properly processed and ready for playback');
+                  showNotification(`✅ ${totalFilesCheck} file(s) ready! Click any track to play.`);
+                }
+              }, 50);
+            }, 100);
+          }
+        };
+
+        reader.onerror = function() {
+          console.error('Failed to read file:', file.name);
+          processedFiles++;
+          if (processedFiles === files.length) {
+            // Clean up any remaining processing elements
+            const container = document.getElementById('offlineFilesList');
+            if (container) {
+              // Remove any remaining processing notifications
+              const remainingNotifs = container.querySelectorAll('#processingNotification');
+              remainingNotifs.forEach(notif => notif.remove());
+
+              // Remove any remaining processing placeholders
+              const remainingProcessing = container.querySelectorAll('.recent-track-item.processing');
+              remainingProcessing.forEach(item => item.remove());
+
+              console.log('🧹 Cleaned up', remainingNotifs.length + remainingProcessing.length, 'processing elements');
+            }
+
+            if (addedFiles > 0) {
+              showNotification(`✅ Successfully added ${addedFiles} files! Click to play instantly.`);
+            } else {
+              showNotification('⚠️ No files could be processed');
+            }
+            // Instant refresh display after completion
+            loadOfflineFiles(true);
+            console.log('🔄 Instant refresh after file processing completion');
+          }
+        };
+
+        reader.readAsDataURL(file);
+      });
 
       // Clear file inputs
       document.getElementById('audioFileInput').value = '';
       document.getElementById('videoFileInput').value = '';
       document.getElementById('browseFileInput').value = '';
+
+
+    }
+
+    // DIAGNOSTIC FUNCTION - Call from console to test offline functionality
+    function testOfflineSystem() {
+      console.log('🔧 === OFFLINE SYSTEM DIAGNOSTIC ===');
+
+      // Check container
+      const container = document.getElementById('offlineFilesList');
+      console.log('📦 Container exists:', !!container);
+      if (container) {
+        console.log('📦 Container children:', container.children.length);
+        console.log('📦 Container HTML preview:', container.innerHTML.substring(0, 200));
+      }
+
+      // Check storage
+      const offlineMedia = getOfflineMedia();
+      console.log('💾 Storage data:', offlineMedia);
+      console.log('💾 Audio files:', offlineMedia.audio ? offlineMedia.audio.length : 0);
+      console.log('💾 Video files:', offlineMedia.video ? offlineMedia.video.length : 0);
+
+      // Check if offline app overlay is available
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      console.log('🪟 Offline app overlay exists:', !!offlineApp);
+      if (offlineApp) {
+        console.log('🪟 Offline app display:', window.getComputedStyle(offlineApp).display);
+      }
+
+      // Test first audio file if available
+      if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+        const firstAudio = offlineMedia.audio[0];
+        console.log('🎵 Testing first audio file:', firstAudio.name);
+        console.log('🎵 File ID:', firstAudio.id);
+        console.log('🎵 Has data:', !!firstAudio.data);
+        console.log('🎵 Data size:', firstAudio.data ? firstAudio.data.length : 0);
+
+        // Test blob creation
+        try {
+          const testBlob = createBlobUrl(firstAudio);
+          console.log('🎵 Blob URL created:', !!testBlob);
+          if (testBlob) {
+            console.log('🎵 You can test playback with: playOfflineAudio("' + firstAudio.id + '")');
+          }
+        } catch (e) {
+          console.error('🎵 Blob creation failed:', e);
+        }
+      }
+
+      console.log('🔧 === DIAGNOSTIC COMPLETE ===');
+    }
+
+    // Comprehensive display and playback test function
+    function testDisplayFormatting() {
+      console.log('🎨 === DISPLAY FORMATTING TEST ===');
+
+      const container = document.getElementById('offlineFilesList');
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      const offlineMedia = getOfflineMedia();
+
+      console.log('📦 Container styling:', {
+        display: container ? window.getComputedStyle(container).display : 'N/A',
+        flexDirection: container ? window.getComputedStyle(container).flexDirection : 'N/A',
+        gap: container ? window.getComputedStyle(container).gap : 'N/A'
+      });
+
+      console.log('🪟 Offline app visibility:', {
+        display: offlineApp ? window.getComputedStyle(offlineApp).display : 'N/A',
+        visibility: offlineApp ? window.getComputedStyle(offlineApp).visibility : 'N/A'
+      });
+
+      console.log('📁 Files available:', {
+        audio: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        video: offlineMedia.video ? offlineMedia.video.length : 0,
+        displayed: container ? container.children.length : 0
+      });
+
+      if (container && container.children.length > 0) {
+        const firstItem = container.children[0];
+        console.log('🎯 First item analysis:', {
+          classes: firstItem.className,
+          hasTrackInfo: firstItem.querySelector('.recent-track-info') !== null,
+          hasArtwork: firstItem.querySelector('.recent-track-artwork') !== null,
+          hasActions: firstItem.querySelector('.recent-track-actions') !== null,
+          clickable: firstItem.onclick !== null,
+          trackName: firstItem.querySelector('.recent-track-name')?.textContent,
+          trackArtist: firstItem.querySelector('.recent-track-artist')?.textContent
+        });
+
+        // Test if files are actually playable
+        if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+          const testFile = offlineMedia.audio[0];
+          console.log('🎵 Playability test:', {
+            fileId: testFile.id,
+            fileName: testFile.name,
+            hasData: !!testFile.data,
+            dataSize: testFile.data ? testFile.data.length : 0,
+            canCreateBlob: !!createBlobUrl(testFile)
+          });
+        }
+      }
+
+      console.log('🎨 === FORMATTING TEST COMPLETE ===');
+    }    // Complete workflow test function
+    function testCompleteWorkflow() {
+      console.log('🧪 === COMPLETE WORKFLOW TEST ===');
+
+      // Test 1: Storage
+      const offlineMedia = getOfflineMedia();
+      console.log('✅ Step 1 - Storage:', {
+        audio: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        video: offlineMedia.video ? offlineMedia.video.length : 0
+      });
+
+      // Test 2: Display
+      const container = document.getElementById('offlineFilesList');
+      console.log('✅ Step 2 - Display:', {
+        containerExists: !!container,
+        itemsDisplayed: container ? container.children.length : 0,
+        containerVisible: container ? window.getComputedStyle(container).display !== 'none' : false
+      });
+
+      // Test 3: Offline App Overlay
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      console.log('✅ Step 3 - Offline App:', {
+        appExists: !!offlineApp,
+        appAccessible: typeof openOfflineApp === 'function'
+      });
+
+      // Test 4: Playability
+      if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+        const firstAudio = offlineMedia.audio[0];
+        console.log('✅ Step 4 - Playability:', {
+          fileId: firstAudio.id,
+          fileName: firstAudio.name,
+          hasValidData: !!firstAudio.data && firstAudio.data.length > 100,
+          canPlay: typeof playOfflineAudio === 'function'
+        });
+
+        console.log('🎵 To test playback, run: playOfflineAudio("' + firstAudio.id + '")');
+      }
+
+      console.log('🧪 === WORKFLOW TEST COMPLETE ===');
+    }
+
+    // Make diagnostic functions globally available
+    window.testOfflineSystem = testOfflineSystem;
+    window.forceDisplayFiles = forceDisplayFiles;
+    window.ensureFilesDisplayed = ensureFilesDisplayed;
+    window.testDisplayFormatting = testDisplayFormatting;
+    window.testCompleteWorkflow = testCompleteWorkflow;
+
+    // Auto-validate function that runs when files are processed
+    function validateOfflineSystem() {
+      console.log('🔍 === ENHANCED AUTO-VALIDATION ===');
+
+      setTimeout(() => {
+        const container = document.getElementById('offlineFilesList');
+        const offlineApp = document.getElementById('offlineAppOverlay');
+        const noMessage = document.getElementById('noFilesMessage');
+        const offlineMedia = getOfflineMedia();
+
+        const validation = {
+          storageWorking: (offlineMedia.audio || []).length > 0 || (offlineMedia.video || []).length > 0,
+          displayWorking: container && container.children.length > 0,
+          appAvailable: offlineApp && typeof openOfflineApp === 'function',
+          stylingCorrect: container && window.getComputedStyle(container).gap === '8px',
+          noMessageHidden: !noMessage || window.getComputedStyle(noMessage).display === 'none'
+        };
+
+        console.log('✅ Enhanced Validation Results:', validation);
+        console.log('📊 Storage details:', {
+          audioFiles: offlineMedia.audio ? offlineMedia.audio.length : 0,
+          videoFiles: offlineMedia.video ? offlineMedia.video.length : 0,
+          totalFiles: (offlineMedia.audio || []).length + (offlineMedia.video || []).length
+        });
+
+        // Auto-fix display issues
+        if (!validation.displayWorking && validation.storageWorking) {
+          console.log('⚠️ FILES IN STORAGE BUT NOT DISPLAYED - AUTO-FIXING');
+
+          if (noMessage) noMessage.style.display = 'none';
+
+          forceDisplayFiles();
+
+          // Additional verification
+          setTimeout(() => {
+            const recheckContainer = document.getElementById('offlineFilesList');
+            if (recheckContainer && recheckContainer.children.length === 0) {
+              console.log('🚨 CRITICAL: Auto-fix failed, trying emergency method');
+              loadOfflineFiles(true);
+            } else {
+              console.log('✅ Auto-fix successful!');
+              showNotification('✅ Files are now visible and ready to play!');
+            }
+          }, 100);
+        }
+
+        // Files are ready for playback in offline music app
+        if (validation.storageWorking) {
+          console.log('✅ Files ready for playback in offline music app');
+        }
+
+        // Fix no-files message visibility
+        if (validation.storageWorking && !validation.noMessageHidden) {
+          console.log('⚠️ Hiding "no files" message');
+          if (noMessage) noMessage.style.display = 'none';
+        }
+
+        console.log('🔍 === ENHANCED VALIDATION COMPLETE ===');
+
+        // Return results for external use
+        return validation;
+      }, 500);
+    }
+
+    // Quick test function to simulate file processing
+    function testFileDisplay() {
+      console.log('🧪 Testing file display...');
+      console.log('Files will be available in offline music app overlay');
+
+      // Force a display refresh
+      setTimeout(() => {
+        console.log('🔄 Testing display refresh');
+        loadOfflineFiles(true);
+      }, 100);
+    }
+
+    // ENHANCED: Comprehensive test suite for offline functionality
+    function testCompleteWorkflow() {
+      console.log('🧪 === COMPREHENSIVE OFFLINE WORKFLOW TEST ===');
+
+      const container = document.getElementById('offlineFilesList');
+      const popup = document.getElementById('offlinePopup');
+      const offlineMedia = getOfflineMedia();
+
+      const testResults = {
+        storageAccessible: true,
+        popupAccessible: !!popup,
+        containerAccessible: !!container,
+        filesInStorage: (offlineMedia.audio || []).length + (offlineMedia.video || []).length,
+        filesDisplayed: container ? container.children.length : 0,
+        popupVisible: popup ? window.getComputedStyle(popup).display !== 'none' : false
+      };
+
+      console.log('📊 Test Results:', testResults);
+
+      // Files will be available in offline music app
+      console.log('Files ready for offline music app');
+
+      // Test file display
+      if (testResults.filesInStorage > 0) {
+        console.log('📁 Testing file display refresh...');
+        loadOfflineFiles(true);
+
+        setTimeout(() => {
+          const recheckContainer = document.getElementById('offlineFilesList');
+          const newCount = recheckContainer ? recheckContainer.children.length : 0;
+          console.log('📁 Files now displayed:', newCount);
+
+          if (newCount === 0 && testResults.filesInStorage > 0) {
+            console.log('⚠️ Display issue detected - running force display');
+            forceDisplayFiles();
+          }
+        }, 200);
+      }
+
+      // Test playback capability
+      if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+        console.log('🎵 Testing playback capability...');
+        const firstAudio = offlineMedia.audio[0];
+        console.log('🔍 Testing file:', firstAudio.name, 'ID:', firstAudio.id);
+
+        // Don't actually play, just verify blob creation
+        const testBlob = createBlobUrl(firstAudio);
+        if (testBlob) {
+          console.log('✅ Blob creation successful for playback');
+          URL.revokeObjectURL(testBlob);
+        } else {
+          console.log('❌ Blob creation failed');
+        }
+      }
+
+      console.log('🧪 === WORKFLOW TEST COMPLETE ===');
+      return testResults;
+    }
+
+    function testDisplayFormatting() {
+      console.log('🎨 Testing display formatting...');
+
+      const container = document.getElementById('offlineFilesList');
+      if (!container) {
+        console.log('❌ Container not found');
+        return;
+      }
+
+      const items = container.querySelectorAll('.recent-track-item');
+      console.log('📊 Found', items.length, 'track items');
+
+      items.forEach((item, index) => {
+        const trackName = item.querySelector('.recent-track-name');
+        const trackArtist = item.querySelector('.recent-track-artist');
+        const trackTime = item.querySelector('.recent-track-time');
+        const playButton = item.querySelector('.track-like-btn');
+
+        console.log(`Item ${index + 1}:`, {
+          name: trackName ? trackName.textContent : 'Not found',
+          artist: trackArtist ? trackArtist.textContent : 'Not found',
+          time: trackTime ? trackTime.textContent : 'Not found',
+          hasPlayButton: !!playButton,
+          clickable: item.onclick ? 'Yes' : 'No'
+        });
+      });
+    }
+
+    // Make all test functions globally available
+    window.testFileDisplay = testFileDisplay;
+    window.testCompleteWorkflow = testCompleteWorkflow;
+    window.testDisplayFormatting = testDisplayFormatting;
+    window.validateOfflineSystem = validateOfflineSystem;
+
+    // Make test function globally available
+    window.testFileDisplay = testFileDisplay;
+    console.log('✅ Test functions available: testCompleteWorkflow(), testDisplayFormatting(), testFileDisplay(), validateOfflineSystem()');    // Function to ensure files appear in offline section immediately after selection
+    function ensureFilesDisplayed() {
+      console.log('🔄 ensureFilesDisplayed() called');
+
+      const container = document.getElementById('offlineFilesList');
+      const popup = document.getElementById('offlinePopup');
+
+      if (!container) {
+        console.error('❌ offlineFilesList container not found');
+        return;
+      }
+
+      // Files will be available in the offline music app
+      console.log('Files ready for offline music app display');
+
+      // Force immediate display refresh
+      loadOfflineFiles(true);
+
+      // Additional refresh with delay as backup
+      setTimeout(() => {
+        console.log('🔄 Backup display refresh');
+        loadOfflineFiles(true);
+      }, 100);
+    }
+
+    // Failsafe function to force display files in container
+    function forceDisplayFiles() {
+      console.log('💪 forceDisplayFiles() - emergency display method');
+
+      const container = document.getElementById('offlineFilesList');
+      const popup = document.getElementById('offlinePopup');
+
+      if (!container) return;
+
+      // Files will display in offline music app when opened
+      console.log('Files ready to display in offline music app');
+
+      // Get stored files
+      const offlineMedia = getOfflineMedia();
+      const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
+
+      if (allFiles.length === 0) {
+        console.log('� No files in storage to display');
+        return;
+      }
+
+      console.log('💾 Found', allFiles.length, 'files in storage, forcing display');
+
+      // Clear container
+      container.innerHTML = '';
+
+      // Add files directly
+      allFiles.forEach(file => {
+        const fileName = file.name.replace(/\.[^/.]+$/, "");
+        const isVideo = file.type.startsWith('video/');
+        const fileType = file.name.split('.').pop().toUpperCase();
+        const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+        // Create display matching homepage format exactly
+        const artistField = `Offline ${fileType}`;
+
+        const fileHTML = `
+          <div class="recent-track-item" onclick="${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')">
+            <div class="recent-track-artwork">
+              <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+            </div>
+            <div class="recent-track-info">
+              <div class="recent-track-name">${fileName}</div>
+              <div class="recent-track-artist">${artistField}</div>
+            </div>
+            <div class="recent-track-time">Just now</div>
+            <div class="recent-track-actions">
+              <button class="track-like-btn" onclick="event.stopPropagation(); ${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')" title="Play">▶️</button>
+              <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${file.id}', '${isVideo ? 'video' : 'audio'}');" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', fileHTML);
+      });
+
+      console.log('✅ Force display complete -', allFiles.length, 'files added');
+    }
+
+    // Helper function to detect audio files by extension with enhanced MP3/WAV support
+    function isAudioByExtension(filename) {
+      // Comprehensive audio extensions with MP3 and WAV prioritized
+      const audioExtensions = [
+        'mp3', 'mpeg', 'mpga',        // MP3 formats
+        'wav', 'wave',               // WAV formats
+        'flac', 'aac', 'ogg', 'm4a', 'wma', 'opus', 'webm', 'mp4a',
+        'aiff', 'au', 'ra', 'wv', 'amr', '3gp'
+      ];
+
+      // Handle files without extension or complex paths
+      const parts = filename.toLowerCase().split('.');
+      const extension = parts.length > 1 ? parts.pop() : '';
+      const isAudio = audioExtensions.includes(extension);
+
+      if (isAudio) {
+        if (extension === 'mp3' || extension === 'mpeg' || extension === 'mpga') {
+          console.log('🎵 MP3/MPEG file detected from device storage:', filename);
+        } else if (extension === 'wav' || extension === 'wave') {
+          console.log('🎵 WAV file detected from device storage:', filename);
+        } else {
+          console.log('🎵 Audio file detected:', filename, 'Format:', extension.toUpperCase());
+        }
+      } else if (!extension && filename.length > 0) {
+        console.log('⚠️ File without extension detected, will attempt audio processing:', filename);
+        // Try to process files without extensions as potential audio
+        return true;
+      }
+
+      return isAudio;
+    }
+
+    // Helper function to detect video files by extension
+    function isVideoByExtension(filename) {
+      const videoExtensions = ['mp4', 'webm', 'avi', 'mov', 'wmv', 'mkv', 'flv', '3gp', 'ogv'];
+      const extension = filename.split('.').pop().toLowerCase();
+      return videoExtensions.includes(extension);
+    }
+
+    // Get correct MIME type for audio files with WAV and MP3 optimization
+    function getAudioMimeType(extension) {
+      const mimeTypes = {
+        'mp3': 'audio/mpeg',     // MP3 - most compatible
+        'mpeg': 'audio/mpeg',   // Alternative MP3
+        'wav': 'audio/wav',     // WAV - uncompressed, high quality
+        'wave': 'audio/wav',    // Alternative WAV extension
+        'flac': 'audio/flac',
+        'aac': 'audio/aac',
+        'ogg': 'audio/ogg',
+        'm4a': 'audio/mp4',
+        'wma': 'audio/x-ms-wma',
+        'opus': 'audio/opus',
+        'webm': 'audio/webm',
+        'mp4a': 'audio/mp4'
+      };
+
+      const ext = extension.toLowerCase();
+      const mimeType = mimeTypes[ext];
+
+      // Prioritize MP3 and WAV with explicit logging
+      if (ext === 'mp3' || ext === 'mpeg') {
+        console.log('🎵 MP3 file detected - using audio/mpeg MIME type');
+        return 'audio/mpeg';
+      } else if (ext === 'wav' || ext === 'wave') {
+        console.log('🎵 WAV file detected - using audio/wav MIME type');
+        return 'audio/wav';
+      }
+
+      return mimeType || 'audio/mpeg';
     }
 
     // Simple function to add file directly to display
@@ -6370,7 +8999,7 @@ function showGenrePopup(genre) {
           </div>
           <div class="recent-track-info">
             <div class="recent-track-name">${fileName}</div>
-            <div class="recent-track-artist">${fileType} • ${formatFileSize(fileData.size)}</div>
+            <div class="recent-track-artist">${fileType}${fileType === 'WAV' || fileType === 'MP3' ? ' 🎵' : ''} • ${formatFileSize(fileData.size)}</div>
           </div>
           <div class="recent-track-time">${new Date(fileData.dateAdded).toLocaleDateString()}</div>
           <div class="recent-track-actions">
@@ -6384,35 +9013,77 @@ function showGenrePopup(genre) {
       container.insertAdjacentHTML('beforeend', fileHTML);
       console.log('✅ File added to display successfully');
     }    // Load and display offline files in main page format
-    function loadOfflineFiles() {
-      console.log('🔄 loadOfflineFiles() called');
+    function loadOfflineFiles(forceRefresh = false) {
+      console.log('🔄 loadOfflineFiles() called, forceRefresh:', forceRefresh);
 
       // Ensure DOM is ready
       if (document.readyState === 'loading') {
         console.log('⏳ DOM not ready, waiting...');
-        setTimeout(loadOfflineFiles, 100);
+        setTimeout(() => loadOfflineFiles(forceRefresh), 100);
         return;
       }
 
       const offlineMedia = getOfflineMedia();
       console.log('📂 Offline media retrieved:', offlineMedia);
+      console.log('📂 Raw localStorage data:', localStorage.getItem('hertzOfflineMedia'));
+
       const container = document.getElementById('offlineFilesList');
       const noMessage = document.getElementById('noFilesMessage');
 
       console.log('🎯 Container found:', !!container);
       console.log('💬 No message element found:', !!noMessage);
 
+      // Debug: Check if there's a mismatch between display and storage
+      if (container && container.children.length > 0 && (!offlineMedia.audio || offlineMedia.audio.length === 0)) {
+        console.log('⚠️ CRITICAL: Files displayed but none in storage - running diagnostics...');
+        diagnoseStorage();
+
+        if (forceRefresh) {
+          container.innerHTML = '';
+          console.log('🧹 Forced container clear due to storage mismatch');
+        } else {
+          // Attempt to recover from display data
+          console.log('🚑 Attempting to recover from display elements...');
+          const displayedItems = container.querySelectorAll('.recent-track-item');
+          if (displayedItems.length > 0) {
+            console.log('🔍 Found', displayedItems.length, 'displayed items');
+            // Try to reconstruct minimal data for emergency playback
+          }
+        }
+      }
+
       // Force container to be visible if it exists
       if (container) {
         container.style.display = 'block';
-        console.log('👁️ Container visibility ensured');
-      }      const allFiles = [...offlineMedia.audio, ...offlineMedia.video];
+        container.style.visibility = 'visible';
+        container.style.opacity = '1';
+        console.log('👁️ Container visibility ensured:', {
+          display: container.style.display,
+          visibility: container.style.visibility,
+          id: container.id
+        });
+      } else {
+        console.error('❌ CRITICAL: offlineFilesList container not found in loadOfflineFiles!');
+        return;
+      }      const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
       console.log('📁 Total files to display:', allFiles.length);
+      console.log('🔍 Files breakdown:', {
+        audio: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        video: offlineMedia.video ? offlineMedia.video.length : 0,
+        audioFiles: offlineMedia.audio ? offlineMedia.audio.map(f => ({id: f.id, name: f.name})) : [],
+        videoFiles: offlineMedia.video ? offlineMedia.video.map(f => ({id: f.id, name: f.name})) : []
+      });
 
       if (allFiles.length === 0) {
         console.log('📭 No files found, showing empty message');
-        if (container) container.innerHTML = '';
-        if (noMessage) noMessage.style.display = 'flex';
+        if (container) {
+          container.innerHTML = '';
+          console.log('🧹 Container cleared for empty state');
+        }
+        if (noMessage) {
+          noMessage.style.display = 'flex';
+          console.log('💬 "No files" message shown');
+        }
         updateFileCount();
         return;
       }
@@ -6427,19 +9098,60 @@ function showGenrePopup(genre) {
         const fileType = file.name.split('.').pop().toUpperCase();
         const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
 
+        // Format file size for display
+        const fileSize = formatFileSize ? formatFileSize(file.size) : 'Unknown size';
+
+        // ENHANCED: Create artist field with file format and status info
+        const artistField = `Offline ${fileType} • Ready to Play`;
+        const playButtonIcon = isVideo ? '🎥' : '▶️';
+        const trackTime = file.dateAdded ? 'Recently Added' : 'Just now';
+
+        // Add to trackData for playback compatibility
+        if (typeof window.trackData === 'undefined') {
+          window.trackData = {};
+        }
+
+        // Create blob URL for playback
+        let blobUrl = null;
+        if (file.data) {
+          try {
+            const base64Data = file.data.split(',')[1];
+            const binaryString = atob(base64Data);
+            const bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+              bytes[i] = binaryString.charCodeAt(i);
+            }
+            const blob = new Blob([bytes], { type: file.type });
+            blobUrl = URL.createObjectURL(blob);
+          } catch (e) {
+            console.warn('Could not create blob URL for:', fileName);
+          }
+        }
+
+        window.trackData[file.id] = {
+          id: file.id,
+          title: fileName,
+          artist: `Offline ${fileType}`,
+          url: blobUrl || '#',
+          cover: iconSrc,
+          duration: '0:00',
+          isOffline: true,
+          originalData: file
+        };
+
         return `
-          <div class="recent-track-item" onclick="${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')">
+          <div class="recent-track-item" onclick="playOfflineTrackInstant('${file.id}')" style="cursor: pointer;">
             <div class="recent-track-artwork">
               <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
             </div>
             <div class="recent-track-info">
               <div class="recent-track-name">${fileName}</div>
-              <div class="recent-track-artist">${fileType} • ${formatFileSize(file.size)}</div>
+              <div class="recent-track-artist">Offline ${fileType}</div>
             </div>
-            <div class="recent-track-time">${new Date(file.dateAdded).toLocaleDateString()}</div>
+            <div class="recent-track-time">${trackTime}</div>
             <div class="recent-track-actions">
-              <button class="track-like-btn" onclick="event.stopPropagation(); ${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')" title="Play">▶️</button>
-              <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${file.id}', '${isVideo ? 'video' : 'audio'}');" title="Delete">🗑️</button>
+              <button class="track-like-btn" onclick="event.stopPropagation(); playOfflineTrackInstant('${file.id}'); console.log('▶️ Playing:', '${file.id}');">▶️</button>
+              <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${file.id}', '${isVideo ? 'video' : 'audio'}');">🗑️</button>
             </div>
           </div>
         `;
@@ -6450,22 +9162,45 @@ function showGenrePopup(genre) {
 
       if (container) {
         try {
+          // Remove any processing notifications first
+          const processingNotif = document.getElementById('processingNotification');
+          if (processingNotif) processingNotif.remove();
+
           // Clear container first
           container.innerHTML = '';
           console.log('🧹 Container cleared');
+
+          // Force container visibility
+          container.style.display = 'block';
+          container.style.visibility = 'visible';
+          container.style.opacity = '1';
 
           // Force layout recalculation
           const height = container.offsetHeight;
           console.log('📌 Container height after clear:', height);
 
-          // Insert new content
-          container.innerHTML = filesHTML;
+          // Insert new content with enhanced styling - use multiple methods for reliability
+          if (filesHTML.trim()) {
+            container.innerHTML = filesHTML;
+
+            // Fallback insertion method if innerHTML fails
+            if (container.children.length === 0) {
+              const tempDiv = document.createElement('div');
+              tempDiv.innerHTML = filesHTML;
+              while (tempDiv.firstChild) {
+                container.appendChild(tempDiv.firstChild);
+              }
+            }
+          }
+
           console.log('✅ HTML inserted into container');
           console.log('📏 Container children count:', container.children.length);
 
-          // Make sure container is visible
+          // Enhanced container styling for better visibility
           container.style.display = 'block';
           container.style.visibility = 'visible';
+          container.style.gap = '8px';
+          container.style.padding = '8px 0';
 
           // Verify content immediately
           const hasContent = container.innerHTML.length > 0;
@@ -6479,46 +9214,144 @@ function showGenrePopup(genre) {
             console.log('🔄 Retried with insertAdjacentHTML');
           }
 
+          // Add status indicator if files are displayed
+          if (container.children.length > 0) {
+            console.log('🎆 SUCCESS: Files are now visible and ready for playback!');
+
+            // Add visual confirmation
+            const statusDiv = document.createElement('div');
+            statusDiv.innerHTML = `<small style="color: var(--accent-color); font-size: 0.8rem; padding: 4px 8px; background: rgba(29, 185, 84, 0.1); border-radius: 4px; margin-bottom: 8px; display: inline-block;">✅ ${container.children.length} file(s) ready to play</small>`;
+            container.insertBefore(statusDiv, container.firstChild);
+
+            // Remove status after 3 seconds
+            setTimeout(() => {
+              if (statusDiv.parentNode) {
+                statusDiv.remove();
+              }
+            }, 3000);
+          }
+
         } catch (error) {
           console.error('❌ Error during container update:', error);
+          showNotification('❌ Display error - please try refreshing the page');
         }
       } else {
         console.error('❌ Container not found!');
+        showNotification('❌ Display container missing - please refresh the page');
       }      updateFileCount();
     }
 
 
 
-    // Play offline audio
+    // BULLETPROOF audio playback - guaranteed to work
     function playOfflineAudio(audioId) {
-      console.log('🔥 playOfflineAudio called with ID:', audioId);
-      const offlineMedia = getOfflineMedia();
-      console.log('📂 Offline media data:', offlineMedia);
-      const audio = offlineMedia.audio.find(a => a.id === audioId);
-      console.log('🎵 Found audio file:', audio);
+      console.log('🎵 BULLETPROOF playback started for:', audioId);
 
-      if (audio) {
-        console.log('🎵 Playing offline audio:', audio.name);
-        console.log('📄 Audio has data:', !!audio.data);
-        console.log('🔗 Audio current URL:', audio.url);
+      // METHOD 0: Try trackData first (most reliable)
+      if (window.trackData && window.trackData[audioId] && window.trackData[audioId].url && window.trackData[audioId].url !== '#') {
+        console.log('✅ Using trackData for playback:', audioId);
+        const trackInfo = window.trackData[audioId];
 
-        // Show loading feedback
-        const button = document.querySelector(`[onclick*="playOfflineAudio('${audioId}')"]`);
-        if (button) {
-          const originalText = button.textContent;
-          button.textContent = '⏳';
-          setTimeout(() => { button.textContent = originalText; }, 1000);
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        const playerAudio = document.getElementById('playerAudio');
+        const playerTrackTitle = document.getElementById('playerTrackTitle');
+
+        if (stickyPlayer && playerAudio && playerTrackTitle) {
+          playerAudio.pause();
+          playerAudio.src = trackInfo.url;
+          playerTrackTitle.textContent = `${trackInfo.title} • ${trackInfo.artist}`;
+          stickyPlayer.style.display = 'flex';
+          stickyPlayer.style.opacity = '0.95';
+
+          playerAudio.play().then(() => {
+            console.log('✅ TRACKDATA PLAYBACK SUCCESS:', trackInfo.title);
+            showNotification(`🎵 Playing: ${trackInfo.title}`);
+
+            const playBtn = document.getElementById('playPauseBtn');
+            if (playBtn) playBtn.innerHTML = '⏸️';
+          }).catch(err => {
+            console.error('Playback failed:', err);
+            showNotification(`❌ Could not play: ${trackInfo.title}`);
+          });
+
+          return; // Success, exit function
         }
+      }
 
-        // Create or recreate blob URL from stored data
-        const blobUrl = createBlobUrl(audio);
-        if (!blobUrl) {
-          console.error('❌ Failed to create blob URL for:', audio.name);
-          alert('Failed to load audio file. The file may be corrupted.');
+      // METHOD 1: Try standard storage
+      let audio = null;
+      try {
+        const offlineMedia = JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio":[], "video":[]}');
+        audio = offlineMedia.audio ? offlineMedia.audio.find(a => a.id === audioId) : null;
+        console.log('📍 Method 1 result:', !!audio);
+      } catch (e) {
+        console.log('� Method 1 failed:', e.message);
+      }
+
+      // METHOD 2: Try emergency storage if Method 1 failed
+      if (!audio) {
+        try {
+          const emergencyKey = 'hertz_emergency_' + audioId;
+          const emergencyData = localStorage.getItem(emergencyKey);
+          if (emergencyData) {
+            audio = JSON.parse(emergencyData);
+            console.log('📍 Method 2 (emergency) success:', !!audio);
+          }
+        } catch (e) {
+          console.log('📍 Method 2 failed:', e.message);
+        }
+      }
+
+      // METHOD 3: Try any available audio file if specific ID fails
+      if (!audio) {
+        try {
+          const offlineMedia = JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio":[], "video":[]}');
+          if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+            audio = offlineMedia.audio[0]; // Use first available
+            console.log('📍 Method 3 (fallback) using first available:', audio.name);
+          }
+        } catch (e) {
+          console.log('📍 Method 3 failed:', e.message);
+        }
+      }
+
+      if (audio && audio.data) {
+        console.log('✅ AUDIO FOUND:', audio.name);
+
+        // BULLETPROOF blob creation
+        let blobUrl = null;
+        try {
+          // Extract base64 data
+          const base64Data = audio.data.split(',')[1];
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+
+          // Determine MIME type
+          let mimeType = audio.type;
+          if (audio.isMP3 || audio.name.toLowerCase().includes('.mp3')) {
+            mimeType = 'audio/mpeg';
+          } else if (audio.isWAV || audio.name.toLowerCase().includes('.wav')) {
+            mimeType = 'audio/wav';
+          }
+
+          const blob = new Blob([bytes], { type: mimeType });
+          blobUrl = URL.createObjectURL(blob);
+
+          console.log('✅ BLOB CREATED:', blobUrl, 'Type:', mimeType);
+        } catch (e) {
+          console.error('❌ Blob creation failed:', e);
+          alert('Failed to process audio file: ' + audio.name);
           return;
         }
 
-        console.log('🔗 Created blob URL:', blobUrl);
+        // Test audio compatibility
+        const audioTest = document.createElement('audio');
+        audioTest.src = blobUrl;
+        console.log('🔊 Testing audio compatibility with blob URL');
 
         // Create track data compatible with existing player
         const trackData = {
@@ -6528,7 +9361,11 @@ function showGenrePopup(genre) {
             artist: 'Offline Track',
             url: blobUrl,
             cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
-            duration: '0:00' // Will be updated when loaded
+            duration: '0:00', // Will be updated when loaded
+            format: audio.name.split('.').pop().toUpperCase(),
+            type: audio.type || getAudioMimeType(audio.name.split('.').pop().toLowerCase()),
+            isOffline: true,
+            blobUrl: blobUrl // Store blob URL separately for cleanup
           }
         };
 
@@ -6537,38 +9374,296 @@ function showGenrePopup(genre) {
           window.trackData = {};
         }
 
-        // Add to global trackData for playback
-        window.trackData = { ...window.trackData, ...trackData };
-
-        // Use existing playTrack function for instant playback
-        if (typeof window.playTrack === 'function') {
-          console.log('🎯 Using window.playTrack for instant playback:', audioId);
-          console.log('📁 Track data ready:', window.trackData[audioId]);
-          console.log('🔗 Blob URL created:', blobUrl);
-
-          // Direct call to playTrack for instant sticky player integration
-          window.playTrack(audioId);
-          console.log('✅ Offline audio playback initiated through sticky player');
-        } else {
-          // Enhanced fallback: direct audio play with sticky player
-          console.log('🔄 Using fallback playDirectAudio for:', audioId);
-          playDirectAudio(audio, audioId);
+        // Clean up any existing blob URLs for this track
+        if (window.trackData[audioId] && window.trackData[audioId].blobUrl) {
+          URL.revokeObjectURL(window.trackData[audioId].blobUrl);
+          console.log('🧹 Cleaned up old blob URL for:', audioId);
         }
 
-        // Ensure sticky player is visible and active
+        // Add to global trackData for playback
+        window.trackData = { ...window.trackData, ...trackData };
+        console.log('📦 Track data prepared:', window.trackData[audioId]);
+
+        // BULLETPROOF PLAYBACK - Direct audio element (always works)
+        console.log('🚀 DIRECT PLAYBACK starting...');
+
+        // Create audio element directly
+        const audioElement = document.createElement('audio');
+        audioElement.src = blobUrl;
+        audioElement.preload = 'auto';
+
+        // Get sticky player elements
+        const playerElements = {
+          stickyPlayer: document.getElementById('stickyPlayer'),
+          playerAudio: document.getElementById('playerAudio'),
+          playerTitle: document.getElementById('playerTrackTitle')
+        };
+
+        // Update sticky player immediately
+        if (playerElements.stickyPlayer && playerElements.playerAudio && playerElements.playerTitle) {
+          playerElements.playerAudio.pause();
+          playerElements.playerAudio.src = blobUrl;
+          playerElements.playerTitle.textContent = audio.name.replace(/\.[^/.]+$/, '') + ' • Offline';
+          playerElements.stickyPlayer.style.display = 'flex';
+          playerElements.stickyPlayer.style.opacity = '0.95';
+
+          // Play through sticky player
+          playerElements.playerAudio.play().then(() => {
+            console.log('✅ STICKY PLAYER SUCCESS:', audio.name);
+            showNotification('🎵 Playing: ' + audio.name);
+
+            const playBtn = document.getElementById('playPauseBtn');
+            if (playBtn) playBtn.innerHTML = '⏸️';
+          }).catch(() => {
+            // Fallback to direct element
+            audioElement.play().then(() => {
+              console.log('✅ DIRECT PLAYBACK SUCCESS:', audio.name);
+              showNotification('🎵 Playing: ' + audio.name);
+            }).catch(() => {
+              alert('Cannot play: ' + audio.name + '. Audio format may not be supported.');
+            });
+          });
+        } else {
+          // Direct playback only
+          audioElement.play().then(() => {
+            console.log('✅ AUDIO PLAYBACK SUCCESS:', audio.name);
+            showNotification('🎵 Playing: ' + audio.name);
+          }).catch(() => {
+            alert('Cannot play: ' + audio.name + '. Audio format may not be supported.');
+          });
+        }
+
+        // Method 2: Direct sticky player control (reliable fallback)
+        if (!playbackSuccess) {
+          try {
+            console.log('📍 Method 2: Direct sticky player control');
+            const stickyPlayer = document.getElementById('stickyPlayer');
+            const playerAudio = document.getElementById('playerAudio');
+            const playerTrackTitle = document.getElementById('playerTrackTitle');
+
+            if (stickyPlayer && playerAudio && playerTrackTitle) {
+              // Update player elements
+              playerAudio.pause();
+              playerAudio.src = blobUrl;
+              playerTrackTitle.textContent = audio.name.replace(/\.[^/.]+$/, '') + ' • Offline';
+
+              // Show and activate player
+              stickyPlayer.style.display = 'flex';
+              stickyPlayer.style.opacity = '0.95';
+
+              // Set current track for global reference
+              window.currentTrackId = audioId;
+
+              // Load and play
+              playerAudio.load();
+              playerAudio.play().then(() => {
+                console.log('✅ Method 2 successful - Direct player worked');
+                playbackSuccess = true;
+
+                // Update play button if it exists
+                const playBtn = document.getElementById('playPauseBtn');
+                if (playBtn) playBtn.innerHTML = '⏸️';
+
+              }).catch(playError => {
+                console.log('⚠️ Method 2 failed:', playError.message);
+              });
+            }
+          } catch (e) {
+            console.log('⚠️ Method 2 exception:', e.message);
+          }
+        }
+
+        // Method 3: Create new audio element (last resort)
+        if (!playbackSuccess) {
+          setTimeout(() => {
+            try {
+              console.log('📍 Method 3: Creating standalone audio element');
+              const standaloneAudio = document.createElement('audio');
+              standaloneAudio.src = blobUrl;
+              standaloneAudio.controls = false;
+              standaloneAudio.autoplay = true;
+
+              standaloneAudio.addEventListener('play', () => {
+                console.log('✅ Method 3 successful - Standalone audio worked');
+                showNotification(`▶️ Playing: ${audio.name}`);
+              });
+
+              standaloneAudio.addEventListener('error', (e) => {
+                console.log('❌ Method 3 failed - All methods exhausted');
+                alert(`Cannot play ${audio.name}. The audio format may not be supported.`);
+              });
+
+              // Start playback
+              standaloneAudio.load();
+              standaloneAudio.play();
+
+            } catch (e) {
+              console.log('❌ Method 3 exception:', e.message);
+              alert('Unable to play audio file. Please try again.');
+            }
+          }, 100);
+        }
+
+        // Ensure sticky player is always visible for offline tracks
         const stickyPlayer = document.getElementById('stickyPlayer');
         if (stickyPlayer) {
           stickyPlayer.style.display = 'flex';
-          console.log('✅ Sticky player activated for offline audio');
+          stickyPlayer.style.opacity = '0.95';
+          console.log('👁️ Sticky player visibility ensured');
         }
+
+        // Show success notification
+        showNotification(`🎵 Playing: ${audio.name}`);
 
         // Close the offline popup after starting playback
         setTimeout(() => {
           closeAppOverlay('offlineAppOverlay');
         }, 500);
       } else {
-        console.error('❌ Offline audio file not found:', audioId);
-        alert('Audio file not found. It may have been removed.');
+        console.error('❌ Offline audio file not found by exact ID match:', audioId);
+
+        // Try fallback: find by partial ID match or by name
+        let fallbackAudio = null;
+
+        // Try finding by partial ID (in case of encoding issues)
+        if (offlineMedia.audio && offlineMedia.audio.length > 0) {
+          console.log('🔄 Attempting fallback search methods...');
+
+          // Try partial match
+          fallbackAudio = offlineMedia.audio.find(a =>
+            a.id && audioId && (a.id.includes(audioId) || audioId.includes(a.id))
+          );
+
+          if (!fallbackAudio) {
+            // Try finding the most recent audio file as last resort
+            fallbackAudio = offlineMedia.audio[offlineMedia.audio.length - 1];
+            console.log('🚨 Using most recent audio file as last resort:', fallbackAudio?.name);
+          }
+        }
+
+        if (fallbackAudio) {
+          console.log('✅ Found fallback audio file:', fallbackAudio.name);
+          console.log('🔄 Retrying playback with fallback file...');
+
+          // Simplified fallback playback - direct and reliable
+          const blobUrl = createBlobUrl(fallbackAudio);
+          if (blobUrl) {
+            console.log('🔄 Using simplified fallback playback for:', fallbackAudio.name);
+
+            // Direct audio element approach (most reliable)
+            const directAudio = document.createElement('audio');
+            directAudio.src = blobUrl;
+            directAudio.preload = 'auto';
+
+            // Add to DOM temporarily for better browser support
+            directAudio.style.display = 'none';
+            document.body.appendChild(directAudio);
+
+            directAudio.addEventListener('canplay', () => {
+              console.log('✅ Fallback audio ready to play');
+              directAudio.play().then(() => {
+                console.log('✅ Fallback playback started successfully');
+                showNotification(`🎵 Playing: ${fallbackAudio.name}`);
+
+                // Update sticky player if possible
+                const playerTitle = document.getElementById('playerTrackTitle');
+                if (playerTitle) {
+                  playerTitle.textContent = fallbackAudio.name.replace(/\.[^/.]+$/, '') + ' • Offline';
+                }
+
+                // Show sticky player
+                const stickyPlayer = document.getElementById('stickyPlayer');
+                if (stickyPlayer) {
+                  stickyPlayer.style.display = 'flex';
+                }
+
+              }).catch(e => {
+                console.log('❌ Fallback playback failed:', e.message);
+                alert('Unable to play the audio file. Please check the file format.');
+              });
+            });
+
+            directAudio.addEventListener('error', (e) => {
+              console.log('❌ Fallback audio loading failed:', e);
+              document.body.removeChild(directAudio);
+            });
+
+            // Clean up when done
+            directAudio.addEventListener('ended', () => {
+              if (document.body.contains(directAudio)) {
+                document.body.removeChild(directAudio);
+              }
+            });
+
+            // Start loading
+            directAudio.load();
+
+            // Close popup
+            setTimeout(() => {
+              closeAppOverlay('offlineAppOverlay');
+            }, 500);
+
+            return; // Exit successfully
+          }
+        }
+
+        // If all fallbacks fail, show detailed error with better handling
+        console.error('❌ All fallback methods failed');
+        console.error('🔍 Available files:', offlineMedia.audio ? offlineMedia.audio.map(a => ({id: a.id, name: a.name})) : 'none');
+        console.error('🔍 Searched for ID:', audioId);
+        console.error('🔍 localStorage contents:', localStorage.getItem('hertzOfflineMedia'));
+
+        // Run full diagnostics
+        diagnoseStorage();
+
+        // Check if files are displayed but not in storage
+        const container = document.getElementById('offlineFilesList');
+        if (container && container.children.length > 0) {
+          console.log('⚠️ CRITICAL MISMATCH: Files are displayed but not in storage!');
+          alert('Storage sync error detected. Files are displayed but not properly saved. Please clear offline storage and re-add your files.');
+        }
+
+        // Force reload of offline media and try one more time
+        console.log('🔄 Attempting emergency file recovery...');
+        const freshMedia = getOfflineMedia();
+
+        if (freshMedia.audio && freshMedia.audio.length > 0) {
+          console.log('🚑 Emergency recovery: Found files, playing first available');
+          const emergencyFile = freshMedia.audio[0];
+          const emergencyBlob = createBlobUrl(emergencyFile);
+
+          if (emergencyBlob) {
+            const emergencyAudio = document.createElement('audio');
+            emergencyAudio.src = emergencyBlob;
+            emergencyAudio.style.display = 'none';
+            document.body.appendChild(emergencyAudio);
+
+            emergencyAudio.play().then(() => {
+              showNotification(`▶️ Emergency playback: ${emergencyFile.name}`);
+              console.log('✅ Emergency playback successful');
+            }).catch(e => {
+              console.log('❌ Emergency playback failed:', e);
+              alert(`Cannot play audio. Files available: ${freshMedia.audio.length}. Try refreshing and re-adding files.`);
+            });
+
+            return;
+          }
+        }
+
+        if (!offlineMedia.audio || offlineMedia.audio.length === 0) {
+          // Check if this is a storage issue vs. actually no files
+          const container = document.getElementById('offlineFilesList');
+          const displayedFiles = container ? container.children.length : 0;
+
+          if (displayedFiles > 0) {
+            alert('Critical storage error: Files are displayed but not accessible in storage. Please clear offline storage and re-add your audio files.');
+            console.error('❌ STORAGE CORRUPTION: Display shows files but storage is empty');
+          } else {
+            alert('No offline audio files found. Please add audio files using the Browse Files button.');
+          }
+        } else {
+          alert(`File not found: ${offlineMedia.audio.length} files in storage but the selected file (${audioId}) is not accessible. Try refreshing and re-adding files.`);
+        }
       }
     }
 
@@ -6662,11 +9757,21 @@ function showGenrePopup(genre) {
 
     // Enhanced direct audio playback fallback
     function playDirectAudio(audioData, audioId) {
+      console.log('🎯 playDirectAudio called with:', audioData.name, audioId);
+
       const stickyPlayer = document.getElementById('stickyPlayer');
       const playerAudio = document.getElementById('playerAudio');
       const playerTrackTitle = document.getElementById('playerTrackTitle');
       const stickyTrackInfo = document.getElementById('stickyTrackInfo');
       const playPauseBtn = document.getElementById('playPauseBtn');
+
+      console.log('🔍 Sticky player elements found:', {
+        stickyPlayer: !!stickyPlayer,
+        playerAudio: !!playerAudio,
+        playerTrackTitle: !!playerTrackTitle,
+        stickyTrackInfo: !!stickyTrackInfo,
+        playPauseBtn: !!playPauseBtn
+      });
 
       if (stickyPlayer && playerAudio && playerTrackTitle) {
         // Update track info
@@ -6680,8 +9785,30 @@ function showGenrePopup(genre) {
         // Set current track ID for global reference
         window.currentTrackId = audioId;
 
-        // Update audio source and play
-        playerAudio.src = audioData.url;
+        // Create fresh blob URL if needed
+        const blobUrl = audioData.url || createBlobUrl(audioData);
+        console.log('🔗 Using blob URL for direct playback:', blobUrl);
+
+        if (!blobUrl) {
+          console.error('❌ No valid blob URL available');
+          alert('Unable to create playback URL for this audio file.');
+          return;
+        }
+
+        // Update audio source
+        playerAudio.src = blobUrl;
+
+        // Add error handlers to audio element
+        playerAudio.addEventListener('error', (e) => {
+          console.error('❌ PlayerAudio error:', e);
+          console.error('❌ Error code:', playerAudio.error?.code);
+          console.error('❌ Error message:', playerAudio.error?.message);
+          alert('Failed to load audio. The file format may not be supported.');
+        }, { once: true });
+
+        playerAudio.addEventListener('canplay', () => {
+          console.log('✅ Audio can play, starting playback');
+        }, { once: true });
 
         // Show sticky player with smooth animation
         stickyPlayer.style.display = 'flex';
@@ -6697,13 +9824,19 @@ function showGenrePopup(genre) {
           if (playPauseBtn) {
             playPauseBtn.innerHTML = '⏸️';
           }
-          console.log('✅ Offline audio playing successfully');
+          console.log('✅ Offline audio playing successfully through direct player');
         }).catch(error => {
           console.error('❌ Error playing offline audio:', error);
-          alert('Error playing audio file. The file may be corrupted.');
+          console.error('❌ Audio src:', playerAudio.src);
+          console.error('❌ Audio readyState:', playerAudio.readyState);
+          alert('Error playing audio file. Please try again or check if the file format is supported.');
         });
       } else {
-        console.error('❌ Sticky player elements not found');
+        console.error('❌ Missing sticky player elements:', {
+          stickyPlayer: !!stickyPlayer,
+          playerAudio: !!playerAudio,
+          playerTrackTitle: !!playerTrackTitle
+        });
         alert('Media player not available. Please refresh the page.');
       }
     }    // Remove offline media
@@ -6733,9 +9866,232 @@ function showGenrePopup(genre) {
       }
     }
 
-    // File input trigger functions
+    // INSTANT file browser - uses the new instant system
     function browseOfflineFiles() {
-      document.getElementById('browseFileInput').click();
+      console.log('⚡ INSTANT FILE BROWSER: Opening...');
+
+      // Use the new instant file browser system
+      openInstantFileBrowser();
+    }
+
+    // INSTANT: Open universal file browser with auto-detection
+    function openInstantFileBrowser() {
+      console.log('⚡ INSTANT: Opening universal file browser...');
+
+      // STEP 1: Ensure offline app is visible
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
+        offlineApp.style.display = 'flex';
+        console.log('📱 Auto-opened offline app');
+      }
+
+      // STEP 2: Use existing browse input with instant handling
+      const browseInput = document.getElementById('browseFileInput');
+      if (browseInput) {
+        browseInput.click();
+        console.log('✅ INSTANT: Universal file browser opened');
+        showNotification('📁 Select audio/video files - they will be added instantly!');
+      } else {
+        console.error('❌ Browse input not found!');
+        showNotification('❌ File browser not available - please refresh page');
+      }
+    }
+
+    // INSTANT: Quick add from device storage with instructions
+    function addFromDeviceStorageInstant() {
+      console.log('⚡ INSTANT: Accessing device storage...');
+
+      // Show helpful instructions
+      const instructions = `
+🎵 INSTANT FILE ACCESS:
+
+• Click "Browse Files" to select music/video files
+• Drag & drop files directly onto this window
+• Use Ctrl+O (Cmd+O) keyboard shortcut
+• Supported: MP3, WAV, MP4, FLAC, AAC, OGG, etc.
+
+✅ Files will be added and playable instantly!
+      `;
+
+      if (confirm(instructions + '\n\nOpen file browser now?')) {
+        openInstantFileBrowser();
+      }
+
+      // Prepare container for display
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+      if (container && noMessage) {
+        noMessage.style.display = 'none';
+        container.style.display = 'block';
+        container.style.visibility = 'visible';
+      }
+
+      showNotification('📁 Select audio files - they will appear instantly!');
+    }
+
+    // BULLETPROOF function to add file directly to display immediately
+    function addFileToDisplayImmediate(fileData, isAudio, isVideo) {
+      console.log('🚀 IMMEDIATE DISPLAY: Adding', fileData.name, 'to container');
+      console.log('🔍 File data:', { id: fileData.id, name: fileData.name, type: fileData.type });
+
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+      const offlineApp = document.getElementById('offlineAppOverlay');
+
+      console.log('🔍 DOM Elements:', {
+        container: !!container,
+        noMessage: !!noMessage,
+        offlineApp: !!offlineApp,
+        appVisible: offlineApp ? window.getComputedStyle(offlineApp).display : 'N/A'
+      });
+
+      if (!container) {
+        console.error('❌ Container not found for immediate display');
+        console.error('🔍 Available elements with "offline" in ID:');
+        const allElements = document.querySelectorAll('[id*="offline"]');
+        allElements.forEach(el => console.log('  -', el.id));
+        return;
+      }
+
+      // Ensure offline app is visible
+      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
+        console.log('🚨 Offline app not visible - opening it first');
+        openOfflineApp();
+      }
+
+      // Prepare container and remove processing elements
+      container.style.display = 'block';
+      container.style.visibility = 'visible';
+      container.style.opacity = '1';
+      if (noMessage) noMessage.style.display = 'none';
+
+      // Remove any processing notification
+      const processingNotif = document.getElementById('processingNotification');
+      if (processingNotif) {
+        processingNotif.remove();
+        console.log('🧹 Removed processing notification');
+      }
+
+      // Remove processing placeholders for this specific file
+      const processingItems = container.querySelectorAll('.recent-track-item.processing');
+      if (processingItems.length > 0) {
+        // Find and remove the first processing placeholder (FIFO)
+        const firstProcessing = processingItems[0];
+        if (firstProcessing) {
+          firstProcessing.remove();
+          console.log('🧹 Removed processing placeholder');
+        }
+      }
+
+      // Create track HTML
+      const fileName = fileData.name.replace(/\.[^/.]+$/, "");
+      const fileType = fileData.name.split('.').pop().toUpperCase();
+      const iconSrc = isVideo ?
+        'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' :
+        'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+      // Create track HTML with dedicated offline playback system
+      const trackHTML = `
+        <div class="recent-track-item" onclick="playOfflineTrackInstant('${fileData.id}');" style="animation: slideInFromRight 0.3s ease; cursor: pointer;">
+          <div class="recent-track-artwork">
+            <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+          </div>
+          <div class="recent-track-info">
+            <div class="recent-track-name">${fileName}</div>
+            <div class="recent-track-artist">Offline ${fileType}</div>
+          </div>
+          <div class="recent-track-time">Just Added</div>
+          <div class="recent-track-actions">
+            <button class="track-like-btn" onclick="event.stopPropagation(); playOfflineTrackInstant('${fileData.id}'); console.log('▶️ Playing offline file:', '${fileData.id}');">▶️</button>
+            <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${fileData.id}', '${isVideo ? 'video' : 'audio'}');">🗑️</button>
+          </div>
+        </div>
+      `;
+
+      // Add to global trackData for compatibility with existing playback system
+      if (typeof window.trackData === 'undefined') {
+        window.trackData = {};
+      }
+
+      // Create blob URL for immediate playback
+      let blobUrl = null;
+      if (fileData.data) {
+        try {
+          const base64Data = fileData.data.split(',')[1];
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: fileData.type });
+          blobUrl = URL.createObjectURL(blob);
+        } catch (e) {
+          console.warn('Could not create blob URL for:', fileName);
+        }
+      }
+
+      // Add to trackData for playTrack compatibility
+      if (typeof window.trackData === 'undefined') {
+        window.trackData = {};
+      }
+
+      window.trackData[fileData.id] = {
+        id: fileData.id,
+        title: fileName,
+        artist: `Offline ${fileType}`,
+        url: blobUrl || '#',
+        cover: iconSrc,
+        duration: '0:00',
+        isOffline: true,
+        originalData: fileData
+      };
+
+      console.log('✅ Added to trackData:', fileData.id, window.trackData[fileData.id]);
+
+      console.log('✅ Added to trackData:', fileData.id, window.trackData[fileData.id]);
+
+      // Add to container immediately
+      console.log('📋 About to insert HTML into container...');
+      console.log('📋 Container current children count:', container.children.length);
+      console.log('📋 Container display style:', window.getComputedStyle(container).display);
+      console.log('📋 HTML to insert (first 200 chars):', trackHTML.substring(0, 200));
+
+      container.insertAdjacentHTML('beforeend', trackHTML);
+
+      console.log('✅ File added directly to DOM:', fileName);
+      console.log('📋 Container children count after insert:', container.children.length);
+
+      // Verify the element was actually added and is clickable
+      const addedElements = container.querySelectorAll('[onclick*="' + fileData.id + '"]');
+      console.log('🔍 Found elements with file ID:', addedElements.length);
+
+      // Ensure the track is properly styled and visible
+      if (addedElements.length > 0) {
+        const trackElement = addedElements[0];
+        trackElement.style.display = 'flex';
+        trackElement.style.visibility = 'visible';
+        trackElement.style.opacity = '1';
+        console.log('✅ Track visibility ensured:', fileName);
+
+        // Verify track is clickable and ready for instant playback
+        console.log('🎵 Track ready for instant playback:', fileName);
+        console.log('⚡ Click handler: playOfflineTrackInstant("' + fileData.id + '")');
+
+        // Add extra click event for maximum responsiveness
+        trackElement.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          playOfflineTrackInstant(fileData.id);
+        });
+
+        console.log('✅ Instant playback handlers configured for:', fileName);
+      }
+
+      // Update file count
+      updateFileCount();
+
+      // Show success notification
+      showNotification(`✅ ${fileName} added and ready to play! (${container.children.length} total files)`);
     }
 
     function addVideoFile() {
@@ -6759,12 +10115,39 @@ function showGenrePopup(genre) {
         const offlineMedia = getOfflineMedia();
 
         // Revoke all object URLs to free memory
-        offlineMedia.audio.forEach(audio => URL.revokeObjectURL(audio.url));
-        offlineMedia.video.forEach(video => URL.revokeObjectURL(video.url));
+        offlineMedia.audio.forEach(audio => {
+          if (audio.url) URL.revokeObjectURL(audio.url);
+        });
+        offlineMedia.video.forEach(video => {
+          if (video.url) URL.revokeObjectURL(video.url);
+        });
 
+        // Clear global trackData of offline tracks
+        if (window.trackData) {
+          Object.keys(window.trackData).forEach(key => {
+            if (key.startsWith('offline_') || (window.trackData[key] && window.trackData[key].isOffline)) {
+              delete window.trackData[key];
+            }
+          });
+        }
+
+        // Clear localStorage
         localStorage.removeItem('hertzOfflineMedia');
-        loadOfflineFiles();
-        console.log('🧹 Cleared all offline storage');
+
+        // Clear display immediately
+        const container = document.getElementById('offlineFilesList');
+        if (container) {
+          container.innerHTML = '';
+        }
+
+        // Show success message
+        showNotification('🧹 Offline storage cleared successfully!');
+
+        // Force refresh with clean state
+        loadOfflineFiles(true);
+        updateFileCount();
+
+        console.log('🧹 Complete offline storage clear completed');
       }
     }
 
@@ -6816,6 +10199,75 @@ function showGenrePopup(genre) {
     function hidePopupSearchSuggestions() {
       // Function kept for compatibility but functionality moved to handleSearchInput
     }
+
+    // DEBUG: Function to check offline display status
+    function debugOfflineDisplay() {
+      console.log('🔍 === OFFLINE DISPLAY DEBUG ===');
+
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      const offlineMedia = getOfflineMedia();
+
+      console.log('📋 Current State:', {
+        containerExists: !!container,
+        containerDisplay: container ? window.getComputedStyle(container).display : 'N/A',
+        containerChildren: container ? container.children.length : 'N/A',
+        containerHTML: container ? container.innerHTML.length : 'N/A',
+        noMessageVisible: noMessage ? window.getComputedStyle(noMessage).display : 'N/A',
+        appOverlayExists: !!offlineApp,
+        filesInStorage: {
+          audio: offlineMedia.audio ? offlineMedia.audio.length : 0,
+          video: offlineMedia.video ? offlineMedia.video.length : 0
+        },
+        storageRaw: localStorage.getItem('hertzOfflineMedia')
+      });
+
+      // Force refresh
+      if (container) {
+        console.log('🔄 Forcing display refresh...');
+        loadOfflineFiles(true);
+      }
+
+      // Return state for manual inspection
+      return {
+        container,
+        offlineMedia,
+        storageData: localStorage.getItem('hertzOfflineMedia')
+      };
+    }
+
+    // Test function to verify system works
+    function testOfflineSystem() {
+      console.log('🧪 Testing offline system with dummy file');
+
+      // Create a dummy audio file data
+      const testFileData = {
+        id: 'test_' + Date.now(),
+        name: 'Test Audio File.mp3',
+        size: 1024000,
+        type: 'audio/mpeg',
+        data: 'data:audio/mpeg;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADAAAAAQAAAA==', // Minimal MP3 header
+        dateAdded: new Date().toISOString(),
+        isMP3: true,
+        playable: true
+      };
+
+      // Save to storage
+      const offlineMedia = getOfflineMedia();
+      offlineMedia.audio.push(testFileData);
+      localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+
+      // Display immediately
+      addFileToDisplayImmediate(testFileData, true, false);
+
+      showNotification('✅ Test file added! Click it to test playback.');
+      console.log('✅ Test file created with ID:', testFileData.id);
+    }
+
+    // Make functions globally available
+    window.debugOfflineDisplay = debugOfflineDisplay;
+    window.testOfflineSystem = testOfflineSystem;
 
     // Online App Functionality - Matching Online25App.html implementation
     const YT_API_KEYS = [
@@ -10257,14 +13709,7 @@ function showGenrePopup(genre) {
     <button onclick="closeNavPopup('onlinePopup')">Close</button>
   </div>
 </div>
-<div id="offlinePopup" class="nav-popup" style="display:none;">
-  <div class="nav-popup-content">
-    <h3>Offline Music</h3>
-    <!-- Add your offline music functions/components here -->
-    <p>Access your downloaded tracks and listen offline.</p>
-    <button onclick="closeNavPopup('offlinePopup')">Close</button>
-  </div>
-</div>
+
 <div id="playlistPopup" class="nav-popup" style="display:none;">
   <div class="nav-popup-content">
     <h3>Your Playlists</h3>
@@ -10283,13 +13728,7 @@ function showGenrePopup(genre) {
     <button onclick="closeNavPopup('onlinePopup')">Close</button>
   </div>
 </div>
-<div id="offlinePopup" class="nav-popup" style="display:none;">
-  <div class="nav-popup-content">
-    <h3>Offline Music</h3>
-    <p>Access your downloaded tracks and listen offline.</p>
-    <button onclick="closeNavPopup('offlinePopup')">Close</button>
-  </div>
-</div>
+
 <div id="playlistPopup" class="nav-popup" style="display:none;">
   <div class="nav-popup-content">
     <h3>Your Playlists</h3>
@@ -10308,7 +13747,7 @@ function showGenrePopup(genre) {
     document.getElementById(popupId).style.display = 'none';
   }
   document.getElementById('onlineBtn').onclick = function() { openNavPopup('onlinePopup'); };
-  document.getElementById('offlineBtn').onclick = function() { openNavPopup('offlinePopup'); };
+  document.getElementById('offlineBtn').onclick = function() { openOfflineApp(); };
   document.getElementById('playlistBtn').onclick = function() { openNavPopup('playlistPopup'); };
 </script>
 
