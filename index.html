@@ -2327,6 +2327,415 @@
         }
     }
 
+    /* Enhanced Offline App Content Styles */
+    .offline-app-container {
+        width: 95vw;
+        max-width: 1000px;
+        height: 90vh;
+        max-height: 800px;
+    }
+
+    .offline-content {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        height: 100%;
+    }
+
+    .offline-controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .offline-control-btn {
+        background: linear-gradient(135deg, var(--accent-color) 0%, #B8860B 100%);
+        color: #000;
+        border: none;
+        padding: 0.8rem 1rem;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .offline-control-btn:hover {
+        background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(255, 215, 0, 0.3);
+    }
+
+    .storage-info {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .storage-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+    }
+
+    .storage-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .storage-count, .storage-size {
+        color: var(--accent-color);
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .offline-files-section {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .offline-section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .offline-count {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+    }
+
+    .offline-files-list {
+        flex: 1;
+        overflow-y: auto;
+        max-height: 350px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent-color) transparent;
+    }
+
+    .offline-files-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .offline-files-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .offline-files-list::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 3px;
+    }
+
+    .no-files-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        color: var(--text-secondary);
+        text-align: center;
+        min-height: 150px;
+    }
+
+    .no-files-message p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+    }
+
+    .offline-tracks-list, .offline-videos-list {
+        flex: 1;
+        overflow-y: auto;
+        max-height: 280px;
+        padding: 8px;
+        margin: -8px;
+        scrollbar-width: thin;
+        scrollbar-color: var(--accent-color) transparent;
+    }
+
+    .offline-tracks-list::-webkit-scrollbar, .offline-videos-list::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .offline-tracks-list::-webkit-scrollbar-track, .offline-videos-list::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .offline-tracks-list::-webkit-scrollbar-thumb, .offline-videos-list::-webkit-scrollbar-thumb {
+        background: var(--accent-color);
+        border-radius: 3px;
+    }
+
+    .offline-tracks-list::-webkit-scrollbar-thumb:hover, .offline-videos-list::-webkit-scrollbar-thumb:hover {
+        background: #FFA500;
+    }
+
+    .offline-track-item, .offline-video-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        background: var(--bg-main);
+        border: 1px solid var(--border-color);
+        transition: all 0.2s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .offline-track-item:hover, .offline-video-item:hover {
+        background: rgba(255, 215, 0, 0.05);
+        border-color: var(--accent-color);
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.1);
+    }
+
+    .offline-track-item:active, .offline-video-item:active {
+        transform: translateX(2px) scale(0.99);
+    }
+
+    .offline-track-artwork {
+        width: 48px;
+        height: 48px;
+        border-radius: 6px;
+        background: linear-gradient(135deg, var(--accent-color), #B8860B);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: #000;
+        flex-shrink: 0;
+    }
+
+    .audio-file-icon, .video-file-icon {
+        font-size: 1.4rem;
+    }
+
+    .offline-track-info {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .offline-track-title {
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+    }
+
+    .offline-track-meta {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .file-type {
+        background: var(--accent-color);
+        color: #000;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.7rem;
+    }
+
+    .offline-track-actions {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+    }
+
+    .offline-action-btn {
+        background: transparent;
+        border: none;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1rem;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .offline-action-btn.play-btn:hover {
+        background: var(--accent-color);
+        color: #000;
+        transform: scale(1.1);
+    }
+
+    .offline-action-btn.delete-btn:hover {
+        background: #ef4444;
+        color: #fff;
+        transform: scale(1.1);
+    }
+
+    .offline-action-btn:active {
+        transform: scale(0.95);
+    }
+
+    .no-tracks-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 1rem;
+        color: var(--text-secondary);
+        text-align: center;
+        min-height: 200px;
+    }
+
+    .no-tracks-message p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+    }
+
+    .video-thumbnail {
+        width: 60px;
+        height: 40px;
+        background: var(--bg-tertiary);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        font-size: 1.2rem;
+        border: 1px solid var(--border-color);
+    }
+
+    /* Responsive Design for Offline App */
+    @media (max-width: 768px) {
+        .offline-app-container {
+            width: 98vw;
+            height: 95vh;
+        }
+
+        .offline-controls {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .storage-info {
+            grid-template-columns: 1fr;
+        }
+
+        .media-tab-btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .offline-track-item, .offline-video-item {
+            padding: 10px 12px;
+            gap: 10px;
+        }
+
+        .offline-track-artwork {
+            width: 40px;
+            height: 40px;
+        }
+
+        .offline-track-title {
+            font-size: 0.9rem;
+        }
+
+        .offline-track-meta {
+            font-size: 0.7rem;
+            gap: 0.3rem;
+        }
+
+        .file-type {
+            font-size: 0.65rem;
+            padding: 1px 4px;
+        }
+
+        .offline-tracks-list, .offline-videos-list {
+            max-height: 240px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .offline-controls {
+            grid-template-columns: 1fr;
+        }
+
+        .offline-control-btn {
+            padding: 1rem;
+        }
+
+        .offline-track-item, .offline-video-item {
+            padding: 8px 10px;
+            gap: 8px;
+        }
+
+        .offline-track-artwork {
+            width: 36px;
+            height: 36px;
+        }
+
+        .audio-file-icon, .video-file-icon {
+            font-size: 1.1rem;
+        }
+
+        .offline-track-title {
+            font-size: 0.85rem;
+        }
+
+        .offline-track-meta {
+            font-size: 0.65rem;
+            flex-wrap: wrap;
+        }
+
+        .offline-tracks-list, .offline-videos-list {
+            max-height: 200px;
+        }
+
+        .offline-action-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 1rem;
+        }
+    }
+
     /* Online App Content Styles */
     .online-search-section {
         margin-bottom: 1.5rem;
@@ -4116,7 +4525,20 @@
       const stickyPlayer = document.getElementById('stickyPlayer');
       const playerAudio = document.getElementById('playerAudio');
       const playerTrackTitle = document.getElementById('playerTrackTitle');
-      let trackData = {
+
+      // Check if track exists in global trackData first (for offline tracks)
+      let track = null;
+      console.log('🔍 Looking for trackId:', trackId);
+      console.log('🌍 Global trackData:', window.trackData);
+
+      if (window.trackData && window.trackData[trackId]) {
+        console.log('🎵 Found track in global trackData:', trackId);
+        track = window.trackData[trackId];
+        console.log('🎯 Track details:', track);
+      } else {
+        console.log('🎶 Searching for track in local trackData:', trackId);
+        // Use local trackData for default tracks
+        let trackData = {
   'Times': { id: 'Times', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
   'Prime': { id: 'Prime', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
   'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
@@ -4162,17 +4584,46 @@
         'vision': { url: 'https://storage.googleapis.com/hertz-music-folder/Vision.wav', title: 'Vision', artist: 'C-All' },
         'faith': { url: 'https://storage.googleapis.com/hertz-music-folder/Faith.wav', title: 'Faith', artist: 'B-I-R-M-P' },
         'yettobe': { url: 'https://storage.googleapis.com/hertz-music-folder/Yet%20to%20be.wav', title: 'Yet to be', artist: 'Bey-Erus' }
-      };
-      let track = trackData[trackId];
+        };
+        track = trackData[trackId];
+      }
       if (track && playerAudio && playerTrackTitle) {
+        console.log('🎵 Playing track:', track.title, 'URL:', track.url);
+
         // Always reload and play the track
         playerAudio.pause();
         playerAudio.src = track.url;
         playerTrackTitle.textContent = track.title + ' - ' + track.artist;
         updateStickyTrackInfo(trackId);
         stickyPlayer.style.display = 'flex';
+
+        // Add error handling for audio loading
+        playerAudio.onerror = (e) => {
+          console.error('❌ Audio playback error:', e);
+          console.error('Failed URL:', track.url);
+        };
+
+        playerAudio.onloadstart = () => {
+          console.log('📥 Audio loading started...');
+        };
+
+        playerAudio.oncanplay = () => {
+          console.log('✅ Audio can play, attempting playback...');
+        };
+
         playerAudio.load();
-        playerAudio.play();
+
+        // Add promise-based error handling for play()
+        const playPromise = playerAudio.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log('✅ Audio playback started successfully');
+            })
+            .catch(error => {
+              console.error('❌ Audio playback failed:', error);
+            });
+        }
 
         // Set current track ID for like button functionality
         currentTrackId = trackId;
@@ -4414,51 +4865,70 @@
     </div>
   </div>
 
-  <!-- Offline Music App Overlay -->
+  <!-- Enhanced Offline Music App Overlay -->
   <div class="app-overlay" id="offlineAppOverlay" onclick="closeAppOverlay('offlineAppOverlay', event)">
-    <div class="app-container" onclick="event.stopPropagation()">
+    <div class="app-container offline-app-container" onclick="event.stopPropagation()">
       <div class="app-header">
         <h2 class="app-title">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.82.62-3.49 1.64-4.83L9 11.5v.5c0 1.1.9 2 2 2h2v2h2v2h-3l-3-3v-2l5.83-5.83C15.49 9.38 16 10.61 16 12c0 2.21-1.79 4-4 4z"/>
           </svg>
-          Offline Music Player
+          Offline Media Player
         </h2>
         <button class="app-close-btn" onclick="closeAppOverlay('offlineAppOverlay')">×</button>
       </div>
-      <div class="app-content">
-        <div class="app-feature-grid">
-          <div class="app-feature-card">
-            <div class="app-feature-icon" style="background: linear-gradient(135deg, #e22134, #ff4757);">📱</div>
-            <div class="app-feature-title">No Internet Required</div>
-            <div class="app-feature-description">Listen to your downloaded music anywhere, anytime without needing an internet connection.</div>
-          </div>
-          <div class="app-feature-card">
-            <div class="app-feature-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">💾</div>
-            <div class="app-feature-title">Local Storage</div>
-            <div class="app-feature-description">Store thousands of songs directly on your device with smart compression technology.</div>
-          </div>
-          <div class="app-feature-card">
-            <div class="app-feature-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">⚡</div>
-            <div class="app-feature-title">Battery Optimized</div>
-            <div class="app-feature-description">Efficient playback engine that maximizes battery life during extended listening sessions.</div>
-          </div>
-          <div class="app-feature-card">
-            <div class="app-feature-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">🎬</div>
-            <div class="app-feature-title">Video Playback</div>
-            <div class="app-feature-description">Watch music videos and visual content offline with our integrated video player.</div>
-          </div>
+
+      <div class="app-content offline-content">
+        <!-- Control Buttons Section -->
+        <div class="offline-controls">
+          <button class="offline-control-btn" onclick="browseOfflineFiles()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z"/>
+            </svg>
+            Browse Files
+          </button>
+
+          <button class="offline-control-btn" onclick="addVideoFile()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
+            </svg>
+            Add Video
+          </button>
+
+          <button class="offline-control-btn" onclick="addAudioFile()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+            Add Audio
+          </button>
+
+          <button class="offline-control-btn" onclick="clearOfflineStorage()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            </svg>
+            Clear Storage
+          </button>
         </div>
-        <div class="app-action-buttons">
-          <button class="app-btn" onclick="window.open('Offline25App.html', '_blank')">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-            Launch Offline App
-          </button>
-          <button class="app-btn secondary" onclick="closeAppOverlay('offlineAppOverlay')">
-            Cancel
-          </button>
+
+        <!-- Simple Offline Files Display -->
+        <div class="offline-files-section">
+          <h3 class="offline-section-title">
+            <span>Offline Files</span>
+            <span class="offline-count" id="offlineFileCount">(0 files)</span>
+          </h3>
+          <div class="offline-files-list" id="offlineFilesList">
+            <div class="no-files-message" id="noFilesMessage">
+              <p>📁 No offline files yet</p>
+              <p style="font-size: 0.9em; opacity: 0.7;">Use the buttons above to add music and videos</p>
+            </div>
+          </div>
         </div>
       </div>
+
+      <!-- Hidden file inputs -->
+      <input type="file" id="audioFileInput" accept="audio/*" multiple style="display: none;">
+      <input type="file" id="videoFileInput" accept="video/*" multiple style="display: none;">
+      <input type="file" id="browseFileInput" accept="audio/*,video/*" multiple style="display: none;">
     </div>
   </div>
 
@@ -5521,6 +5991,780 @@ function showGenrePopup(genre) {
       const overlay = document.getElementById('offlineAppOverlay');
       if (overlay) {
         overlay.style.display = 'flex';
+        initializeOfflineApp();
+      }
+    }
+
+    // Initialize offline app functionality
+    function initializeOfflineApp() {
+      console.log('🔧 Initializing Offline App');
+
+      // Verify DOM elements exist
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+      const fileCount = document.getElementById('offlineFileCount');
+
+      console.log('🔍 DOM Elements Check:');
+      console.log('  - Container:', !!container);
+      console.log('  - No Message:', !!noMessage);
+      console.log('  - File Count:', !!fileCount);
+
+      // Debug: Show current localStorage state
+      const currentStorage = localStorage.getItem('hertzOfflineMedia');
+      console.log('💾 Current localStorage content:', currentStorage);
+
+      if (!container) {
+        console.error('❌ Critical: offlineFilesList container not found!');
+        return;
+      }
+
+      loadOfflineFiles();
+      setupFileInputHandlers();
+
+      // Add test message for verification
+      console.log('📝 To test display: Type testOfflineDisplay() in console');
+    }
+
+    // Update file count display
+    function updateFileCount() {
+      const offlineMedia = getOfflineMedia();
+      const totalFiles = offlineMedia.audio.length + offlineMedia.video.length;
+      const countElement = document.getElementById('offlineFileCount');
+      if (countElement) {
+        countElement.textContent = `(${totalFiles} files)`;
+        console.log('📊 File count updated:', totalFiles);
+      } else {
+        console.error('❌ File count element not found!');
+      }
+    }
+
+    // Test function to add a sample file (for debugging)
+    function addTestFile() {
+      const testFile = {
+        id: 'test_' + Date.now(),
+        name: 'Test Audio.mp3',
+        size: 1024000,
+        type: 'audio/mp3',
+        lastModified: Date.now(),
+        data: 'data:audio/mp3;base64,SGVsbG8gV29ybGQ=', // "Hello World" in base64
+        url: null,
+        dateAdded: new Date().toISOString()
+      };
+
+      const offlineMedia = getOfflineMedia();
+      offlineMedia.audio.push(testFile);
+      saveOfflineMedia(offlineMedia);
+      console.log('🧪 Test file added to storage');
+
+      // Force UI update
+      setTimeout(() => {
+        loadOfflineFiles();
+        updateFileCount();
+      }, 50);
+    }
+
+    // Force refresh display function (for debugging)
+    window.forceRefreshOfflineFiles = function() {
+      console.log('🔄 Forcing offline files refresh...');
+      const container = document.getElementById('offlineFilesList');
+      if (container) {
+        console.log('📋 Container found, current content length:', container.innerHTML.length);
+        loadOfflineFiles();
+      } else {
+        console.error('❌ Container not found during force refresh');
+      }
+    };
+
+    // Comprehensive test function
+    window.testOfflineDisplay = function() {
+      console.log('🧪 Testing offline display functionality...');
+
+      // Clear any existing data first
+      localStorage.removeItem('hertzOfflineMedia');
+
+      // Add a test file directly
+      const testData = {
+        audio: [{
+          id: 'test_display_' + Date.now(),
+          name: 'Test Song.mp3',
+          size: 5242880,
+          type: 'audio/mp3',
+          lastModified: Date.now(),
+          data: 'data:audio/mp3;base64,SGVsbG8gV29ybGQ=',
+          url: null,
+          dateAdded: new Date().toISOString()
+        }],
+        video: []
+      };
+
+      // Save to localStorage
+      localStorage.setItem('hertzOfflineMedia', JSON.stringify(testData));
+      console.log('💾 Test data saved to localStorage');
+
+      // Force display update
+      loadOfflineFiles();
+      updateFileCount();
+
+      console.log('✅ Test complete - check the offline files section!');
+    };    // Get offline media from localStorage
+    function getOfflineMedia() {
+      try {
+        return JSON.parse(localStorage.getItem('hertzOfflineMedia') || '{"audio": [], "video": []}');
+      } catch (e) {
+        return {"audio": [], "video": []};
+      }
+    }
+
+    // Create blob URL from base64 data
+    function createBlobUrl(fileData) {
+      console.log('🔧 createBlobUrl called for:', fileData.name);
+      console.log('📊 File data exists:', !!fileData.data);
+      console.log('📏 Data length:', fileData.data ? fileData.data.length : 0);
+
+      if (!fileData.data) {
+        console.error('❌ No data property found in fileData');
+        return null;
+      }
+
+      // Always create a fresh blob URL for offline files
+      try {
+        console.log('🔄 Creating fresh blob URL...');
+        const base64Data = fileData.data.split(',')[1];
+        if (!base64Data) {
+          console.error('❌ Invalid base64 data format');
+          return null;
+        }
+
+        console.log('📝 Base64 data length:', base64Data.length);
+        const byteCharacters = atob(base64Data);
+        const byteNumbers = new Array(byteCharacters.length);
+
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: fileData.type });
+        const url = URL.createObjectURL(blob);
+
+        console.log('✅ Created blob URL:', url);
+        console.log('📦 Blob size:', blob.size, 'bytes');
+
+        // Cache the URL for future use
+        fileData.url = url;
+        return url;
+      } catch (e) {
+        console.error('❌ Failed to create blob URL:', e);
+        console.error('🔍 FileData:', fileData);
+        return null;
+      }
+    }    // Save offline media to localStorage
+    function saveOfflineMedia(media) {
+      try {
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify(media));
+      } catch (e) {
+        console.error('Failed to save offline media:', e);
+      }
+    }
+
+    // Format file size for display
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 MB';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+
+
+    // Setup file input handlers
+    function setupFileInputHandlers() {
+      console.log('🔧 Setting up file input handlers...');
+      const audioInput = document.getElementById('audioFileInput');
+      const videoInput = document.getElementById('videoFileInput');
+      const browseInput = document.getElementById('browseFileInput');
+
+      if (audioInput) {
+        audioInput.addEventListener('change', (e) => {
+          console.log('🎵 Audio input changed, files:', e.target.files.length);
+          handleFileSelection(e.target.files, 'audio');
+        });
+        console.log('✅ Audio input handler added');
+      } else {
+        console.error('❌ audioFileInput not found!');
+      }
+
+      if (videoInput) {
+        videoInput.addEventListener('change', (e) => {
+          console.log('🎬 Video input changed, files:', e.target.files.length);
+          handleFileSelection(e.target.files, 'mixed');
+        });
+        console.log('✅ Video input handler added');
+      } else {
+        console.error('❌ videoFileInput not found!');
+      }
+
+      if (browseInput) {
+        browseInput.addEventListener('change', (e) => {
+          console.log('📁 Browse input changed, files:', e.target.files.length);
+          handleFileSelection(e.target.files, 'mixed');
+        });
+        console.log('✅ Browse input handler added');
+      } else {
+        console.error('❌ browseFileInput not found!');
+      }
+    }
+
+    // Simple, direct file handling that works
+    function handleFileSelection(files, type) {
+      console.log('📁 handleFileSelection called with:', files.length, 'files, type:', type);
+      if (!files || files.length === 0) {
+        console.warn('⚠️ No files provided to handleFileSelection');
+        return;
+      }
+
+      // Get container immediately
+      const fileContainer = document.getElementById('offlineFilesList');
+      const noFilesMsg = document.getElementById('noFilesMessage');
+
+      if (!fileContainer) {
+        console.error('❌ Container not found!');
+        return;
+      }
+
+      console.log('✅ Container found, proceeding with file processing');
+
+      // Hide no files message immediately
+      if (noFilesMsg) noFilesMsg.style.display = 'none';
+
+      let addedFiles = 0;
+      let processedFiles = 0;
+
+      // Show immediate feedback
+      showNotification(`Processing ${files.length} file(s)...`);
+
+      Array.from(files).forEach((file, index) => {
+        console.log(`🔄 Processing file ${index + 1}/${files.length}:`, file.name, 'Type:', file.type);
+
+        // Validate file type
+        const isAudio = file.type.startsWith('audio/');
+        const isVideo = file.type.startsWith('video/');
+
+        if (!isAudio && !isVideo) {
+          console.warn('⚠️ Skipping unsupported file type:', file.name, file.type);
+          processedFiles++;
+          return;
+        }
+
+        console.log(`✅ File accepted as ${isAudio ? 'audio' : 'video'}:`, file.name);
+
+        // Convert file to base64 for persistent storage
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          // Get fresh offline media state to prevent race conditions
+          const currentOfflineMedia = getOfflineMedia();
+
+          const fileData = {
+            id: 'offline_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified,
+            data: e.target.result, // Base64 data
+            url: null, // Will be created when needed
+            dateAdded: new Date().toISOString()
+          };
+
+          if (isAudio) {
+            currentOfflineMedia.audio.push(fileData);
+            addedFiles++;
+          } else if (isVideo) {
+            currentOfflineMedia.video.push(fileData);
+            addedFiles++;
+          }
+
+          saveOfflineMedia(currentOfflineMedia);
+          console.log(`✅ Saved ${isAudio ? 'audio' : 'video'} file: ${file.name}`);
+          console.log('💾 File data saved with ID:', fileData.id);
+          console.log('📄 Data length:', fileData.data ? fileData.data.length : 'NO DATA');
+
+          // Add file to display immediately with simple method
+          addFileToDisplay(fileData, fileContainer);
+
+          processedFiles++;
+          console.log(`📊 Progress: ${processedFiles}/${files.length} files processed`);
+
+          if (processedFiles === files.length) {
+            showNotification(`✅ Successfully added ${addedFiles} file(s) to offline storage!`);
+            updateFileCount();
+          }
+        };
+
+        reader.onerror = function() {
+          console.error('Failed to read file:', file.name);
+          processedFiles++;
+          if (processedFiles === files.length && addedFiles > 0) {
+            showNotification(`Successfully added ${addedFiles} files to offline storage!`);
+          }
+        };
+
+        reader.readAsDataURL(file);
+      });
+
+      // Show placeholder items immediately for better UX
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+      if (container && noMessage) {
+        noMessage.style.display = 'none';
+
+        // Add processing placeholders
+        const placeholderHTML = Array.from(files).map((file, index) => {
+          const fileName = file.name.replace(/\.[^/.]+$/, "");
+          const isVideo = file.type.startsWith('video/');
+          const fileType = file.name.split('.').pop().toUpperCase();
+          const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+          return `
+            <div class="recent-track-item processing" style="opacity: 0.6;">
+              <div class="recent-track-artwork">
+                <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+              </div>
+              <div class="recent-track-info">
+                <div class="recent-track-name">${fileName}</div>
+                <div class="recent-track-artist">${fileType} • Processing...</div>
+              </div>
+              <div class="recent-track-time">Just now</div>
+              <div class="recent-track-actions">
+                <button class="track-like-btn" title="Processing">⌛</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        container.innerHTML = placeholderHTML;
+        console.log('🎨 Added processing placeholders for instant feedback');
+      }
+
+      // Clear file inputs
+      document.getElementById('audioFileInput').value = '';
+      document.getElementById('videoFileInput').value = '';
+      document.getElementById('browseFileInput').value = '';
+    }
+
+    // Simple function to add file directly to display
+    function addFileToDisplay(fileData, container) {
+      console.log('🎨 Adding file to display:', fileData.name);
+
+      const fileName = fileData.name.replace(/\.[^/.]+$/, "");
+      const isVideo = fileData.type.startsWith('video/');
+      const fileType = fileData.name.split('.').pop().toUpperCase();
+      const iconSrc = isVideo ?
+        'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' :
+        'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+      const fileHTML = `
+        <div class="recent-track-item" onclick="${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${fileData.id}')">
+          <div class="recent-track-artwork">
+            <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+          </div>
+          <div class="recent-track-info">
+            <div class="recent-track-name">${fileName}</div>
+            <div class="recent-track-artist">${fileType} • ${formatFileSize(fileData.size)}</div>
+          </div>
+          <div class="recent-track-time">${new Date(fileData.dateAdded).toLocaleDateString()}</div>
+          <div class="recent-track-actions">
+            <button class="track-like-btn" onclick="event.stopPropagation(); ${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${fileData.id}')" title="Play">▶️</button>
+            <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${fileData.id}', '${isVideo ? 'video' : 'audio'}');" title="Delete">🗑️</button>
+          </div>
+        </div>
+      `;
+
+      // Add to container immediately
+      container.insertAdjacentHTML('beforeend', fileHTML);
+      console.log('✅ File added to display successfully');
+    }    // Load and display offline files in main page format
+    function loadOfflineFiles() {
+      console.log('🔄 loadOfflineFiles() called');
+
+      // Ensure DOM is ready
+      if (document.readyState === 'loading') {
+        console.log('⏳ DOM not ready, waiting...');
+        setTimeout(loadOfflineFiles, 100);
+        return;
+      }
+
+      const offlineMedia = getOfflineMedia();
+      console.log('📂 Offline media retrieved:', offlineMedia);
+      const container = document.getElementById('offlineFilesList');
+      const noMessage = document.getElementById('noFilesMessage');
+
+      console.log('🎯 Container found:', !!container);
+      console.log('💬 No message element found:', !!noMessage);
+
+      // Force container to be visible if it exists
+      if (container) {
+        container.style.display = 'block';
+        console.log('👁️ Container visibility ensured');
+      }      const allFiles = [...offlineMedia.audio, ...offlineMedia.video];
+      console.log('📁 Total files to display:', allFiles.length);
+
+      if (allFiles.length === 0) {
+        console.log('📭 No files found, showing empty message');
+        if (container) container.innerHTML = '';
+        if (noMessage) noMessage.style.display = 'flex';
+        updateFileCount();
+        return;
+      }
+
+      console.log('✅ Files found, generating HTML...');
+      if (noMessage) noMessage.style.display = 'none';
+
+      const filesHTML = allFiles.map((file, index) => {
+        console.log(`📋 Processing file ${index + 1}: ${file.name}`);
+        const fileName = file.name.replace(/\.[^/.]+$/, "");
+        const isVideo = file.type.startsWith('video/');
+        const fileType = file.name.split('.').pop().toUpperCase();
+        const iconSrc = isVideo ? 'https://images.unsplash.com/photo-1489599849332-053c4f3b3ac2?auto=format&fit=crop&w=400&q=80' : 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+
+        return `
+          <div class="recent-track-item" onclick="${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')">
+            <div class="recent-track-artwork">
+              <img src="${iconSrc}" alt="${fileName} cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;">
+            </div>
+            <div class="recent-track-info">
+              <div class="recent-track-name">${fileName}</div>
+              <div class="recent-track-artist">${fileType} • ${formatFileSize(file.size)}</div>
+            </div>
+            <div class="recent-track-time">${new Date(file.dateAdded).toLocaleDateString()}</div>
+            <div class="recent-track-actions">
+              <button class="track-like-btn" onclick="event.stopPropagation(); ${isVideo ? 'playOfflineVideo' : 'playOfflineAudio'}('${file.id}')" title="Play">▶️</button>
+              <button class="track-menu-btn" onclick="event.stopPropagation(); removeOfflineMedia('${file.id}', '${isVideo ? 'video' : 'audio'}');" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      console.log('🎨 Generated HTML length:', filesHTML.length, 'characters');
+      console.log('📋 First 200 chars:', filesHTML.substring(0, 200));
+
+      if (container) {
+        try {
+          // Clear container first
+          container.innerHTML = '';
+          console.log('🧹 Container cleared');
+
+          // Force layout recalculation
+          const height = container.offsetHeight;
+          console.log('📌 Container height after clear:', height);
+
+          // Insert new content
+          container.innerHTML = filesHTML;
+          console.log('✅ HTML inserted into container');
+          console.log('📏 Container children count:', container.children.length);
+
+          // Make sure container is visible
+          container.style.display = 'block';
+          container.style.visibility = 'visible';
+
+          // Verify content immediately
+          const hasContent = container.innerHTML.length > 0;
+          console.log('🔍 Immediate verification - Container has content:', hasContent);
+
+          if (!hasContent && allFiles.length > 0) {
+            console.error('🚨 Content insertion failed immediately!');
+            // Try alternative insertion method
+            container.textContent = '';
+            container.insertAdjacentHTML('beforeend', filesHTML);
+            console.log('🔄 Retried with insertAdjacentHTML');
+          }
+
+        } catch (error) {
+          console.error('❌ Error during container update:', error);
+        }
+      } else {
+        console.error('❌ Container not found!');
+      }      updateFileCount();
+    }
+
+
+
+    // Play offline audio
+    function playOfflineAudio(audioId) {
+      console.log('🔥 playOfflineAudio called with ID:', audioId);
+      const offlineMedia = getOfflineMedia();
+      console.log('📂 Offline media data:', offlineMedia);
+      const audio = offlineMedia.audio.find(a => a.id === audioId);
+      console.log('🎵 Found audio file:', audio);
+
+      if (audio) {
+        console.log('🎵 Playing offline audio:', audio.name);
+        console.log('📄 Audio has data:', !!audio.data);
+        console.log('🔗 Audio current URL:', audio.url);
+
+        // Show loading feedback
+        const button = document.querySelector(`[onclick*="playOfflineAudio('${audioId}')"]`);
+        if (button) {
+          const originalText = button.textContent;
+          button.textContent = '⏳';
+          setTimeout(() => { button.textContent = originalText; }, 1000);
+        }
+
+        // Create or recreate blob URL from stored data
+        const blobUrl = createBlobUrl(audio);
+        if (!blobUrl) {
+          console.error('❌ Failed to create blob URL for:', audio.name);
+          alert('Failed to load audio file. The file may be corrupted.');
+          return;
+        }
+
+        console.log('🔗 Created blob URL:', blobUrl);
+
+        // Create track data compatible with existing player
+        const trackData = {
+          [audioId]: {
+            id: audioId,
+            title: audio.name.replace(/\.[^/.]+$/, ""), // Remove file extension
+            artist: 'Offline Track',
+            url: blobUrl,
+            cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80',
+            duration: '0:00' // Will be updated when loaded
+          }
+        };
+
+        // Ensure global trackData exists
+        if (typeof window.trackData === 'undefined') {
+          window.trackData = {};
+        }
+
+        // Add to global trackData for playback
+        window.trackData = { ...window.trackData, ...trackData };
+
+        // Use existing playTrack function for instant playback
+        if (typeof window.playTrack === 'function') {
+          console.log('🎯 Using window.playTrack for instant playback:', audioId);
+          console.log('📁 Track data ready:', window.trackData[audioId]);
+          console.log('🔗 Blob URL created:', blobUrl);
+
+          // Direct call to playTrack for instant sticky player integration
+          window.playTrack(audioId);
+          console.log('✅ Offline audio playback initiated through sticky player');
+        } else {
+          // Enhanced fallback: direct audio play with sticky player
+          console.log('🔄 Using fallback playDirectAudio for:', audioId);
+          playDirectAudio(audio, audioId);
+        }
+
+        // Ensure sticky player is visible and active
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        if (stickyPlayer) {
+          stickyPlayer.style.display = 'flex';
+          console.log('✅ Sticky player activated for offline audio');
+        }
+
+        // Close the offline popup after starting playback
+        setTimeout(() => {
+          closeAppOverlay('offlineAppOverlay');
+        }, 500);
+      } else {
+        console.error('❌ Offline audio file not found:', audioId);
+        alert('Audio file not found. It may have been removed.');
+      }
+    }
+
+    // Play offline video
+    function playOfflineVideo(videoId) {
+      console.log('🎬 playOfflineVideo called with ID:', videoId);
+      const offlineMedia = getOfflineMedia();
+      const video = offlineMedia.video.find(v => v.id === videoId);
+
+      if (video) {
+        console.log('🎬 Playing offline video:', video.name);
+
+        // Create or recreate blob URL from stored data
+        const blobUrl = createBlobUrl(video);
+        if (!blobUrl) {
+          console.error('❌ Failed to create blob URL for video:', video.name);
+          alert('Failed to load video file. The file may be corrupted.');
+          return;
+        }
+
+        console.log('🔗 Created video blob URL:', blobUrl);
+
+        // Use existing mini video player if available
+        if (typeof window.showMiniVideoPlayer === 'function') {
+          console.log('🎥 Using mini video player');
+          window.showMiniVideoPlayer(blobUrl);
+        } else {
+          // Enhanced fallback: create video element for playback
+          console.log('📺 Creating video playback element');
+          playDirectVideo(video, blobUrl);
+        }
+
+        // Close the offline popup after starting playback
+        setTimeout(() => {
+          closeAppOverlay('offlineAppOverlay');
+        }, 500);
+      } else {
+        console.error('❌ Offline video file not found:', videoId);
+        alert('Video file not found. It may have been removed.');
+      }
+    }
+
+    // Direct video playback function
+    function playDirectVideo(videoData, blobUrl) {
+      console.log('🎥 Starting direct video playback for:', videoData.name);
+
+      // Create video element for playback
+      const videoElement = document.createElement('video');
+      videoElement.src = blobUrl;
+      videoElement.controls = true;
+      videoElement.autoplay = true;
+      videoElement.style.cssText = `
+        position: fixed;
+        bottom: 100px;
+        right: 20px;
+        width: 320px;
+        height: 180px;
+        z-index: 10000;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        background: #000;
+      `;
+
+      // Add close button
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = '×';
+      closeBtn.style.cssText = `
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        z-index: 10001;
+      `;
+
+      closeBtn.onclick = () => {
+        document.body.removeChild(videoElement);
+        URL.revokeObjectURL(blobUrl);
+      };
+
+      videoElement.appendChild(closeBtn);
+      document.body.appendChild(videoElement);
+
+      console.log('✅ Video player created and started');
+    }
+
+    // Enhanced direct audio playback fallback
+    function playDirectAudio(audioData, audioId) {
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerAudio = document.getElementById('playerAudio');
+      const playerTrackTitle = document.getElementById('playerTrackTitle');
+      const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+
+      if (stickyPlayer && playerAudio && playerTrackTitle) {
+        // Update track info
+        const trackTitle = audioData.name.replace(/\.[^/.]+$/, "");
+        playerTrackTitle.textContent = trackTitle;
+
+        if (stickyTrackInfo) {
+          stickyTrackInfo.textContent = `${trackTitle} • Offline Track`;
+        }
+
+        // Set current track ID for global reference
+        window.currentTrackId = audioId;
+
+        // Update audio source and play
+        playerAudio.src = audioData.url;
+
+        // Show sticky player with smooth animation
+        stickyPlayer.style.display = 'flex';
+        stickyPlayer.style.opacity = '0';
+
+        setTimeout(() => {
+          stickyPlayer.style.transition = 'opacity 0.3s ease';
+          stickyPlayer.style.opacity = '0.95';
+        }, 50);
+
+        // Play audio and update button
+        playerAudio.play().then(() => {
+          if (playPauseBtn) {
+            playPauseBtn.innerHTML = '⏸️';
+          }
+          console.log('✅ Offline audio playing successfully');
+        }).catch(error => {
+          console.error('❌ Error playing offline audio:', error);
+          alert('Error playing audio file. The file may be corrupted.');
+        });
+      } else {
+        console.error('❌ Sticky player elements not found');
+        alert('Media player not available. Please refresh the page.');
+      }
+    }    // Remove offline media
+    function removeOfflineMedia(mediaId, type) {
+      if (confirm('Are you sure you want to remove this file from offline storage?')) {
+        const offlineMedia = getOfflineMedia();
+
+        if (type === 'audio') {
+          const index = offlineMedia.audio.findIndex(a => a.id === mediaId);
+          if (index > -1) {
+            // Revoke object URL to free memory
+            URL.revokeObjectURL(offlineMedia.audio[index].url);
+            offlineMedia.audio.splice(index, 1);
+          }
+        } else if (type === 'video') {
+          const index = offlineMedia.video.findIndex(v => v.id === mediaId);
+          if (index > -1) {
+            // Revoke object URL to free memory
+            URL.revokeObjectURL(offlineMedia.video[index].url);
+            offlineMedia.video.splice(index, 1);
+          }
+        }
+
+        saveOfflineMedia(offlineMedia);
+        loadOfflineFiles();
+        console.log('🗑️ Removed offline media:', mediaId);
+      }
+    }
+
+    // File input trigger functions
+    function browseOfflineFiles() {
+      document.getElementById('browseFileInput').click();
+    }
+
+    function addVideoFile() {
+      document.getElementById('videoFileInput').click();
+    }
+
+    function addAudioFile() {
+      console.log('🎵 addAudioFile() called - opening file selector');
+      const input = document.getElementById('audioFileInput');
+      if (input) {
+        input.click();
+        console.log('✅ File input clicked');
+      } else {
+        console.error('❌ audioFileInput not found!');
+      }
+    }
+
+    // Clear all offline storage
+    function clearOfflineStorage() {
+      if (confirm('Are you sure you want to clear ALL offline media? This action cannot be undone.')) {
+        const offlineMedia = getOfflineMedia();
+
+        // Revoke all object URLs to free memory
+        offlineMedia.audio.forEach(audio => URL.revokeObjectURL(audio.url));
+        offlineMedia.video.forEach(video => URL.revokeObjectURL(video.url));
+
+        localStorage.removeItem('hertzOfflineMedia');
+        loadOfflineFiles();
+        console.log('🧹 Cleared all offline storage');
       }
     }
 
