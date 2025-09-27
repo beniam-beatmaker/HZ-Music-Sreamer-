@@ -1179,13 +1179,16 @@
         /* Main sticky player styles for all screen sizes */
         .sticky-player {
             position: fixed;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            z-index: 2000;
-            background: linear-gradient(90deg, #232526 0%, #414345 100%);
-            box-shadow: 0 0 32px 0 rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10);
-            border-radius: 18px;
+            left: 0;
+            right: 0;
+            bottom: 88px;
+            transform: none;
+            z-index: 1600;
+            background: rgba(18, 18, 18, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 0;
             padding: 12px 16px 10px 16px;
             display: flex;
             flex-direction: column;
@@ -1213,7 +1216,7 @@
             .sticky-player {
             left: 0;
             right: 0;
-            bottom: 80px;
+            bottom: 88px;
             transform: none;
             border-radius: 18px 18px 0 0;
             padding: 10px 10px 8px 10px;
@@ -1376,6 +1379,64 @@
         }
         .sticky-player #likeBtn.liked {
           color: #ffd700 !important;
+        }
+
+        /* Optimized sticky player for offline tracks - thinner and above bottom nav icons */
+        .sticky-player.offline-optimized {
+          height: 65px !important;
+          min-height: 65px !important;
+          max-height: 65px !important;
+          padding: 4px 8px !important;
+        }
+
+        /* Offline popup player styling */
+        .sticky-player.offline-popup-player {
+          position: relative !important;
+          bottom: auto !important;
+          left: auto !important;
+          right: auto !important;
+          transform: none !important;
+          z-index: auto !important;
+          background: rgba(18, 18, 18, 0.95) !important;
+          backdrop-filter: blur(10px) !important;
+          box-shadow: 0 -2px 15px rgba(0,0,0,0.2) !important;
+          border-top: 1px solid rgba(255, 215, 0, 0.3) !important;
+          border-radius: 12px !important;
+          padding: 12px 16px !important;
+          margin: 0 10px 10px 10px !important;
+        }
+
+        .sticky-player.offline-optimized .player-controls {
+          gap: 1rem !important;
+          padding: 4px 8px !important;
+        }
+
+        .sticky-player.offline-optimized .player-btn {
+          width: 40px !important;
+          height: 40px !important;
+          font-size: 1.2rem !important;
+          border-radius: 50% !important;
+          border: none !important;
+          cursor: pointer !important;
+          transition: all 0.2s ease !important;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.15) !important;
+        }
+
+        .sticky-player.offline-optimized #progressBar {
+          width: 85vw !important;
+          max-width: 350px !important;
+          height: 3px !important;
+          margin: 2px 0 !important;
+        }
+
+        .sticky-player.offline-optimized #playerTrackTitle {
+          font-size: 0.85em !important;
+          margin-bottom: 1px !important;
+        }
+
+        .sticky-player.offline-optimized #stickyTrackInfo {
+          font-size: 0.9em !important;
+          margin-top: 1px !important;
         }
 
         .track-section {
@@ -2855,6 +2916,212 @@
         font-size: 1rem;
     }
 
+    /* Enhanced Media Tabs Styles */
+    .offline-media-tabs {
+        display: flex;
+        background: var(--bg-tertiary);
+        border-radius: 12px;
+        padding: 4px;
+        margin-bottom: 20px;
+        border: 1px solid var(--border-color);
+    }
+
+    .media-tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 8px;
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        position: relative;
+    }
+
+    .media-tab-btn.active {
+        background: var(--accent-color);
+        color: #000;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+    }
+
+    .media-tab-btn:hover:not(.active) {
+        background: rgba(255, 215, 0, 0.1);
+        color: var(--accent-color);
+    }
+
+    .media-count {
+        font-size: 0.8rem;
+        opacity: 0.8;
+        margin-left: 4px;
+    }
+
+    .media-section {
+        min-height: 300px;
+    }
+
+    /* Enhanced Offline Sticky Player Styles */
+    .offline-sticky-player {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border: 2px solid var(--accent-color);
+        border-radius: 16px;
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 8px 32px rgba(255, 215, 0, 0.4);
+        z-index: 10000;
+        backdrop-filter: blur(15px);
+        min-width: 420px;
+        max-width: 95vw;
+        animation: slideUpFadeIn 0.3s ease-out;
+    }
+
+    .offline-player-progress {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .offline-time-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-color);
+    }
+
+    .offline-player-progress input[type="range"] {
+        width: 100%;
+        height: 6px;
+        accent-color: var(--accent-color);
+        border-radius: 3px;
+        appearance: none;
+        background: rgba(255, 215, 0, 0.2);
+        outline: none;
+    }
+
+    .offline-player-progress input[type="range"]::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--accent-color);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .offline-player-main {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .offline-player-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .offline-player-artwork {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--accent-color), #B8860B);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: #000;
+        font-weight: bold;
+        flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .offline-player-details {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .offline-player-title {
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .offline-player-artist {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .offline-player-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .offline-player-btn {
+        background: rgba(255, 215, 0, 0.15);
+        border: 1px solid var(--accent-color);
+        border-radius: 10px;
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: all 0.2s ease;
+        color: var(--accent-color);
+    }
+
+    .offline-player-btn.play-pause-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 1.4rem;
+        background: var(--accent-color);
+        color: #000;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+    }
+
+    .offline-player-btn:hover {
+        background: var(--accent-color);
+        color: #000;
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+
+    .offline-player-btn.play-pause-btn:hover {
+        transform: scale(1.08);
+        box-shadow: 0 6px 16px rgba(255, 215, 0, 0.5);
+    }
+
+    .offline-player-btn:active {
+        transform: scale(0.95);
+    }
+
     .video-thumbnail {
         width: 60px;
         height: 40px;
@@ -2992,6 +3259,71 @@
         .app-header {
             padding: 1rem;
             font-size: 1.1rem;
+
+        /* Enhanced Mobile Styles for New Elements */
+        .offline-media-tabs {
+            margin-bottom: 16px;
+            padding: 3px;
+        }
+
+        .media-tab-btn {
+            padding: 10px 12px;
+            font-size: 0.85rem;
+            gap: 6px;
+        }
+
+        .media-tab-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .media-count {
+            font-size: 0.75rem;
+        }
+
+        .offline-sticky-player {
+            min-width: 95vw;
+            bottom: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
+        }
+
+        .offline-player-main {
+            gap: 12px;
+        }
+
+        .offline-player-artwork {
+            width: 44px;
+            height: 44px;
+        }
+
+        .offline-player-title {
+            font-size: 0.9rem;
+        }
+
+        .offline-player-artist {
+            font-size: 0.8rem;
+        }
+
+        .offline-player-controls {
+            gap: 8px;
+        }
+
+        .offline-player-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+
+        .offline-player-btn.play-pause-btn {
+            width: 46px;
+            height: 46px;
+            font-size: 1.3rem;
+        }
+
+        .offline-time-display {
+            font-size: 0.85rem;
+        }
         }
 
         .app-close-btn {
@@ -4762,6 +5094,10 @@
           function playTrack(trackId) {
             console.log('🎵 playTrack called with:', trackId);
 
+            // Pause offline player when starting main track
+            pauseOfflineStickyPlayer();
+            globalPlayerState.isOfflinePopupActive = false;
+
             const stickyPlayer = document.getElementById('stickyPlayer');
             const playerAudio = document.getElementById('playerAudio');
             const playerTrackTitle = document.getElementById('playerTrackTitle');
@@ -5354,52 +5690,92 @@
       </div>
 
       <div class="app-content offline-content">
-        <!-- Control Buttons Section -->
+        <!-- Enhanced Control Buttons Section -->
         <div class="offline-controls">
-          <button class="offline-control-btn" onclick="browseOfflineFiles()" title="Select MP3, WAV, and other audio files from your device">
+          <button class="offline-control-btn" onclick="addOfflineTracks()" title="Add MP3, WAV, and other audio files">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z"/>
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
             </svg>
-            📁 Browse Files
+            🎵 Add Tracks
+          </button>
+
+          <button class="offline-control-btn" onclick="addOfflineVideos()" title="Add MP4, WebM, and other video files">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+            🎬 Add Videos
           </button>
 
           <button class="offline-control-btn" onclick="clearOfflineStorage()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
             </svg>
-            Clear Storage
+            Clear All
           </button>
         </div>
 
-        <!-- Simple Offline Files Display -->
-        <div class="offline-files-section">
-          <h3 class="offline-section-title">
-            <span>Offline Files</span>
-            <span class="offline-count" id="offlineFileCount">(0 files)</span>
-          </h3>
-          <div class="offline-files-list" id="offlineFilesList">
-            <div class="no-files-message" id="noFilesMessage">
-              <p>📁 No offline files yet</p>
-              <p style="font-size: 0.9em; opacity: 0.7;">Click "📁 Browse Files" above to add MP3, WAV, and other music files</p>
-              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added files will appear here and can be played just like online tracks</p>
+        <!-- Enhanced Tabbed Media Sections -->
+        <div class="offline-media-tabs">
+          <button class="media-tab-btn active" onclick="switchMediaTab('tracks')" id="tracksTabBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+            Tracks <span class="media-count" id="tracksCount">(0)</span>
+          </button>
+          <button class="media-tab-btn" onclick="switchMediaTab('videos')" id="videosTabBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
+            </svg>
+            Videos <span class="media-count" id="videosCount">(0)</span>
+          </button>
+        </div>
+
+        <!-- Tracks Section -->
+        <div class="media-section" id="tracksSection">
+          <div class="offline-tracks-list" id="offlineTracksList">
+            <div class="no-files-message" id="noTracksMessage">
+              <p>🎵 No offline tracks yet</p>
+              <p style="font-size: 0.9em; opacity: 0.7;">Click "🎵 Add Tracks" above to add MP3, WAV, and other audio files</p>
+              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added tracks will appear here and can be played with the sticky player</p>
             </div>
           </div>
         </div>
 
-        <!-- Dedicated Offline Sticky Player -->
-        <div class="offline-sticky-player" id="offlineStickyPlayer" style="display: none;">
-          <div class="offline-player-info">
-            <div class="offline-player-artwork">🎵</div>
-            <div class="offline-player-details">
-              <div class="offline-player-title" id="offlinePlayerTitle">Select a track</div>
-              <div class="offline-player-artist">Offline Player</div>
+        <!-- Videos Section -->
+        <div class="media-section" id="videosSection" style="display: none;">
+          <div class="offline-videos-list" id="offlineVideosList">
+            <div class="no-files-message" id="noVideosMessage">
+              <p>🎬 No offline videos yet</p>
+              <p style="font-size: 0.9em; opacity: 0.7;">Click "🎬 Add Videos" above to add MP4, WebM, and other video files</p>
+              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added videos will appear here and can be played in mini player</p>
             </div>
           </div>
-          <div class="offline-player-controls">
-            <button class="offline-player-btn" id="offlinePlayPauseBtn" onclick="toggleOfflinePlayPause()">▶️</button>
-            <button class="offline-player-btn" onclick="stopOfflinePlayback()">⏹️</button>
-          </div>
-          <audio id="offlinePlayerAudio" preload="metadata"></audio>
+        </div>
+
+        <!-- Offline Sticky Player (using main sticky player) -->
+        <div class="sticky-player offline-popup-player" id="offlineStickyPlayer" style="display: none;">
+            <div style="width:100%;display:flex;flex-direction:column;align-items:center;min-height:70px;max-height:90px;">
+              <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:2px;">
+                <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+                  <span id="offlineCurrentTime" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+                  <span style="margin:0 6px;color:#fff;">/</span>
+                  <span id="offlineDuration" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+                </div>
+                <input type="range" id="offlineProgressBar" min="0" max="100" value="0" step="0.1" style="width:92%;max-width:420px;margin:6px 0 2px 0;height:4px;accent-color:#FFD700;">
+              </div>
+        <span class="player-title" id="offlinePlayerTitle" style="font-size:0.9em;color:#FFD700;margin-bottom:2px;"></span>
+              <div class="player-controls" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;padding:8px 16px;">
+                <button class="player-btn player-shuffle" id="offlineShuffleBtn" title="Shuffle" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:36px;height:36px;font-size:1.1rem;">&#128256;</button>
+                <button class="player-btn" id="offlinePrevBtn" title="Previous" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;">&#9198;</button>
+                <button class="player-btn" id="offlinePlayPauseBtn" title="Play/Pause" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);">&#9654;</button>
+                <button class="player-btn" id="offlineNextBtn" title="Next" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;">&#9197;</button>
+                <button class="player-btn player-loop" id="offlineLoopBtn" title="Loop" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:36px;height:36px;font-size:1.1rem;">&#128257;</button>
+              </div>
+              <div style="width:100%;text-align:center;margin-top:4px;">
+                <span id="offlinePlayerArtist" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
+              </div>
+            </div>
+            <audio id="offlinePlayerAudio" preload="metadata"></audio>
         </div>
       </div>
 
@@ -6123,6 +6499,17 @@
     function goToHome() {
       console.log('🏠 Going to Home');
       updateBottomNavActive('home');
+
+      // Handle player switching when going home
+      if (globalPlayerState.isOfflinePopupActive) {
+        pauseOfflineStickyPlayer();
+        globalPlayerState.isOfflinePopupActive = false;
+        // Resume main player if it was playing
+        setTimeout(() => {
+          resumeMainStickyPlayer();
+        }, 100);
+      }
+
       closeAllOverlays();
 
       // Scroll to top smoothly
@@ -6468,12 +6855,156 @@ function showGenrePopup(genre) {
 
     function openOfflineApp() {
       console.log('📱 Opening Offline Music Popup');
+
+      // Pause main sticky player when opening offline popup
+      pauseMainStickyPlayer();
+      globalPlayerState.isOfflinePopupActive = true;
+
       closeAppSelectionPopup();
       const overlay = document.getElementById('offlineAppOverlay');
       if (overlay) {
         overlay.style.display = 'flex';
         initializeOfflineApp();
+
+        // Resume offline player if there was a current track
+        setTimeout(() => {
+          if (globalPlayerState.currentTrack) {
+            const offlinePlayer = document.getElementById('offlineStickyPlayer');
+            const offlineTitle = document.getElementById('offlinePlayerTitle');
+            const offlineArtist = document.getElementById('offlinePlayerArtist');
+
+            if (offlinePlayer && offlineTitle) {
+              offlinePlayer.style.display = 'block';
+              offlineTitle.textContent = globalPlayerState.currentTrack.name;
+              if (offlineArtist) offlineArtist.textContent = globalPlayerState.currentTrack.artist || '';
+              console.log('🔄 Resumed offline player display for:', globalPlayerState.currentTrack.name);
+            }
+          }
+        }, 200);
+        // Initialize enhanced features
+        setTimeout(() => {
+          initializeEnhancedOffline();
+          initializeOfflineQueue();
+          loadStoredData(true);
+        }, 100);
       }
+    }
+
+    // Global sticky player state management
+    let globalPlayerState = {
+      isOfflinePopupActive: false,
+      currentTrack: null,
+      isPlaying: false,
+      currentTime: 0
+    };
+
+    function pauseMainStickyPlayer() {
+      const mainAudio = document.getElementById('playerAudio');
+      const mainPlayBtn = document.getElementById('playPauseBtn');
+      const mainPlayer = document.getElementById('stickyPlayer');
+
+      if (mainAudio && !mainAudio.paused) {
+        globalPlayerState.currentTime = mainAudio.currentTime;
+        globalPlayerState.isPlaying = true;
+        mainAudio.pause();
+        console.log('⏸️ Main sticky player paused for offline popup');
+
+        if (mainPlayBtn) {
+          mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
+        }
+      }
+    }
+
+    function pauseOfflineStickyPlayer() {
+      const offlinePlayer = document.getElementById('offlineStickyPlayer');
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlinePlayBtn = document.getElementById('offlinePlayPauseBtn');
+
+      if (offlineAudio && !offlineAudio.paused) {
+        offlineAudio.pause();
+        console.log('⏸️ Offline sticky player paused for main player');
+      }
+
+      if (offlinePlayer) {
+        offlinePlayer.style.display = 'none';
+      }
+
+      if (offlinePlayBtn) {
+        offlinePlayBtn.innerHTML = '&#9654;';
+      }
+    }
+
+    function resumeMainStickyPlayer() {
+      const mainAudio = document.getElementById('playerAudio');
+      const mainPlayBtn = document.getElementById('playPauseBtn');
+
+      if (mainAudio && globalPlayerState.isPlaying) {
+        mainAudio.currentTime = globalPlayerState.currentTime;
+        mainAudio.play().then(() => {
+          console.log('▶️ Main sticky player resumed');
+          if (mainPlayBtn) {
+            mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
+          }
+        });
+      }
+    }
+
+    // EXACT COPY OF DATA LOADING FROM OFFLINE25APP.HTML
+    function loadStoredData(shouldRender = false) {
+      console.log('=== LOADING STORED DATA ===');
+      console.log('Should render:', shouldRender);
+
+      // Load tracks from localStorage
+      try {
+        const storedTracks = localStorage.getItem('offlineTracks');
+        if (storedTracks) {
+          offlineTracks = JSON.parse(storedTracks);
+          console.log('Loaded', offlineTracks.length, 'tracks from storage');
+        }
+      } catch (error) {
+        console.error('Error loading tracks from storage:', error);
+        offlineTracks = [];
+      }
+
+      // Load videos from localStorage
+      try {
+        const storedVideos = localStorage.getItem('offlineVideos');
+        if (storedVideos) {
+          offlineVideos = JSON.parse(storedVideos);
+          console.log('Loaded', offlineVideos.length, 'videos from storage');
+        }
+      } catch (error) {
+        console.error('Error loading videos from storage:', error);
+        offlineVideos = [];
+      }
+
+      // Update queue with loaded tracks
+      queue = [...offlineTracks];
+
+      // Only render if DOM is ready
+      if (shouldRender) {
+        console.log('Rendering libraries after loading data');
+        renderOfflineLibrary();
+        renderOfflineVideoLibrary();
+      }
+
+      console.log('=== DATA LOADING COMPLETE ===');
+    }
+
+    // Enhanced save function - EXACT COPY FROM OFFLINE25APP.HTML
+    function saveAllData() {
+      try {
+        localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
+        localStorage.setItem('offlineVideos', JSON.stringify(offlineVideos));
+        console.log('✅ Data saved successfully');
+      } catch (error) {
+        console.error('❌ Error saving data:', error);
+      }
+    }
+
+    // Initialize offline data
+    function initializeOfflineQueue() {
+      loadStoredData(true);
     }
 
     // Initialize offline app functionality
@@ -6527,6 +7058,12 @@ function showGenrePopup(genre) {
         }
 
         console.log('🔄 Post-initialization refresh completed');
+
+        // Initialize enhanced system after basic setup
+        loadOfflineTracks();
+        loadOfflineVideos();
+        updateMediaCounts();
+        console.log('✅ Enhanced system loaded with existing files');
       }, 50);
 
       // Add test message for verification
@@ -6826,12 +7363,8 @@ function showGenrePopup(genre) {
         return;
       }
 
-      // Auto-open offline app if not visible
-      const offlineApp = document.getElementById('offlineAppOverlay');
-      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
-        openOfflineApp();
-        console.log('📱 Auto-opened offline app for file processing');
-      }
+      // Note: Offline app will only open when user explicitly clicks it
+      console.log('� Files ready for processing in offline app when user opens it');
 
       // Show instant processing feedback
       showNotification(`⚡ Processing ${files.length} file(s) instantly...`);
@@ -7759,6 +8292,10 @@ function showGenrePopup(genre) {
     function playTrack(trackId) {
       console.log('🎵 PLAYING TRACK THROUGH STICKY PLAYER:', trackId);
 
+      // Pause offline player when starting main track
+      pauseOfflineStickyPlayer();
+      globalPlayerState.isOfflinePopupActive = false;
+
       // Check both offline and regular track data
       let currentTrackData = null;
       let trackName = '';
@@ -7982,6 +8519,11 @@ function showGenrePopup(genre) {
         audioInput.addEventListener('change', (e) => {
           console.log('🎵 Audio input changed, files:', e.target.files.length);
           handleFileSelection(e.target.files, 'audio');
+          // Update the enhanced display
+          setTimeout(() => {
+            loadOfflineTracks();
+            updateMediaCounts();
+          }, 100);
         });
         console.log('✅ Audio input handler added');
       } else {
@@ -7991,7 +8533,12 @@ function showGenrePopup(genre) {
       if (videoInput) {
         videoInput.addEventListener('change', (e) => {
           console.log('🎬 Video input changed, files:', e.target.files.length);
-          handleFileSelection(e.target.files, 'mixed');
+          handleFileSelection(e.target.files, 'video');
+          // Update the enhanced display
+          setTimeout(() => {
+            loadOfflineVideos();
+            updateMediaCounts();
+          }, 100);
         });
         console.log('✅ Video input handler added');
       } else {
@@ -8045,11 +8592,8 @@ function showGenrePopup(genre) {
       const noMessage = document.getElementById('noFilesMessage');
       const offlineApp = document.getElementById('offlineAppOverlay');
 
-      // Ensure offline app is visible
-      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
-        console.log('📱 Auto-opening offline app for file processing');
-        openOfflineApp();
-      }
+      // Note: Files will be processed when user opens offline app
+      console.log('� Files ready for offline processing');
 
       if (container && noMessage) {
         // Force container visibility immediately
@@ -8242,8 +8786,13 @@ function showGenrePopup(genre) {
                 // BULLETPROOF immediate file display - add directly to DOM
                 addFileToDisplayImmediate(fileData, finalIsAudio, finalIsVideo);
 
-                // Background consistency check
-                setTimeout(() => loadOfflineFiles(true), 200);
+                // Update enhanced displays immediately
+                setTimeout(() => {
+                  loadOfflineTracks();
+                  loadOfflineVideos();
+                  updateMediaCounts();
+                  loadOfflineFiles(true);
+                }, 100);
               } else {
                 throw new Error('Verification failed');
               }
@@ -8395,10 +8944,17 @@ function showGenrePopup(genre) {
             showNotification(message);
             updateFileCount();
 
-            // ENHANCED: Immediate display refresh with multiple fallbacks
+            // ENHANCED: Update both old and new systems
             setTimeout(() => {
               console.log('🔄 Final display refresh - all files processed');
               loadOfflineFiles(true);
+
+              // Update enhanced tab system
+              loadOfflineTracks();
+              loadOfflineVideos();
+              updateMediaCounts();
+
+              console.log('✅ Enhanced system updated after file processing');
 
               // Verify display worked immediately
               const container = document.getElementById('offlineFilesList');
@@ -9862,16 +10418,27 @@ function showGenrePopup(genre) {
 
         saveOfflineMedia(offlineMedia);
         loadOfflineFiles();
+        // Refresh enhanced displays
+        loadOfflineTracks();
+        loadOfflineVideos();
+        updateMediaCounts();
         console.log('🗑️ Removed offline media:', mediaId);
       }
     }
 
-    // INSTANT file browser - uses the new instant system
+    // INSTANT file browser - uses the new instant system (backward compatibility)
     function browseOfflineFiles() {
       console.log('⚡ INSTANT FILE BROWSER: Opening...');
 
       // Use the new instant file browser system
       openInstantFileBrowser();
+
+      // Ensure enhanced displays are updated after file selection
+      setTimeout(() => {
+        loadOfflineTracks();
+        loadOfflineVideos();
+        updateMediaCounts();
+      }, 200);
     }
 
     // INSTANT: Open universal file browser with auto-detection
@@ -9953,11 +10520,8 @@ function showGenrePopup(genre) {
         return;
       }
 
-      // Ensure offline app is visible
-      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
-        console.log('🚨 Offline app not visible - opening it first');
-        openOfflineApp();
-      }
+      // Note: Processing will occur when user opens offline app
+      console.log('� Files queued for offline processing');
 
       // Prepare container and remove processing elements
       container.style.display = 'block';
@@ -10050,11 +10614,33 @@ function showGenrePopup(genre) {
 
       console.log('✅ Added to trackData:', fileData.id, window.trackData[fileData.id]);
 
-      // Add to container immediately
+      // Add to both old container and new enhanced tabs
       console.log('📋 About to insert HTML into container...');
       console.log('📋 Container current children count:', container.children.length);
       console.log('📋 Container display style:', window.getComputedStyle(container).display);
       console.log('📋 HTML to insert (first 200 chars):', trackHTML.substring(0, 200));
+
+      // Add to old system container
+      if (container.querySelector('.no-files-message')) {
+        container.innerHTML = trackHTML;
+      } else {
+        container.insertAdjacentHTML('beforeend', trackHTML);
+      }
+
+      // Also add to enhanced tab system immediately
+      const enhancedContainer = isVideo ?
+        document.getElementById('offlineVideosList') :
+        document.getElementById('offlineTracksList');
+
+      if (enhancedContainer) {
+        const enhancedHTML = createEnhancedTrackHTML(fileData, isVideo);
+        if (enhancedContainer.querySelector('.no-files-message')) {
+          enhancedContainer.innerHTML = enhancedHTML;
+        } else {
+          enhancedContainer.insertAdjacentHTML('beforeend', enhancedHTML);
+        }
+        console.log('✅ Added to enhanced container:', isVideo ? 'videos' : 'tracks');
+      }
 
       container.insertAdjacentHTML('beforeend', trackHTML);
 
@@ -10146,12 +10732,1411 @@ function showGenrePopup(genre) {
         // Force refresh with clean state
         loadOfflineFiles(true);
         updateFileCount();
+        updateMediaCounts();
 
         console.log('🧹 Complete offline storage clear completed');
       }
     }
 
-    function openPlaylistApp() {
+    // Helper function to create enhanced track HTML
+    function createEnhancedTrackHTML(fileData, isVideo) {
+      const fileName = fileData.name || 'Unknown File';
+      const fileType = fileData.type ? fileData.type.split('/')[1].toUpperCase() : (isVideo ? 'VIDEO' : 'AUDIO');
+
+      if (isVideo) {
+        return `
+          <div class="offline-video-item" onclick="playOfflineVideoEnhanced('${fileData.id}')">
+            <div class="video-thumbnail">
+              <span class="video-file-icon">🎬</span>
+            </div>
+            <div class="offline-track-info">
+              <div class="offline-track-title">${fileName}</div>
+              <div class="offline-track-meta">
+                <span class="file-type">${fileType}</span>
+                <span>Just Added</span>
+              </div>
+            </div>
+            <div class="offline-track-actions">
+              <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playOfflineVideoEnhanced('${fileData.id}')" title="Play">▶️</button>
+              <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeOfflineMedia('${fileData.id}', 'video')" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+      } else {
+        return `
+          <div class="offline-track-item" onclick="playOfflineTrackEnhanced('${fileData.id}')">
+            <div class="offline-track-artwork">
+              <span class="audio-file-icon">🎵</span>
+            </div>
+            <div class="offline-track-info">
+              <div class="offline-track-title">${fileName}</div>
+              <div class="offline-track-meta">
+                <span class="file-type">${fileType}</span>
+                <span>Just Added</span>
+              </div>
+            </div>
+            <div class="offline-track-actions">
+              <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playOfflineTrackEnhanced('${fileData.id}')" title="Play">▶️</button>
+              <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeOfflineMedia('${fileData.id}', 'audio')" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // INSTANT FILE PROCESSING - EXACT COPY FROM OFFLINE25APP.HTML
+    function processFilesInstantly(files, mediaType) {
+      console.log('=== PROCESSING FILES INSTANTLY ===');
+      console.log('Processing', files.length, 'files');
+
+      // Note: Files will be available in offline app when user opens it
+      console.log('📁 Files prepared for offline access');
+
+      // Ensure tracks tab is active when processing audio files - IMMEDIATE
+      if (mediaType === 'audio') {
+        console.log('🎵 Switching to tracks tab immediately');
+        switchMediaTab('tracks');
+      } else if (mediaType === 'video') {
+        console.log('🎬 Switching to videos tab immediately');
+        switchMediaTab('videos');
+      }
+
+      let processed = 0;
+      let audioCount = 0;
+      let videoCount = 0;
+
+      Array.from(files).forEach((file, index) => {
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          console.log('=== FILE READER ONLOAD TRIGGERED ===');
+          console.log('File loaded successfully, size:', e.target.result.length);
+          const base64Data = e.target.result;
+          const fileName = file.name.replace(/\.[^/.]+$/, '');
+          const fileId = Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          console.log('Generated file ID:', fileId);
+          console.log('File name:', fileName);
+          console.log('File type:', file.type);
+
+          // Check if it's an audio file - EXACT LOGIC FROM OFFLINE25APP.HTML
+          if (file.type.startsWith('audio/') || /\.(mp3|wav|ogg|aac|flac|m4a|wma|opus|webm)$/i.test(file.name)) {
+            // Create track object with proper structure - EXACT FROM OFFLINE25APP.HTML
+            const newTrack = {
+              id: fileId,
+              name: fileName,
+              title: fileName,
+              artist: '',
+              base64: base64Data,
+              audioUrl: base64Data,
+              thumbnail: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgogICAgICA8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjMDAwMDAwIi8+CiAgPGNpcmNsZSBjeD0iMTAwIiBjeT0iMTAwIiByPSI5MCIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CiAgPHRleHQgeD0iMTAwIiB5PSIxMjAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI3MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiMwMDAwMDAiPkhaPC90ZXh0Pgo8L3N2Zz4=",
+              type: file.type || 'audio/mp3',
+              size: file.size,
+              uploadDate: Date.now(),
+              dateAdded: Date.now(),
+              liked: false,
+              addedToLibrary: true
+            };
+
+            // Add to tracks array - EXACT FROM OFFLINE25APP.HTML
+            console.log('About to add track to offlineTracks array');
+            console.log('Current offlineTracks length:', offlineTracks.length);
+            offlineTracks.push(newTrack);
+            console.log('Added track! New offlineTracks length:', offlineTracks.length);
+            console.log('New track added:', newTrack);
+
+            // Update queue immediately
+            queue = [...offlineTracks];
+            audioCount++;
+
+            // Save to storage immediately using enhanced save function
+            saveAllData();
+
+            console.log('Added audio track:', fileName);            // Instant UI update - EXACT FROM OFFLINE25APP.HTML
+            console.log('Instant UI update for track:', fileName);
+            renderOfflineLibrary();          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
+            const newVideo = {
+              id: fileId,
+              name: fileName,
+              data: base64Data,
+              type: file.type || 'video/mp4',
+              size: file.size,
+              dateAdded: new Date().toISOString(),
+              playable: true
+            };
+
+            // Add to localStorage immediately
+            const offlineMedia = getOfflineMedia();
+            offlineMedia.video.push(newVideo);
+            localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+
+            videoCount++;
+            console.log('Added video file:', fileName);
+
+            // UI UPDATE FOR VIDEO WITH SMALL DELAY
+            setTimeout(() => {
+              renderEnhancedOfflineVideoLibrary();
+            }, 50);
+          }
+
+          processed++;
+
+          // When all files are processed
+          if (processed === files.length) {
+            console.log('=== ALL FILES PROCESSED ===');
+            console.log('Audio count:', audioCount, 'Video count:', videoCount);
+
+            // Final render and updates
+            console.log('Final render and updates');
+            // Don't re-render if we used direct insertion, just update counts
+            updateMediaCounts();
+
+            // Force update queue - EXACT FROM OFFLINE25APP.HTML
+            if (audioCount > 0) {
+              console.log('🔄 Refreshing queue with new tracks');
+              queue = [...offlineTracks];
+              // Final instant render
+              console.log('Final instant render - no delays');
+              renderOfflineLibrary();
+            }
+
+            // Only render if direct insertion might have failed
+            if (audioCount === 0) {
+              console.log('No audio files processed via direct insertion, using render function');
+              renderEnhancedOfflineLibrary();
+            }
+            if (videoCount === 0) {
+              console.log('No video files processed, using render function');
+              renderEnhancedOfflineVideoLibrary();
+            }            showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully!`);
+          }
+        };
+
+        reader.onerror = function(error) {
+          console.error('❌ Error reading file:', file.name, error);
+          processed++;
+        };
+
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // COMPREHENSIVE TEST FUNCTIONS - AVAILABLE GLOBALLY
+    window.testAddTrack = function() {
+      console.log('=== TESTING SIMPLE TRACK ADD ===');
+
+      // Check if popup is open (only test if user has opened it)
+      const popup = document.getElementById('offlineAppOverlay');
+      console.log('🔍 Popup state:', popup ? window.getComputedStyle(popup).display : 'NOT FOUND');
+      if (!popup || window.getComputedStyle(popup).display === 'none') {
+        console.log('⚠️ Test skipped - offline popup not open. Please open offline app first.');
+        return; // Exit test if popup not open
+      }
+
+      // Ensure tracks tab is active
+      console.log('🎵 Switching to tracks tab...');
+      switchMediaTab('tracks');
+
+      const testTrack = {
+        id: 'test_' + Date.now(),
+        name: 'Test Track',
+        title: 'Test Track',
+        artist: 'Test Artist',
+        data: 'data:audio/mp3;base64,test',
+        audioUrl: 'data:audio/mp3;base64,test',
+        type: 'audio/mp3',
+        size: 12345,
+        dateAdded: new Date().toISOString(),
+        playable: true,
+        liked: false
+      };
+
+      // Add directly to localStorage
+      const offlineMedia = getOfflineMedia();
+      console.log('📊 Before adding - tracks in storage:', offlineMedia.audio.length);
+      offlineMedia.audio.push(testTrack);
+      localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+      console.log('📊 After adding - tracks in storage:', offlineMedia.audio.length);
+
+      // Check container state
+      const container = document.getElementById('offlineTracksList');
+      console.log('🔍 Container found:', !!container);
+      console.log('🔍 Container display:', container ? window.getComputedStyle(container).display : 'N/A');
+      console.log('🔍 Container parent display:', container && container.parentElement ? window.getComputedStyle(container.parentElement).display : 'N/A');
+
+      if (container) {
+        // Remove no-files message first
+        const noFiles = container.querySelector('.no-files-message');
+        if (noFiles) {
+          console.log('🗑️ Removing no-files message');
+          noFiles.remove();
+        }
+
+        // Add test track using insertAdjacentHTML (same method as real files)
+        const testHTML = `
+          <div class="offline-track-item" style="border: 3px solid lime; background: rgba(0,255,0,0.2); padding: 10px; margin: 5px;">
+            <div class="offline-track-artwork">
+              <span class="audio-file-icon">🎵</span>
+            </div>
+            <div class="offline-track-info">
+              <div class="offline-track-title">✅ TEST TRACK ADDED! - ${new Date().toLocaleTimeString()}</div>
+              <div class="offline-track-meta">
+                <span class="file-type">MP3</span>
+                <span>Test Track Success</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', testHTML);
+        console.log('✅ Test track displayed using insertAdjacentHTML!');
+        console.log('📊 Container now has', container.children.length, 'children');
+        console.log('📊 Track items:', container.querySelectorAll('.offline-track-item').length);
+        return true;
+      } else {
+        console.error('❌ Container not found');
+        return false;
+      }
+    }
+
+    // DEBUG FUNCTION TO TEST OFFLINE MEDIA - AVAILABLE GLOBALLY
+    window.debugOfflineMedia = function() {
+      console.log('=== DEBUG OFFLINE MEDIA ===');
+      const rawData = localStorage.getItem('hertzOfflineMedia');
+      console.log('Raw localStorage:', rawData);
+
+      const offlineMedia = getOfflineMedia();
+      console.log('Parsed offline media:', offlineMedia);
+      console.log('Audio tracks:', offlineMedia.audio);
+      console.log('Video files:', offlineMedia.video);
+
+      const container = document.getElementById('offlineTracksList');
+      console.log('Container element:', container);
+      console.log('Container innerHTML length:', container ? container.innerHTML.length : 'NOT FOUND');
+      console.log('Container visibility:', container ? window.getComputedStyle(container).display : 'NOT FOUND');
+
+      const popup = document.getElementById('offlineAppOverlay');
+      console.log('Popup element:', popup);
+      console.log('Popup display:', popup ? window.getComputedStyle(popup).display : 'NOT FOUND');
+
+      // Force render test
+      if (container && offlineMedia.audio.length > 0) {
+        console.log('Forcing manual render test...');
+        container.innerHTML = '<div style="color: red; padding: 20px; background: yellow; border: 2px solid red;">TEST: ' + offlineMedia.audio.length + ' tracks found in storage</div>';
+        return true;
+      }
+      return false;
+    }
+
+    // Force render function - available globally
+    window.forceRenderTracks = function() {
+      console.log('=== FORCE RENDER TRACKS ===');
+      renderEnhancedOfflineLibrary();
+    }
+
+    // Test sticky player function - available globally
+    window.testStickyPlayer = function() {
+      console.log('=== TESTING STICKY PLAYER ===');
+
+      // First add a test track if none exist
+      if (offlineQueue.length === 0) {
+        console.log('📦 No tracks in queue, adding test track first...');
+        window.testAddTrack();
+        setTimeout(() => {
+          window.testStickyPlayer();
+        }, 500);
+        return;
+      }
+
+      // Play the first track in queue
+      const firstTrack = offlineQueue[0];
+      if (firstTrack) {
+        console.log('🎵 Testing sticky player with track:', firstTrack.name);
+        playEnhancedTrack(firstTrack.id);
+
+        // Test controls after a short delay
+        setTimeout(() => {
+          console.log('⏯️ Testing pause...');
+          toggleOfflinePlayPause();
+
+          setTimeout(() => {
+            console.log('▶️ Testing resume...');
+            toggleOfflinePlayPause();
+          }, 1000);
+        }, 1000);
+
+        return true;
+      } else {
+        console.error('❌ No tracks available to test');
+        return false;
+      }
+    }    // GLOBAL VARIABLES - EXACT COPY FROM OFFLINE25APP.HTML
+    let offlineTracks = [];
+    let offlineVideos = [];
+    let queue = [];
+    let currentTrack = null;
+    let currentIndex = 0;
+    let isPlaying = false;
+
+    // ENHANCED RENDER FUNCTIONS - EXACT LOGIC FROM OFFLINE25APP.HTML
+    // EXACT COPY OF RENDEROFFLINELIBRARY FROM OFFLINE25APP.HTML
+    function renderOfflineLibrary() {
+      console.log('=== RENDERING OFFLINE LIBRARY ===');
+      console.log('offlineTracks array:', offlineTracks);
+      console.log('Number of tracks:', offlineTracks.length);
+
+      const libraryElement = document.getElementById('offlineTracksList');
+      const emptyMusicMessage = document.getElementById('noTracksMessage');
+
+      if (!libraryElement) {
+        console.error('❌ Library element not found - ID: offlineTracksList');
+        return;
+      }
+
+      console.log('✅ Library element found:', libraryElement);
+
+      if (offlineTracks.length === 0) {
+        console.log('No tracks to display, showing empty message');
+        libraryElement.innerHTML = '<div class="no-files-message" id="noTracksMessage"><p>🎵 No offline tracks yet</p><p style="font-size: 0.9em; opacity: 0.7;">Click "🎵 Add Tracks" above to add MP3, WAV, and other audio files</p><p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added tracks will appear here and can be played with the sticky player</p></div>';
+        return;
+      }
+
+      console.log('Rendering', offlineTracks.length, 'tracks');
+
+      // Hide empty message and render tracks
+      if (emptyMusicMessage) {
+        emptyMusicMessage.style.display = 'none';
+      }
+
+      let html = '';
+      offlineTracks.forEach((track, index) => {
+        console.log(`Rendering track ${index + 1}:`, track.name);
+        const fileName = track.name || track.title || 'Unknown Track';
+        const artist = track.artist || '';
+
+        html += `
+          <div class="offline-track-item" onclick="playOfflineTrack('${track.id}')" style="cursor:pointer;">
+            <div class="offline-track-artwork">
+              <span class="audio-file-icon">🎵</span>
+            </div>
+            <div class="offline-track-info">
+              <div class="offline-track-title">${fileName}</div>
+              <div class="offline-track-meta">
+                <span class="offline-track-artist">${artist}</span>
+                <span>Offline Track</span>
+              </div>
+            </div>
+            <div class="offline-track-actions">
+              <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playOfflineTrack('${track.id}')" title="Play">▶️</button>
+              <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeTrack('${track.id}')" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+      });
+
+      libraryElement.innerHTML = html;
+      console.log('✅ Tracks rendered:', offlineTracks.length, 'items displayed');
+    }
+
+    // Alias for compatibility
+    function renderEnhancedOfflineLibrary() {
+      renderOfflineLibrary();
+    }    function renderEnhancedOfflineVideoLibrary() {
+      console.log('=== RENDERING ENHANCED OFFLINE VIDEO LIBRARY ===');
+      const offlineMedia = getOfflineMedia();
+      const videos = offlineMedia.video || [];
+      console.log('Number of videos:', videos.length);
+
+      const libraryElement = document.getElementById('offlineVideosList');
+
+      if (!libraryElement) {
+        console.error('❌ Videos container not found - ID: offlineVideosList');
+        return;
+      }
+
+      console.log('✅ Videos container found:', libraryElement);
+
+      if (videos.length === 0) {
+        console.log('No videos to display, showing empty message');
+        libraryElement.innerHTML = '<div class="no-files-message" id="noVideosMessage"><p>🎬 No offline videos yet</p><p style="font-size: 0.9em; opacity: 0.7;">Click "🎬 Add Videos" above to add MP4, WebM, and other video files</p><p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added videos will appear here and can be played in mini player</p></div>';
+        return;
+      }
+
+      console.log('Rendering', videos.length, 'videos');
+
+      let html = '';
+      videos.forEach((video, index) => {
+        console.log(`Rendering video ${index + 1}:`, video.name);
+        const fileName = video.name || 'Unknown Video';
+        const fileType = video.type ? video.type.split('/')[1].toUpperCase() : 'VIDEO';
+
+        html += `
+          <div class="offline-video-item" onclick="playEnhancedVideo('${video.id}')">
+            <div class="video-thumbnail">
+              <span class="video-file-icon">🎬</span>
+            </div>
+            <div class="offline-track-info">
+              <div class="offline-track-title">${fileName}</div>
+              <div class="offline-track-meta">
+                <span class="file-type">${fileType}</span>
+                <span>Offline Video</span>
+              </div>
+            </div>
+            <div class="offline-track-actions">
+              <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playEnhancedVideo('${video.id}')" title="Play">▶️</button>
+              <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeEnhancedFile('${video.id}', 'video')" title="Delete">🗑️</button>
+            </div>
+          </div>
+        `;
+      });
+
+      libraryElement.innerHTML = html;
+      console.log('✅ Enhanced videos rendered:', videos.length, 'items displayed');
+    }
+
+    // Add file to enhanced display immediately (legacy function - now using render functions above)
+    function addFileToEnhancedDisplay(fileData, mediaType) {
+      console.log('📺 Adding to display:', fileData.name, 'as', mediaType);
+
+      const container = mediaType === 'audio' ?
+        document.getElementById('offlineTracksList') :
+        document.getElementById('offlineVideosList');
+
+      if (!container) {
+        console.error('❌ Container not found for:', mediaType);
+        return;
+      }
+
+      // Remove no-files message
+      const noFilesMsg = container.querySelector('.no-files-message');
+      if (noFilesMsg) {
+        noFilesMsg.remove();
+      }
+
+      // Create HTML for the file
+      const fileName = fileData.name.replace(/\.[^/.]+$/, '');
+      const fileType = fileData.type ? fileData.type.split('/')[1].toUpperCase() : (mediaType === 'audio' ? 'AUDIO' : 'VIDEO');
+
+      const fileHTML = mediaType === 'audio' ? `
+        <div class="offline-track-item" onclick="playEnhancedTrack('${fileData.id}')" style="animation: slideInFromRight 0.3s ease;">
+          <div class="offline-track-artwork">
+            <span class="audio-file-icon">🎵</span>
+          </div>
+          <div class="offline-track-info">
+            <div class="offline-track-title">${fileName}</div>
+            <div class="offline-track-meta">
+              <span class="file-type">${fileType}</span>
+              <span>Just Added</span>
+            </div>
+          </div>
+          <div class="offline-track-actions">
+            <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playEnhancedTrack('${fileData.id}')" title="Play">▶️</button>
+            <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeEnhancedFile('${fileData.id}', 'audio')" title="Delete">🗑️</button>
+          </div>
+        </div>
+      ` : `
+        <div class="offline-video-item" onclick="playEnhancedVideo('${fileData.id}')" style="animation: slideInFromRight 0.3s ease;">
+          <div class="video-thumbnail">
+            <span class="video-file-icon">🎬</span>
+          </div>
+          <div class="offline-track-info">
+            <div class="offline-track-title">${fileName}</div>
+            <div class="offline-track-meta">
+              <span class="file-type">${fileType}</span>
+              <span>Just Added</span>
+            </div>
+          </div>
+          <div class="offline-track-actions">
+            <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playEnhancedVideo('${fileData.id}')" title="Play">▶️</button>
+            <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeEnhancedFile('${fileData.id}', 'video')" title="Delete">🗑️</button>
+          </div>
+        </div>
+      `;
+
+      // Insert HTML
+      container.insertAdjacentHTML('beforeend', fileHTML);
+      console.log('✅ Added to display:', fileName);
+    }
+
+    // Update all display systems
+    function updateAllDisplays() {
+      updateMediaCounts();
+      // Also update old system for compatibility
+      setTimeout(() => {
+        loadOfflineFiles(true);
+      }, 100);
+    }
+
+    // Enhanced offline track playback - UNIQUE NAME TO AVOID CONFLICTS
+    function playOfflineTrack(trackId) {
+      console.log('🎵 playTrack called with ID:', trackId);
+
+      // Pause any existing main player when starting offline track
+      if (!globalPlayerState.isOfflinePopupActive) {
+        pauseMainStickyPlayer();
+      }
+
+      const track = offlineTracks.find(t => t.id === trackId);
+      if (!track) {
+        console.error('❌ Track not found:', trackId);
+        console.log('Available tracks:', offlineTracks.map(t => t.id));
+        return;
+      }
+      console.log('✅ Track found:', track.name);
+
+      // Update global state
+      globalPlayerState.currentTrack = track;
+
+      currentTrack = track;
+
+      // Ensure queue is set up properly
+      if (queue.length === 0) {
+        queue = [...offlineTracks];
+      }
+
+      currentIndex = queue.findIndex(t => t.id === trackId);
+      if (currentIndex === -1) {
+        // If track not in queue, add it and make it current
+        queue.push(track);
+        currentIndex = queue.length - 1;
+      }
+
+      // USE MAIN GLOBAL STICKY PLAYER - MATCH ACTUAL ELEMENTS
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerTitle = document.getElementById('playerTrackTitle');
+      const playerAudio = document.getElementById('playerAudio');
+      const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+
+      console.log('🔍 Element check:', {
+        stickyPlayer: !!stickyPlayer,
+        playerTitle: !!playerTitle,
+        playerAudio: !!playerAudio,
+        stickyTrackInfo: !!stickyTrackInfo
+      });
+
+      if (stickyPlayer && playerTitle && playerAudio) {
+        console.log('📱 Showing main sticky player for offline track:', track.name);
+        stickyPlayer.style.display = 'flex';
+        stickyPlayer.style.position = 'fixed';
+        stickyPlayer.style.bottom = '88px'; // Clearly above navigation menu
+        stickyPlayer.style.left = '0';
+        stickyPlayer.style.right = '0';
+        stickyPlayer.style.zIndex = '1600'; // Above bottom nav (z-index 1500)
+        stickyPlayer.style.height = '65px'; // Thinner player
+        stickyPlayer.style.minHeight = '65px';
+        stickyPlayer.style.maxHeight = '65px';
+        stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
+        stickyPlayer.style.backdropFilter = 'blur(10px)';
+        stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
+        stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+
+        // Apply optimized class for offline tracks
+        stickyPlayer.classList.add('offline-optimized');
+
+        playerTitle.textContent = track.name;
+        if (stickyTrackInfo) stickyTrackInfo.textContent = track.artist || '';
+
+        playerAudio.src = track.base64 || track.audioUrl;
+        console.log('🎵 Audio source set:', track.base64 ? `base64 data (${track.base64.substring(0, 50)}...)` : 'no base64 data');
+        console.log('🎵 playerAudio element:', playerAudio);
+        console.log('🎵 stickyPlayer element:', stickyPlayer);
+        console.log('🎵 stickyPlayer computed style:', window.getComputedStyle(stickyPlayer).display);
+
+        // Update duration when audio loads
+        playerAudio.addEventListener('loadedmetadata', function() {
+          updateDurationDisplay();
+        }, { once: true });
+
+        // Update play button to pause when starting
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        if (playPauseBtn) {
+          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
+        }
+
+        playerAudio.play().then(() => {
+          console.log('✅ Audio playback started successfully');
+          isPlaying = true;
+
+          // Update offline player button state
+          const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
+          if (offlinePlayPauseBtn) {
+            offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
+          }
+        }).catch((error) => {
+          console.error('❌ Audio playback failed:', error);
+        });
+
+        console.log('✅ Track setup completed:', track.name);
+
+        // Also activate the offline sticky player inside the popup
+        const offlineStickyPlayer = document.getElementById('offlineStickyPlayer');
+        const offlinePlayerTitle = document.getElementById('offlinePlayerTitle');
+        const offlinePlayerArtist = document.getElementById('offlinePlayerArtist');
+        const offlinePlayerAudio = document.getElementById('offlinePlayerAudio');
+        const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
+
+        if (offlineStickyPlayer && offlinePlayerTitle && offlinePlayerAudio) {
+          console.log('📱 Also activating offline sticky player inside popup');
+          offlineStickyPlayer.style.display = 'block';
+
+          offlinePlayerTitle.textContent = track.name;
+          if (offlinePlayerArtist) offlinePlayerArtist.textContent = track.artist || '';
+
+          offlinePlayerAudio.src = track.base64 || track.audioUrl;
+
+          // Update play button to pause when starting
+          if (offlinePlayPauseBtn) {
+            offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
+            // Make the offline play button control the main audio
+            offlinePlayPauseBtn.onclick = function() {
+              const mainAudio = document.getElementById('playerAudio');
+              const mainPlayBtn = document.getElementById('playPauseBtn');
+              if (mainAudio) {
+                if (mainAudio.paused) {
+                  mainAudio.play().then(() => {
+                    offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
+                    if (mainPlayBtn) mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
+                  });
+                } else {
+                  mainAudio.pause();
+                  offlinePlayPauseBtn.innerHTML = '&#9654;'; // Play symbol
+                  if (mainPlayBtn) mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
+                }
+              }
+            };
+          }
+
+          // Don't use separate audio - use main audio only
+          // offlinePlayerAudio.currentTime = playerAudio.currentTime;
+
+          console.log('✅ Offline sticky player inside popup activated');
+        }
+      } else {
+        console.error('❌ Required elements missing for playback');
+        console.log('Missing elements:', {
+          stickyPlayer: !stickyPlayer,
+          playerTitle: !playerTitle,
+          playerAudio: !playerAudio
+        });
+      }
+    }
+
+    // Alias for compatibility
+    function playEnhancedTrack(trackId) {
+      playOfflineTrack(trackId);
+    }
+
+    // Add missing removeTrack function
+    function removeTrack(trackId) {
+      if (!confirm('Remove this track from offline storage?')) return;
+
+      const index = offlineTracks.findIndex(t => t.id === trackId);
+      if (index > -1) {
+        offlineTracks.splice(index, 1);
+        queue = [...offlineTracks];
+        saveAllData();
+        renderOfflineLibrary();
+        console.log('🗑️ Track removed:', trackId);
+      }
+    }
+
+    // COMPLETE PLAYBACK CONTROLS - USE MAIN PLAYER LIKE OFFLINE25APP.HTML
+    function toggleOfflinePlayPause() {
+      const playerAudio = document.getElementById('playerAudio');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const playerCover = document.getElementById('playerCover');
+
+      if (!playerAudio) return;
+
+      if (isPlaying) {
+        playerAudio.pause();
+        isPlaying = false;
+        if (playPauseBtn) {
+          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
+        }
+        if (playerCover) {
+          playerCover.classList.add('paused');
+          playerCover.classList.remove('rotating');
+        }
+      } else {
+        playerAudio.play().catch(console.error);
+        isPlaying = true;
+        if (playPauseBtn) {
+          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
+        }
+        if (playerCover) {
+          playerCover.classList.add('rotating');
+          playerCover.classList.remove('paused');
+        }
+      }
+    }
+
+    function nextOfflineTrack() {
+      if (queue.length === 0) return;
+
+      currentIndex = (currentIndex + 1) % queue.length;
+      const nextTrack = queue[currentIndex];
+      if (nextTrack) {
+        playOfflineTrack(nextTrack.id);
+      }
+    }
+
+    // Alias for main player next button
+    function playNextTrack() {
+      nextOfflineTrack();
+    }
+
+    function previousOfflineTrack() {
+      if (queue.length === 0) return;
+
+      currentIndex = currentIndex <= 0 ? queue.length - 1 : currentIndex - 1;
+      const prevTrack = queue[currentIndex];
+      if (prevTrack) {
+        playOfflineTrack(prevTrack.id);
+      }
+    }
+
+    // Alias for main player previous button
+    function playPreviousTrack() {
+      previousOfflineTrack();
+    }
+
+    // Main player toggle play/pause function
+    function togglePlayPause() {
+      toggleOfflinePlayPause();
+    }
+
+    // Function to reset sticky player to normal mode (for regular tracks)
+    function resetStickyPlayerToNormal() {
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      if (stickyPlayer) {
+        stickyPlayer.classList.remove('offline-optimized');
+        // Reset any inline styles that were set
+        stickyPlayer.style.removeProperty('position');
+        stickyPlayer.style.removeProperty('bottom');
+        stickyPlayer.style.removeProperty('left');
+        stickyPlayer.style.removeProperty('right');
+        stickyPlayer.style.removeProperty('height');
+        stickyPlayer.style.removeProperty('min-height');
+        stickyPlayer.style.removeProperty('max-height');
+        stickyPlayer.style.removeProperty('background-color');
+        stickyPlayer.style.removeProperty('backdrop-filter');
+        stickyPlayer.style.removeProperty('box-shadow');
+        stickyPlayer.style.removeProperty('border-top');
+        console.log('🔄 Sticky player reset to normal mode');
+      }
+    }
+
+    function toggleOfflineShuffle() {
+      // Use main player shuffle button if available
+      const shuffleBtn = document.getElementById('shuffleBtn') || document.getElementById('offlineShuffleBtn');
+
+      isShuffling = !isShuffling;
+
+      if (shuffleBtn) {
+        shuffleBtn.style.color = isShuffling ? '#1db954' : '#b3b3b3';
+        shuffleBtn.style.transform = isShuffling ? 'scale(1.1)' : 'scale(1)';
+      }
+
+      console.log(isShuffling ? '🔀 Shuffle enabled' : '🔀 Shuffle disabled');
+    }
+
+    function toggleOfflineLoop() {
+      // Use main player loop button if available
+      const loopBtn = document.getElementById('loopBtn') || document.getElementById('offlineLoopBtn');
+
+      isLooping = !isLooping;
+
+      // Update button state
+      if (loopBtn) {
+        loopBtn.style.color = isLooping ? '#1db954' : '#b3b3b3';
+        loopBtn.style.transform = isLooping ? 'scale(1.1)' : 'scale(1)';
+      }
+
+      console.log(isLooping ? '🔁 Loop enabled' : '🔁 Loop disabled');
+    }
+
+    function updateOfflineDurationDisplay() {
+      const playerAudio = document.getElementById('offlinePlayerAudio');
+      const duration = document.getElementById('offlineDuration');
+
+      if (playerAudio && duration && playerAudio.duration) {
+        const minutes = Math.floor(playerAudio.duration / 60);
+        const seconds = Math.floor(playerAudio.duration % 60).toString().padStart(2, '0');
+        duration.textContent = `${minutes}:${seconds}`;
+      }
+    }
+
+    // Enhanced video playback
+    function playEnhancedVideo(videoId) {
+      console.log('🎬 Playing enhanced video:', videoId);
+
+      const offlineMedia = getOfflineMedia();
+      const video = offlineMedia.video.find(v => v.id === videoId);
+
+      if (!video) {
+        console.error('❌ Video not found:', videoId);
+        return;
+      }
+
+      // Use existing video player or create mini player
+      if (typeof playOfflineVideoInMiniPlayer === 'function') {
+        playOfflineVideoInMiniPlayer(video);
+      } else {
+        console.log('🎬 Video playback:', video.name);
+      }
+    }
+
+    // Remove enhanced file
+    function removeEnhancedFile(fileId, mediaType) {
+      if (!confirm('Remove this file from offline storage?')) return;
+
+      console.log('🗑️ Removing enhanced file:', fileId);
+
+      const offlineMedia = getOfflineMedia();
+
+      if (mediaType === 'audio') {
+        const index = offlineMedia.audio.findIndex(t => t.id === fileId);
+        if (index > -1) {
+          offlineMedia.audio.splice(index, 1);
+        }
+      } else {
+        const index = offlineMedia.video.findIndex(v => v.id === fileId);
+        if (index > -1) {
+          offlineMedia.video.splice(index, 1);
+        }
+      }
+
+      // Save to localStorage
+      localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+
+      // Refresh displays
+      loadOfflineTracks();
+      loadOfflineVideos();
+      updateAllDisplays();
+
+      console.log('✅ File removed and displays updated');
+    }
+
+    // Enhanced Offline Functions for Offline25App.html design
+
+    // Switch between tracks and videos tabs
+    function switchMediaTab(tabType) {
+      console.log('📱 Switching to', tabType, 'tab');
+
+      const tracksTab = document.getElementById('tracksTabBtn');
+      const videosTab = document.getElementById('videosTabBtn');
+      const tracksSection = document.getElementById('tracksSection');
+      const videosSection = document.getElementById('videosSection');
+
+      // Remove active class from all tabs
+      if (tracksTab) tracksTab.classList.remove('active');
+      if (videosTab) videosTab.classList.remove('active');
+
+      // Hide all sections
+      if (tracksSection) tracksSection.style.display = 'none';
+      if (videosSection) videosSection.style.display = 'none';
+
+      // Show selected tab and section
+      if (tabType === 'tracks') {
+        if (tracksTab) tracksTab.classList.add('active');
+        if (tracksSection) tracksSection.style.display = 'block';
+      } else if (tabType === 'videos') {
+        if (videosTab) videosTab.classList.add('active');
+        if (videosSection) videosSection.style.display = 'block';
+      }
+
+      // Update displays
+      loadOfflineTracks();
+      loadOfflineVideos();
+    }
+
+    // Add tracks specifically - WORKING IMPLEMENTATION
+    function addOfflineTracks() {
+      console.log('🎵 Adding offline tracks...');
+
+      // Create a temporary file input for audio files
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'audio/*,.mp3,.wav,.flac,.aac,.ogg,.m4a,.wma';
+      input.multiple = true;
+      input.style.display = 'none';
+
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          console.log('🎵 Selected', files.length, 'audio files');
+          processFilesInstantly(files, 'audio');
+        }
+        document.body.removeChild(input);
+      };
+
+      document.body.appendChild(input);
+      input.click();
+    }
+
+    // Add videos specifically - WORKING IMPLEMENTATION
+    function addOfflineVideos() {
+      console.log('🎬 Adding offline videos...');
+
+      // Create a temporary file input for video files
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'video/*,.mp4,.webm,.avi,.mov,.wmv,.mkv';
+      input.multiple = true;
+      input.style.display = 'none';
+
+      input.onchange = function(e) {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          console.log('🎬 Selected', files.length, 'video files');
+          processFilesInstantly(files, 'video');
+        }
+        document.body.removeChild(input);
+      };
+
+      document.body.appendChild(input);
+      input.click();
+    }
+
+    // Load and display offline tracks
+    function loadOfflineTracks() {
+      console.log('🔄 Loading offline tracks using renderer...');
+      renderOfflineLibrary();
+    }    // Load and display offline videos
+    function loadOfflineVideos() {
+      console.log('🔄 Loading offline videos using enhanced renderer...');
+      renderEnhancedOfflineVideoLibrary();
+    }
+
+    // Force reload all tracks and videos (used when needed)
+    function forceReloadAllMedia() {
+      console.log('🔄 Force reloading all media...');
+
+      // Clear containers first
+      const tracksContainer = document.getElementById('offlineTracksList');
+      const videosContainer = document.getElementById('offlineVideosList');
+
+      if (tracksContainer) tracksContainer.innerHTML = '';
+      if (videosContainer) videosContainer.innerHTML = '';
+
+      // Reload everything
+      loadOfflineTracks();
+      loadOfflineVideos();
+      updateMediaCounts();
+    }
+
+    // Update media counts in tabs
+    function updateMediaCounts() {
+      const offlineMedia = getOfflineMedia();
+      const tracksCount = document.getElementById('tracksCount');
+      const videosCount = document.getElementById('videosCount');
+
+      if (tracksCount) {
+        tracksCount.textContent = `(${offlineMedia.audio ? offlineMedia.audio.length : 0})`;
+      }
+      if (videosCount) {
+        videosCount.textContent = `(${offlineMedia.video ? offlineMedia.video.length : 0})`;
+      }
+    }
+
+    // Enhanced track playback for offline sticky player
+    function playOfflineTrackEnhanced(trackId) {
+      console.log('🎵 Playing enhanced offline track:', trackId);
+
+      const offlineMedia = getOfflineMedia();
+      const track = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])].find(item => item.id === trackId);
+
+      if (!track) {
+        console.error('❌ Track not found:', trackId);
+        return;
+      }
+
+      // Update current track info
+      window.currentOfflineTrack = trackId;
+      window.currentOfflinePlaylist = offlineMedia.audio || [];
+
+      // Show and update the enhanced sticky player
+      const stickyPlayer = document.getElementById('offlineStickyPlayer');
+      const playerTitle = document.getElementById('offlinePlayerTitle');
+      const playerArtist = document.getElementById('offlinePlayerArtist');
+      const playerArtwork = document.getElementById('offlinePlayerArtwork');
+      const playerAudio = document.getElementById('offlinePlayerAudio');
+
+      if (stickyPlayer) stickyPlayer.style.display = 'flex';
+      if (playerTitle) playerTitle.textContent = track.name || 'Unknown Track';
+      if (playerArtist) playerArtist.textContent = `Offline ${track.type ? track.type.split('/')[1].toUpperCase() : 'Audio'}`;
+      if (playerArtwork) playerArtwork.textContent = '🎵';
+
+      // Set up audio playback
+      if (playerAudio && track.data) {
+        try {
+          // Convert base64 to blob URL
+          const base64Data = track.data.split(',')[1];
+          const binaryString = atob(base64Data);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          const blob = new Blob([bytes], { type: track.type });
+          const blobUrl = URL.createObjectURL(blob);
+
+          playerAudio.src = blobUrl;
+          playerAudio.play();
+
+          // Update play/pause button
+          const playPauseBtn = document.getElementById('offlinePlayPauseBtn');
+          if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+
+          console.log('✅ Enhanced offline track playback started');
+        } catch (error) {
+          console.error('❌ Error playing offline track:', error);
+          showNotification('❌ Error playing offline track');
+        }
+      }
+    }
+
+    // Enhanced video playback
+    function playOfflineVideoEnhanced(videoId) {
+      console.log('🎬 Playing enhanced offline video:', videoId);
+
+      const offlineMedia = getOfflineMedia();
+      const video = (offlineMedia.video || []).find(item => item.id === videoId);
+
+      if (!video) {
+        console.error('❌ Video not found:', videoId);
+        return;
+      }
+
+      // Use existing mini video player logic
+      playOfflineVideoInMiniPlayer(video);
+    }
+
+    // Enhanced sticky player controls
+    function toggleOfflinePlayPause() {
+      const playerAudio = document.getElementById('offlinePlayerAudio');
+      const playPauseBtn = document.getElementById('offlinePlayPauseBtn');
+
+      if (!playerAudio) return;
+
+      if (playerAudio.paused) {
+        playerAudio.play();
+        if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+      } else {
+        playerAudio.pause();
+        if (playPauseBtn) playPauseBtn.textContent = '▶️';
+      }
+    }
+
+    function previousOfflineTrack() {
+      // Implementation for previous track functionality
+      console.log('⏮️ Previous offline track');
+      // TODO: Add playlist navigation logic
+    }
+
+    function nextOfflineTrack() {
+      // Implementation for next track functionality
+      console.log('⏭️ Next offline track');
+      // TODO: Add playlist navigation logic
+    }
+
+    function toggleOfflineLoop() {
+      const loopBtn = document.getElementById('offlineLoopBtn');
+      const playerAudio = document.getElementById('offlinePlayerAudio');
+
+      if (playerAudio) {
+        playerAudio.loop = !playerAudio.loop;
+        if (loopBtn) {
+          loopBtn.style.opacity = playerAudio.loop ? '1' : '0.6';
+        }
+        console.log('🔁 Loop:', playerAudio.loop ? 'ON' : 'OFF');
+      }
+    }
+
+    function toggleOfflineShuffle() {
+      const shuffleBtn = document.getElementById('offlineShuffleBtn');
+      // Toggle shuffle state
+      window.offlineShuffleMode = !window.offlineShuffleMode;
+      if (shuffleBtn) {
+        shuffleBtn.style.opacity = window.offlineShuffleMode ? '1' : '0.6';
+      }
+      console.log('🔀 Shuffle:', window.offlineShuffleMode ? 'ON' : 'OFF');
+    }
+
+    // Initialize enhanced offline features
+    function initializeEnhancedOffline() {
+      console.log('🚀 Initializing enhanced offline features...');
+
+      // Load initial displays
+      switchMediaTab('tracks');
+      updateMediaCounts();
+
+      // Set up main sticky player button event listeners
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const prevBtn = document.getElementById('prevBtn');
+
+      if (playPauseBtn) {
+        playPauseBtn.addEventListener('click', toggleOfflinePlayPause);
+        console.log('✅ Play/pause button listener added');
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', nextOfflineTrack);
+        console.log('✅ Next button listener added');
+      }
+      if (prevBtn) {
+        prevBtn.addEventListener('click', previousOfflineTrack);
+        console.log('✅ Previous button listener added');
+      }
+
+      // Set up audio progress tracking
+      const playerAudio = document.getElementById('offlinePlayerAudio');
+      const progressBar = document.getElementById('offlineProgressBar');
+      const currentTime = document.getElementById('offlineCurrentTime');
+      const duration = document.getElementById('offlineDuration');
+
+      if (playerAudio && progressBar) {
+        playerAudio.addEventListener('timeupdate', function() {
+          if (this.duration) {
+            const progress = (this.currentTime / this.duration) * 100;
+            progressBar.value = progress;
+
+            if (currentTime) {
+              const minutes = Math.floor(this.currentTime / 60);
+              const seconds = Math.floor(this.currentTime % 60).toString().padStart(2, '0');
+              currentTime.textContent = `${minutes}:${seconds}`;
+            }
+          }
+        });
+
+        playerAudio.addEventListener('loadedmetadata', function() {
+          if (duration) {
+            const minutes = Math.floor(this.duration / 60);
+            const seconds = Math.floor(this.duration % 60).toString().padStart(2, '0');
+            duration.textContent = `${minutes}:${seconds}`;
+          }
+        });
+
+        progressBar.addEventListener('input', function() {
+          if (playerAudio.duration) {
+            playerAudio.currentTime = (this.value / 100) * playerAudio.duration;
+          }
+        });
+      }
+
+      // Add keyboard shortcuts for the offline player
+      document.addEventListener('keydown', function(e) {
+        // Only activate shortcuts when offline popup is visible
+        const offlineOverlay = document.getElementById('offlineAppOverlay');
+        if (!offlineOverlay || window.getComputedStyle(offlineOverlay).display === 'none') {
+          return;
+        }
+
+        switch(e.code) {
+          case 'Space':
+            e.preventDefault();
+            toggleOfflinePlayPause();
+            break;
+          case 'ArrowLeft':
+            e.preventDefault();
+            previousOfflineTrack();
+            break;
+          case 'ArrowRight':
+            e.preventDefault();
+            nextOfflineTrack();
+            break;
+          case 'KeyL':
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              toggleOfflineLoop();
+            }
+            break;
+          case 'KeyS':
+            if (e.ctrlKey || e.metaKey) {
+              e.preventDefault();
+              toggleOfflineShuffle();
+            }
+            break;
+        }
+      });
+
+      // Load existing files into enhanced displays
+      setTimeout(() => {
+        console.log('🔄 Loading existing files into enhanced displays...');
+        switchMediaTab('tracks'); // This will load tracks and set up the tab
+        loadOfflineTracks();
+        loadOfflineVideos();
+        updateMediaCounts();
+        console.log('✅ Existing files loaded into enhanced system');
+      }, 50);
+
+      console.log('✅ Enhanced offline features initialized with keyboard shortcuts');
+    }
+
+    // Debug function to check enhanced system status
+    window.debugEnhancedOffline = function() {
+      console.log('🔍 Enhanced Offline System Debug:');
+
+      const offlineMedia = getOfflineMedia();
+      const tracksContainer = document.getElementById('offlineTracksList');
+      const videosContainer = document.getElementById('offlineVideosList');
+      const tracksTab = document.getElementById('tracksTabBtn');
+      const videosTab = document.getElementById('videosTabBtn');
+      const tracksCount = document.getElementById('tracksCount');
+      const videosCount = document.getElementById('videosCount');
+
+      console.log('📊 Storage:', {
+        audioFiles: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        videoFiles: offlineMedia.video ? offlineMedia.video.length : 0
+      });
+
+      console.log('🎯 DOM Elements:', {
+        tracksContainer: !!tracksContainer,
+        videosContainer: !!videosContainer,
+        tracksTab: !!tracksTab,
+        videosTab: !!videosTab,
+        tracksCount: !!tracksCount,
+        videosCount: !!videosCount
+      });
+
+      if (tracksContainer) {
+        console.log('📋 Tracks Container:', {
+          children: tracksContainer.children.length,
+          innerHTML: tracksContainer.innerHTML.length > 0 ? 'Has content' : 'Empty',
+          display: window.getComputedStyle(tracksContainer).display
+        });
+      }
+
+      if (videosContainer) {
+        console.log('📋 Videos Container:', {
+          children: videosContainer.children.length,
+          innerHTML: videosContainer.innerHTML.length > 0 ? 'Has content' : 'Empty',
+          display: window.getComputedStyle(videosContainer).display
+        });
+      }
+
+      // Try to refresh
+      console.log('🔄 Attempting refresh...');
+      loadOfflineTracks();
+      loadOfflineVideos();
+      updateMediaCounts();
+
+      return {
+        audioFiles: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        videoFiles: offlineMedia.video ? offlineMedia.video.length : 0,
+        containersFound: !!tracksContainer && !!videosContainer
+      };
+    };
+
+    // Test function to add a sample file for testing
+    window.addTestOfflineFile = function() {
+      console.log('🧪 Adding test offline file...');
+
+      const testFile = {
+        id: 'test_' + Date.now(),
+        name: 'Test Audio Track.mp3',
+        size: 1024000,
+        type: 'audio/mp3',
+        data: 'data:audio/mp3;base64,SGVsbG8gV29ybGQ=', // "Hello World" in base64
+        dateAdded: new Date().toISOString(),
+        isWAV: false,
+        isMP3: true,
+        playable: true
+      };
+
+      const offlineMedia = getOfflineMedia();
+      offlineMedia.audio.push(testFile);
+
+      try {
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+        console.log('✅ Test file added to storage');
+
+        // Refresh displays using instant method
+        addFileToEnhancedDisplay(testFile, 'audio');
+        updateAllDisplays();
+
+        console.log('✅ Test file added to enhanced display');
+        return testFile.id;
+      } catch (error) {
+        console.error('❌ Error adding test file:', error);
+        return null;
+      }
+    };
+
+    // Comprehensive system verification
+    window.verifyEnhancedSystem = function() {
+      console.log('🔍 ENHANCED SYSTEM VERIFICATION:');
+
+      // Check DOM elements
+      const elements = {
+        offlineApp: document.getElementById('offlineAppOverlay'),
+        tracksTab: document.getElementById('tracksTabBtn'),
+        videosTab: document.getElementById('videosTabBtn'),
+        tracksSection: document.getElementById('tracksSection'),
+        videosSection: document.getElementById('videosSection'),
+        tracksList: document.getElementById('offlineTracksList'),
+        videosList: document.getElementById('offlineVideosList'),
+        tracksCount: document.getElementById('tracksCount'),
+        videosCount: document.getElementById('videosCount'),
+        stickyPlayer: document.getElementById('offlineStickyPlayer')
+      };
+
+      console.log('📋 DOM Elements Status:');
+      Object.entries(elements).forEach(([name, element]) => {
+        console.log(`  ${name}: ${element ? '✅ Found' : '❌ Missing'}`);
+      });
+
+      // Check storage
+      const offlineMedia = getOfflineMedia();
+      console.log('💾 Storage Status:');
+      console.log(`  Audio files: ${offlineMedia.audio ? offlineMedia.audio.length : 0}`);
+      console.log(`  Video files: ${offlineMedia.video ? offlineMedia.video.length : 0}`);
+
+      // Check functions
+      const functions = [
+        'addOfflineTracks', 'addOfflineVideos', 'processFilesInstantly',
+        'loadOfflineTracks', 'loadOfflineVideos', 'updateMediaCounts',
+        'switchMediaTab', 'playEnhancedTrack', 'removeEnhancedFile'
+      ];
+
+      console.log('🔧 Function Status:');
+      functions.forEach(funcName => {
+        console.log(`  ${funcName}: ${typeof window[funcName] === 'function' ? '✅ Available' : '❌ Missing'}`);
+      });
+
+      // Test the system
+      console.log('🧪 Running system test...');
+
+      // Check if offline app is open for testing
+      const offlineApp = document.getElementById('offlineAppOverlay');
+      if (offlineApp && window.getComputedStyle(offlineApp).display === 'none') {
+        console.log('⚠️ Testing environment setup skipped - offline app not open');
+        return; // Exit if app not open
+      }
+
+      setTimeout(() => {
+        // Load displays
+        loadOfflineTracks();
+        loadOfflineVideos();
+        updateMediaCounts();
+
+        console.log('✅ System verification completed');
+        console.log('💡 To test file upload: Click "🎵 Add Tracks" or "🎬 Add Videos" buttons');
+        console.log('💡 To add test file: Run addTestOfflineFile()');
+      }, 500);
+
+      return {
+        elements: Object.fromEntries(Object.entries(elements).map(([k,v]) => [k, !!v])),
+        audioFiles: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        videoFiles: offlineMedia.video ? offlineMedia.video.length : 0,
+        functionsAvailable: functions.map(f => typeof window[f] === 'function').every(Boolean)
+      };
+    };
+
+    // Auto-verify system on load
+    setTimeout(() => {
+      console.log('🚀 AUTO-VERIFICATION: Enhanced Offline System');
+      verifyEnhancedSystem();
+    }, 2000);    function openPlaylistApp() {
       console.log('📋 Opening Playlist Manager Popup');
       closeAppSelectionPopup();
       const overlay = document.getElementById('playlistAppOverlay');
@@ -10165,6 +12150,17 @@ function showGenrePopup(genre) {
       // Only close if clicking on overlay background or close button, not the content
       if (!event || event.target.classList.contains('app-overlay') || event.target.classList.contains('app-close-btn')) {
         console.log(`❌ Closing app overlay: ${overlayId}`);
+
+        // Handle offline popup closure
+        if (overlayId === 'offlineAppOverlay') {
+          pauseOfflineStickyPlayer();
+          globalPlayerState.isOfflinePopupActive = false;
+          // Resume main player if it was playing before
+          setTimeout(() => {
+            resumeMainStickyPlayer();
+          }, 100);
+        }
+
         const overlay = document.getElementById(overlayId);
         if (overlay) {
           overlay.style.display = 'none';
@@ -12098,8 +14094,7 @@ function showGenrePopup(genre) {
 
     // --- Enhanced Persistent Player Logic ---
     let allTracks = [];
-    let currentIndex = 0;
-    let isPlaying = false;
+    // currentIndex and isPlaying already declared above for offline system
     let isLoop = false;
     let isShuffle = false;
 
@@ -12109,6 +14104,17 @@ function showGenrePopup(genre) {
       const m = Math.floor(seconds / 60);
       const s = Math.floor(seconds % 60);
       return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    // Update duration display for main player - EXACT FROM OFFLINE25APP.HTML
+    function updateDurationDisplay() {
+      const playerAudio = document.getElementById('playerAudio');
+      const duration = document.getElementById('duration');
+
+      if (playerAudio && duration && playerAudio.duration) {
+        const time = formatTime(playerAudio.duration);
+        duration.textContent = time;
+      }
     }
 
     // Global function to play track from card click - defined early to avoid timing issues
