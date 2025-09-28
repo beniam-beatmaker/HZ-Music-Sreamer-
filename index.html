@@ -71,7 +71,9 @@
               'Future': 'https://storage.googleapis.com/hertz-music-folder/Future.wav',
               'Promise': 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3',
               'Bliss': 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3',
-              'Hustle': 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3'
+              'Hustle': 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3',
+              'Ain&#39;t Shit': 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3',
+              'Dream': 'https://storage.googleapis.com/hertz-music-folder/Dream.wav'
             };
             trackUrl = urlMap[trackId] || 'https://storage.googleapis.com/hertz-music-folder/' + trackId + '.mp3';
           }
@@ -147,6 +149,16 @@
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+  }
+
+  /* Shuffle button glow animation */
+  @keyframes shuffleGlow {
+    0% {
+      box-shadow: 0 0 15px rgba(0, 102, 255, 0.6), 0 0 30px rgba(0, 102, 255, 0.3);
+    }
+    100% {
+      box-shadow: 0 0 25px rgba(0, 102, 255, 0.9), 0 0 50px rgba(0, 102, 255, 0.5);
+    }
   }
 
   @keyframes slideInFromRight {
@@ -4688,6 +4700,26 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+              <!-- New Track: Ain't Shit at top -->
+              <div class="recent-track-item" onclick="playNewTrack('Ain&amp;#39;t Shit', 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', 'Ain&amp;#39;t Shit', 'Texx')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Shining stars cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Ain't Shit</div>
+                  <div class="recent-track-artist">Texx</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Dream -->
+              <div class="recent-track-item" onclick="playNewTrack('Dream', 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', 'Dream', 'Desiree')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Clouds cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Dream</div>
+                  <div class="recent-track-artist">Desiree</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
               <div class="recent-track-item" onclick="playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Times cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
@@ -5014,6 +5046,22 @@
                 <tr class="track-row" onclick="playNewTrack('Good Woman', 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', 'Good Woman', 'Molly-Able')">
                   <td><div class="track-number">20</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Beautiful brunette woman" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Good Woman</div><div class="track-artist">Molly-Able</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Dream by Desiree -->
+                <tr class="track-row" onclick="playNewTrack('Dream', 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', 'Dream', 'Desiree')">
+                  <td><div class="track-number">21</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Clouds cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Dream</div><div class="track-artist">Desiree</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Ain't Shit by Texx -->
+                <tr class="track-row" onclick="playNewTrack('Ain&amp;#39;t Shit', 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', 'Ain&amp;#39;t Shit', 'Texx')">
+                  <td><div class="track-number">22</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Shining stars cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ain't Shit</div><div class="track-artist">Texx</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -5533,24 +5581,35 @@
             }
           });
 
-          // Loop - Toggle between blue and golden
+          // Loop - Toggle with '1' indicator when active
           loopBtn.addEventListener('click', function() {
             playerAudio.loop = !playerAudio.loop;
             if (playerAudio.loop) {
+              loopBtn.innerHTML = '🔂1';
               loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
               loopBtn.style.color = '#fff';
+              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
+              loopBtn.style.border = '2px solid #0066ff';
+              console.log('🔂 Loop ON - Track will repeat');
             } else {
+              loopBtn.innerHTML = '🔂';
               loopBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
               loopBtn.style.color = '#FFD700';
+              loopBtn.style.boxShadow = 'none';
+              loopBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
+              console.log('🔂 Loop OFF');
             }
           });
 
-          // Shuffle - Toggle between blue and golden
+          // Shuffle - Toggle with blue glow when active
           shuffleBtn.addEventListener('click', function() {
             isShuffled = !isShuffled;
             if (isShuffled) {
               shuffleBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
               shuffleBtn.style.color = '#fff';
+              shuffleBtn.style.boxShadow = '0 0 20px rgba(0, 102, 255, 0.8), 0 0 40px rgba(0, 102, 255, 0.4)';
+              shuffleBtn.style.border = '2px solid #0066ff';
+              shuffleBtn.style.animation = 'shuffleGlow 2s ease-in-out infinite alternate';
               // Shuffle the track order except current
               var currentTrack = trackOrder[currentTrackIndex];
               var rest = trackOrder.slice();
@@ -5560,15 +5619,20 @@
                 [rest[i], rest[j]] = [rest[j], rest[i]];
               }
               trackOrder = [currentTrack].concat(rest);
+              console.log('🔀 Shuffle ON - Tracks randomized');
             } else {
               shuffleBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
               shuffleBtn.style.color = '#FFD700';
+              shuffleBtn.style.boxShadow = 'none';
+              shuffleBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
+              shuffleBtn.style.animation = 'none';
               // Restore original order
               trackOrder = [
                 'Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
                 'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
                 'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
               ];
+              console.log('🔀 Shuffle OFF - Original order restored');
             }
           });
 
