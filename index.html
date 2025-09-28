@@ -2675,6 +2675,15 @@
         background: #FFA500;
     }
 
+    /* Empty State Styles */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #a7a7a7;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
     /* Offline Sticky Player Styles */
     .offline-sticky-player {
         position: fixed;
@@ -5021,11 +5030,26 @@
           <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
-          <div class="content-card content-card-small" onclick="openLikedPage(); event.stopPropagation();" style="cursor: pointer;">
-          <div class="card-image card-image-small"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
-          <h3 class="card-title card-title-small">Liked Songs</h3>
-          <p class="card-description card-description-small" id="likedSongsCountCard">0 liked songs</p>
-        </div>
+          <!-- Liked Songs Card - First Option -->
+          <div class="content-card content-card-small" onclick="openLikedSongs()" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #ff6b6b, #ee5a24);display:flex;align-items:center;justify-content:center;">
+                <span style="font-size:2.5rem;color:white;">❤️</span>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Liked Songs</h3>
+            <p class="card-description card-description-small">Your favorite tracks all in one place</p>
+          </div>
+
+          <!-- Most Popular Card - Second Option -->
+          <div class="content-card content-card-small" onclick="openMostPopular()" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Most Popular cover" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Most Popular</h3>
+            <p class="card-description card-description-small">Trending hits and chart toppers</p>
+          </div>
+
           <div class="content-card content-card-small">
             <div class="card-image card-image-small"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Lovely Mix cover" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
             <h3 class="card-title card-title-small">Lovely Mix</h3>
@@ -5037,11 +5061,7 @@
             <p class="card-description card-description-small">Your weekly mixtape of fresh music</p>
           </div>
 
-          <div class="content-card content-card-small" onclick="openLikedPage(); event.stopPropagation();" style="cursor: pointer;">
-          <div class="card-image card-image-small"><img src="https://wallpapercave.com/wp/wp3198562.jpg" alt="HD nebula" style="width:100%;height:100%;border-radius:8px;object-fit:cover;"></div>
-          <h3 class="card-title card-title-small">Liked Songs</h3>
-          <p class="card-description card-description-small">382 liked songs</p>
-      </div>
+
         </div>
       </div>
 
@@ -5513,6 +5533,70 @@
       </div>
       <div class="bottom-nav-label">Settings</div>
     </button>
+  </div>
+
+  <!-- Liked Songs Popup -->
+  <div class="page-overlay" id="likedSongsOverlay" style="display: none;">
+    <div class="page-content">
+      <div class="page-header">
+        <button class="back-btn" onclick="closeLikedSongs()">←</button>
+        <h1 class="page-title">Liked Songs</h1>
+        <div class="page-actions">
+          <button class="action-btn" onclick="shuffleLikedSongs()" title="Shuffle">🔀</button>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="playlist-header">
+          <div class="playlist-cover">
+            <div style="width:200px;height:200px;border-radius:12px;background:linear-gradient(135deg, #ff6b6b, #ee5a24);display:flex;align-items:center;justify-content:center;">
+              <span style="font-size:4rem;color:white;">❤️</span>
+            </div>
+          </div>
+          <div class="playlist-info">
+            <h2>Liked Songs</h2>
+            <p id="likedSongsCount">0 songs</p>
+            <div class="playlist-actions">
+              <button class="play-btn primary" onclick="playAllLikedSongs()">▶ Play</button>
+              <button class="play-btn secondary" onclick="shuffleLikedSongs()">🔀 Shuffle</button>
+            </div>
+          </div>
+        </div>
+        <div class="tracks-list" id="likedSongsList">
+          <!-- Liked songs will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Most Popular Popup -->
+  <div class="page-overlay" id="mostPopularOverlay" style="display: none;">
+    <div class="page-content">
+      <div class="page-header">
+        <button class="back-btn" onclick="closeMostPopular()">←</button>
+        <h1 class="page-title">Most Popular</h1>
+        <div class="page-actions">
+          <button class="action-btn" onclick="refreshPopular()" title="Refresh">🔄</button>
+        </div>
+      </div>
+      <div class="page-body">
+        <div class="playlist-header">
+          <div class="playlist-cover">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=200&q=80" alt="Most Popular" style="width:200px;height:200px;border-radius:12px;object-fit:cover;">
+          </div>
+          <div class="playlist-info">
+            <h2>Most Popular</h2>
+            <p>Trending hits and chart toppers</p>
+            <div class="playlist-actions">
+              <button class="play-btn primary" onclick="playPopularPlaylist()">▶ Play</button>
+              <button class="play-btn secondary" onclick="shufflePopularPlaylist()">🔀 Shuffle</button>
+            </div>
+          </div>
+        </div>
+        <div class="tracks-list" id="popularTracksList">
+          <!-- Popular tracks will be populated here -->
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Search Popup Overlay -->
@@ -6856,8 +6940,7 @@ function showGenrePopup(genre) {
     function openOfflineApp() {
       console.log('📱 Opening Offline Music Popup');
 
-      // Pause main sticky player when opening offline popup
-      pauseMainStickyPlayer();
+      // Main sticky player continues in offline popup (no need to pause)
       globalPlayerState.isOfflinePopupActive = true;
 
       closeAppSelectionPopup();
@@ -6866,26 +6949,132 @@ function showGenrePopup(genre) {
         overlay.style.display = 'flex';
         initializeOfflineApp();
 
-        // Resume offline player if there was a current track
+        // Immediately force sticky player visibility
         setTimeout(() => {
-          if (globalPlayerState.currentTrack) {
-            const offlinePlayer = document.getElementById('offlineStickyPlayer');
-            const offlineTitle = document.getElementById('offlinePlayerTitle');
-            const offlineArtist = document.getElementById('offlinePlayerArtist');
+          forceStickyPlayerInPopup();
+        }, 50);
 
-            if (offlinePlayer && offlineTitle) {
-              offlinePlayer.style.display = 'block';
-              offlineTitle.textContent = globalPlayerState.currentTrack.name;
-              if (offlineArtist) offlineArtist.textContent = globalPlayerState.currentTrack.artist || '';
-              console.log('🔄 Resumed offline player display for:', globalPlayerState.currentTrack.name);
+        // Force sticky player visibility in offline popup with proper z-index
+        setTimeout(() => {
+          loadOfflinePlayerState();
+
+          // FORCE sticky player visibility in offline popup context
+          const stickyPlayer = document.getElementById('stickyPlayer');
+          if (stickyPlayer) {
+            console.log('🔄 FORCING sticky player visibility in offline popup');
+
+            // Force display and positioning above popup overlay
+            stickyPlayer.style.display = 'flex';
+            stickyPlayer.style.position = 'fixed';
+            stickyPlayer.style.bottom = '88px';
+            stickyPlayer.style.left = '0';
+            stickyPlayer.style.right = '0';
+            stickyPlayer.style.zIndex = '10001'; // Higher than popup overlay (10000)
+            stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
+            stickyPlayer.style.backdropFilter = 'blur(10px)';
+            stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
+            stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+
+            // Ensure track info is displayed if there's a current track
+            if (globalPlayerState.currentTrack) {
+              const playerTitle = document.getElementById('playerTrackTitle');
+              const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+              const playerAudio = document.getElementById('playerAudio');
+
+              if (playerTitle) playerTitle.textContent = globalPlayerState.currentTrack.name;
+              if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
+              if (playerAudio && !playerAudio.src) {
+                playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
+              }
             }
+
+            console.log('✅ Sticky player FORCED visible in offline popup with z-index 10001');
+          }
+
+          // Hide separate offline player since we're using main player
+          const offlinePlayer = document.getElementById('offlineStickyPlayer');
+          if (offlinePlayer) {
+            offlinePlayer.style.display = 'none';
           }
         }, 200);
-        // Initialize enhanced features
+        // DIRECT TRACK LOADING - FOOLPROOF APPROACH
         setTimeout(() => {
+          console.log('💾 === DIRECT TRACK LOADING ===');
+
+          // DIRECT localStorage access - no functions, no complexity
+          try {
+            const savedTracks = localStorage.getItem('offlineTracks');
+            const savedVideos = localStorage.getItem('offlineVideos');
+
+            console.log('💾 Direct check - savedTracks exists:', !!savedTracks);
+            console.log('💾 Direct check - savedVideos exists:', !!savedVideos);
+
+            if (savedTracks) {
+              const parsed = JSON.parse(savedTracks);
+              offlineTracks.length = 0; // Clear existing
+              offlineTracks.push(...parsed); // Add all saved tracks
+              console.log('✅ DIRECT: Loaded', offlineTracks.length, 'tracks');
+            } else {
+              console.log('⚠️ No saved tracks found in localStorage');
+            }
+
+            if (savedVideos) {
+              const parsed = JSON.parse(savedVideos);
+              offlineVideos.length = 0; // Clear existing
+              offlineVideos.push(...parsed); // Add all saved videos
+              console.log('✅ DIRECT: Loaded', offlineVideos.length, 'videos');
+            }
+
+          } catch (error) {
+            console.error('❌ Direct loading error:', error);
+          }
+
+          // Update queue
+          queue = [...offlineTracks];
+          console.log('🔄 Queue set to', queue.length, 'tracks');
+
+          // IMMEDIATE render
+          console.log('📝 IMMEDIATE RENDER with', offlineTracks.length, 'tracks');
+
+          const libraryElement = document.getElementById('offlineTracksList');
+          if (libraryElement && offlineTracks.length > 0) {
+            let html = '';
+            offlineTracks.forEach(track => {
+              const fileName = track.name || track.title || 'Unknown Track';
+              const artist = track.artist || '';
+
+              html += `
+                <div class="offline-track-item" onclick="playOfflineTrack('${track.id}')" style="cursor:pointer;">
+                  <div class="offline-track-artwork">
+                    <span class="audio-file-icon">🎵</span>
+                  </div>
+                  <div class="offline-track-info">
+                    <div class="offline-track-title">${fileName}</div>
+                    <div class="offline-track-meta">
+                      <span class="offline-track-artist">${artist}</span>
+                      <span>Offline Track</span>
+                    </div>
+                  </div>
+                  <div class="offline-track-actions">
+                    <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playOfflineTrack('${track.id}')" title="Play">▶️</button>
+                    <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeTrack('${track.id}')" title="Delete">🗑️</button>
+                  </div>
+                </div>
+              `;
+            });
+            libraryElement.innerHTML = html;
+            console.log('✅ DIRECT RENDER: Displayed', offlineTracks.length, 'tracks in DOM');
+          } else if (libraryElement) {
+            libraryElement.innerHTML = '<div class="no-files-message"><p>🎵 No offline tracks yet</p></div>';
+            console.log('� DIRECT RENDER: Showed empty message');
+          }
+
+          // Initialize other systems
           initializeEnhancedOffline();
           initializeOfflineQueue();
-          loadStoredData(true);
+          updateMediaCounts();
+
+          console.log('✅ === DIRECT LOADING COMPLETE ===');
         }, 100);
       }
     }
@@ -6897,6 +7086,230 @@ function showGenrePopup(genre) {
       isPlaying: false,
       currentTime: 0
     };
+
+    // Offline player specific state and functions
+    let offlinePlayerState = {
+      currentTrackId: null,
+      isPlaying: false,
+      queue: [],
+      currentIndex: 0,
+      isLooped: false,
+      isShuffled: false,
+      currentTime: 0,
+      duration: 0
+    };
+
+    function saveOfflinePlayerState() {
+      localStorage.setItem('offlinePlayerState', JSON.stringify(offlinePlayerState));
+    }
+
+    function loadOfflinePlayerState() {
+      const saved = localStorage.getItem('offlinePlayerState');
+      if (saved) {
+        offlinePlayerState = { ...offlinePlayerState, ...JSON.parse(saved) };
+      }
+    }
+
+    function initializeOfflinePlayerControls() {
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlineProgressBar = document.getElementById('offlineProgressBar');
+      const offlineCurrentTime = document.getElementById('offlineCurrentTime');
+      const offlineDuration = document.getElementById('offlineDuration');
+      const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
+      const offlinePrevBtn = document.getElementById('offlinePrevBtn');
+      const offlineNextBtn = document.getElementById('offlineNextBtn');
+      const offlineShuffleBtn = document.getElementById('offlineShuffleBtn');
+      const offlineLoopBtn = document.getElementById('offlineLoopBtn');
+
+      if (!offlineAudio) return;
+
+      // Audio event listeners
+      offlineAudio.addEventListener('timeupdate', () => {
+        if (offlineAudio.duration) {
+          const progress = (offlineAudio.currentTime / offlineAudio.duration) * 100;
+          if (offlineProgressBar) offlineProgressBar.value = progress;
+          if (offlineCurrentTime) offlineCurrentTime.textContent = formatTime(offlineAudio.currentTime);
+          offlinePlayerState.currentTime = offlineAudio.currentTime;
+          saveOfflinePlayerState();
+        }
+      });
+
+      offlineAudio.addEventListener('loadedmetadata', () => {
+        if (offlineDuration) offlineDuration.textContent = formatTime(offlineAudio.duration);
+        offlinePlayerState.duration = offlineAudio.duration;
+        saveOfflinePlayerState();
+      });
+
+      offlineAudio.addEventListener('ended', () => {
+        if (offlinePlayerState.isLooped) {
+          offlineAudio.currentTime = 0;
+          offlineAudio.play();
+        } else {
+          playNextOfflineTrack();
+        }
+      });
+
+      // Progress bar control
+      if (offlineProgressBar) {
+        offlineProgressBar.addEventListener('input', () => {
+          if (offlineAudio.duration) {
+            const newTime = (offlineProgressBar.value / 100) * offlineAudio.duration;
+            offlineAudio.currentTime = newTime;
+          }
+        });
+      }
+
+      // Button controls
+      if (offlinePlayPauseBtn) {
+        offlinePlayPauseBtn.onclick = () => toggleOfflinePlayPause();
+      }
+      if (offlinePrevBtn) {
+        offlinePrevBtn.onclick = () => playPrevOfflineTrack();
+      }
+      if (offlineNextBtn) {
+        offlineNextBtn.onclick = () => playNextOfflineTrack();
+      }
+      if (offlineShuffleBtn) {
+        offlineShuffleBtn.onclick = () => toggleOfflineShuffle();
+      }
+      if (offlineLoopBtn) {
+        offlineLoopBtn.onclick = () => toggleOfflineLoop();
+      }
+    }
+
+    function toggleOfflinePlayPause() {
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
+
+      if (!offlineAudio || !offlinePlayPauseBtn) return;
+
+      if (offlineAudio.paused) {
+        offlineAudio.play().then(() => {
+          offlinePlayPauseBtn.innerHTML = '&#9208;';
+          offlinePlayerState.isPlaying = true;
+          saveOfflinePlayerState();
+        });
+      } else {
+        offlineAudio.pause();
+        offlinePlayPauseBtn.innerHTML = '&#9654;';
+        offlinePlayerState.isPlaying = false;
+        saveOfflinePlayerState();
+      }
+    }
+
+    function playPrevOfflineTrack() {
+      if (offlinePlayerState.queue.length === 0) return;
+
+      offlinePlayerState.currentIndex = offlinePlayerState.currentIndex > 0
+        ? offlinePlayerState.currentIndex - 1
+        : offlinePlayerState.queue.length - 1;
+
+      const prevTrack = offlinePlayerState.queue[offlinePlayerState.currentIndex];
+      if (prevTrack) {
+        playOfflineTrackById(prevTrack.id);
+      }
+    }
+
+    function playNextOfflineTrack() {
+      if (offlinePlayerState.queue.length === 0) return;
+
+      offlinePlayerState.currentIndex = offlinePlayerState.currentIndex < offlinePlayerState.queue.length - 1
+        ? offlinePlayerState.currentIndex + 1
+        : 0;
+
+      const nextTrack = offlinePlayerState.queue[offlinePlayerState.currentIndex];
+      if (nextTrack) {
+        playOfflineTrackById(nextTrack.id);
+      }
+    }
+
+    function toggleOfflineLoop() {
+      const offlineLoopBtn = document.getElementById('offlineLoopBtn');
+      offlinePlayerState.isLooped = !offlinePlayerState.isLooped;
+
+      if (offlineLoopBtn) {
+        offlineLoopBtn.style.color = offlinePlayerState.isLooped ? '#1db954' : '#FFD700';
+      }
+      saveOfflinePlayerState();
+    }
+
+    function toggleOfflineShuffle() {
+      const offlineShuffleBtn = document.getElementById('offlineShuffleBtn');
+      offlinePlayerState.isShuffled = !offlinePlayerState.isShuffled;
+
+      if (offlineShuffleBtn) {
+        offlineShuffleBtn.style.color = offlinePlayerState.isShuffled ? '#1db954' : '#FFD700';
+      }
+
+      if (offlinePlayerState.isShuffled) {
+        shuffleOfflineQueue();
+      } else {
+        restoreOfflineQueueOrder();
+      }
+      saveOfflinePlayerState();
+    }
+
+    function shuffleOfflineQueue() {
+      const currentTrack = offlinePlayerState.queue[offlinePlayerState.currentIndex];
+      for (let i = offlinePlayerState.queue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [offlinePlayerState.queue[i], offlinePlayerState.queue[j]] = [offlinePlayerState.queue[j], offlinePlayerState.queue[i]];
+      }
+      offlinePlayerState.currentIndex = offlinePlayerState.queue.findIndex(track => track.id === currentTrack.id);
+    }
+
+    function restoreOfflineQueueOrder() {
+      const offlineMedia = getOfflineMedia();
+      offlinePlayerState.queue = [...offlineMedia.audio];
+      const currentTrack = offlineMedia.audio.find(track => track.id === offlinePlayerState.currentTrackId);
+      offlinePlayerState.currentIndex = currentTrack ? offlineMedia.audio.indexOf(currentTrack) : 0;
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function playOfflineTrackById(trackId) {
+      console.log('🎵 Playing offline track by ID:', trackId);
+      const offlineMedia = getOfflineMedia();
+      const track = offlineMedia.audio.find(t => t.id === trackId);
+
+      if (!track) {
+        console.error('❌ Track not found:', trackId);
+        return;
+      }
+
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      const offlinePlayerTitle = document.getElementById('offlinePlayerTitle');
+      const offlinePlayerArtist = document.getElementById('offlinePlayerArtist');
+      const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
+      const offlineStickyPlayer = document.getElementById('offlineStickyPlayer');
+
+      if (!offlineAudio) return;
+
+      // Update player state
+      offlinePlayerState.currentTrackId = trackId;
+      offlinePlayerState.currentIndex = offlinePlayerState.queue.findIndex(t => t.id === trackId);
+
+      // Update UI
+      if (offlinePlayerTitle) offlinePlayerTitle.textContent = track.name;
+      if (offlinePlayerArtist) offlinePlayerArtist.textContent = track.artist || '';
+      if (offlineStickyPlayer) offlineStickyPlayer.style.display = 'block';
+
+      // Set audio source and play
+      offlineAudio.src = track.base64 || track.audioUrl;
+      offlineAudio.play().then(() => {
+        if (offlinePlayPauseBtn) offlinePlayPauseBtn.innerHTML = '&#9208;';
+        offlinePlayerState.isPlaying = true;
+        globalPlayerState.currentTrack = track;
+        saveOfflinePlayerState();
+        console.log('✅ Offline track playing:', track.name);
+      }).catch(error => {
+        console.error('❌ Failed to play offline track:', error);
+      });
+    }
 
     function pauseMainStickyPlayer() {
       const mainAudio = document.getElementById('playerAudio');
@@ -6921,8 +7334,11 @@ function showGenrePopup(genre) {
       const offlinePlayBtn = document.getElementById('offlinePlayPauseBtn');
 
       if (offlineAudio && !offlineAudio.paused) {
+        offlinePlayerState.currentTime = offlineAudio.currentTime;
+        offlinePlayerState.isPlaying = false;
         offlineAudio.pause();
-        console.log('⏸️ Offline sticky player paused for main player');
+        saveOfflinePlayerState();
+        console.log('⏸️ Offline sticky player paused and state saved');
       }
 
       if (offlinePlayer) {
@@ -6932,9 +7348,7 @@ function showGenrePopup(genre) {
       if (offlinePlayBtn) {
         offlinePlayBtn.innerHTML = '&#9654;';
       }
-    }
-
-    function resumeMainStickyPlayer() {
+    }    function resumeMainStickyPlayer() {
       const mainAudio = document.getElementById('playerAudio');
       const mainPlayBtn = document.getElementById('playPauseBtn');
 
@@ -6949,67 +7363,189 @@ function showGenrePopup(genre) {
       }
     }
 
-    // EXACT COPY OF DATA LOADING FROM OFFLINE25APP.HTML
+    // ENHANCED data loading matching Offline25App.html functionality
     function loadStoredData(shouldRender = false) {
-      console.log('=== LOADING STORED DATA ===');
+      console.log('💾 === ENHANCED DATA LOADING (Offline25App.html style) ===');
       console.log('Should render:', shouldRender);
 
-      // Load tracks from localStorage
+      let primaryTracks = [];
+      let primaryVideos = [];
+      let secondaryData = { audio: [], video: [] };
+
+      // LOAD FROM PRIMARY STORAGE (offlineTracks/offlineVideos)
       try {
         const storedTracks = localStorage.getItem('offlineTracks');
         if (storedTracks) {
-          offlineTracks = JSON.parse(storedTracks);
-          console.log('Loaded', offlineTracks.length, 'tracks from storage');
+          primaryTracks = JSON.parse(storedTracks);
+          console.log('💾 Primary: Loaded', primaryTracks.length, 'tracks');
         }
       } catch (error) {
-        console.error('Error loading tracks from storage:', error);
-        offlineTracks = [];
+        console.error('❌ Error loading primary tracks:', error);
+        primaryTracks = [];
       }
 
-      // Load videos from localStorage
       try {
         const storedVideos = localStorage.getItem('offlineVideos');
         if (storedVideos) {
-          offlineVideos = JSON.parse(storedVideos);
-          console.log('Loaded', offlineVideos.length, 'videos from storage');
+          primaryVideos = JSON.parse(storedVideos);
+          console.log('💾 Primary: Loaded', primaryVideos.length, 'videos');
         }
       } catch (error) {
-        console.error('Error loading videos from storage:', error);
-        offlineVideos = [];
+        console.error('❌ Error loading primary videos:', error);
+        primaryVideos = [];
+      }
+
+      // LOAD FROM SECONDARY STORAGE (hertzOfflineMedia) as backup
+      try {
+        const offlineMedia = localStorage.getItem('hertzOfflineMedia');
+        if (offlineMedia) {
+          secondaryData = JSON.parse(offlineMedia);
+          console.log('💾 Secondary: Found', secondaryData.audio ? secondaryData.audio.length : 0, 'audio,', secondaryData.video ? secondaryData.video.length : 0, 'video');
+        }
+      } catch (error) {
+        console.error('❌ Error loading secondary data:', error);
+        secondaryData = { audio: [], video: [] };
+      }
+
+      // USE WHICHEVER HAS MORE DATA (most recent/complete)
+      if (primaryTracks.length >= (secondaryData.audio ? secondaryData.audio.length : 0)) {
+        offlineTracks = primaryTracks;
+        console.log('✅ Using PRIMARY tracks:', offlineTracks.length);
+      } else {
+        offlineTracks = secondaryData.audio || [];
+        console.log('✅ Using SECONDARY tracks:', offlineTracks.length);
+      }
+
+      if (primaryVideos.length >= (secondaryData.video ? secondaryData.video.length : 0)) {
+        offlineVideos = primaryVideos;
+        console.log('✅ Using PRIMARY videos:', offlineVideos.length);
+      } else {
+        offlineVideos = secondaryData.video || [];
+        console.log('✅ Using SECONDARY videos:', offlineVideos.length);
       }
 
       // Update queue with loaded tracks
       queue = [...offlineTracks];
+      console.log('🔄 Queue updated with', queue.length, 'tracks');
+
+      // SAVE UNIFIED DATA to ensure both storage systems are in sync
+      if (offlineTracks.length > 0 || offlineVideos.length > 0) {
+        console.log('💾 Syncing storage systems...');
+        saveAllData();
+      }
 
       // Only render if DOM is ready
       if (shouldRender) {
-        console.log('Rendering libraries after loading data');
+        console.log('📝 Rendering libraries after unified loading');
         renderOfflineLibrary();
         renderOfflineVideoLibrary();
       }
 
-      console.log('=== DATA LOADING COMPLETE ===');
+      console.log('✅ === UNIFIED DATA LOADING COMPLETE ===');
+      console.log('📝 Final counts - Tracks:', offlineTracks.length, 'Videos:', offlineVideos.length);
     }
 
-    // Enhanced save function - EXACT COPY FROM OFFLINE25APP.HTML
+    // ENHANCED SAVE FUNCTION - MATCHING OFFLINE25APP.HTML FUNCTIONALITY
     function saveAllData() {
+      console.log('💾 === ENHANCED SAVE (Offline25App.html style) ===');
+      console.log('Saving', offlineTracks.length, 'tracks and', offlineVideos.length, 'videos');
+
       try {
+        // Save to primary storage (matching Offline25App.html)
         localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
         localStorage.setItem('offlineVideos', JSON.stringify(offlineVideos));
-        console.log('✅ Data saved successfully');
-      } catch (error) {
-        console.error('❌ Error saving data:', error);
-      }
-    }
 
-    // Initialize offline data
+        // Also save to hertzOfflineMedia for full compatibility
+        const offlineMedia = {
+          audio: offlineTracks.map(track => ({
+            id: track.id,
+            name: track.name,
+            title: track.title || track.name,
+            artist: track.artist || '',
+            base64: track.base64,
+            audioUrl: track.audioUrl,
+            type: track.type,
+            size: track.size,
+            dateAdded: track.dateAdded,
+            liked: track.liked || false
+          })),
+          video: offlineVideos
+        };
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+
+        // Save queue state for persistence
+        const queueState = {
+          tracks: queue,
+          currentIndex: currentIndex,
+          isPlaying: isPlaying,
+          currentTrack: currentTrack
+        };
+        localStorage.setItem('offlineQueueState', JSON.stringify(queueState));
+
+        // Verification
+        const check1 = localStorage.getItem('offlineTracks');
+        const check2 = localStorage.getItem('offlineVideos');
+        const check3 = localStorage.getItem('hertzOfflineMedia');
+
+        if (check1 && check2 && check3) {
+          const verifyTracks = JSON.parse(check1);
+          const verifyVideos = JSON.parse(check2);
+          const verifyMedia = JSON.parse(check3);
+          console.log('✅ ENHANCED SAVE verified:');
+          console.log('  - Tracks:', verifyTracks.length);
+          console.log('  - Videos:', verifyVideos.length);
+          console.log('  - Media Audio:', verifyMedia.audio ? verifyMedia.audio.length : 0);
+        } else {
+          console.error('❌ ENHANCED SAVE verification failed!');
+        }
+      } catch (error) {
+        console.error('❌ ENHANCED SAVE error:', error);
+      }
+    }    // Initialize offline data
     function initializeOfflineQueue() {
       loadStoredData(true);
     }
 
     // Initialize offline app functionality
     function initializeOfflineApp() {
-      console.log('🔧 Initializing Offline App');
+      console.log('🔧 === INITIALIZING OFFLINE APP ===');
+
+      // IMMEDIATE DATA LOADING - NO DELAYS
+      console.log('💾 Loading saved tracks immediately...');
+
+      try {
+        const storedTracks = localStorage.getItem('offlineTracks');
+        const storedVideos = localStorage.getItem('offlineVideos');
+
+        console.log('💾 Raw check - tracks exist:', !!storedTracks);
+        console.log('💾 Raw check - videos exist:', !!storedVideos);
+
+        if (storedTracks) {
+          const parsed = JSON.parse(storedTracks);
+          offlineTracks.splice(0); // Clear array
+          offlineTracks.push(...parsed); // Add saved tracks
+          console.log('✅ INIT: Restored', offlineTracks.length, 'tracks');
+        } else {
+          console.log('⚠️ INIT: No saved tracks found');
+        }
+
+        if (storedVideos) {
+          const parsed = JSON.parse(storedVideos);
+          offlineVideos.splice(0); // Clear array
+          offlineVideos.push(...parsed); // Add saved videos
+          console.log('✅ INIT: Restored', offlineVideos.length, 'videos');
+        }
+
+        // Update queue
+        queue = [...offlineTracks];
+        console.log('🔄 INIT: Queue set to', queue.length, 'tracks');
+
+      } catch (error) {
+        console.error('❌ INIT: Error loading data:', error);
+        offlineTracks = [];
+        offlineVideos = [];
+        queue = [];
+      }
 
       // Verify DOM elements exist
       const container = document.getElementById('offlineFilesList');
@@ -7029,6 +7565,10 @@ function showGenrePopup(genre) {
         console.error('❌ Critical: offlineFilesList container not found!');
         return;
       }
+
+      // PERSISTENCE GUARANTEE: Update queue with loaded tracks
+      queue = [...offlineTracks];
+      console.log('✅ Queue updated with', queue.length, 'persistent tracks');
 
       // Prepare container for immediate display
       container.style.display = 'block';
@@ -10848,12 +11388,29 @@ function showGenrePopup(genre) {
             queue = [...offlineTracks];
             audioCount++;
 
-            // Save to storage immediately using enhanced save function
-            saveAllData();
+            // IMMEDIATE SAVE - NO DELAYS
+            console.log('💾 IMMEDIATE SAVE after adding track:', fileName);
+            localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
 
-            console.log('Added audio track:', fileName);            // Instant UI update - EXACT FROM OFFLINE25APP.HTML
+            // Immediate verification
+            const immediateCheck = localStorage.getItem('offlineTracks');
+            if (immediateCheck) {
+              const parsed = JSON.parse(immediateCheck);
+              console.log('✅ IMMEDIATE verification:', parsed.length, 'tracks saved');
+            } else {
+              console.error('❌ IMMEDIATE save failed!');
+            }
+
+            console.log('Added audio track:', fileName);
+
+            // Instant UI update - EXACT FROM OFFLINE25APP.HTML
             console.log('Instant UI update for track:', fileName);
-            renderOfflineLibrary();          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
+            renderOfflineLibrary();
+
+            // Backup UI update
+            setTimeout(() => {
+              renderOfflineLibrary();
+            }, 100);          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
             const newVideo = {
               id: fileId,
               name: fileName,
@@ -11266,157 +11823,80 @@ function showGenrePopup(genre) {
       }, 100);
     }
 
-    // Enhanced offline track playback - UNIQUE NAME TO AVOID CONFLICTS
+    // Enhanced offline track playback - ACTIVATES MAIN STICKY PLAYER
     function playOfflineTrack(trackId) {
-      console.log('🎵 playTrack called with ID:', trackId);
+      console.log('🎵 playOfflineTrack called with ID:', trackId);
 
-      // Pause any existing main player when starting offline track
-      if (!globalPlayerState.isOfflinePopupActive) {
-        pauseMainStickyPlayer();
-      }
-
+      // Find the track in stored tracks
       const track = offlineTracks.find(t => t.id === trackId);
       if (!track) {
         console.error('❌ Track not found:', trackId);
-        console.log('Available tracks:', offlineTracks.map(t => t.id));
         return;
       }
+
       console.log('✅ Track found:', track.name);
 
       // Update global state
       globalPlayerState.currentTrack = track;
-
       currentTrack = track;
 
-      // Ensure queue is set up properly
-      if (queue.length === 0) {
-        queue = [...offlineTracks];
-      }
-
-      currentIndex = queue.findIndex(t => t.id === trackId);
-      if (currentIndex === -1) {
-        // If track not in queue, add it and make it current
-        queue.push(track);
-        currentIndex = queue.length - 1;
-      }
-
-      // USE MAIN GLOBAL STICKY PLAYER - MATCH ACTUAL ELEMENTS
+      // USE MAIN STICKY PLAYER (same as homepage)
       const stickyPlayer = document.getElementById('stickyPlayer');
       const playerTitle = document.getElementById('playerTrackTitle');
       const playerAudio = document.getElementById('playerAudio');
       const stickyTrackInfo = document.getElementById('stickyTrackInfo');
-
-      console.log('🔍 Element check:', {
-        stickyPlayer: !!stickyPlayer,
-        playerTitle: !!playerTitle,
-        playerAudio: !!playerAudio,
-        stickyTrackInfo: !!stickyTrackInfo
-      });
+      const playPauseBtn = document.getElementById('playPauseBtn');
 
       if (stickyPlayer && playerTitle && playerAudio) {
-        console.log('📱 Showing main sticky player for offline track:', track.name);
+        console.log('📱 Activating main sticky player in offline popup:', track.name);
+
+        // Show and position the main sticky player with HIGH z-index for popup visibility
         stickyPlayer.style.display = 'flex';
         stickyPlayer.style.position = 'fixed';
-        stickyPlayer.style.bottom = '88px'; // Clearly above navigation menu
+        stickyPlayer.style.bottom = '88px'; // Above navigation menu
         stickyPlayer.style.left = '0';
         stickyPlayer.style.right = '0';
-        stickyPlayer.style.zIndex = '1600'; // Above bottom nav (z-index 1500)
-        stickyPlayer.style.height = '65px'; // Thinner player
-        stickyPlayer.style.minHeight = '65px';
-        stickyPlayer.style.maxHeight = '65px';
+        stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '1600'; // Higher z-index in popup
         stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
         stickyPlayer.style.backdropFilter = 'blur(10px)';
         stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
         stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
 
-        // Apply optimized class for offline tracks
-        stickyPlayer.classList.add('offline-optimized');
-
+        // Set track info
         playerTitle.textContent = track.name;
         if (stickyTrackInfo) stickyTrackInfo.textContent = track.artist || '';
 
+        // Set audio source and play
         playerAudio.src = track.base64 || track.audioUrl;
-        console.log('🎵 Audio source set:', track.base64 ? `base64 data (${track.base64.substring(0, 50)}...)` : 'no base64 data');
-        console.log('🎵 playerAudio element:', playerAudio);
-        console.log('🎵 stickyPlayer element:', stickyPlayer);
-        console.log('🎵 stickyPlayer computed style:', window.getComputedStyle(stickyPlayer).display);
 
-        // Update duration when audio loads
-        playerAudio.addEventListener('loadedmetadata', function() {
-          updateDurationDisplay();
-        }, { once: true });
-
-        // Update play button to pause when starting
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        if (playPauseBtn) {
-          playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
-        }
+        // Save state immediately for cross-navigation persistence
+        globalPlayerState.isPlaying = true;
+        globalPlayerState.currentTime = 0;
 
         playerAudio.play().then(() => {
           console.log('✅ Audio playback started successfully');
           isPlaying = true;
 
-          // Update offline player button state
-          const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
-          if (offlinePlayPauseBtn) {
-            offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
+          // Update play button to pause
+          if (playPauseBtn) {
+            playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
           }
+
+          // Save state for persistence across navigation
+          saveOfflinePlayerState();
         }).catch((error) => {
           console.error('❌ Audio playback failed:', error);
         });
 
-        console.log('✅ Track setup completed:', track.name);
-
-        // Also activate the offline sticky player inside the popup
-        const offlineStickyPlayer = document.getElementById('offlineStickyPlayer');
-        const offlinePlayerTitle = document.getElementById('offlinePlayerTitle');
-        const offlinePlayerArtist = document.getElementById('offlinePlayerArtist');
-        const offlinePlayerAudio = document.getElementById('offlinePlayerAudio');
-        const offlinePlayPauseBtn = document.getElementById('offlinePlayPauseBtn');
-
-        if (offlineStickyPlayer && offlinePlayerTitle && offlinePlayerAudio) {
-          console.log('📱 Also activating offline sticky player inside popup');
-          offlineStickyPlayer.style.display = 'block';
-
-          offlinePlayerTitle.textContent = track.name;
-          if (offlinePlayerArtist) offlinePlayerArtist.textContent = track.artist || '';
-
-          offlinePlayerAudio.src = track.base64 || track.audioUrl;
-
-          // Update play button to pause when starting
-          if (offlinePlayPauseBtn) {
-            offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
-            // Make the offline play button control the main audio
-            offlinePlayPauseBtn.onclick = function() {
-              const mainAudio = document.getElementById('playerAudio');
-              const mainPlayBtn = document.getElementById('playPauseBtn');
-              if (mainAudio) {
-                if (mainAudio.paused) {
-                  mainAudio.play().then(() => {
-                    offlinePlayPauseBtn.innerHTML = '&#9208;'; // Pause symbol
-                    if (mainPlayBtn) mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
-                  });
-                } else {
-                  mainAudio.pause();
-                  offlinePlayPauseBtn.innerHTML = '&#9654;'; // Play symbol
-                  if (mainPlayBtn) mainPlayBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
-                }
-              }
-            };
-          }
-
-          // Don't use separate audio - use main audio only
-          // offlinePlayerAudio.currentTime = playerAudio.currentTime;
-
-          console.log('✅ Offline sticky player inside popup activated');
+        // Hide the separate offline player if it exists
+        const offlinePlayer = document.getElementById('offlineStickyPlayer');
+        if (offlinePlayer) {
+          offlinePlayer.style.display = 'none';
         }
+
+        console.log('✅ Main sticky player activated for offline track:', track.name);
       } else {
-        console.error('❌ Required elements missing for playback');
-        console.log('Missing elements:', {
-          stickyPlayer: !stickyPlayer,
-          playerTitle: !playerTitle,
-          playerAudio: !playerAudio
-        });
+        console.error('❌ Main sticky player elements not found');
       }
     }
 
@@ -12136,7 +12616,310 @@ function showGenrePopup(genre) {
     setTimeout(() => {
       console.log('🚀 AUTO-VERIFICATION: Enhanced Offline System');
       verifyEnhancedSystem();
-    }, 2000);    function openPlaylistApp() {
+    }, 2000);
+
+    // Liked Songs Functions
+    function openLikedSongs() {
+      console.log('❤️ Opening Liked Songs');
+      const overlay = document.getElementById('likedSongsOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        loadLikedSongs();
+      }
+    }
+
+    function closeLikedSongs() {
+      const overlay = document.getElementById('likedSongsOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function loadLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      const countElement = document.getElementById('likedSongsCount');
+      const listElement = document.getElementById('likedSongsList');
+
+      if (countElement) {
+        countElement.textContent = `${likedSongs.length} songs`;
+      }
+
+      if (listElement) {
+        if (likedSongs.length === 0) {
+          listElement.innerHTML = '<div class="empty-state">No liked songs yet. Start liking songs to build your collection!</div>';
+        } else {
+          let html = '';
+          likedSongs.forEach((song, index) => {
+            html += `
+              <div class="track-row" onclick="playTrack('${song.id}')">
+                <div class="track-number">${index + 1}</div>
+                <div class="track-info">
+                  <div class="track-title">${song.title}</div>
+                  <div class="track-artist">${song.artist}</div>
+                </div>
+                <div class="track-duration">${song.duration || '3:45'}</div>
+                <div class="track-actions">
+                  <button class="track-like-btn active" onclick="event.stopPropagation(); toggleLike(this, event, '${song.id}')">♥</button>
+                </div>
+              </div>
+            `;
+          });
+          listElement.innerHTML = html;
+        }
+      }
+    }
+
+    function playAllLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      if (likedSongs.length > 0) {
+        playTrack(likedSongs[0].id);
+      }
+    }
+
+    function shuffleLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      if (likedSongs.length > 0) {
+        const randomIndex = Math.floor(Math.random() * likedSongs.length);
+        playTrack(likedSongs[randomIndex].id);
+      }
+    }
+
+    // Most Popular Functions
+    function openMostPopular() {
+      console.log('🔥 Opening Most Popular');
+      const overlay = document.getElementById('mostPopularOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        loadMostPopular();
+      }
+    }
+
+    function closeMostPopular() {
+      const overlay = document.getElementById('mostPopularOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function loadMostPopular() {
+      const popularTracks = [
+        { id: 'popular1', title: 'Blinding Lights', artist: 'The Weeknd', duration: '3:20' },
+        { id: 'popular2', title: 'Shape of You', artist: 'Ed Sheeran', duration: '3:53' },
+        { id: 'popular3', title: 'Someone You Loved', artist: 'Lewis Capaldi', duration: '3:02' },
+        { id: 'popular4', title: 'Watermelon Sugar', artist: 'Harry Styles', duration: '2:54' },
+        { id: 'popular5', title: 'Don\'t Start Now', artist: 'Dua Lipa', duration: '3:03' }
+      ];
+
+      const listElement = document.getElementById('popularTracksList');
+      if (listElement) {
+        let html = '';
+        popularTracks.forEach((track, index) => {
+          html += `
+            <div class="track-row" onclick="playTrack('${track.id}')">
+              <div class="track-number">${index + 1}</div>
+              <div class="track-info">
+                <div class="track-title">${track.title}</div>
+                <div class="track-artist">${track.artist}</div>
+              </div>
+              <div class="track-duration">${track.duration}</div>
+              <div class="track-actions">
+                <button class="track-like-btn" onclick="event.stopPropagation(); toggleLike(this, event, '${track.id}')">♡</button>
+              </div>
+            </div>
+          `;
+        });
+        listElement.innerHTML = html;
+      }
+    }
+
+    function playPopularPlaylist() {
+      playTrack('popular1');
+    }
+
+    function shufflePopularPlaylist() {
+      const randomNum = Math.floor(Math.random() * 5) + 1;
+      playTrack(`popular${randomNum}`);
+    }
+
+    function refreshPopular() {
+      loadMostPopular();
+      console.log('🔄 Popular tracks refreshed');
+    }
+
+    // Liked Songs Functions
+    function openLikedSongs() {
+      console.log('❤️ Opening Liked Songs');
+      const overlay = document.getElementById('likedSongsOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        loadLikedSongs();
+      }
+    }
+
+    function closeLikedSongs() {
+      const overlay = document.getElementById('likedSongsOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function loadLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      const countElement = document.getElementById('likedSongsCount');
+      const listElement = document.getElementById('likedSongsList');
+
+      if (countElement) {
+        countElement.textContent = `${likedSongs.length} songs`;
+      }
+
+      if (listElement) {
+        if (likedSongs.length === 0) {
+          listElement.innerHTML = '<div class="empty-state">No liked songs yet. Start liking songs to build your collection!</div>';
+        } else {
+          let html = '';
+          likedSongs.forEach((song, index) => {
+            html += `
+              <div class="track-row" onclick="playTrack('${song.id}')">
+                <div class="track-number">${index + 1}</div>
+                <div class="track-info">
+                  <div class="track-title">${song.title}</div>
+                  <div class="track-artist">${song.artist}</div>
+                </div>
+                <div class="track-duration">${song.duration || '3:45'}</div>
+                <div class="track-actions">
+                  <button class="track-like-btn active" onclick="event.stopPropagation(); toggleLike(this, event, '${song.id}')">♥</button>
+                </div>
+              </div>
+            `;
+          });
+          listElement.innerHTML = html;
+        }
+      }
+    }
+
+    function playAllLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      if (likedSongs.length > 0) {
+        playTrack(likedSongs[0].id);
+      }
+    }
+
+    function shuffleLikedSongs() {
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+      if (likedSongs.length > 0) {
+        const randomIndex = Math.floor(Math.random() * likedSongs.length);
+        playTrack(likedSongs[randomIndex].id);
+      }
+    }
+
+    // Most Popular Functions
+    function openMostPopular() {
+      console.log('🔥 Opening Most Popular');
+      const overlay = document.getElementById('mostPopularOverlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+        loadMostPopular();
+      }
+    }
+
+    function closeMostPopular() {
+      const overlay = document.getElementById('mostPopularOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
+    }
+
+    function loadMostPopular() {
+      const popularTracks = [
+        { id: 'popular1', title: 'Blinding Lights', artist: 'The Weeknd', duration: '3:20' },
+        { id: 'popular2', title: 'Shape of You', artist: 'Ed Sheeran', duration: '3:53' },
+        { id: 'popular3', title: 'Someone You Loved', artist: 'Lewis Capaldi', duration: '3:02' },
+        { id: 'popular4', title: 'Watermelon Sugar', artist: 'Harry Styles', duration: '2:54' },
+        { id: 'popular5', title: 'Don\'t Start Now', artist: 'Dua Lipa', duration: '3:03' }
+      ];
+
+      const listElement = document.getElementById('popularTracksList');
+      if (listElement) {
+        let html = '';
+        popularTracks.forEach((track, index) => {
+          html += `
+            <div class="track-row" onclick="playTrack('${track.id}')">
+              <div class="track-number">${index + 1}</div>
+              <div class="track-info">
+                <div class="track-title">${track.title}</div>
+                <div class="track-artist">${track.artist}</div>
+              </div>
+              <div class="track-duration">${track.duration}</div>
+              <div class="track-actions">
+                <button class="track-like-btn" onclick="event.stopPropagation(); toggleLike(this, event, '${track.id}')">♡</button>
+              </div>
+            </div>
+          `;
+        });
+        listElement.innerHTML = html;
+      }
+    }
+
+    function playPopularPlaylist() {
+      playTrack('popular1');
+    }
+
+    function shufflePopularPlaylist() {
+      const randomNum = Math.floor(Math.random() * 5) + 1;
+      playTrack(`popular${randomNum}`);
+    }
+
+    function refreshPopular() {
+      loadMostPopular();
+      console.log('🔄 Popular tracks refreshed');
+    }
+
+    // Universal function to ensure sticky player appears in ANY popup
+    function forceStickyPlayerInPopup() {
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      if (stickyPlayer && globalPlayerState.currentTrack) {
+        console.log('🎵 FORCING sticky player visibility in popup context');
+
+        stickyPlayer.style.display = 'flex';
+        stickyPlayer.style.position = 'fixed';
+        stickyPlayer.style.bottom = '88px';
+        stickyPlayer.style.left = '0';
+        stickyPlayer.style.right = '0';
+        stickyPlayer.style.zIndex = '10001'; // Above all popups
+        stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
+        stickyPlayer.style.backdropFilter = 'blur(10px)';
+        stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
+        stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+
+        const playerTitle = document.getElementById('playerTrackTitle');
+        const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+        const playerAudio = document.getElementById('playerAudio');
+
+        if (playerTitle) playerTitle.textContent = globalPlayerState.currentTrack.name;
+        if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
+        if (playerAudio && !playerAudio.src) {
+          playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
+        }
+
+        console.log('✅ Sticky player FORCED visible with z-index 10001');
+      }
+    }
+
+    // Ensure sticky player appears on page load if there's a current track
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        ensureStickyPlayerVisibility();
+      }, 1000);
+    });
+
+    // Also check on window load as backup
+    window.addEventListener('load', function() {
+      setTimeout(() => {
+        ensureStickyPlayerVisibility();
+      }, 1500);
+    });
+
+    function openPlaylistApp() {
       console.log('📋 Opening Playlist Manager Popup');
       closeAppSelectionPopup();
       const overlay = document.getElementById('playlistAppOverlay');
@@ -12153,12 +12936,39 @@ function showGenrePopup(genre) {
 
         // Handle offline popup closure
         if (overlayId === 'offlineAppOverlay') {
-          pauseOfflineStickyPlayer();
-          globalPlayerState.isOfflinePopupActive = false;
-          // Resume main player if it was playing before
+          // CRITICAL PERSISTENCE: Force save all data before closing
+          console.log('💾 === CRITICAL SAVE ON CLOSE ===');
+          console.log('📝 Tracks in memory before close:', offlineTracks.length);
+          console.log('� Videos in memory before close:', offlineVideos.length);
+
+          // Force save twice for extra reliability
+          saveAllData();
           setTimeout(() => {
-            resumeMainStickyPlayer();
+            saveAllData();
+            console.log('💾 Double-save completed');
+          }, 50);
+
+          saveOfflinePlayerState();
+
+          globalPlayerState.isOfflinePopupActive = false;
+
+          // Verification: Check that data was actually saved
+          setTimeout(() => {
+            const verification = localStorage.getItem('offlineTracks');
+            if (verification) {
+              const verifiedTracks = JSON.parse(verification);
+              console.log('✅ Close verification: found', verifiedTracks.length, 'tracks in storage');
+            } else {
+              console.error('❌ Close verification: NO TRACKS FOUND IN STORAGE!');
+            }
           }, 100);
+
+          // Ensure sticky player remains visible on homepage if there's a current track
+          setTimeout(() => {
+            ensureStickyPlayerVisibility();
+          }, 150);
+
+          console.log('✅ Offline popup closed with data preserved');
         }
 
         const overlay = document.getElementById(overlayId);
@@ -12166,6 +12976,43 @@ function showGenrePopup(genre) {
           overlay.style.display = 'none';
         }
         updateBottomNavActive('home');
+      }
+    }
+
+    // Function to ensure sticky player is visible when there's a current track
+    function ensureStickyPlayerVisibility() {
+      if (globalPlayerState.currentTrack) {
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        const playerTitle = document.getElementById('playerTrackTitle');
+        const playerAudio = document.getElementById('playerAudio');
+        const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+
+        if (stickyPlayer && playerTitle) {
+          console.log('🔄 Ensuring sticky player visibility for:', globalPlayerState.currentTrack.name);
+
+          // Show and position sticky player with appropriate z-index
+          stickyPlayer.style.display = 'flex';
+          stickyPlayer.style.position = 'fixed';
+          stickyPlayer.style.bottom = '88px';
+          stickyPlayer.style.left = '0';
+          stickyPlayer.style.right = '0';
+          stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '1600';
+          stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
+          stickyPlayer.style.backdropFilter = 'blur(10px)';
+          stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
+          stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+
+          // Ensure track info is displayed
+          playerTitle.textContent = globalPlayerState.currentTrack.name;
+          if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
+
+          // Ensure audio source is set
+          if (playerAudio && !playerAudio.src) {
+            playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
+          }
+
+          console.log('✅ Sticky player visibility ensured');
+        }
       }
     }
 
