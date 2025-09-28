@@ -4505,7 +4505,7 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
-              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Times'); window.playTrack('Times'); console.log('After calling window.playTrack');">
+              <div class="recent-track-item" onclick="playTrack('Times')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Times cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Times</div>
@@ -4523,7 +4523,7 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Prime'); window.playTrack('Prime'); console.log('After calling window.playTrack');">
+              <div class="recent-track-item" onclick="playTrack('Prime')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80" alt="Prime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Prime</div>
@@ -4536,6 +4536,46 @@
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Made It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Made It</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Space -->
+              <div class="recent-track-item" onclick="playNewTrack('Space', 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', 'Space', 'Prod. Tedla')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Space nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Space</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Nimbus -->
+              <div class="recent-track-item" onclick="playNewTrack('Nimbus', 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', 'Nimbus', 'Prod. Tedla')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80" alt="Cloud formation" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Nimbus</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Shootin Starz -->
+              <div class="recent-track-item" onclick="playNewTrack('Shootin Starz', 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', 'Shootin Starz', 'Prod. Simz')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Shooting stars" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Shootin Starz</div>
+                  <div class="recent-track-artist">Prod. Simz</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Mars -->
+              <div class="recent-track-item" onclick="playNewTrack('Mars', 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', 'Mars', 'Prod. Tedla')">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Mars planet" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Mars</div>
                   <div class="recent-track-artist">Prod. Tedla</div>
                 </div>
                 <div class="recent-track-time">Just now</div>
@@ -4560,7 +4600,7 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="console.log('About to call window.playTrack with Aint Nough Dreamzz'); window.playTrack('Aint Nough Dreamzz'); console.log('After calling window.playTrack');">
+              <div class="recent-track-item" onclick="playTrack('Aint Nough Dreamzz')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Aint Nough Dreamzz cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Aint Nough Dreamzz</div>
@@ -4791,6 +4831,34 @@
                 <tr class="track-row" onclick="playTrack('Good Woman')">
                   <td><div class="track-number">20</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Beautiful brunette woman" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Good Woman</div><div class="track-artist">Molly-Able</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Space', 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', 'Space', 'Prod. Tedla')">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Space nebula" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Space</div><div class="track-artist">Prod. Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Nimbus', 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', 'Nimbus', 'Prod. Tedla')">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80" alt="Cloud formation" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nimbus</div><div class="track-artist">Prod. Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Shootin Starz', 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', 'Shootin Starz', 'Prod. Simz')">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Shooting stars" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Shootin Starz</div><div class="track-artist">Prod. Simz</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Mars', 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', 'Mars', 'Prod. Tedla')">
+                  <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Mars planet" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Mars</div><div class="track-artist">Prod. Tedla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -5112,7 +5180,7 @@
 
           // Global track playback function - uses trackData object for all tracks
           function playTrack(trackId) {
-            console.log('🎵 playTrack called with:', trackId);
+            console.log('🎵 FIRST PLAYTRACK FUNCTION CALLED:', trackId);
 
             // Pause offline player when starting main track
             pauseOfflineStickyPlayer();
@@ -5158,6 +5226,16 @@
               'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
               'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
               'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
+              'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
+              'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
+              'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
+              'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
+              'Consistency': { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', title: 'Consistency', artist: 'StarLight' },
+              'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Pyro' },
+              'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+              'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+              'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+              'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
               'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
             };
 
@@ -8830,11 +8908,62 @@ function showGenrePopup(genre) {
       showNotification('🎵 Playback attempted for: ' + trackId);
     }    // BULLETPROOF PLAYBACK
     function playTrack(trackId) {
-      console.log('🎵 PLAYING TRACK THROUGH STICKY PLAYER:', trackId);
+      console.log('🎵 SECOND PLAYTRACK FUNCTION CALLED:', trackId);
+      console.log('🔍 Track ID type:', typeof trackId);
+      console.log('🔍 Track ID value:', trackId);
 
       // Pause offline player when starting main track
       pauseOfflineStickyPlayer();
       globalPlayerState.isOfflinePopupActive = false;
+
+      // Hardcoded track data (complete set matching first function)
+      const hardcodedTrackData = {
+        'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
+        'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
+        'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+        'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus' },
+        'Mach 1': { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1', artist: 'Prod. Phantom' },
+        'Echo': { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo', artist: 'Neon Gloww' },
+        'Lights': { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', title: 'Lights', artist: 'Bezzie' },
+        'Smilin': { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin', artist: 'Melody-Soull' },
+        'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla' },
+        'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla' },
+        'Buckets': { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', title: 'Buckets', artist: 'Bezzie' },
+        'Sweet': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', title: 'Sweet', artist: 'Bezzie' },
+        'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo' },
+        'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree' },
+        'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV' },
+        'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms' },
+        'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' },
+        'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree' },
+        'Huh': { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', title: 'Huh', artist: 'Prod. Legacy' },
+        'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
+        'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree' },
+        'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie' },
+        'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus' },
+        'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
+        'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
+        'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
+        '808-Symph': { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', title: '808-Symph', artist: 'Molly-Able' },
+        'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
+        'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
+        'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
+        'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' },
+        'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
+        'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
+        'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
+        'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
+        'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
+        'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
+        'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
+        'Consistency': { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', title: 'Consistency', artist: 'StarLight' },
+        'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Pyro' },
+        'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+        'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+        'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+        'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+        'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
+      };
 
       // Check both offline and regular track data
       let currentTrackData = null;
@@ -8860,7 +8989,7 @@ function showGenrePopup(genre) {
           if (stickyPlayer && playerAudio && playerTitle) {
             playerAudio.pause();
             playerAudio.src = currentTrackData.url;
-            playerTitle.textContent = trackName + ' • Offline';
+            playerTitle.textContent = (currentTrackData.title || trackId) + ' • ' + (currentTrackData.artist || 'Unknown Artist');
             stickyPlayer.style.display = 'flex';
             stickyPlayer.style.opacity = '0.95';
 
@@ -8874,14 +9003,70 @@ function showGenrePopup(genre) {
           return;
         }
         console.log('✅ Using regular trackData');
+      } else if (hardcodedTrackData[trackId]) {
+        // Use hardcoded track data as fallback
+        currentTrackData = hardcodedTrackData[trackId];
+        trackName = currentTrackData.title || trackId;
+        console.log('🎵 Found hardcoded track:', trackId, currentTrackData);
+        console.log('🔍 New track debugging - Space:', !!hardcodedTrackData['Space']);
+        console.log('🔍 New track debugging - Nimbus:', !!hardcodedTrackData['Nimbus']);
+        console.log('🔍 New track debugging - Shootin Starz:', !!hardcodedTrackData['Shootin Starz']);
+        console.log('🔍 New track debugging - Mars:', !!hardcodedTrackData['Mars']);
+        // For hardcoded trackData, use the URL directly
+        if (currentTrackData.url) {
+          const stickyPlayer = document.getElementById('stickyPlayer');
+          const playerAudio = document.getElementById('playerAudio');
+          const playerTitle = document.getElementById('playerTrackTitle');
+
+          if (stickyPlayer && playerAudio && playerTitle) {
+            console.log('🎵 Setting up hardcoded track playback for:', currentTrackData.url);
+            console.log('🔍 Elements found - stickyPlayer:', !!stickyPlayer, 'playerAudio:', !!playerAudio, 'playerTitle:', !!playerTitle);
+            playerAudio.pause();
+            playerAudio.src = currentTrackData.url;
+            playerTitle.textContent = (currentTrackData.title || trackId) + ' • ' + (currentTrackData.artist || 'Unknown Artist');
+            stickyPlayer.style.display = 'flex';
+            stickyPlayer.style.opacity = '0.95';
+
+            // Add error event listener
+            playerAudio.onerror = (e) => {
+              console.error('❌ Audio loading error:', e);
+              console.error('❌ Failed URL:', currentTrackData.url);
+            };
+
+            playerAudio.play().then(() => {
+              console.log('✅ HARDCODED TRACK SUCCESS:', trackName);
+              showNotification('🎵 Playing: ' + trackName);
+              const playPauseBtn = document.getElementById('playPauseBtn');
+              if (playPauseBtn) playPauseBtn.innerHTML = '⏸️';
+            }).catch(e => {
+              console.error('❌ Hardcoded track playback failed:', e);
+              console.error('❌ Track URL:', currentTrackData.url);
+              console.error('❌ Network status:', navigator.onLine ? 'Online' : 'Offline');
+            });
+          } else {
+            console.error('❌ Player elements not found:', {
+              stickyPlayer: !!stickyPlayer,
+              playerAudio: !!playerAudio,
+              playerTitle: !!playerTitle
+            });
+          }
+          return;
+        }
+        console.log('✅ Using hardcoded trackData');
       } else {
-        console.error('❌ Track data not found:', trackId);
+        console.error('❌ Track data not found for:', trackId);
+        console.error('Available hardcoded tracks:', Object.keys(hardcodedTrackData));
+        console.error('🔍 Searching for new tracks specifically:');
+        console.error('Space exists:', 'Space' in hardcodedTrackData);
+        console.error('Nimbus exists:', 'Nimbus' in hardcodedTrackData);
+        console.error('Shootin Starz exists:', 'Shootin Starz' in hardcodedTrackData);
+        console.error('Mars exists:', 'Mars' in hardcodedTrackData);
         return;
       }
 
-      // Handle offline audio data
+      // Handle offline audio data (only for offline tracks that have base64 data)
       if (!audioData) {
-        console.error('❌ No audio data available for:', trackId);
+        console.error('❌ No offline audio data available for:', trackId);
         return;
       }
 
@@ -12703,11 +12888,11 @@ function showGenrePopup(genre) {
 
     function loadMostPopular() {
       const popularTracks = [
-        { id: 'popular1', title: 'Blinding Lights', artist: 'The Weeknd', duration: '3:20' },
-        { id: 'popular2', title: 'Shape of You', artist: 'Ed Sheeran', duration: '3:53' },
-        { id: 'popular3', title: 'Someone You Loved', artist: 'Lewis Capaldi', duration: '3:02' },
-        { id: 'popular4', title: 'Watermelon Sugar', artist: 'Harry Styles', duration: '2:54' },
-        { id: 'popular5', title: 'Don\'t Start Now', artist: 'Dua Lipa', duration: '3:03' }
+        { id: 'Space', title: 'Space', artist: 'Prod. Tedla', duration: '3:20' },
+        { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', duration: '3:53' },
+        { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', duration: '3:02' },
+        { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', duration: '2:54' },
+        { id: 'Times', title: 'Times', artist: 'Stat Cross', duration: '3:03' }
       ];
 
       const listElement = document.getElementById('popularTracksList');
@@ -12733,12 +12918,13 @@ function showGenrePopup(genre) {
     }
 
     function playPopularPlaylist() {
-      playTrack('popular1');
+      playTrack('Space');
     }
 
     function shufflePopularPlaylist() {
-      const randomNum = Math.floor(Math.random() * 5) + 1;
-      playTrack(`popular${randomNum}`);
+      const tracks = ['Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Times'];
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      playTrack(tracks[randomIndex]);
     }
 
     function refreshPopular() {
@@ -12831,11 +13017,11 @@ function showGenrePopup(genre) {
 
     function loadMostPopular() {
       const popularTracks = [
-        { id: 'popular1', title: 'Blinding Lights', artist: 'The Weeknd', duration: '3:20' },
-        { id: 'popular2', title: 'Shape of You', artist: 'Ed Sheeran', duration: '3:53' },
-        { id: 'popular3', title: 'Someone You Loved', artist: 'Lewis Capaldi', duration: '3:02' },
-        { id: 'popular4', title: 'Watermelon Sugar', artist: 'Harry Styles', duration: '2:54' },
-        { id: 'popular5', title: 'Don\'t Start Now', artist: 'Dua Lipa', duration: '3:03' }
+        { id: 'Space', title: 'Space', artist: 'Prod. Tedla', duration: '3:20' },
+        { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', duration: '3:53' },
+        { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', duration: '3:02' },
+        { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', duration: '2:54' },
+        { id: 'Times', title: 'Times', artist: 'Stat Cross', duration: '3:03' }
       ];
 
       const listElement = document.getElementById('popularTracksList');
@@ -12861,12 +13047,13 @@ function showGenrePopup(genre) {
     }
 
     function playPopularPlaylist() {
-      playTrack('popular1');
+      playTrack('Space');
     }
 
     function shufflePopularPlaylist() {
-      const randomNum = Math.floor(Math.random() * 5) + 1;
-      playTrack(`popular${randomNum}`);
+      const tracks = ['Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Times'];
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      playTrack(tracks[randomIndex]);
     }
 
     function refreshPopular() {
@@ -15695,6 +15882,53 @@ function showGenrePopup(genre) {
         const audio = document.getElementById('playerAudio');
       // Ensure Utopia tracks play and show sticky player
   window.playTrack = playTrack;
+
+  // DEBUG: Verify new tracks are in the function when page loads
+  console.log('🔍 DEBUGGING: Testing if new tracks are accessible:');
+  console.log('window.playTrack exists:', typeof window.playTrack);
+
+  // Test that the hardcoded data has the new tracks
+  setTimeout(() => {
+    console.log('🔍 Testing playTrack function access to new tracks...');
+    try {
+      console.log('Calling playTrack for testing - Times (should work)');
+      // Don't actually play, just test the function call structure
+    } catch(e) {
+      console.error('Function access test failed:', e);
+    }
+  }, 1000);
+
+  // BULLETPROOF NEW TRACKS - Direct functions to ensure they work
+  window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+    console.log('🎵 BULLETPROOF FUNCTION CALLED:', trackId);
+
+    const stickyPlayer = document.getElementById('stickyPlayer');
+    const playerAudio = document.getElementById('playerAudio');
+    const playerTitle = document.getElementById('playerTrackTitle');
+
+    if (stickyPlayer && playerAudio && playerTitle) {
+      console.log('✅ All elements found, setting up playback');
+
+      // Stop any current playback
+      playerAudio.pause();
+      playerAudio.src = trackUrl;
+      playerTitle.textContent = trackTitle + ' • ' + trackArtist;
+
+      // Show sticky player
+      stickyPlayer.style.display = 'flex';
+      stickyPlayer.style.opacity = '0.95';
+
+      // Start playback
+      playerAudio.play().then(() => {
+        console.log('✅ NEW TRACK SUCCESS:', trackTitle);
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        if (playPauseBtn) playPauseBtn.innerHTML = '⏸️';
+      }).catch(e => console.error('❌ New track failed:', e));
+    } else {
+      console.error('❌ Elements not found:', {stickyPlayer: !!stickyPlayer, playerAudio: !!playerAudio, playerTitle: !!playerTitle});
+    }
+  };
+
         const state = {
           track: window.currentTrack || null,
           currentTime: audio ? audio.currentTime : 0,
@@ -16152,33 +16386,6 @@ function showGenrePopup(genre) {
   </script>
 
   </div> <!-- End App Container -->
-
-  <!-- Sticky Player HTML (added for seamless playback state persistence) -->
-  <div class="sticky-player" id="stickyPlayer" style="display:none; flex-direction:column;">
-    <div style="width:100%;display:flex;flex-direction:column;align-items:center;min-height:70px;max-height:90px;">
-      <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:2px;">
-        <div style="width:100%;display:flex;justify-content:center;align-items:center;">
-          <span id="currentTime" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
-          <span style="margin:0 6px;color:#fff;">/</span>
-          <span id="duration" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
-        </div>
-        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="width:92vw;max-width:420px;margin:6px 0 2px 0;height:4px;accent-color:#FFD700;">
-      </div>
-      <span class="player-title" id="playerTrackTitle" style="font-size:0.9em;color:#FFD700;margin-bottom:2px;"></span>
-      <div class="player-controls" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;padding:8px 16px;">
-        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
-        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
-        <button class="player-btn" id="playPauseBtn" title="Play/Pause">&#9654;</button>
-        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
-        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
-        <button id="likeBtn" title="Like" style="margin-left:0.6rem;background:none;border:none;cursor:pointer;font-size:1.5rem;color:rgba(255,255,255,0.4);transition:color 0.2s, box-shadow 0.3s ease, filter 0.3s ease;">&#10084;</button>
-      </div>
-      <div style="width:100%;text-align:center;margin-top:4px;">
-        <span id="stickyTrackInfo" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
-      </div>
-    </div>
-    <audio id="playerAudio" class="player-audio"></audio>
-  </div>
 
   <script>
     console.log('🚨 TERMS ENFORCEMENT ACTIVE - Modal shown by default, will be hidden only if user has account or accepted terms');
