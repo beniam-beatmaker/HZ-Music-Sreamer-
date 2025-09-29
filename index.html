@@ -113,22 +113,55 @@
       if ('mediaSession' in navigator) {
         console.log('🔒 BULLETPROOF: Setting up HZ Media Session for ALL devices:', title, 'by', artist);
 
-        // Force media session activation with silent audio trick (CRITICAL for mobile)
+        // SPOTIFY-STYLE Force media session activation with enhanced mobile support
         const forceMediaSessionActivation = () => {
-          // Create extremely short silent audio to register with system
-          const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
-          silentAudio.volume = 0.01; // Almost silent but not zero
+          const userAgent = navigator.userAgent.toLowerCase();
+          const isAndroid = userAgent.includes('android');
+          const isIOS = /iphone|ipad|ipod/.test(userAgent);
+          const isMobile = isAndroid || isIOS;
+
+          // Create higher quality silent audio for better system recognition
+          const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+          silentAudio.volume = isMobile ? 0.05 : 0.01; // Slightly louder for mobile to ensure detection
           silentAudio.loop = false;
 
-          // Play and immediately pause to register without user hearing anything
+          // SPOTIFY-STYLE activation sequence
           const activatePromise = silentAudio.play().then(() => {
+            // Immediate state to 'playing' like Spotify does
+            navigator.mediaSession.playbackState = 'playing';
+
             setTimeout(() => {
               silentAudio.pause();
               silentAudio.currentTime = 0;
-              console.log('✅ BULLETPROOF: HZ registered with device media system');
-            }, 50);
+              navigator.mediaSession.playbackState = 'paused';
+
+              // Android needs extra activation
+              if (isAndroid) {
+                setTimeout(() => {
+                  navigator.mediaSession.playbackState = 'playing';
+                  setTimeout(() => {
+                    navigator.mediaSession.playbackState = 'paused';
+                    console.log('🎵 HZ: Spotify-style Android activation complete');
+                  }, 75);
+                }, 75);
+              }
+
+              console.log('✅ HZ: Spotify-style activation registered with system');
+            }, isMobile ? 150 : 50); // Longer activation time for mobile
           }).catch(() => {
-            console.log('📱 BULLETPROOF: Will activate on user interaction');
+            // Fallback activation on user interaction (like Spotify)
+            const activateOnTouch = () => {
+              navigator.mediaSession.playbackState = 'playing';
+              setTimeout(() => {
+                navigator.mediaSession.playbackState = 'paused';
+                console.log('📱 HZ: Spotify-style touch activation complete');
+              }, 50);
+              document.removeEventListener('touchstart', activateOnTouch, {once: true});
+              document.removeEventListener('click', activateOnTouch, {once: true});
+            };
+            document.addEventListener('touchstart', activateOnTouch, {once: true, passive: true});
+            document.addEventListener('click', activateOnTouch, {once: true, passive: true});
+            console.log('📱 HZ: Waiting for user interaction (Spotify-style)');
           });
 
           return activatePromise;
@@ -334,32 +367,95 @@
               playerAudio.pause();
               playerAudio.currentTime = 0;
               navigator.mediaSession.playbackState = 'paused';
+              updatePositionState();
+            }
+          });
+
+          // Additional Spotify-style action handlers
+          try {
+            // Seek forward/backward (like Spotify's 15s skip)
+            navigator.mediaSession.setActionHandler('seekforward', (details) => {
+              console.log('🔒 Lock screen: Seek forward', details);
+              const playerAudio = document.getElementById('playerAudio');
+              if (playerAudio) {
+                const seekTime = details.seekOffset || 15; // Default 15s like Spotify
+                playerAudio.currentTime = Math.min(playerAudio.currentTime + seekTime, playerAudio.duration || 0);
+                updatePositionState();
+              }
+            });
+
+            navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+              console.log('🔒 Lock screen: Seek backward', details);
+              const playerAudio = document.getElementById('playerAudio');
+              if (playerAudio) {
+                const seekTime = details.seekOffset || 15; // Default 15s like Spotify
+                playerAudio.currentTime = Math.max(playerAudio.currentTime - seekTime, 0);
+                updatePositionState();
+              }
+            });
+
+            // Hang up call handler (some devices show this)
+            navigator.mediaSession.setActionHandler('hangup', () => {
+              console.log('🔒 Lock screen: Hangup (stopping playback)');
+              const playerAudio = document.getElementById('playerAudio');
+              if (playerAudio) {
+                playerAudio.pause();
+                navigator.mediaSession.playbackState = 'paused';
+                updatePositionState();
+              }
+            });
+          } catch (error) {
+            // Some action handlers may not be supported on all devices
+            console.debug('Some advanced media session actions not supported');
+          }
+
+
+
+          // Enhanced audio event listeners for Spotify-like behavior
+          const playerAudio = document.getElementById('playerAudio');
+          if (playerAudio) {
+            // Real-time position updates like Spotify
+            playerAudio.addEventListener('timeupdate', updatePositionState);
+            playerAudio.addEventListener('durationchange', updatePositionState);
+            playerAudio.addEventListener('loadedmetadata', updatePositionState);
+            playerAudio.addEventListener('play', () => {
+              navigator.mediaSession.playbackState = 'playing';
+              updatePositionState();
+            });
+            playerAudio.addEventListener('pause', () => {
+              navigator.mediaSession.playbackState = 'paused';
+              updatePositionState();
+            });
+            playerAudio.addEventListener('ended', () => {
+              navigator.mediaSession.playbackState = 'paused';
+              updatePositionState();
+            });
+
+            // Store updatePositionState globally for later use
+            window.updatePositionState = updatePositionState;
+          }
+
+          // Additional Spotify-style action handlers
+          navigator.mediaSession.setActionHandler('seekforward', (details) => {
+            console.log('🔒 Lock screen: Seek forward', details);
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio) {
+              const seekTime = details.seekOffset || 15; // Default 15s like Spotify
+              playerAudio.currentTime = Math.min(playerAudio.currentTime + seekTime, playerAudio.duration || 0);
+              updatePositionState();
             }
           });
 
           navigator.mediaSession.setActionHandler('seekbackward', (details) => {
-            console.log('🔒 Lock screen: Seek backward', details.seekOffset || 10);
+            console.log('🔒 Lock screen: Seek backward', details);
             const playerAudio = document.getElementById('playerAudio');
             if (playerAudio) {
-              playerAudio.currentTime = Math.max(0, playerAudio.currentTime - (details.seekOffset || 10));
+              const seekTime = details.seekOffset || 15; // Default 15s like Spotify
+              playerAudio.currentTime = Math.max(playerAudio.currentTime - seekTime, 0);
+              updatePositionState();
             }
           });
 
-          navigator.mediaSession.setActionHandler('seekforward', (details) => {
-            console.log('🔒 Lock screen: Seek forward', details.seekOffset || 10);
-            const playerAudio = document.getElementById('playerAudio');
-            if (playerAudio) {
-              playerAudio.currentTime = Math.min(playerAudio.duration || 0, playerAudio.currentTime + (details.seekOffset || 10));
-            }
-          });
-
-          navigator.mediaSession.setActionHandler('seekto', (details) => {
-            console.log('🔒 Lock screen: Seek to', details.seekTime);
-            const playerAudio = document.getElementById('playerAudio');
-            if (playerAudio && details.seekTime !== undefined) {
-              playerAudio.currentTime = details.seekTime;
-            }
-          });
         } catch (error) {
           console.log('⚠️ Some advanced media session features not supported:', error.message);
         }
@@ -981,26 +1077,94 @@
 
 <!-- Inline PWA Manifest for Perfect Mobile Recognition -->
 <script>
-  // Create inline manifest for immediate HZ recognition
+  // Create Spotify-style manifest for perfect mobile recognition
   const manifestData = {
-    "name": "HZ",
+    "name": "HZ Music",
     "short_name": "HZ",
+    "description": "HZ Music - Stream your favorite tracks",
     "display": "standalone",
+    "orientation": "portrait-primary",
     "start_url": "/",
-    "theme_color": "#1a1a1a",
-    "background_color": "#1a1a1a",
+    "scope": "/",
+    "theme_color": "#1DB954",
+    "background_color": "#191414",
+    "categories": ["music", "entertainment", "media"],
+    "lang": "en-US",
+    "dir": "ltr",
     "icons": [
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=72&q=100",
+        "sizes": "72x72",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=100",
+        "sizes": "96x96",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=144&q=100",
+        "sizes": "144x144",
+        "type": "image/jpeg",
+        "purpose": "any"
+      },
       {
         "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=100",
         "sizes": "192x192",
-        "type": "image/jpeg"
+        "type": "image/jpeg",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=384&q=100",
+        "sizes": "384x384",
+        "type": "image/jpeg",
+        "purpose": "any"
       },
       {
         "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=100",
         "sizes": "512x512",
-        "type": "image/jpeg"
+        "type": "image/jpeg",
+        "purpose": "any maskable"
       }
-    ]
+    ],
+    "shortcuts": [
+      {
+        "name": "Search Music",
+        "short_name": "Search",
+        "url": "/?action=search",
+        "icons": [{"src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=100", "sizes": "96x96"}]
+      }
+    ],
+    "screenshots": [
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=540&h=720&q=90",
+        "sizes": "540x720",
+        "type": "image/jpeg",
+        "form_factor": "narrow"
+      }
+    ],
+    "protocol_handlers": [
+      {
+        "protocol": "web+music",
+        "url": "/play?track=%s"
+      }
+    ],
+    "file_handlers": [
+      {
+        "action": "/",
+        "accept": {
+          "audio/*": [".mp3", ".wav", ".ogg", ".m4a", ".flac"]
+        }
+      }
+    ],
+    "launch_handler": {
+      "client_mode": "focus-existing"
+    },
+    "edge_side_panel": {
+      "preferred_width": 400
+    }
   };
 
   // Create blob URL for manifest
@@ -1014,14 +1178,49 @@
   }
 </script>
 
-<!-- Dark Theme Support for Lock Screen -->
-<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
+<!-- Spotify-style Theme and Media Support -->
+<meta name="theme-color" content="#1DB954" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#191414" media="(prefers-color-scheme: dark)">
 
-<!-- Universal Browser and OS Support -->
-<meta name="msapplication-navbutton-color" content="#1a1a1a">
+<!-- Enhanced Mobile Web App Configuration (Spotify-style) -->
+<meta name="apple-mobile-web-app-title" content="HZ Music">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-mobile-web-app-orientations" content="portrait">
+
+<!-- Microsoft/Windows Tiles (like Spotify) -->
+<meta name="msapplication-TileColor" content="#1DB954">
+<meta name="msapplication-navbutton-color" content="#1DB954">
 <meta name="msapplication-starturl" content="/">
 <meta name="msapplication-window" content="width=1024;height=768">
+<meta name="msapplication-task" content="name=Play Music;action-uri=/play;icon-uri=https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=16">
+<meta name="msapplication-task" content="name=Search;action-uri=/search;icon-uri=https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=16">
+
+<!-- Media Session and PWA App Identity -->
+<meta name="application-name" content="HZ Music">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Media Controls and Notification Support -->
+<meta name="supported-color-schemes" content="light dark">
+<meta name="color-scheme" content="light dark">
+
+<!-- Enhanced Apple Touch Icons (all sizes like Spotify) -->
+<link rel="apple-touch-icon" sizes="57x57" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=57&q=100">
+<link rel="apple-touch-icon" sizes="60x60" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=60&q=100">
+<link rel="apple-touch-icon" sizes="72x72" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=72&q=100">
+<link rel="apple-touch-icon" sizes="76x76" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=76&q=100">
+<link rel="apple-touch-icon" sizes="114x114" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=114&q=100">
+<link rel="apple-touch-icon" sizes="120x120" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=120&q=100">
+<link rel="apple-touch-icon" sizes="144x144" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=144&q=100">
+<link rel="apple-touch-icon" sizes="152x152" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=152&q=100">
+<link rel="apple-touch-icon" sizes="180x180" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=180&q=100">
+
+<!-- Favicon variants for better OS recognition -->
+<link rel="icon" type="image/png" sizes="32x32" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=32&q=100">
+<link rel="icon" type="image/png" sizes="16x16" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=16&q=100">
+<link rel="shortcut icon" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=32&q=100">
 
 <!-- Enhanced Cross-Platform Meta Tags -->
 <meta name="mobile-web-app-title" content="HZ">
@@ -5275,6 +5474,61 @@
       position: relative;
     }
   </style>
+
+  <!-- Spotify-style Service Worker for Better Mobile Integration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      // Enhanced service worker registration for Spotify-like behavior
+      navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(registration) {
+        console.log('🎵 HZ: Service Worker registered like Spotify - enhanced mobile experience active');
+
+        // Handle updates like Spotify does
+        registration.addEventListener('updatefound', () => {
+          console.log('🎵 HZ: App update available');
+        });
+      }).catch(function(error) {
+        // Create inline service worker if file doesn't exist
+        const swCode = `
+          self.addEventListener('install', (event) => {
+            console.log('🎵 HZ Service Worker: Installing...');
+            self.skipWaiting();
+          });
+
+          self.addEventListener('activate', (event) => {
+            console.log('🎵 HZ Service Worker: Activating...');
+            self.clients.claim();
+          });
+
+          self.addEventListener('notificationclick', (event) => {
+            event.notification.close();
+            event.waitUntil(
+              self.clients.matchAll().then((clients) => {
+                if (clients.length > 0) {
+                  return clients[0].focus();
+                }
+                return self.clients.openWindow('/');
+              })
+            );
+          });
+        `;
+
+        const blob = new Blob([swCode], { type: 'application/javascript' });
+        const swUrl = URL.createObjectURL(blob);
+
+        navigator.serviceWorker.register(swUrl).then(() => {
+          console.log('🎵 HZ: Inline Service Worker registered - Spotify-style mobile ready');
+        });
+      });
+
+      // Handle messages from service worker
+      navigator.serviceWorker.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'MEDIA_SESSION_ACTION') {
+          console.log('🎵 HZ: Background media action:', event.data.action);
+        }
+      });
+    }
+  </script>
+
 </head>
 <body>
 
