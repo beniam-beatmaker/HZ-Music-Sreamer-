@@ -4,6 +4,112 @@
 <title>HZ Music Streamer - Ethical Artist-First Streaming</title>
 <meta name="description" content="Listen to all Bangers here! HZ Music Streamer is a globally inclusive, artist-first platform offering fair pricing and ethical streaming. Visit hz-streams.com to learn more">
 <meta name="keywords" content="HZ Music Streamer, hz-streams, ethical streaming, artist-first platform, global music">
+
+<!-- ⚡ INSTANT HZ LOCK SCREEN ACTIVATION - RUNS IMMEDIATELY ⚡ -->
+<script>
+// ULTRA-AGGRESSIVE IMMEDIATE ACTIVATION - NO WAITING!
+(function() {
+  'use strict';
+
+  console.log('⚡ HZ: INSTANT ACTIVATION STARTING - Lock screen activation NOW!');
+
+  // Check if MediaSession is available
+  if ('mediaSession' in navigator) {
+
+    // INSTANT metadata setup - appears in lock screen IMMEDIATELY
+    const setupInstantHZBranding = () => {
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'HZ Music',
+          artist: 'Music Player Ready',
+          album: 'HZ Streaming',
+          artwork: [
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=96&h=96&fit=crop&auto=format', sizes: '96x96', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=128&h=128&fit=crop&auto=format', sizes: '128x128', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=192&h=192&fit=crop&auto=format', sizes: '192x192', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=256&h=256&fit=crop&auto=format', sizes: '256x256', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=512&h=512&fit=crop&auto=format', sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+        console.log('✅ HZ: INSTANT metadata set!');
+      } catch (e) {
+        console.log('📱 HZ: Metadata will be set when available');
+      }
+    };
+
+    // INSTANT action handlers - makes HZ controllable from lock screen IMMEDIATELY
+    const setupInstantActions = () => {
+      try {
+        navigator.mediaSession.setActionHandler('play', () => {
+          console.log('🔒 HZ Lock Screen: Play pressed');
+          navigator.mediaSession.playbackState = 'playing';
+        });
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          console.log('🔒 HZ Lock Screen: Pause pressed');
+          navigator.mediaSession.playbackState = 'paused';
+        });
+
+        console.log('🎮 HZ: INSTANT action handlers set!');
+      } catch (e) {
+        console.log('📱 HZ: Action handlers will be set when available');
+      }
+    };
+
+    // ULTRA-AGGRESSIVE state activation - forces immediate lock screen visibility
+    const forceInstantActivation = () => {
+      try {
+        // Rapid state changes to force system recognition
+        navigator.mediaSession.playbackState = 'playing';
+        setTimeout(() => {
+          navigator.mediaSession.playbackState = 'paused';
+          setTimeout(() => {
+            navigator.mediaSession.playbackState = 'playing';
+            setTimeout(() => {
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('⚡ HZ: INSTANT activation complete - CHECK LOCK SCREEN NOW!');
+            }, 10);
+          }, 10);
+        }, 10);
+      } catch (e) {
+        console.log('📱 HZ: State activation blocked, will retry on interaction');
+      }
+    };
+
+    // Execute ALL instant activations NOW
+    setupInstantHZBranding();
+    setupInstantActions();
+    forceInstantActivation();
+
+    // INSTANT interaction capture - activates on ANY user input
+    const captureInstantInteraction = (event) => {
+      console.log(`⚡ HZ: INSTANT ${event.type} captured!`);
+      navigator.mediaSession.playbackState = 'playing';
+      setTimeout(() => {
+        navigator.mediaSession.playbackState = 'paused';
+        console.log('✅ HZ: INSTANT interaction activation SUCCESS!');
+      }, 50);
+
+      // Remove listeners after first activation
+      document.removeEventListener('touchstart', captureInstantInteraction, true);
+      document.removeEventListener('click', captureInstantInteraction, true);
+      document.removeEventListener('scroll', captureInstantInteraction, true);
+      document.removeEventListener('keydown', captureInstantInteraction, true);
+    };
+
+    // Register for ALL possible interactions IMMEDIATELY
+    document.addEventListener('touchstart', captureInstantInteraction, { capture: true, passive: true });
+    document.addEventListener('click', captureInstantInteraction, { capture: true, passive: true });
+    document.addEventListener('scroll', captureInstantInteraction, { capture: true, passive: true });
+    document.addEventListener('keydown', captureInstantInteraction, { capture: true, passive: true });
+
+    console.log('🚀 HZ: INSTANT LOCK SCREEN ACTIVATION COMPLETE!');
+
+  } else {
+    console.log('❌ HZ: MediaSession not supported on this device');
+  }
+})();
+</script>
   <!-- EmailJS SDK for sending emails from frontend -->
   <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script type="text/javascript">
@@ -113,61 +219,93 @@
       if ('mediaSession' in navigator) {
         console.log('🔒 BULLETPROOF: Setting up HZ Media Session for ALL devices:', title, 'by', artist);
 
-        // SPOTIFY-STYLE Force media session activation with enhanced mobile support
+        // ULTRA-AGGRESSIVE INSTANT LOCK SCREEN/NOTIFICATION ACTIVATION
         const forceMediaSessionActivation = () => {
+          console.log('🚀 HZ: INSTANT ACTIVATION - Forcing immediate lock screen visibility!');
+
           const userAgent = navigator.userAgent.toLowerCase();
           const isAndroid = userAgent.includes('android');
           const isIOS = /iphone|ipad|ipod/.test(userAgent);
           const isMobile = isAndroid || isIOS;
+          const isDesktop = !isMobile;
 
-          // Create higher quality silent audio for better system recognition
-          const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
-          silentAudio.volume = isMobile ? 0.05 : 0.01; // Slightly louder for mobile to ensure detection
-          silentAudio.loop = false;
-
-          // SPOTIFY-STYLE activation sequence
-          const activatePromise = silentAudio.play().then(() => {
-            // Immediate state to 'playing' like Spotify does
-            navigator.mediaSession.playbackState = 'playing';
-
-            setTimeout(() => {
-              silentAudio.pause();
-              silentAudio.currentTime = 0;
+          // INSTANT lock screen registration - multiple simultaneous approaches
+          const instantActivation = async () => {
+            try {
+              // Method 1: INSTANT state change (works on most devices)
+              navigator.mediaSession.playbackState = 'playing';
+              await new Promise(resolve => setTimeout(resolve, 10));
               navigator.mediaSession.playbackState = 'paused';
 
-              // Android needs extra activation
-              if (isAndroid) {
-                setTimeout(() => {
-                  navigator.mediaSession.playbackState = 'playing';
-                  setTimeout(() => {
-                    navigator.mediaSession.playbackState = 'paused';
-                    console.log('🎵 HZ: Spotify-style Android activation complete');
-                  }, 75);
-                }, 75);
+              // Method 2: AGGRESSIVE audio activation for stubborn devices
+              const aggressiveAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
+              aggressiveAudio.volume = isMobile ? 0.1 : 0.05; // Audible enough for system detection
+
+              try {
+                await aggressiveAudio.play();
+                navigator.mediaSession.playbackState = 'playing';
+                await new Promise(resolve => setTimeout(resolve, 100));
+                aggressiveAudio.pause();
+                navigator.mediaSession.playbackState = 'paused';
+              } catch (e) {
+                console.log('📱 HZ: Audio activation blocked, using fallback');
               }
 
-              console.log('✅ HZ: Spotify-style activation registered with system');
-            }, isMobile ? 150 : 50); // Longer activation time for mobile
-          }).catch(() => {
-            // Fallback activation on user interaction (like Spotify)
-            const activateOnTouch = () => {
-              navigator.mediaSession.playbackState = 'playing';
-              setTimeout(() => {
+              // Method 3: ANDROID SUPER-AGGRESSIVE (multiple rapid state changes)
+              if (isAndroid) {
+                console.log('🤖 HZ: ANDROID ULTRA-BOOST activated!');
+                for (let i = 0; i < 5; i++) {
+                  navigator.mediaSession.playbackState = 'playing';
+                  await new Promise(resolve => setTimeout(resolve, 50));
+                  navigator.mediaSession.playbackState = 'paused';
+                  await new Promise(resolve => setTimeout(resolve, 50));
+                }
+              }
+
+              // Method 4: iOS SPECIAL TREATMENT (requires specific timing)
+              if (isIOS) {
+                console.log('🍎 HZ: iOS LOCK SCREEN activation!');
+                navigator.mediaSession.playbackState = 'playing';
+                await new Promise(resolve => setTimeout(resolve, 200));
                 navigator.mediaSession.playbackState = 'paused';
-                console.log('📱 HZ: Spotify-style touch activation complete');
-              }, 50);
-              document.removeEventListener('touchstart', activateOnTouch, {once: true});
-              document.removeEventListener('click', activateOnTouch, {once: true});
-            };
-            document.addEventListener('touchstart', activateOnTouch, {once: true, passive: true});
-            document.addEventListener('click', activateOnTouch, {once: true, passive: true});
-            console.log('📱 HZ: Waiting for user interaction (Spotify-style)');
+                await new Promise(resolve => setTimeout(resolve, 100));
+                navigator.mediaSession.playbackState = 'playing';
+                await new Promise(resolve => setTimeout(resolve, 50));
+                navigator.mediaSession.playbackState = 'paused';
+              }
+
+              console.log('✅ HZ: INSTANT ACTIVATION COMPLETE - Should appear in lock screen NOW!');
+
+            } catch (error) {
+              console.error('❌ HZ: Instant activation failed:', error);
+            }
+          };
+
+          // Execute instant activation immediately
+          instantActivation();
+
+          // BACKUP: User interaction fallback (captures any touch/click INSTANTLY)
+          const instantInteractionCapture = (event) => {
+            console.log(`📱 HZ: INSTANT ${event.type} captured - activating NOW!`);
+            navigator.mediaSession.playbackState = 'playing';
+            setTimeout(() => {
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('✅ HZ: Interaction activation SUCCESS!');
+            }, 25);
+
+            // Remove listeners after first activation
+            ['touchstart', 'touchend', 'click', 'mousedown', 'pointerdown', 'scroll'].forEach(eventType => {
+              document.removeEventListener(eventType, instantInteractionCapture, true);
+            });
+          };
+
+          // Register INSTANT capture for ALL possible user interactions
+          ['touchstart', 'touchend', 'click', 'mousedown', 'pointerdown', 'scroll'].forEach(eventType => {
+            document.addEventListener(eventType, instantInteractionCapture, { once: true, passive: false, capture: true });
           });
 
-          return activatePromise;
-        };
-
-        // Get high-quality artwork based on track or use default
+          return Promise.resolve(true);
+        };        // Get high-quality artwork based on track or use default
         const trackArtworkMap = {
           'Times': 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop',
           'Prime': 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop',
@@ -233,20 +371,69 @@
           document.title = `HZ - ${title} by ${artist}`;
         }
 
-        // BULLETPROOF: Force media session activation to ensure HZ appears immediately
+        // INSTANT HZ METADATA - appears immediately in lock screen
+        const instantMetadataSetup = () => {
+          const branding = getUniversalBranding();
+
+          // Set metadata INSTANTLY (before any audio even loads)
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: branding.title,
+            artist: branding.artist,
+            album: 'HZ Music', // Always shows HZ branding
+            artwork: [
+              { src: artworkBase + '&w=96&h=96&q=100&fit=crop', sizes: '96x96', type: 'image/jpeg' },
+              { src: artworkBase + '&w=128&h=128&q=100&fit=crop', sizes: '128x128', type: 'image/jpeg' },
+              { src: artworkBase + '&w=192&h=192&q=100&fit=crop', sizes: '192x192', type: 'image/jpeg' },
+              { src: artworkBase + '&w=256&h=256&q=100&fit=crop', sizes: '256x256', type: 'image/jpeg' },
+              { src: artworkBase + '&w=512&h=512&q=100&fit=crop', sizes: '512x512', type: 'image/jpeg' }
+            ]
+          });
+
+          console.log('⚡ HZ: INSTANT metadata set - should appear in notifications NOW!');
+        };
+
+        // Execute INSTANT setup
+        instantMetadataSetup();
+
+        // BULLETPROOF: Ultra-aggressive activation for immediate lock screen visibility
         forceMediaSessionActivation();
 
         // BULLETPROOF: Multiple state changes to force visibility in ALL device notifications
         navigator.mediaSession.playbackState = 'playing';
 
-        // Additional activation boost for stubborn devices
+        // INSTANT NOTIFICATION PERMISSION (critical for Android visibility)
+        if ('Notification' in window) {
+          Notification.requestPermission().then(permission => {
+            console.log(`🔔 HZ: Notification permission ${permission} - enhances lock screen visibility`);
+            if (permission === 'granted') {
+              // Test notification to ensure system recognizes HZ
+              try {
+                const testNotification = new Notification('HZ Music Ready', {
+                  body: 'Media controls active in lock screen',
+                  icon: artworkBase + '&w=128&h=128&q=100&fit=crop',
+                  silent: true,
+                  tag: 'hz-media-ready'
+                });
+                setTimeout(() => testNotification.close(), 2000);
+              } catch (e) {
+                console.log('🔕 HZ: Silent notification test (enhances visibility)');
+              }
+            }
+          });
+        }
+
+        // Multiple rapid state changes for immediate visibility
+        navigator.mediaSession.playbackState = 'playing';
         setTimeout(() => {
           navigator.mediaSession.playbackState = 'paused';
           setTimeout(() => {
             navigator.mediaSession.playbackState = 'playing';
-            console.log('🎯 BULLETPROOF: HZ media session forced to PLAYING state');
+            setTimeout(() => {
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('⚡ HZ: RAPID activation complete - check lock screen NOW!');
+            }, 25);
           }, 25);
-        }, 50);
+        }, 25);
 
         // Enhanced action handlers with better error handling and fallbacks
         navigator.mediaSession.setActionHandler('play', () => {
@@ -480,6 +667,45 @@
     // BULLETPROOF Universal Cross-Platform HZ Branding for ALL Devices
     function initializeUniversalHZBranding() {
       console.log('🚀 BULLETPROOF: Initializing Universal HZ branding for ALL devices and platforms...');
+
+      // 🚨 EMERGENCY INSTANT ACTIVATION - Execute immediately before anything else
+      if ('mediaSession' in navigator) {
+        console.log('🚨 EMERGENCY: Forcing INSTANT HZ visibility in lock screen!');
+
+        // Emergency metadata setup
+        try {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: 'HZ Music Player',
+            artist: 'Now Active',
+            album: 'HZ Streaming Service',
+            artwork: [
+              { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=192&h=192&fit=crop&auto=format', sizes: '192x192' },
+              { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=512&h=512&fit=crop&auto=format', sizes: '512x512' }
+            ]
+          });
+          console.log('🚨 EMERGENCY metadata set INSTANTLY!');
+        } catch (e) {
+          console.log('📱 Emergency metadata blocked');
+        }
+
+        // Emergency ultra-rapid activation sequence
+        const emergencyActivate = async () => {
+          try {
+            // Super rapid state cycling (5 cycles in 500ms)
+            for (let i = 0; i < 5; i++) {
+              navigator.mediaSession.playbackState = 'playing';
+              await new Promise(resolve => setTimeout(resolve, 25));
+              navigator.mediaSession.playbackState = 'paused';
+              await new Promise(resolve => setTimeout(resolve, 25));
+            }
+            console.log('🚨 EMERGENCY: 5-cycle activation COMPLETE!');
+          } catch (e) {
+            console.log('📱 Emergency activation blocked');
+          }
+        };
+
+        emergencyActivate();
+      }
 
       // Comprehensive device detection
       const deviceInfo = {
@@ -1016,11 +1242,60 @@
       );
 
       console.log('🌍 Universal HZ branding initialized for ALL platforms and devices!');
-    }    // Initialize universal HZ branding for ALL devices and platforms
+    }
+
+    // 🔥 PERSISTENT HZ LOCK SCREEN VISIBILITY GUARDIAN 🔥
+    // This ensures HZ STAYS visible in lock screens and notifications
+    function setupPersistentHZVisibility() {
+      if ('mediaSession' in navigator) {
+        console.log('🛡️ HZ: Setting up persistent lock screen visibility guardian...');
+
+        // Periodic visibility refresh (every 30 seconds)
+        const refreshHZVisibility = () => {
+          try {
+            // Quick state pulse to maintain visibility
+            navigator.mediaSession.playbackState = 'playing';
+            setTimeout(() => {
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('🔄 HZ: Visibility refresh pulse sent');
+            }, 100);
+          } catch (e) {
+            console.log('🛡️ HZ: Silent visibility refresh');
+          }
+        };
+
+        // Start periodic refresh
+        setInterval(refreshHZVisibility, 30000);
+
+        // Visibility check when page becomes visible again
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && 'mediaSession' in navigator) {
+            console.log('👁️ HZ: Page visible - refreshing lock screen presence');
+            refreshHZVisibility();
+          }
+        });
+
+        // Visibility refresh on window focus
+        window.addEventListener('focus', () => {
+          if ('mediaSession' in navigator) {
+            console.log('🎯 HZ: Window focused - ensuring lock screen visibility');
+            refreshHZVisibility();
+          }
+        });
+
+        console.log('✅ HZ: Persistent visibility guardian ACTIVE!');
+      }
+    }
+
+    // Initialize universal HZ branding for ALL devices and platforms
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeUniversalHZBranding);
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeUniversalHZBranding();
+        setupPersistentHZVisibility();
+      });
     } else {
       initializeUniversalHZBranding();
+      setupPersistentHZVisibility();
     }
 
     // Additional platform-specific initializations
