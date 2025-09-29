@@ -33,9 +33,70 @@
     return zipIndicators.some(indicator => indicator);
   };
 
-  const runningFromZip = isZipApp();
+  // 📱 DETECT IF RUNNING AS ANDROID APK APP
+  const isAPKApp = () => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const appVersion = navigator.appVersion.toLowerCase();
 
-  if (runningFromZip) {
+    // Check various APK app indicators
+    const apkIndicators = [
+      // Android WebView indicators (used in APK apps)
+      userAgent.includes('wv') && userAgent.includes('android'), // WebView identifier
+      userAgent.includes('version/') && userAgent.includes('mobile') && userAgent.includes('safari') && userAgent.includes('android'),
+
+      // APK-specific indicators
+      window.location.protocol === 'file:' && userAgent.includes('android'), // Local file on Android
+      window.location.href.startsWith('file:///android_asset/'), // Android asset folder
+      window.location.href.includes('file:///android_res/'), // Android resources
+
+      // Cordova/PhoneGap indicators (common APK frameworks)
+      typeof window.cordova !== 'undefined',
+      typeof window.PhoneGap !== 'undefined',
+      typeof window.phonegap !== 'undefined',
+
+      // Android intent and package indicators
+      window.location.href.includes('intent://'),
+      document.referrer.includes('android-app://'),
+
+      // WebView bridge indicators
+      typeof window.Android !== 'undefined', // Common WebView bridge name
+      typeof window.AndroidInterface !== 'undefined',
+      typeof window.HZAndroid !== 'undefined', // Custom HZ Android bridge
+
+      // Display mode indicators for APK
+      window.matchMedia('(display-mode: standalone)').matches && userAgent.includes('android'),
+      window.navigator.standalone === true && userAgent.includes('android'),
+
+      // Android Chrome Custom Tabs / Trusted Web Activity
+      userAgent.includes('chrome') && userAgent.includes('android') && window.location.protocol === 'https:' && window.name === '_blank',
+
+      // Android package environment checks
+      typeof window.packageName !== 'undefined',
+      typeof window.versionCode !== 'undefined'
+    ];
+
+    return apkIndicators.some(indicator => indicator);
+  };
+
+  const runningFromZip = isZipApp();
+  const runningAsAPK = isAPKApp();
+
+  // Determine app type with priority: APK > Zip > Web
+  if (runningAsAPK) {
+    console.log('📱 HZ: DETECTED RUNNING AS ANDROID APK - Ultra-enhanced activation mode!');
+
+    // Special handling for APK apps
+    document.documentElement.classList.add('hz-apk-app', 'hz-android-app');
+    document.body.setAttribute('data-hz-source', 'apk-app');
+    document.body.setAttribute('data-hz-platform', 'android');
+
+    // Store APK app status globally
+    window.HZ_APK_APP = true;
+    window.HZ_ZIP_APP = false; // APK takes priority over zip
+    window.HZ_APP_TYPE = 'android-apk';
+    window.HZ_ANDROID_NATIVE = true;
+
+  } else if (runningFromZip) {
     console.log('📦 HZ: DETECTED RUNNING FROM ZIP APP - Enhanced activation mode!');
 
     // Special handling for zip apps
@@ -44,10 +105,13 @@
 
     // Store zip app status globally
     window.HZ_ZIP_APP = true;
+    window.HZ_APK_APP = false;
     window.HZ_APP_TYPE = 'zip-extracted';
+
   } else {
     console.log('🌐 HZ: Running from web - Standard activation mode');
     window.HZ_ZIP_APP = false;
+    window.HZ_APK_APP = false;
     window.HZ_APP_TYPE = 'web-app';
   }
 
@@ -55,10 +119,22 @@
   if ('mediaSession' in navigator) {    // INSTANT metadata setup - appears in lock screen IMMEDIATELY
     const setupInstantHZBranding = () => {
       try {
-        // Enhanced metadata for zip apps
-        const appTitle = window.HZ_ZIP_APP ? 'HZ Music (Zip App)' : 'HZ Music';
-        const appArtist = window.HZ_ZIP_APP ? 'Portable Music Player' : 'Music Player Ready';
-        const appAlbum = window.HZ_ZIP_APP ? 'HZ Portable Edition' : 'HZ Streaming';
+        // Enhanced metadata based on app type
+        let appTitle, appArtist, appAlbum;
+
+        if (window.HZ_APK_APP) {
+          appTitle = 'HZ Music (Android App)';
+          appArtist = 'Native Android Player';
+          appAlbum = 'HZ Android Edition';
+        } else if (window.HZ_ZIP_APP) {
+          appTitle = 'HZ Music (Zip App)';
+          appArtist = 'Portable Music Player';
+          appAlbum = 'HZ Portable Edition';
+        } else {
+          appTitle = 'HZ Music';
+          appArtist = 'Music Player Ready';
+          appAlbum = 'HZ Streaming';
+        }
 
         navigator.mediaSession.metadata = new MediaMetadata({
           title: appTitle,
@@ -75,8 +151,22 @@
 
         console.log(`✅ HZ: INSTANT metadata set for ${window.HZ_APP_TYPE}!`);
 
-        // Special notification for zip apps
-        if (window.HZ_ZIP_APP && 'Notification' in window) {
+        // Special notifications for APK apps
+        if (window.HZ_APK_APP && 'Notification' in window) {
+          Notification.requestPermission().then(permission => {
+            if (permission === 'granted') {
+              new Notification('HZ Android App Active', {
+                body: 'Native Android media controls available',
+                icon: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=128&h=128&fit=crop&auto=format',
+                silent: true,
+                tag: 'hz-apk-app-ready',
+                badge: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=64&h=64&fit=crop&auto=format'
+              });
+            }
+          });
+        }
+        // Special notifications for zip apps
+        else if (window.HZ_ZIP_APP && 'Notification' in window) {
           Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
               new Notification('HZ Portable App Active', {
@@ -101,10 +191,24 @@
           console.log(`🔒 HZ Lock Screen: Play pressed (${window.HZ_APP_TYPE})`);
           navigator.mediaSession.playbackState = 'playing';
 
+          // Special handling for APK apps
+          if (window.HZ_APK_APP) {
+            console.log('� HZ Android APK: Activating native Android player');
+
+            // Try Android WebView bridge first
+            if (typeof window.Android !== 'undefined' && window.Android.play) {
+              window.Android.play();
+            } else if (typeof window.HZAndroid !== 'undefined' && window.HZAndroid.play) {
+              window.HZAndroid.play();
+            } else {
+              // Fallback to DOM elements
+              const playBtn = document.getElementById('playPauseBtn') || document.querySelector('[onclick*="play"]');
+              if (playBtn) playBtn.click();
+            }
+          }
           // Special handling for zip apps
-          if (window.HZ_ZIP_APP) {
+          else if (window.HZ_ZIP_APP) {
             console.log('📦 HZ Zip App: Activating portable player');
-            // Trigger any existing play functionality
             const playBtn = document.getElementById('playPauseBtn') || document.querySelector('[onclick*="play"]');
             if (playBtn) playBtn.click();
           }
@@ -114,26 +218,67 @@
           console.log(`🔒 HZ Lock Screen: Pause pressed (${window.HZ_APP_TYPE})`);
           navigator.mediaSession.playbackState = 'paused';
 
+          // Special handling for APK apps
+          if (window.HZ_APK_APP) {
+            console.log('📱 HZ Android APK: Pausing native Android player');
+
+            // Try Android WebView bridge first
+            if (typeof window.Android !== 'undefined' && window.Android.pause) {
+              window.Android.pause();
+            } else if (typeof window.HZAndroid !== 'undefined' && window.HZAndroid.pause) {
+              window.HZAndroid.pause();
+            } else {
+              // Fallback to DOM elements
+              const playBtn = document.getElementById('playPauseBtn') || document.querySelector('[onclick*="pause"]');
+              if (playBtn) playBtn.click();
+            }
+          }
           // Special handling for zip apps
-          if (window.HZ_ZIP_APP) {
+          else if (window.HZ_ZIP_APP) {
             console.log('📦 HZ Zip App: Pausing portable player');
             const playBtn = document.getElementById('playPauseBtn') || document.querySelector('[onclick*="pause"]');
             if (playBtn) playBtn.click();
           }
         });
 
-        // Enhanced next/previous for zip apps
-        if (window.HZ_ZIP_APP) {
+        // Enhanced next/previous for APK and zip apps
+        if (window.HZ_APK_APP || window.HZ_ZIP_APP) {
           navigator.mediaSession.setActionHandler('nexttrack', () => {
-            console.log('📦 HZ Zip App: Next track from lock screen');
-            const nextBtn = document.getElementById('nextBtn') || document.querySelector('[onclick*="next"]');
-            if (nextBtn) nextBtn.click();
+            console.log(`� HZ ${window.HZ_APK_APP ? 'Android APK' : 'Zip App'}: Next track from lock screen`);
+
+            if (window.HZ_APK_APP) {
+              // Try Android bridge first
+              if (typeof window.Android !== 'undefined' && window.Android.nextTrack) {
+                window.Android.nextTrack();
+              } else if (typeof window.HZAndroid !== 'undefined' && window.HZAndroid.nextTrack) {
+                window.HZAndroid.nextTrack();
+              } else {
+                const nextBtn = document.getElementById('nextBtn') || document.querySelector('[onclick*="next"]');
+                if (nextBtn) nextBtn.click();
+              }
+            } else {
+              const nextBtn = document.getElementById('nextBtn') || document.querySelector('[onclick*="next"]');
+              if (nextBtn) nextBtn.click();
+            }
           });
 
           navigator.mediaSession.setActionHandler('previoustrack', () => {
-            console.log('📦 HZ Zip App: Previous track from lock screen');
-            const prevBtn = document.getElementById('prevBtn') || document.querySelector('[onclick*="prev"]');
-            if (prevBtn) prevBtn.click();
+            console.log(`� HZ ${window.HZ_APK_APP ? 'Android APK' : 'Zip App'}: Previous track from lock screen`);
+
+            if (window.HZ_APK_APP) {
+              // Try Android bridge first
+              if (typeof window.Android !== 'undefined' && window.Android.previousTrack) {
+                window.Android.previousTrack();
+              } else if (typeof window.HZAndroid !== 'undefined' && window.HZAndroid.previousTrack) {
+                window.HZAndroid.previousTrack();
+              } else {
+                const prevBtn = document.getElementById('prevBtn') || document.querySelector('[onclick*="prev"]');
+                if (prevBtn) prevBtn.click();
+              }
+            } else {
+              const prevBtn = document.getElementById('prevBtn') || document.querySelector('[onclick*="prev"]');
+              if (prevBtn) prevBtn.click();
+            }
           });
         }
 
@@ -144,12 +289,26 @@
     };    // ULTRA-AGGRESSIVE state activation - forces immediate lock screen visibility
     const forceInstantActivation = () => {
       try {
-        const cycles = window.HZ_ZIP_APP ? 5 : 3; // More cycles for zip apps
-        const delay = window.HZ_ZIP_APP ? 20 : 10; // Faster cycles for zip apps
+        // Enhanced cycles based on app type
+        let cycles, delay, description;
 
-        console.log(`⚡ HZ: Starting ${cycles}-cycle activation for ${window.HZ_APP_TYPE}`);
+        if (window.HZ_APK_APP) {
+          cycles = 7; // Most aggressive for APK
+          delay = 15; // Fastest timing for Android
+          description = 'ANDROID APK ULTRA';
+        } else if (window.HZ_ZIP_APP) {
+          cycles = 5; // Enhanced for zip
+          delay = 20; // Fast timing for zip
+          description = 'ZIP APP ENHANCED';
+        } else {
+          cycles = 3; // Standard for web
+          delay = 25; // Normal timing for web
+          description = 'WEB STANDARD';
+        }
 
-        // Rapid state changes to force system recognition
+        console.log(`⚡ HZ: Starting ${cycles}-cycle ${description} activation for ${window.HZ_APP_TYPE}`);
+
+        // Ultra-rapid state changes to force system recognition
         let currentCycle = 0;
         const cycleActivation = () => {
           if (currentCycle < cycles) {
@@ -160,7 +319,17 @@
               if (currentCycle < cycles) {
                 setTimeout(cycleActivation, delay);
               } else {
-                console.log(`⚡ HZ: ${cycles}-cycle activation complete for ${window.HZ_APP_TYPE} - CHECK LOCK SCREEN NOW!`);
+                console.log(`⚡ HZ: ${cycles}-cycle ${description} activation complete - CHECK ANDROID LOCK SCREEN NOW!`);
+
+                // Special Android notification for APK apps
+                if (window.HZ_APK_APP && 'Notification' in window && Notification.permission === 'granted') {
+                  new Notification('HZ Android Ready', {
+                    body: 'Lock screen controls active',
+                    icon: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=128&h=128&fit=crop&auto=format',
+                    silent: true,
+                    tag: 'hz-android-ready'
+                  });
+                }
               }
             }, delay);
           }
@@ -784,14 +953,27 @@
       if ('mediaSession' in navigator) {
         console.log('🚨 EMERGENCY: Forcing INSTANT HZ visibility in lock screen!');
 
-        // Check if running from zip app
+        // Check environment type with APK priority
+        const isAPKEnvironment = window.HZ_APK_APP;
         const isZipEnvironment = window.HZ_ZIP_APP || window.location.protocol === 'file:' || !navigator.onLine;
 
-        // Emergency metadata setup with zip app detection
+        // Emergency metadata setup with app type detection
         try {
-          const emergencyTitle = isZipEnvironment ? 'HZ Music (Portable)' : 'HZ Music Player';
-          const emergencyArtist = isZipEnvironment ? 'Zip App Active' : 'Now Active';
-          const emergencyAlbum = isZipEnvironment ? 'HZ Portable Edition' : 'HZ Streaming Service';
+          let emergencyTitle, emergencyArtist, emergencyAlbum;
+
+          if (isAPKEnvironment) {
+            emergencyTitle = 'HZ Music (Android Native)';
+            emergencyArtist = 'APK App Active';
+            emergencyAlbum = 'HZ Android Edition';
+          } else if (isZipEnvironment) {
+            emergencyTitle = 'HZ Music (Portable)';
+            emergencyArtist = 'Zip App Active';
+            emergencyAlbum = 'HZ Portable Edition';
+          } else {
+            emergencyTitle = 'HZ Music Player';
+            emergencyArtist = 'Now Active';
+            emergencyAlbum = 'HZ Streaming Service';
+          }
 
           navigator.mediaSession.metadata = new MediaMetadata({
             title: emergencyTitle,
@@ -1564,17 +1746,29 @@
     // This ensures HZ STAYS visible in lock screens and notifications (ZIP APP READY)
     function setupPersistentHZVisibility() {
     // 🔥 ENHANCED PERSISTENT HZ LOCK SCREEN VISIBILITY GUARDIAN 🔥
-    // This ensures HZ STAYS visible in lock screens and notifications (ZIP APP READY)
+    // This ensures HZ STAYS visible in lock screens and notifications (APK + ZIP APP READY)
     function setupPersistentHZVisibility() {
       if ('mediaSession' in navigator) {
         console.log('🛡️ HZ: Setting up enhanced persistent lock screen visibility guardian...');
 
-        // Enhanced settings for zip apps
-        const isZipApp = window.HZ_ZIP_APP || window.location.protocol === 'file:';
-        const refreshInterval = isZipApp ? 20000 : 30000; // More frequent for zip apps (20s vs 30s)
-        const refreshIntensity = isZipApp ? 2 : 1; // Double pulse for zip apps
+        // Enhanced settings based on app type
+        let refreshInterval, refreshIntensity, appMode;
 
-        console.log(`🛡️ HZ: Guardian configured for ${isZipApp ? 'ZIP APP' : 'WEB APP'} (${refreshInterval}ms intervals)`);
+        if (window.HZ_APK_APP) {
+          refreshInterval = 15000; // Most frequent for APK (15s)
+          refreshIntensity = 3; // Triple pulse for APK
+          appMode = 'ANDROID APK';
+        } else if (window.HZ_ZIP_APP) {
+          refreshInterval = 20000; // Enhanced for zip (20s)
+          refreshIntensity = 2; // Double pulse for zip
+          appMode = 'ZIP APP';
+        } else {
+          refreshInterval = 30000; // Standard for web (30s)
+          refreshIntensity = 1; // Single pulse for web
+          appMode = 'WEB APP';
+        }
+
+        console.log(`🛡️ HZ: Guardian configured for ${appMode} (${refreshInterval}ms intervals, ${refreshIntensity}x intensity)`);
 
         // Enhanced periodic visibility refresh
         const refreshHZVisibility = () => {
@@ -1779,7 +1973,10 @@
           "application/zip": [".zip"],
           "application/x-zip-compressed": [".zip"],
           "application/x-hz-music": [".hz", ".hzmusic"],
-          "application/octet-stream": [".zip"]
+          "application/octet-stream": [".zip"],
+          "application/vnd.android.package-archive": [".apk"],
+          "application/vnd.android.application": [".apk"],
+          "application/x-android-apk": [".apk"]
         }
       },
       {
@@ -1787,6 +1984,14 @@
         "accept": {
           "application/zip": [".zip"],
           "application/x-zip-compressed": [".zip"]
+        }
+      },
+      {
+        "action": "/open-hz-apk",
+        "accept": {
+          "application/vnd.android.package-archive": [".apk"],
+          "application/vnd.android.application": [".apk"],
+          "application/x-android-apk": [".apk"]
         }
       }
     ],
@@ -1830,8 +2035,8 @@
 <meta name="msapplication-task" content="name=Open HZ Archive;action-uri=/open-hz-archive;icon-uri=https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=16">
 
 <!-- HZ Zip File Association Meta Tags -->
-<meta name="file-associations" content="application/zip:.zip,application/x-zip-compressed:.zip,application/x-hz-music:.hz">
-<meta name="supported-file-types" content=".zip,.hz,.hzmusic">
+<meta name="file-associations" content="application/zip:.zip,application/x-zip-compressed:.zip,application/x-hz-music:.hz,application/vnd.android.package-archive:.apk">
+<meta name="supported-file-types" content=".zip,.hz,.hzmusic,.apk">
 <meta name="default-file-handler" content="HZ Music Archive Processor">
 
 <!-- Media Session and PWA App Identity -->
@@ -1863,6 +2068,29 @@
 <meta name="mobile-web-app-title" content="HZ">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-status-bar-style" content="black">
+
+<!-- Android APK and WebView Support -->
+<meta name="android-app-capable" content="yes">
+<meta name="android-app-title" content="HZ Music">
+<meta name="android-app-status-bar-style" content="black-translucent">
+<meta name="android-app-orientations" content="portrait">
+
+<!-- Android Chrome and WebView Enhancement -->
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="msapplication-navbutton-color" content="#000000">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-config" content="none">
+
+<!-- Android Intent Filters and Deep Links -->
+<meta name="android-intent-filter" content="android.intent.action.MUSIC_PLAYER">
+<meta name="android-intent-category" content="android.intent.category.APP_MUSIC">
+<meta name="android-media-action" content="android.media.action.MEDIA_PLAY_FROM_SEARCH">
+
+<!-- Android APK File Association -->
+<meta name="android-package-name" content="com.hz.music">
+<meta name="android-app-id" content="hz-music-player">
+<meta name="android-minimum-version" content="21">
 
 <!-- Firefox OS Support -->
 <meta name="mozilla-web-app-capable" content="yes">
@@ -1971,6 +2199,60 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     font-weight: 600;
     letter-spacing: 0.5px;
+  }
+
+  /* App Type Specific Styling */
+
+  /* APK App Styling */
+  .hz-apk-app {
+    --hz-accent-color: #34a853; /* Android green */
+    --hz-app-indicator: "📱 Android APK";
+  }
+
+  .hz-apk-app .hz-branding:after {
+    content: " (Android)";
+    color: var(--hz-accent-color);
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+
+  body[data-hz-source="apk-app"] {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    border-top: 3px solid #34a853;
+  }
+
+  body[data-hz-source="apk-app"] .player-container {
+    border: 2px solid rgba(52, 168, 83, 0.3);
+    box-shadow: 0 0 20px rgba(52, 168, 83, 0.2);
+  }
+
+  /* Zip App Styling */
+  .hz-zip-app {
+    --hz-accent-color: #ff9500; /* Orange for portable */
+    --hz-app-indicator: "📦 Portable";
+  }
+
+  .hz-zip-app .hz-branding:after {
+    content: " (Portable)";
+    color: var(--hz-accent-color);
+    font-size: 0.85em;
+    font-weight: 500;
+  }
+
+  body[data-hz-source="zip-app"] {
+    background: linear-gradient(135deg, #ff9500 0%, #ff6200 100%);
+    border-top: 3px solid #ff9500;
+  }
+
+  body[data-hz-source="zip-app"] .player-container {
+    border: 2px solid rgba(255, 149, 0, 0.3);
+    box-shadow: 0 0 20px rgba(255, 149, 0, 0.2);
+  }
+
+  /* Web App Styling (default) */
+  body[data-hz-source="web-app"] {
+    --hz-accent-color: #0066ff;
+    --hz-app-indicator: "🌐 Web";
   }
   .card-display { background: linear-gradient(135deg, #232526 0%, #414345 100%); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 22px 28px 18px 28px; margin: 0 auto 18px auto; min-width: 270px; max-width: 340px; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; border: 1.5px solid #333; }
   .card-chip { width: 38px; height: 24px; background: linear-gradient(90deg, #e0e0e0 0%, #bdbdbd 100%); border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
