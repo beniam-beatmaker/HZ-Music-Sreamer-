@@ -108,41 +108,74 @@
         }
     };
 
-    // Media Session API for lock screen and background controls
+    // Enhanced Media Session API for perfect lock screen and notification controls
     function updateMediaSession(title, artist, audioUrl) {
       if ('mediaSession' in navigator) {
-        console.log('🔒 Setting up Media Session for:', title, 'by', artist);
+        console.log('🔒 Setting up Enhanced Media Session for:', title, 'by', artist);
+
+        // Get high-quality artwork based on track or use default
+        const trackArtworkMap = {
+          'Times': 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop',
+          'Prime': 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop',
+          'Made It': 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop',
+          'Space': 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop',
+          'Nimbus': 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop',
+          'Mars': 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop'
+        };
+
+        const defaultArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
+        const artworkBase = trackArtworkMap[title] || defaultArtwork;
 
         navigator.mediaSession.metadata = new MediaMetadata({
           title: title,
           artist: artist,
-          album: 'Hertz Music',
+          album: 'HZ Music Streamer', // Clean app name for notifications
           artwork: [
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=80', sizes: '96x96', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=128&q=80', sizes: '128x128', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=80', sizes: '192x192', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=256&q=80', sizes: '256x256', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=384&q=80', sizes: '384x384', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=80', sizes: '512x512', type: 'image/jpeg' }
+            { src: artworkBase + '&w=96&q=90', sizes: '96x96', type: 'image/jpeg' },
+            { src: artworkBase + '&w=128&q=90', sizes: '128x128', type: 'image/jpeg' },
+            { src: artworkBase + '&w=192&q=90', sizes: '192x192', type: 'image/jpeg' },
+            { src: artworkBase + '&w=256&q=90', sizes: '256x256', type: 'image/jpeg' },
+            { src: artworkBase + '&w=384&q=90', sizes: '384x384', type: 'image/jpeg' },
+            { src: artworkBase + '&w=512&q=90', sizes: '512x512', type: 'image/jpeg' },
+            { src: artworkBase + '&w=1024&q=95', sizes: '1024x1024', type: 'image/jpeg' }
           ]
         });
 
-        // Set action handlers for lock screen controls
+        // Enhanced action handlers with better error handling and fallbacks
         navigator.mediaSession.setActionHandler('play', () => {
           console.log('🔒 Lock screen: Play pressed');
           const playerAudio = document.getElementById('playerAudio');
           const playBtn = document.getElementById('playPauseBtn');
-          if (playerAudio) {
-            if (playerAudio.paused) {
+
+          if (playerAudio && playerAudio.paused) {
+            // Ensure audio is loaded before attempting to play
+            if (playerAudio.readyState >= 2) {
               playerAudio.play().then(() => {
                 if (playBtn) playBtn.innerHTML = '⏸️';
                 navigator.mediaSession.playbackState = 'playing';
                 console.log('✅ Lock screen play successful');
               }).catch(e => {
                 console.error('❌ Lock screen play failed:', e);
+                // Try to reload and play
+                if (playerAudio.src) {
+                  playerAudio.load();
+                  setTimeout(() => {
+                    playerAudio.play().catch(err => console.error('❌ Retry failed:', err));
+                  }, 100);
+                }
               });
+            } else {
+              // Wait for audio to load
+              const onCanPlay = () => {
+                playerAudio.removeEventListener('canplay', onCanPlay);
+                playerAudio.play().then(() => {
+                  if (playBtn) playBtn.innerHTML = '⏸️';
+                  navigator.mediaSession.playbackState = 'playing';
+                }).catch(e => console.error('❌ Delayed play failed:', e));
+              };
+              playerAudio.addEventListener('canplay', onCanPlay);
             }
-          } else {
+          } else if (!playerAudio) {
             console.log('⚠️ No audio element found for lock screen play');
           }
         });
@@ -151,31 +184,31 @@
           console.log('🔒 Lock screen: Pause pressed');
           const playerAudio = document.getElementById('playerAudio');
           const playBtn = document.getElementById('playPauseBtn');
-          if (playerAudio) {
-            if (!playerAudio.paused) {
-              playerAudio.pause();
-              if (playBtn) playBtn.innerHTML = '▶️';
-              navigator.mediaSession.playbackState = 'paused';
-              console.log('✅ Lock screen pause successful');
-            }
-          } else {
-            console.log('⚠️ No audio element found for lock screen pause');
+
+          if (playerAudio && !playerAudio.paused) {
+            playerAudio.pause();
+            if (playBtn) playBtn.innerHTML = '▶️';
+            navigator.mediaSession.playbackState = 'paused';
+            console.log('✅ Lock screen pause successful');
           }
         });
 
         navigator.mediaSession.setActionHandler('previoustrack', () => {
           console.log('🔒 Lock screen: Previous track pressed');
 
-          // Access the global variables from the player
+          // Multiple fallback methods for previous track
           if (typeof window.currentTrackIndex !== 'undefined' && typeof window.trackOrder !== 'undefined' && typeof window.playTrack === 'function') {
             if (window.currentTrackIndex > 0) {
               window.currentTrackIndex--;
               const prevTrackId = window.trackOrder[window.currentTrackIndex];
               console.log('🔎 Switching to previous track:', prevTrackId);
               window.playTrack(prevTrackId);
-              console.log('✅ Lock screen previous track successful');
             } else {
-              console.log('⚠️ Already at first track');
+              // Wrap to last track
+              window.currentTrackIndex = window.trackOrder.length - 1;
+              const lastTrackId = window.trackOrder[window.currentTrackIndex];
+              console.log('🔂 Wrapping to last track:', lastTrackId);
+              window.playTrack(lastTrackId);
             }
           } else {
             // Fallback to button click
@@ -184,7 +217,7 @@
               prevBtn.click();
               console.log('✅ Lock screen previous via button click');
             } else {
-              console.log('❌ Previous button not found');
+              console.log('⚠️ No previous track method available');
             }
           }
         });
@@ -192,23 +225,19 @@
         navigator.mediaSession.setActionHandler('nexttrack', () => {
           console.log('🔒 Lock screen: Next track pressed');
 
-          // Access the global variables from the player
+          // Multiple fallback methods for next track
           if (typeof window.currentTrackIndex !== 'undefined' && typeof window.trackOrder !== 'undefined' && typeof window.playTrack === 'function') {
             if (window.currentTrackIndex < window.trackOrder.length - 1) {
               window.currentTrackIndex++;
               const nextTrackId = window.trackOrder[window.currentTrackIndex];
               console.log('🔎 Switching to next track:', nextTrackId);
               window.playTrack(nextTrackId);
-              console.log('✅ Lock screen next track successful');
-            } else if (typeof window.loopMode !== 'undefined' && window.loopMode === 1) {
-              // Loop all mode - wrap to beginning
+            } else {
+              // Wrap to first track
               window.currentTrackIndex = 0;
               const firstTrackId = window.trackOrder[window.currentTrackIndex];
-              console.log('🔂 Loop mode: wrapping to first track:', firstTrackId);
+              console.log('🔂 Wrapping to first track:', firstTrackId);
               window.playTrack(firstTrackId);
-              console.log('✅ Lock screen next track (loop) successful');
-            } else {
-              console.log('⚠️ Already at last track');
             }
           } else {
             // Fallback to button click
@@ -217,15 +246,54 @@
               nextBtn.click();
               console.log('✅ Lock screen next via button click');
             } else {
-              console.log('❌ Next button not found');
+              console.log('⚠️ No next track method available');
             }
           }
         });
 
-        // Set playback state
+        // Additional action handlers for better device compatibility
+        try {
+          navigator.mediaSession.setActionHandler('stop', () => {
+            console.log('🔒 Lock screen: Stop pressed');
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio) {
+              playerAudio.pause();
+              playerAudio.currentTime = 0;
+              navigator.mediaSession.playbackState = 'paused';
+            }
+          });
+
+          navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+            console.log('🔒 Lock screen: Seek backward', details.seekOffset || 10);
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio) {
+              playerAudio.currentTime = Math.max(0, playerAudio.currentTime - (details.seekOffset || 10));
+            }
+          });
+
+          navigator.mediaSession.setActionHandler('seekforward', (details) => {
+            console.log('🔒 Lock screen: Seek forward', details.seekOffset || 10);
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio) {
+              playerAudio.currentTime = Math.min(playerAudio.duration || 0, playerAudio.currentTime + (details.seekOffset || 10));
+            }
+          });
+
+          navigator.mediaSession.setActionHandler('seekto', (details) => {
+            console.log('🔒 Lock screen: Seek to', details.seekTime);
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio && details.seekTime !== undefined) {
+              playerAudio.currentTime = details.seekTime;
+            }
+          });
+        } catch (error) {
+          console.log('⚠️ Some advanced media session features not supported:', error.message);
+        }
+
+        // Set initial playback state
         navigator.mediaSession.playbackState = 'playing';
 
-        console.log('🔒 Media Session controls active - Available in lock screen!');
+        console.log('🔒 Enhanced Media Session controls active - Perfect lock screen & notification support!');
       } else {
         console.log('⚠️ Media Session API not supported in this browser');
       }
@@ -7179,46 +7247,122 @@
       // Save search to recent searches
       saveRecentSearch(query);
 
-      // Mock search results (in a real app, this would be an API call)
-      const mockResults = [
-        {
-          type: 'track',
-          title: `${query} - Best Hits`,
-          subtitle: 'Various Artists',
-          icon: '🎵'
-        },
-        {
-          type: 'artist',
-          title: `${query} Artist`,
-          subtitle: 'Artist',
-          icon: '👤'
-        },
-        {
-          type: 'album',
-          title: `The Best of ${query}`,
-          subtitle: `${query} Collection`,
-          icon: '💿'
-        },
-        {
-          type: 'playlist',
-          title: `${query} Mix`,
-          subtitle: 'Curated Playlist',
-          icon: '📋'
+      // Get actual track database for real search results
+      const allTracks = {
+        'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+        'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz' },
+        'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80', genre: 'Alternative' },
+        'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+        'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+        'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
+        'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'nova': { id:'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+        'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+        'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Consistency': { id: 'Consistency', title: 'Consistency', artist: 'StarLight', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        'Like Love': { id: 'Like Love', title: 'Like Love', artist: 'Pyro', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Shootin Starz': { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Mars': { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Ain&#39;t Shit': { id: 'Ain&#39;t Shit', title: 'Ain\'t Shit', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Dream': { id: 'Dream', title: 'Dream', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' }
+      };
+
+      // Filter tracks based on query
+      const q = query.toLowerCase();
+      const matchingTracks = Object.values(allTracks).filter(track => {
+        return track.title.toLowerCase().includes(q) ||
+               track.artist.toLowerCase().includes(q) ||
+               (track.genre && track.genre.toLowerCase().includes(q));
+      }).slice(0, 8); // Show up to 8 matching tracks
+
+      // Create results with real tracks
+      const trackResults = matchingTracks.map(track => ({
+        type: 'track',
+        id: track.id,
+        title: track.title,
+        subtitle: `${track.artist} • ${track.genre}`,
+        icon: '🎵',
+        cover: track.cover
+      }));
+
+      // Add some category results if we have room
+      const categoryResults = [];
+      if (trackResults.length < 6) {
+        categoryResults.push(
+          {
+            type: 'artist',
+            title: `"${query}" Artists`,
+            subtitle: 'Browse artists',
+            icon: '👤'
+          },
+          {
+            type: 'genre',
+            title: `${query} Genre`,
+            subtitle: 'Explore genre',
+            icon: '🎸'
+          }
+        );
+      }
+
+      const allResults = [...trackResults, ...categoryResults];
+
+      const resultsHtml = allResults.map(result => {
+        if (result.type === 'track') {
+          return `
+            <div class="search-result-item track-card" style="position:relative;display:flex;align-items:center;gap:12px;padding:12px 16px;" onclick="playSearchTrack('${result.id}');closeSearchPopup();">
+              <img src="${result.cover}" style="width:48px;height:48px;border-radius:8px;object-fit:cover;flex-shrink:0;">
+              <div class="search-result-info" style="flex:1;min-width:0;">
+                <div class="search-result-title" style="color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">${result.title}</div>
+                <div class="search-result-subtitle" style="color:#b3b3b3;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${result.subtitle}</div>
+              </div>
+              <button class='track-menu-btn' style='position:absolute;top:50%;right:18px;transform:translateY(-50%);background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick="event.stopPropagation();showTrackMenu(event, '${result.id}')">⋯</button>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="search-result-item" onclick="selectSearchResult('${result.type}', '${result.title}')">
+              <div class="search-result-icon">${result.icon}</div>
+              <div class="search-result-info">
+                <div class="search-result-title">${result.title}</div>
+                <div class="search-result-subtitle">${result.subtitle}</div>
+              </div>
+            </div>
+          `;
         }
-      ];
+      }).join('');
 
-      const resultsHtml = mockResults.map(result => `
-        <div class="search-result-item track-card" style="position:relative;" onclick="${result.type === 'track' ? `playTrack('${result.title.split(' -')[0]}');closeSearchPopup();` : `selectSearchResult('${result.type}', '${result.title}')`}">
-          <div class="search-result-icon">${result.icon}</div>
-          <div class="search-result-info">
-            <div class="search-result-title">${result.title}</div>
-            <div class="search-result-subtitle">${result.subtitle}</div>
-          </div>
-          ${result.type === 'track' ? `<button class='track-menu-btn' style='position:absolute;top:50%;right:18px;transform:translateY(-50%);background:transparent;border:none;font-size:1.5rem;color:#fff;cursor:pointer;' onclick=\"event.stopPropagation();showTrackMenu(event, '${result.title.split(' -')[0]}')\">⋯</button>` : ''}
-        </div>
-      `).join('');
-
-      resultsList.innerHTML = resultsHtml;
+      resultsList.innerHTML = resultsHtml || '<div style="padding:20px;text-align:center;color:#b3b3b3;">No results found for "' + query + '"</div>';
     }
 
     function searchCategory(category) {
@@ -7315,12 +7459,85 @@ function showGenrePopup(genre) {
 }
     }
 
+    // New function to play tracks from search results with bulletproof functionality
+    function playSearchTrack(trackId) {
+      console.log('🎵 SEARCH: Playing track from search results:', trackId);
+
+      // Use the bulletproof playNewTrack function for guaranteed playback
+      if (typeof window.playNewTrack === 'function') {
+        // Get track data for proper title and artist display
+        const trackData = {
+          'Times': { title: 'Times', artist: 'Stat Cross' },
+          'Prime': { title: 'Prime', artist: 'SlattZ' },
+          'Made It': { title: 'Made It', artist: 'Prod. Tedla' },
+          'Nector': { title: 'Nector', artist: 'Prod. Tedla' },
+          'Aint Nough Dreamzz': { title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+          'Blossom': { title: 'Blossom', artist: 'Prod. Nexus' },
+          'Space': { title: 'Space', artist: 'Prod. Tedla' },
+          'Nimbus': { title: 'Nimbus', artist: 'Prod. Tedla' },
+          'Shootin Starz': { title: 'Shootin Starz', artist: 'Prod. Simz' },
+          'Mars': { title: 'Mars', artist: 'Prod. Tedla' },
+          'Mach 1': { title: 'Mach 1', artist: 'Prod. Phantom' },
+          'Echo': { title: 'Echo', artist: 'Neon Gloww' },
+          'Lights': { title: 'Lights', artist: 'Bezzie' },
+          'Smilin': { title: 'Smilin', artist: 'Melody-Soull' },
+          'Buckets': { title: 'Buckets', artist: 'Bezzie' },
+          'Sweet': { title: 'Sweet', artist: 'Bezzie' },
+          'Persistence': { title: 'Persistence', artist: 'Neo' },
+          'Focus': { title: 'Focus', artist: 'Desiree' },
+          'Smooth': { title: 'Smooth', artist: 'Prod. 4EV' },
+          'Different': { title: 'Different', artist: 'Prod. Cool-Rhythms' },
+          'Wop!!!': { title: 'Wop!!!', artist: 'Klevv' },
+          'Mind': { title: 'Mind', artist: 'Desiree' },
+          'Huh': { title: 'Huh', artist: 'Prod. Legacy' },
+          'Soul': { title: 'Soul', artist: 'Desiree' },
+          'Step': { title: 'Step', artist: 'Desiree' },
+          'Vibes': { title: 'Vibes', artist: 'Bezzie' },
+          'Future': { title: 'Future', artist: 'Pegasus' },
+          'Promise': { title: 'Promise', artist: 'Desiree' },
+          'Bliss': { title: 'Bliss', artist: 'Echo' },
+          'Hustle': { title: 'Hustle', artist: 'NeoXX' },
+          '808-Symph': { title: '808-Symph', artist: 'Molly-Able' },
+          'shine': { title: 'Shine', artist: 'Bezzie' },
+          'heart': { title: 'Heart', artist: 'T-Glow' },
+          'nova': { title: 'Nova', artist: 'Prod. Boltz' },
+          'pushit': { title: 'Push It', artist: 'B-Gallop' },
+          'bright': { title: 'Bright', artist: 'Soul-Ful' },
+          'whisper': { title: 'Whisper', artist: 'Molly-Able' },
+          'lord': { title: 'Lord', artist: 'Sweet-Soul' },
+          'smile': { title: 'Smile', artist: 'Amie-Rain' },
+          'Good Woman': { title: 'Good Woman', artist: 'Molly-Able' },
+          'Rhymes': { title: 'Rhymes', artist: 'Bezzie' },
+          'Nights': { title: 'Nights', artist: 'Lil Guava' },
+          'You My Vibe': { title: 'You My Vibe', artist: 'Aime-Rain' },
+          'Consistency': { title: 'Consistency', artist: 'StarLight' },
+          'Like Love': { title: 'Like Love', artist: 'Pyro' },
+          'Ain&#39;t Shit': { title: 'Ain\'t Shit', artist: 'Texx' },
+          'Dream': { title: 'Dream', artist: 'Desiree' }
+        };
+
+        const track = trackData[trackId] || { title: trackId, artist: 'Unknown Artist' };
+        window.playNewTrack(trackId, null, track.title, track.artist);
+      } else {
+        // Fallback to regular playTrack
+        if (typeof window.playTrack === 'function') {
+          window.playTrack(trackId);
+        } else {
+          console.error('❌ No playback functions available');
+        }
+      }
+    }
+
     function selectSearchResult(type, title) {
       console.log('▶️ Selected search result:', type, title);
       if (type === 'track') {
-        playTrack(title.split(' -')[0]); // Use the track name before ' -' for mock results
+        playSearchTrack(title);
+      } else if (type === 'genre') {
+        // Extract genre name and show genre popup
+        const genreName = title.replace(' Genre', '').replace('"', '').replace('"', '');
+        showGenrePopup(genreName);
       } else {
-        alert(`Playing: ${title}`);
+        console.log(`Selected ${type}: ${title}`);
       }
       closeSearchPopup();
     }
@@ -14882,11 +15099,76 @@ function showGenrePopup(genre) {
         closeSearchPopup();
       }
 
+      // Get track data to ensure ALL tracks are playable (complete list from homepage)
+      const localTracks = {
+        // Core tracks
+        'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
+        'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
+        'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', cover: 'https://wallpapercave.com/wp/wp3198562.jpg' },
+        'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', cover: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80' },
+        'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80' },
+        'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Step': { id: 'Step', title: 'Step', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80' },
+        'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
+        '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
+        'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80' },
+        'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
+        'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
+        'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
+        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80' },
+        'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
+        'Consistency': { id: 'Consistency', title: 'Consistency', artist: 'StarLight', url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Like Love': { id: 'Like Love', title: 'Like Love', artist: 'Pyro', url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        // New tracks
+        'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80' },
+        'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80' },
+        'Shootin Starz': { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Mars': { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80' },
+        'Ain&#39;t Shit': { id: 'Ain&#39;t Shit', title: 'Ain\'t Shit', artist: 'Texx', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        'Dream': { id: 'Dream', title: 'Dream', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' }
+      };
+
+      const track = localTracks[trackId];
+      if (!track) {
+        console.error('❌ Track not found in search data:', trackId);
+        return;
+      }
+
       // Ensure track starts from the beginning by resetting audio current time
       const playerAudio = document.getElementById('playerAudio');
       if (playerAudio) {
         playerAudio.currentTime = 0;
         console.log('⏮️ Reset track to beginning for search playback');
+      }
+
+      // Update Media Session with track info for proper lock screen display
+      if (typeof updateMediaSession === 'function') {
+        updateMediaSession(track.title, track.artist, track.url);
+        console.log('🔒 Updated Media Session for:', track.title, 'by', track.artist);
       }
 
       // Call the existing playTrack function which handles the sticky player
