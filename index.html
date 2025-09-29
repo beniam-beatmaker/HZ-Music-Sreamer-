@@ -96,6 +96,9 @@
             console.log('✅ PLAYBACK SUCCESS');
             const playBtn = document.getElementById('playPauseBtn');
             if (playBtn) playBtn.innerHTML = '⏸️';
+
+            // Update Media Session metadata for lock screen controls
+            updateMediaSession(trackTitle, trackArtist, trackUrl);
           }).catch(e => {
             console.error('❌ Playback failed:', e);
           });
@@ -103,6 +106,137 @@
         } else {
           console.error('Player elements not found. Page may not be fully loaded.');
         }
+    };
+
+    // Media Session API for lock screen and background controls
+    function updateMediaSession(title, artist, audioUrl) {
+      if ('mediaSession' in navigator) {
+        console.log('🔒 Setting up Media Session for:', title, 'by', artist);
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: title,
+          artist: artist,
+          album: 'Hertz Music',
+          artwork: [
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=80', sizes: '96x96', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=128&q=80', sizes: '128x128', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=80', sizes: '192x192', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=256&q=80', sizes: '256x256', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=384&q=80', sizes: '384x384', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=80', sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+
+        // Set action handlers for lock screen controls
+        navigator.mediaSession.setActionHandler('play', () => {
+          console.log('🔒 Lock screen: Play pressed');
+          const playerAudio = document.getElementById('playerAudio');
+          const playBtn = document.getElementById('playPauseBtn');
+          if (playerAudio) {
+            if (playerAudio.paused) {
+              playerAudio.play().then(() => {
+                if (playBtn) playBtn.innerHTML = '⏸️';
+                navigator.mediaSession.playbackState = 'playing';
+                console.log('✅ Lock screen play successful');
+              }).catch(e => {
+                console.error('❌ Lock screen play failed:', e);
+              });
+            }
+          } else {
+            console.log('⚠️ No audio element found for lock screen play');
+          }
+        });
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          console.log('🔒 Lock screen: Pause pressed');
+          const playerAudio = document.getElementById('playerAudio');
+          const playBtn = document.getElementById('playPauseBtn');
+          if (playerAudio) {
+            if (!playerAudio.paused) {
+              playerAudio.pause();
+              if (playBtn) playBtn.innerHTML = '▶️';
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('✅ Lock screen pause successful');
+            }
+          } else {
+            console.log('⚠️ No audio element found for lock screen pause');
+          }
+        });
+
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+          console.log('🔒 Lock screen: Previous track pressed');
+
+          // Access the global variables from the player
+          if (typeof window.currentTrackIndex !== 'undefined' && typeof window.trackOrder !== 'undefined' && typeof window.playTrack === 'function') {
+            if (window.currentTrackIndex > 0) {
+              window.currentTrackIndex--;
+              const prevTrackId = window.trackOrder[window.currentTrackIndex];
+              console.log('🔎 Switching to previous track:', prevTrackId);
+              window.playTrack(prevTrackId);
+              console.log('✅ Lock screen previous track successful');
+            } else {
+              console.log('⚠️ Already at first track');
+            }
+          } else {
+            // Fallback to button click
+            const prevBtn = document.getElementById('prevBtn');
+            if (prevBtn) {
+              prevBtn.click();
+              console.log('✅ Lock screen previous via button click');
+            } else {
+              console.log('❌ Previous button not found');
+            }
+          }
+        });
+
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+          console.log('🔒 Lock screen: Next track pressed');
+
+          // Access the global variables from the player
+          if (typeof window.currentTrackIndex !== 'undefined' && typeof window.trackOrder !== 'undefined' && typeof window.playTrack === 'function') {
+            if (window.currentTrackIndex < window.trackOrder.length - 1) {
+              window.currentTrackIndex++;
+              const nextTrackId = window.trackOrder[window.currentTrackIndex];
+              console.log('🔎 Switching to next track:', nextTrackId);
+              window.playTrack(nextTrackId);
+              console.log('✅ Lock screen next track successful');
+            } else if (typeof window.loopMode !== 'undefined' && window.loopMode === 1) {
+              // Loop all mode - wrap to beginning
+              window.currentTrackIndex = 0;
+              const firstTrackId = window.trackOrder[window.currentTrackIndex];
+              console.log('🔂 Loop mode: wrapping to first track:', firstTrackId);
+              window.playTrack(firstTrackId);
+              console.log('✅ Lock screen next track (loop) successful');
+            } else {
+              console.log('⚠️ Already at last track');
+            }
+          } else {
+            // Fallback to button click
+            const nextBtn = document.getElementById('nextBtn');
+            if (nextBtn) {
+              nextBtn.click();
+              console.log('✅ Lock screen next via button click');
+            } else {
+              console.log('❌ Next button not found');
+            }
+          }
+        });
+
+        // Set playback state
+        navigator.mediaSession.playbackState = 'playing';
+
+        console.log('🔒 Media Session controls active - Available in lock screen!');
+      } else {
+        console.log('⚠️ Media Session API not supported in this browser');
+      }
+    }
+
+    // Update Media Session playback state when audio state changes
+    window.updateMediaSessionState = function(state) {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.playbackState = state;
+        console.log('🔒 Media Session state updated to:', state);
+      }
     };
 
 
@@ -5103,7 +5237,7 @@
                 </tr>
                 <tr class="track-row" onclick="playNewTrack('Nights', 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', 'Nights', 'Lil Guava')">
                   <td><div class="track-number">22</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80" alt="Starry night sky" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nights</div><div class="track-artist">Lil Guava</div></div></div></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80" alt="Beautiful night sky with stars" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nights</div><div class="track-artist">Lil Guava</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -5159,7 +5293,7 @@
             </tr>
             <tr class="track-row" onclick="playNewTrack('Different', 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', 'Different', 'Prod. Cool-Rhythms')">
               <td><div class="track-number">13</div><button class="track-play-btn">▶</button></td>
-              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1465101178521-c1a9136a3b99?auto=format&fit=crop&w=400&q=80" alt="Unique abstract" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Different</div><div class="track-artist">Prod. Cool-Rhythms</div></div></div></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80" alt="Creative abstract design" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Different</div><div class="track-artist">Prod. Cool-Rhythms</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -5465,6 +5599,8 @@
               'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
               'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
               'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+              'Ain&#39;t Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Ain\'t Shit', artist: 'Texx' },
+              'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
               'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
             };
 
@@ -5549,61 +5685,92 @@
           var trackOrder = [
             'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
             'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
-            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile'
+            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe', 'Consistency', 'Like Love',
+            'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
           ];
+          // Make variables globally accessible for Media Session handlers
+          window.currentTrackIndex = 0;
+          window.isShuffled = false;
+          window.loopMode = 0; // 0 = no loop, 1 = loop all, 2 = loop one
+          window.trackOrder = trackOrder;
+
+          // Keep local references for backward compatibility
           var currentTrackIndex = 0;
           var isShuffled = false;
+          var loopMode = 0;
 
           // Play/Pause
           playPauseBtn.addEventListener('click', function() {
             if (playerAudio.paused) {
               playerAudio.play();
               playPauseBtn.innerHTML = '&#10073;&#10073;'; // Pause icon
+              updateMediaSessionState('playing');
             } else {
               playerAudio.pause();
               playPauseBtn.innerHTML = '&#9654;'; // Play icon
+              updateMediaSessionState('paused');
             }
           });
 
           // Next Track
           nextBtn.addEventListener('click', function() {
-            if (currentTrackIndex < trackOrder.length - 1) {
-              currentTrackIndex++;
-              playTrack(trackOrder[currentTrackIndex]);
-            }
+            // Use modulo to wrap around to beginning when reaching end
+            const nextIndex = (currentTrackIndex + 1) % trackOrder.length;
+            currentTrackIndex = nextIndex;
+            window.currentTrackIndex = currentTrackIndex;
+            console.log('⏭️ Next button: moving to track', nextIndex, '(' + trackOrder[nextIndex] + ')');
+            playTrack(trackOrder[currentTrackIndex]);
           });
 
           // Previous Track
           prevBtn.addEventListener('click', function() {
-            if (currentTrackIndex > 0) {
-              currentTrackIndex--;
-              playTrack(trackOrder[currentTrackIndex]);
-            }
+            // Use modulo to wrap around to end when reaching beginning
+            const prevIndex = (currentTrackIndex - 1 + trackOrder.length) % trackOrder.length;
+            currentTrackIndex = prevIndex;
+            window.currentTrackIndex = currentTrackIndex;
+            console.log('⏮️ Previous button: moving to track', prevIndex, '(' + trackOrder[prevIndex] + ')');
+            playTrack(trackOrder[currentTrackIndex]);
           });
 
-          // Loop - Toggle with '1' indicator when active
+          // Loop - Three-state system: normal -> loop all -> loop one -> normal
           loopBtn.addEventListener('click', function() {
-            playerAudio.loop = !playerAudio.loop;
-            if (playerAudio.loop) {
-              loopBtn.innerHTML = '🔂1';
-              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
-              loopBtn.style.color = '#fff';
-              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
-              loopBtn.style.border = '2px solid #0066ff';
-              console.log('🔂 Loop ON - Track will repeat');
-            } else {
+            loopMode = (loopMode + 1) % 3;
+            window.loopMode = loopMode;
+
+            if (loopMode === 0) {
+              // No loop - normal playback
+              playerAudio.loop = false;
               loopBtn.innerHTML = '🔂';
               loopBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
               loopBtn.style.color = '#FFD700';
               loopBtn.style.boxShadow = 'none';
               loopBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
-              console.log('🔂 Loop OFF');
+              console.log('🔂 Loop OFF - Normal playback');
+            } else if (loopMode === 1) {
+              // Loop all - plays next track when current ends
+              playerAudio.loop = false;
+              loopBtn.innerHTML = '🔂';
+              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
+              loopBtn.style.color = '#fff';
+              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.4)';
+              loopBtn.style.border = '2px solid #0066ff';
+              console.log('🔂 Loop ALL - Will continue to next track');
+            } else if (loopMode === 2) {
+              // Loop one - repeats current track
+              playerAudio.loop = true;
+              loopBtn.innerHTML = '🔂1';
+              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
+              loopBtn.style.color = '#fff';
+              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
+              loopBtn.style.border = '2px solid #0066ff';
+              console.log('🔂 Loop ONE - Current track will repeat');
             }
           });
 
           // Shuffle - Toggle with blue glow when active
           shuffleBtn.addEventListener('click', function() {
             isShuffled = !isShuffled;
+            window.isShuffled = isShuffled;
             if (isShuffled) {
               shuffleBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
               shuffleBtn.style.color = '#fff';
@@ -5628,9 +5795,10 @@
               shuffleBtn.style.animation = 'none';
               // Restore original order
               trackOrder = [
-                'Made It', 'Nector', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
-                'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise',
-                'bliss', 'hustle', 'utopia1', 'utopia2', 'vibes'
+                'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
+                'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
+                'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe', 'Consistency', 'Like Love',
+                'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
               ];
               console.log('🔀 Shuffle OFF - Original order restored');
             }
@@ -5646,17 +5814,30 @@
           // Update play/pause button on audio events
           playerAudio.addEventListener('play', function() {
             playPauseBtn.innerHTML = '&#10073;&#10073;';
+            updateMediaSessionState('playing');
           });
           playerAudio.addEventListener('pause', function() {
             playPauseBtn.innerHTML = '&#9654;';
+            updateMediaSessionState('paused');
           });
 
-          // Track autoplay logic
+          // Track autoplay logic with three-state loop system
           playerAudio.onended = function() {
-            if (!playerAudio.loop && currentTrackIndex < trackOrder.length - 1) {
+            if (loopMode === 1) {
+              // Loop all mode - continue to next track, wrap to beginning if at end
+              currentTrackIndex = (currentTrackIndex + 1) % trackOrder.length;
+              window.currentTrackIndex = currentTrackIndex;
+              playTrack(trackOrder[currentTrackIndex]);
+              console.log('🔂 Loop ALL - Playing next track:', trackOrder[currentTrackIndex]);
+            } else if (loopMode === 0 && currentTrackIndex < trackOrder.length - 1) {
+              // Normal mode - only continue if not at last track
               currentTrackIndex++;
               playTrack(trackOrder[currentTrackIndex]);
+            } else {
+              // Track ended and no more to play
+              updateMediaSessionState('paused');
             }
+            // Loop one mode (loopMode === 2) is handled by playerAudio.loop = true
           };
 
           // Function to update like button state when track changes
@@ -5675,7 +5856,10 @@
           // Sync currentTrackIndex when playTrack is called
           window.playTrack = function(trackId) {
       var idx = trackOrder.indexOf(trackId);
-      if (idx !== -1) currentTrackIndex = idx;
+      if (idx !== -1) {
+        currentTrackIndex = idx;
+        window.currentTrackIndex = idx;
+      }
       const stickyPlayer = document.getElementById('stickyPlayer');
       const playerAudio = document.getElementById('playerAudio');
       const playerTrackTitle = document.getElementById('playerTrackTitle');
@@ -5747,6 +5931,7 @@
         // Always reload and play the track
         playerAudio.pause();
         playerAudio.src = track.url;
+        playerAudio.currentTime = 0;  // Ensure track starts from the beginning
         playerTrackTitle.textContent = track.title + ' - ' + track.artist;
         updateStickyTrackInfo(trackId);
         stickyPlayer.style.display = 'flex';
@@ -5781,6 +5966,11 @@
 
         // Set current track ID for like button functionality
         currentTrackId = trackId;
+
+        // Update Media Session for lock screen controls
+        if (typeof updateMediaSession === 'function') {
+          updateMediaSession(track.title, track.artist, track.url);
+        }
 
         // Update like button state
         if (typeof updateLikeButtonState === 'function') {
@@ -9211,6 +9401,8 @@ function showGenrePopup(genre) {
         'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
         'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
         'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+        'Ain&#39;t Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Ain\'t Shit', artist: 'Texx' },
+        'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
         'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' }
       };
 
@@ -14626,7 +14818,23 @@ function showGenrePopup(genre) {
         'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
         'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
         'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-        'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' }
+        'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+
+        // Additional tracks from homepage
+        'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+        'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+        'Consistency': { id: 'Consistency', title: 'Consistency', artist: 'StarLight', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+        'Like Love': { id: 'Like Love', title: 'Like Love', artist: 'Pyro', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+
+        // New tracks added to homepage
+        'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+        'Shootin Starz': { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Mars': { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+        'Ain&#39;t Shit': { id: 'Ain&#39;t Shit', title: 'Ain\'t Shit', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Dream': { id: 'Dream', title: 'Dream', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' }
       };
 
       // Filter tracks based on search query
@@ -14654,8 +14862,6 @@ function showGenrePopup(genre) {
                 <div style="color:#fff;font-weight:600;font-size:1.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px;">${track.title}</div>
                 <div style="color:#b3b3b3;font-size:0.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${track.artist}${track.genre ? ' • ' + track.genre : ''}</div>
               </div>
-              <div style="color:#1db954;font-size:1.4rem;margin-left:8px;opacity:0.8;transition:opacity 0.2s;"
-                   onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">▶</div>
             </div>
           `;
         });
@@ -14674,6 +14880,13 @@ function showGenrePopup(genre) {
       // Close the search popup
       if (typeof closeSearchPopup === 'function') {
         closeSearchPopup();
+      }
+
+      // Ensure track starts from the beginning by resetting audio current time
+      const playerAudio = document.getElementById('playerAudio');
+      if (playerAudio) {
+        playerAudio.currentTime = 0;
+        console.log('⏮️ Reset track to beginning for search playback');
       }
 
       // Call the existing playTrack function which handles the sticky player
@@ -15566,6 +15779,19 @@ function showGenrePopup(genre) {
     }
 
     function playNext() {
+      // Check if sticky player system is available and prefer it for sequential play
+      if (!isShuffle && window.trackOrder && window.currentTrackIndex !== undefined) {
+        const currentIndex = window.currentTrackIndex;
+        const nextIndex = (currentIndex + 1) % window.trackOrder.length;
+        console.log('🎵 Sequential playback: moving from', currentIndex, 'to', nextIndex);
+        window.currentTrackIndex = nextIndex;
+        if (window.playTrack) {
+          window.playTrack(window.trackOrder[nextIndex]);
+          return;
+        }
+      }
+
+      // Fallback to original logic
       if (isShuffle) {
         currentIndex = Math.floor(Math.random() * allTracks.length);
       } else {
@@ -15656,7 +15882,16 @@ function showGenrePopup(genre) {
       playPauseBtn.innerHTML = '&#9654;'; // Show play button when ended
       isPlaying = false;
       if (!isLoop) {
-        playNext(); // Auto-play next track if not looping
+        // Use sticky player sequential logic instead of random playlist logic
+        if (window.currentTrackIndex !== undefined && window.trackOrder) {
+          const currentIndex = window.currentTrackIndex;
+          const nextIndex = (currentIndex + 1) % window.trackOrder.length;
+          console.log('🎵 Auto-advancing from track', currentIndex, 'to', nextIndex, 'in sequential order');
+          window.currentTrackIndex = nextIndex;
+          window.playTrack(window.trackOrder[nextIndex]);
+        } else {
+          playNext(); // Fallback to original logic if sticky player isn't available
+        }
       }
     });
 
