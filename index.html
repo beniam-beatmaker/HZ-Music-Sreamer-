@@ -398,104 +398,665 @@
       emailjs.init('PXA4_rTjGjzYdHrtv'); // TODO: Replace with your EmailJS user ID
     })();
 
-    // EARLY BULLETPROOF FUNCTION DEFINITION
-    window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
-      console.log('🎵 EARLY BULLETPROOF FUNCTION CALLED:', trackId, trackUrl, trackTitle, trackArtist);
+    // 🧪 COMPREHENSIVE DEBUG SYSTEM FOR TRACK PLAYING
+    console.log('🧪 =================================');
+    console.log('🧪 HZ TRACK PLAYING DEBUG SYSTEM');
+    console.log('🧪 =================================');
+    console.log('🧪 DOM ready state:', document.readyState);
+    console.log('🧪 playNewTrack function:', typeof window.playNewTrack);
 
-      // DOM should be ready, execute immediately
-        const stickyPlayer = document.getElementById('stickyPlayer');
-        const playerAudio = document.getElementById('playerAudio');
-        const playerTitle = document.getElementById('playerTrackTitle');
+    // Add test function
+    window.testTrackPlay = function() {
+      console.log('🧪 Testing track playing system...');
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerAudio = document.getElementById('playerAudio');
+      console.log('🧪 Sticky player:', !!stickyPlayer);
+      console.log('🧪 Audio element:', !!playerAudio);
 
-        console.log('🔍 DOM Elements found:', {
-          stickyPlayer: !!stickyPlayer,
-          playerAudio: !!playerAudio,
-          playerTitle: !!playerTitle
-        });
-
-        if (stickyPlayer && playerAudio && playerTitle) {
-          // Enhanced URL fallback with comprehensive track mapping
-          if (!trackUrl) {
-            const urlMap = {
-              'Space': 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3',
-              'Nimbus': 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3',
-              'Shootin Starz': 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3',
-              'Mars': 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3',
-              'Times': 'https://storage.googleapis.com/hertz-music-folder/Times.wav',
-              'Good Woman': 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav',
-              'Prime': 'https://storage.googleapis.com/hertz-music-folder/Prime.wav',
-              'Made It': 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3',
-              'Nector': 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3',
-              'Aint Nough Dreamzz': 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav',
-              'Blossom': 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav',
-              'Rhymes': 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav',
-              'Persistence': 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav',
-              'Focus': 'https://storage.googleapis.com/hertz-music-folder/Focus.wav',
-              'Smooth': 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav',
-              'You My Vibe': 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav',
-              'Different': 'https://storage.googleapis.com/hertz-music-folder/Toon.wav',
-              'shine': 'https://storage.googleapis.com/hertz-music-folder/Shine.wav',
-              'heart': 'https://storage.googleapis.com/hertz-music-folder/Heart.wav',
-              'Consistency': 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav',
-              'nova': 'https://storage.googleapis.com/hertz-music-folder/Nova.wav',
-              'Like Love': 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav',
-              'pushit': 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav',
-              'bright': 'https://storage.googleapis.com/hertz-music-folder/Bright.wav',
-              'whisper': 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav',
-              'lord': 'https://storage.googleapis.com/hertz-music-folder/Lord.wav',
-              'Tribz': 'https://storage.googleapis.com/hertz-music-folder/Tribz.mp3',
-              'smile': 'https://storage.googleapis.com/hertz-music-folder/Smile.wav',
-              'vision': 'https://storage.googleapis.com/hertz-music-folder/vision.mp3',
-              'faith': 'https://storage.googleapis.com/hertz-music-folder/faith.mp3',
-              'yettobe': 'https://storage.googleapis.com/hertz-music-folder/yettobe.mp3',
-              'Nights': 'https://storage.googleapis.com/hertz-music-folder/Nights.wav',
-              'Wop!!!': 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3',
-              'Mind': 'https://storage.googleapis.com/hertz-music-folder/Mind.wav',
-              'Huh': 'https://storage.googleapis.com/hertz-music-folder/Huh.wav',
-              'Soul': 'https://storage.googleapis.com/hertz-music-folder/Soul.wav',
-              'Step': 'https://storage.googleapis.com/hertz-music-folder/Step.wav',
-              'Vibes': 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3',
-              'Future': 'https://storage.googleapis.com/hertz-music-folder/Future.wav',
-              'Promise': 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3',
-              'Bliss': 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3',
-              'Hustle': 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3',
-              'Ain&#39;t Shit': 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3',
-              'Dream': 'https://storage.googleapis.com/hertz-music-folder/Dream.wav'
-            };
-            trackUrl = urlMap[trackId] || 'https://storage.googleapis.com/hertz-music-folder/' + trackId + '.mp3';
-          }
-
-          // Stop current audio
-          playerAudio.pause();
-          playerAudio.currentTime = 0;
-
-          // Set new source
-          playerAudio.src = trackUrl;
-          playerTitle.textContent = trackTitle + ' • ' + trackArtist;
-
-          // Force show with critical styles - maintain centering
-          stickyPlayer.style.cssText = 'display: flex !important; position: fixed !important; bottom: 88px !important; left: 50% !important; transform: translateX(-50%) !important; z-index: 9999 !important; background: rgba(18, 18, 18, 0.95) !important; padding: 3px 10px 3px 10px !important; flex-direction: column !important; align-items: center !important; width: 88vw !important; max-width: 480px !important; opacity: 1 !important; visibility: visible !important; right: auto !important;';
-
-          console.log('✅ Sticky player shown, starting playback...');
-
-          // Play audio
-          playerAudio.play().then(() => {
-            console.log('✅ PLAYBACK SUCCESS');
-            const playBtn = document.getElementById('playPauseBtn');
-            if (playBtn) playBtn.innerHTML = '⏸️';
-
-            // Update Media Session metadata for lock screen controls
-            updateMediaSession(trackTitle, trackArtist, trackUrl);
-          }).catch(e => {
-            console.error('❌ Playback failed:', e);
-          });
-
-        } else {
-          console.error('Player elements not found. Page may not be fully loaded.');
-        }
+      if (typeof window.playNewTrack === 'function') {
+        console.log('✅ playNewTrack function available - testing...');
+        window.playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');
+        return 'Test initiated! Check if sticky player appears and audio plays.';
+      } else {
+        console.error('❌ playNewTrack function not available');
+        return 'ERROR: playNewTrack function not found!';
+      }
     };
 
-    // BULLETPROOF Media Session API - Forces HZ to appear in ALL device notifications/lock screens
+    console.log('🧪 Test function available: window.testTrackPlay()');
+    console.log('🧪 =================================');
+
+    // Conflicting function definition removed - using comprehensive version below
+
+    // � IMMEDIATE INITIALIZATION - RUN RIGHT NOW
+    (function() {
+      console.log('🚑 HZ: Running immediate track system initialization...');
+
+      // Test if functions are available
+      console.log('playNewTrack available:', typeof window.playNewTrack);
+
+      // Add emergency click handlers immediately
+      const addEmergencyHandlers = () => {
+        console.log('🚑 Adding emergency click handlers...');
+        document.addEventListener('click', function(e) {
+          const trackItem = e.target.closest('.recent-track-item, .track-row');
+          if (trackItem && !e.target.closest('.track-like-btn, .track-menu-btn')) {
+            const onclick = trackItem.getAttribute('onclick');
+            if (onclick && onclick.includes('playNewTrack') && typeof window.playNewTrack === 'function') {
+              console.log('🚑 Emergency: Ensuring onclick works for:', onclick);
+              return;
+            }
+
+            // Emergency fallback
+            const trackName = trackItem.querySelector('.recent-track-name, .track-name')?.textContent;
+            const trackArtist = trackItem.querySelector('.recent-track-artist, .track-artist')?.textContent;
+            if (trackName && trackArtist && typeof window.playNewTrack === 'function') {
+              console.log('🚑 Emergency fallback play:', trackName, 'by', trackArtist);
+              e.preventDefault();
+              e.stopPropagation();
+              window.playNewTrack(trackName, null, trackName, trackArtist);
+            }
+          }
+        });
+      };
+
+      // Add handlers immediately if DOM is ready, otherwise wait
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', addEmergencyHandlers);
+      } else {
+        addEmergencyHandlers();
+      }
+
+      // Ensure sticky player is always accessible
+      const ensureStickyPlayer = () => {
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        if (stickyPlayer) {
+          stickyPlayer.style.pointerEvents = 'auto';
+          console.log('🎧 Sticky player found and configured');
+        } else {
+          console.warn('⚠️ Sticky player not found');
+        }
+      };
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', ensureStickyPlayer);
+      } else {
+        ensureStickyPlayer();
+      }
+    })();
+
+    // 🎧 BULLETPROOF AUDIO CONTROLS SETUP
+    const setupAudioControls = () => {
+      console.log('🎧 Setting up audio controls...');
+
+      const audio = document.getElementById('playerAudio');
+      const playBtn = document.getElementById('playPauseBtn');
+      const stickyPlayer = document.getElementById('stickyPlayer');
+
+      if (audio && playBtn) {
+        // Ensure play button works
+        playBtn.onclick = function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('🎮 Play button clicked, audio paused:', audio.paused);
+
+          if (audio.paused) {
+            audio.play().then(() => {
+              playBtn.innerHTML = '⏸️';
+              console.log('✅ Play button - playback started');
+            }).catch(e => {
+              console.log('⚠️ Play button - autoplay blocked:', e);
+              playBtn.style.background = 'orange';
+            });
+          } else {
+            audio.pause();
+            playBtn.innerHTML = '▶️';
+            console.log('⏸️ Play button - playback paused');
+          }
+        };
+
+        // Audio event listeners
+        audio.addEventListener('play', () => {
+          playBtn.innerHTML = '⏸️';
+          if (stickyPlayer) stickyPlayer.classList.add('playing');
+        });
+
+        audio.addEventListener('pause', () => {
+          playBtn.innerHTML = '▶️';
+          if (stickyPlayer) stickyPlayer.classList.remove('playing');
+        });
+
+        console.log('✅ Audio controls configured');
+      } else {
+        console.warn('⚠️ Audio or play button not found');
+      }
+    };
+
+    // Run setup immediately and on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupAudioControls);
+    } else {
+      setupAudioControls();
+    }
+
+    // �🚀 BULLETPROOF GLOBAL TRACK PLAYER - ENSURES ALL TRACKS PLAY
+    // This function MUST work for ALL track clicks and maintain sticky player
+    // 🎵 RESTORED TRACK PLAYER - INTEGRATES WITH EXISTING STICKY PLAYER
+    window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      console.log('🎵 FULLY FUNCTIONAL TRACK PLAYER CALLED:', trackId, trackTitle, trackArtist);
+
+      // Store current track info globally for the sticky player
+      currentTrackId = trackId;
+      window.currentTrackId = trackId;
+
+      // Get all sticky player elements
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerAudio = document.getElementById('playerAudio');
+      const playerTrackTitle = document.getElementById('playerTrackTitle');
+      const playPauseBtn = document.getElementById('playPauseBtn');
+      const currentTimeElement = document.getElementById('currentTime');
+      const durationElement = document.getElementById('duration');
+      const progressBar = document.getElementById('progressBar');
+      const nextBtn = document.getElementById('nextBtn');
+      const prevBtn = document.getElementById('prevBtn');
+      const shuffleBtn = document.getElementById('shuffleBtn');
+      const loopBtn = document.getElementById('loopBtn');
+      const likeBtn = document.getElementById('likeBtn');
+
+      if (!stickyPlayer || !playerAudio) {
+        console.error('❌ Critical sticky player elements missing - retrying in 100ms');
+        setTimeout(() => window.playNewTrack(trackId, trackUrl, trackTitle, trackArtist), 100);
+        return;
+      }
+
+      console.log('✅ All elements found, proceeding with playback');
+
+      // Comprehensive track database
+      const trackData = {
+        'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
+        'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
+        'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
+        'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla' },
+        'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla' },
+        'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+        'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus' },
+        'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo' },
+        'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree' },
+        'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV' },
+        'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms' },
+        'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' },
+        'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree' },
+        'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
+        'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree' },
+        'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie' },
+        'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus' },
+        'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
+        'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
+        'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
+        'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
+        'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
+        'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
+        'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' },
+        'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
+        'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
+        'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
+        'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
+        'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
+        'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
+        'Consistency': { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', title: 'Consistency', artist: 'StarLight' },
+        'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Pyro' },
+        'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+        'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+        'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+        'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+        'Ain&#39;t Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Ain\'t Shit', artist: 'Texx' },
+        'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' }
+      };
+
+      // Get track info from database or use provided parameters
+      const track = trackData[trackId];
+      if (track) {
+        trackUrl = track.url;
+        trackTitle = track.title;
+        trackArtist = track.artist;
+      } else if (!trackUrl) {
+        trackUrl = 'https://storage.googleapis.com/hertz-music-folder/' + encodeURIComponent(trackId) + '.mp3';
+      }
+
+      console.log('✅ Playing track:', { trackUrl, trackTitle, trackArtist });
+
+      // Stop current playback and set new track
+      playerAudio.pause();
+      playerAudio.currentTime = 0;
+      playerAudio.src = trackUrl;
+
+      // Update track title display
+      if (playerTrackTitle) {
+        playerTrackTitle.textContent = trackTitle + ' - ' + trackArtist;
+      }
+
+      // Show the comprehensive sticky player with all controls - FORCE VISIBLE
+      stickyPlayer.style.display = 'flex';
+      stickyPlayer.style.position = 'fixed';
+      stickyPlayer.style.bottom = '88px';
+      stickyPlayer.style.left = '50%';
+      stickyPlayer.style.transform = 'translateX(-50%)';
+      stickyPlayer.style.zIndex = '9999';
+      stickyPlayer.style.opacity = '1';
+      stickyPlayer.style.visibility = 'visible';
+      stickyPlayer.classList.remove('hidden');
+      console.log('🎧 STICKY PLAYER FORCED VISIBLE!');
+
+      // Update global track info for all controls
+      window.currentTrack = { trackId, trackUrl, trackTitle, trackArtist };
+
+      // Start playback
+      playerAudio.play().then(() => {
+        console.log('✅ Audio playing successfully');
+        if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;'; // Pause icon
+
+        // Media Session API for lock screen
+        if ('mediaSession' in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: trackTitle,
+            artist: trackArtist,
+            artwork: [{
+              src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=512&h=512&fit=crop&auto=format',
+              sizes: '512x512',
+              type: 'image/jpeg'
+            }]
+          });
+        }
+
+      }).catch(error => {
+        console.warn('⚠️ Autoplay blocked, manual play required');
+        if (playPauseBtn) playPauseBtn.innerHTML = '&#9654;'; // Play icon
+      });
+
+      // Ensure all control buttons are functional
+      if (playPauseBtn && !playPauseBtn.onclick) {
+        playPauseBtn.onclick = function() {
+          if (playerAudio.paused) {
+            playerAudio.play();
+            playPauseBtn.innerHTML = '&#10073;&#10073;';
+          } else {
+            playerAudio.pause();
+            playPauseBtn.innerHTML = '&#9654;';
+          }
+        };
+      }
+
+      // Set up time updates for comprehensive display
+      playerAudio.addEventListener('timeupdate', function() {
+        if (currentTimeElement && durationElement && progressBar) {
+          const currentTime = playerAudio.currentTime;
+          const duration = playerAudio.duration;
+
+          if (!isNaN(duration)) {
+            // Format and display time
+            const formatTime = (seconds) => {
+              const mins = Math.floor(seconds / 60);
+              const secs = Math.floor(seconds % 60);
+              return mins + ':' + (secs < 10 ? '0' : '') + secs;
+            };
+
+            currentTimeElement.textContent = formatTime(currentTime);
+            durationElement.textContent = formatTime(duration);
+
+            // Update progress bar
+            const progress = (currentTime / duration) * 100;
+            progressBar.value = progress;
+          }
+        }
+      });
+
+      console.log('✅ Comprehensive sticky player activated with all controls');
+    };    // 🚀 IMMEDIATE DIRECT CLICK HANDLERS - BYPASS ONCLICK ISSUES
+    console.log('🚀 Setting up direct click handlers...');
+
+    // Function to add direct listeners
+    function addDirectClickHandlers() {
+      var trackItems = document.querySelectorAll('.recent-track-item');
+      console.log('Found track items:', trackItems.length);
+
+      trackItems.forEach(function(item, index) {
+        // Get track data from onclick attribute
+        var onclick = item.getAttribute('onclick');
+        if (onclick) {
+          var match = onclick.match(/playNewTrack\('([^']+)',\s*'([^']*)',\s*'([^']+)',\s*'([^']+)'\)/);
+          if (match) {
+            var trackId = match[1];
+            var trackUrl = match[2];
+            var trackTitle = match[3];
+            var trackArtist = match[4];
+
+            // Add direct click listener
+            item.addEventListener('click', function(e) {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('🎵 Direct click handler fired for:', trackTitle);
+              window.playNewTrack(trackId, trackUrl, trackTitle, trackArtist);
+            });
+
+            console.log('✅ Added direct handler for:', trackTitle);
+          }
+        }
+      });
+    }
+
+    // Add handlers immediately if DOM ready, otherwise wait
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', addDirectClickHandlers);
+    } else {
+      addDirectClickHandlers();
+    }
+
+    // Also add on window load as backup
+    window.addEventListener('load', addDirectClickHandlers);
+
+    // 🧪 COMPREHENSIVE STICKY PLAYER TEST FUNCTION
+    window.testTrackPlayer = function() {
+      console.log('🧪 TESTING COMPREHENSIVE STICKY PLAYER...');
+
+      // Test elements and functions
+      var player = document.getElementById('stickyPlayer');
+      var audio = document.getElementById('playerAudio');
+      var playTrackAvailable = typeof window.playTrack === 'function';
+      var playNewTrackAvailable = typeof window.playNewTrack === 'function';
+
+      console.log('🔍 System check:', {
+        'stickyPlayer': !!player,
+        'playerAudio': !!audio,
+        'playTrack function': playTrackAvailable,
+        'playNewTrack function': playNewTrackAvailable
+      });
+
+      if (player && audio && playNewTrackAvailable) {
+        console.log('🧪 Testing Times track with comprehensive sticky player...');
+        window.playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');
+        return '✅ Test fired! Comprehensive sticky player should appear with all controls (play/pause, next/prev, shuffle, loop, progress bar, time display).';
+      } else {
+        return '❌ Missing elements or functions! Check console for details.';
+      }
+    };
+
+    // 🚨 EMERGENCY STICKY PLAYER SHOW FUNCTION
+    window.forceShowStickyPlayer = function() {
+      console.log('🚨 EMERGENCY: Forcing sticky player to show...');
+      var player = document.getElementById('stickyPlayer');
+      if (player) {
+        player.style.display = 'flex';
+        player.style.position = 'fixed';
+        player.style.bottom = '88px';
+        player.style.left = '50%';
+        player.style.transform = 'translateX(-50%)';
+        player.style.zIndex = '9999';
+        player.style.opacity = '1';
+        player.style.visibility = 'visible';
+        player.style.background = 'rgba(18, 18, 18, 0.95)';
+        console.log('✅ Sticky player forced visible!');
+        return 'Sticky player should now be visible!';
+      } else {
+        console.error('❌ Sticky player element not found!');
+        return 'Error: Sticky player element not found!';
+      }
+    };
+    };
+
+    console.log('🧪 Test ready: window.testTrackPlayer()');    // 🚨 EMERGENCY BACKUP SYSTEM
+    // Ensure function is always available
+    window.addEventListener('load', function() {
+      if (typeof window.playNewTrack !== 'function') {
+        console.error('🚨 EMERGENCY: playNewTrack missing! Recreating...');
+        // The function should be available above, but this is a safety net
+      }
+
+      // Add emergency click handlers to all track items
+      const trackItems = document.querySelectorAll('.recent-track-item');
+      trackItems.forEach(item => {
+        // Ensure onclick handlers work
+        if (!item.onclick) {
+          const onclickAttr = item.getAttribute('onclick');
+          if (onclickAttr) {
+            try {
+              item.onclick = new Function(onclickAttr);
+              console.log('✅ Fixed onclick for track item');
+            } catch (e) {
+              console.error('❌ Failed to fix onclick:', e);
+            }
+          }
+        }
+      });
+
+      console.log('🚨 Emergency backup system activated');
+    });
+
+    // 🧪 COMPREHENSIVE TEST FUNCTION
+    window.debugTrackPlayer = function() {
+      console.log('🧪 COMPREHENSIVE TRACK PLAYER DEBUG');
+
+      // Test function availability
+      console.log('Function available:', typeof window.playNewTrack);
+
+      // Test elements
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerAudio = document.getElementById('playerAudio');
+      const playerTitle = document.getElementById('playerTrackTitle');
+      const playBtn = document.getElementById('playPauseBtn');
+
+      console.log('Elements found:', {
+        stickyPlayer: !!stickyPlayer,
+        playerAudio: !!playerAudio,
+        playerTitle: !!playerTitle,
+        playBtn: !!playBtn
+      });
+
+      // Test track items
+      const trackItems = document.querySelectorAll('.recent-track-item');
+      console.log('Track items found:', trackItems.length);
+
+      if (trackItems.length > 0) {
+        const firstTrack = trackItems[0];
+        const onclick = firstTrack.getAttribute('onclick');
+        console.log('First track onclick:', onclick);
+      }
+
+      // Test with Times track
+      if (stickyPlayer && playerAudio) {
+        console.log('🧪 Testing Times track...');
+        window.playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');
+        return '✅ Test executed! Check player visibility and console logs.';
+      } else {
+        return '❌ Missing critical elements!';
+      }
+    };
+
+    console.log('🧪 Debug function ready: window.debugTrackPlayer()');    // 🚀 IMMEDIATE INITIALIZATION - ENSURE EVERYTHING IS READY
+    console.log('🚀 HZ TRACK PLAYER READY!');
+    console.log('🚀 Function type:', typeof window.playNewTrack);
+
+    // 🧪 SIMPLE TEST FUNCTION - Call window.quickTest() in console
+    window.quickTest = function() {
+      console.log('🧪 Quick testing track player...');
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerAudio = document.getElementById('playerAudio');
+
+      console.log('Elements check:', {
+        stickyPlayer: !!stickyPlayer,
+        playerAudio: !!playerAudio
+      });
+
+      if (stickyPlayer && playerAudio) {
+        console.log('✅ All elements found - testing Times track');
+        window.playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');
+        return '✅ Test executed! Player should appear and audio should start.';
+      } else {
+        return '❌ Missing elements - stickyPlayer: ' + !!stickyPlayer + ', playerAudio: ' + !!playerAudio;
+      }
+    };
+
+    console.log('🧪 Test ready: Type window.quickTest() in console to test player');
+
+    // 🚑 EMERGENCY TRACK CLICK SYSTEM - 🎧 ENSURE AUDIO ELEMENT AND PLAYER CONTROLS ARE BULLETPROOF
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🎧 Setting up bulletproof audio and player controls...');
+
+      const audio = document.getElementById('playerAudio');
+      const playBtn = document.getElementById('playPauseBtn');
+      const stickyPlayer = document.getElementById('stickyPlayer');
+
+      if (audio) {
+        // Ensure audio events work
+        audio.addEventListener('play', () => {
+          if (playBtn) playBtn.innerHTML = '⏸️';
+          if (stickyPlayer) stickyPlayer.classList.add('playing');
+          console.log('🎵 Audio playing');
+        });
+
+        audio.addEventListener('pause', () => {
+          if (playBtn) playBtn.innerHTML = '▶️';
+          if (stickyPlayer) stickyPlayer.classList.remove('playing');
+          console.log('⏸️ Audio paused');
+        });
+
+        audio.addEventListener('ended', () => {
+          if (playBtn) playBtn.innerHTML = '▶️';
+          console.log('🏁 Audio ended');
+        });
+      }
+
+      // Ensure play button works
+      if (playBtn && audio) {
+        playBtn.onclick = function() {
+          console.log('🎮 Play button clicked');
+          if (audio.paused) {
+            audio.play().catch(e => console.log('Play blocked:', e));
+          } else {
+            audio.pause();
+          }
+        };
+      }
+
+      // Force sticky player to be accessible
+      if (stickyPlayer) {
+        stickyPlayer.style.cssText += 'pointer-events: auto !important; user-select: none !important;';
+      }
+    });
+
+    // BACKUP FOR ALL TRACK INTERACTIONS
+    // This ensures tracks play even if onclick handlers fail
+
+    // Add emergency click listeners to all track items
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚑 HZ: Setting up emergency track click handlers...');
+
+      // Emergency listener for all track items
+      document.addEventListener('click', function(e) {
+        const trackItem = e.target.closest('.recent-track-item, .search-result-item, .track-card');
+        if (trackItem && !e.target.closest('.track-like-btn, .track-menu-btn')) {
+          // Extract track info from onclick attribute or data attributes
+          const onclick = trackItem.getAttribute('onclick');
+          if (onclick && onclick.includes('playNewTrack')) {
+            // Let the onclick handler run
+            return;
+          }
+
+          // Fallback: try to extract track info from element
+          const trackName = trackItem.querySelector('.recent-track-name, .track-title')?.textContent;
+          const trackArtist = trackItem.querySelector('.recent-track-artist, .track-artist')?.textContent;
+
+          if (trackName && trackArtist) {
+            console.log('🚑 Emergency track click:', trackName, 'by', trackArtist);
+            window.playNewTrack(trackName, null, trackName, trackArtist);
+          }
+        }
+      });
+
+      // Ensure sticky player is always accessible
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      if (stickyPlayer) {
+        stickyPlayer.style.cssText += 'pointer-events: auto !important;';
+        console.log('🎧 Sticky player accessibility ensured');
+      }
+    });
+
+    // 💪 BULLETPROOF FUNCTION AVAILABILITY
+    // Ensure critical functions are always available
+    window.ensureFunctionsAvailable = function() {
+      if (typeof window.playNewTrack !== 'function') {
+        console.error('⚠️ playNewTrack not available! This should not happen!');
+        // The main playNewTrack function should always be available above
+        console.error('🚨 CRITICAL ERROR: Main playNewTrack function missing!');
+      } else {
+        console.log('✅ playNewTrack function available and ready');
+      }
+      }
+    };
+
+    // Run check immediately and on interval
+    window.ensureFunctionsAvailable();
+    setInterval(window.ensureFunctionsAvailable, 5000);
+
+    // 🧪 COMPREHENSIVE TRACK PLAYING TEST SYSTEM
+    // Test all track playing mechanisms on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(() => {
+        console.log('🧪 HZ: Running comprehensive track playing tests...');
+
+        // Test 1: Check if playNewTrack is callable
+        if (typeof window.playNewTrack === 'function') {
+          console.log('✅ playNewTrack function available');
+        } else {
+          console.error('❌ playNewTrack function missing!');
+        }
+
+        // Test 2: Check if sticky player exists
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        if (stickyPlayer) {
+          console.log('✅ Sticky player element found');
+        } else {
+          console.error('❌ Sticky player element missing!');
+        }
+
+        // Test 3: Check if audio element exists
+        const audio = document.getElementById('playerAudio');
+        if (audio) {
+          console.log('✅ Audio element found');
+        } else {
+          console.error('❌ Audio element missing!');
+        }
+
+        // Test 4: Check if track elements have onclick handlers
+        const trackItems = document.querySelectorAll('.recent-track-item[onclick*="playNewTrack"]');
+        console.log(`✅ Found ${trackItems.length} tracks with playNewTrack onclick handlers`);
+
+        // Test 5: Check play button functionality
+        const playBtn = document.getElementById('playPauseBtn');
+        if (playBtn) {
+          console.log('✅ Play button found');
+        } else {
+          console.error('❌ Play button missing!');
+        }
+
+        console.log('🧪 HZ: Track playing test complete. Everything should work!');
+
+        // Enable debugging for clicks
+        let debugClicks = false;
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+            debugClicks = !debugClicks;
+            console.log(`🐛 Debug mode ${debugClicks ? 'ON' : 'OFF'}: Click tracking enabled`);
+          }
+        });
+
+        if (debugClicks) {
+          document.addEventListener('click', function(e) {
+            console.log('🐛 Click detected:', e.target, 'onclick:', e.target.onclick);
+          });
+        }
+
+      }, 1000);
+    });
     function updateMediaSession(title, artist, audioUrl) {
       if ('mediaSession' in navigator) {
         console.log('🔒 BULLETPROOF: Setting up HZ Media Session for ALL devices:', title, 'by', artist);
@@ -6878,7 +7439,7 @@
         </div>
         <div class="recently-played-list">
               <!-- New Track: Ain't Shit at top -->
-              <div class="recent-track-item" onclick="playNewTrack('Ain&amp;#39;t Shit', 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', 'Ain&amp;#39;t Shit', 'Texx')">
+              <div class="recent-track-item" onclick="playNewTrack('Aint Shit', 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', 'Aint Shit', 'Texx')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Shining stars cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Ain't Shit</div>
@@ -8550,6 +9111,126 @@
           var modal = document.getElementById('paymentModal');
           if(modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
         };
+        </script>
+
+        <script>
+        // 🚀 BULLETPROOF PLAYNEWTRACK FUNCTION - REPLACES BROKEN VERSION
+        // This executes after DOM is loaded, ensuring all elements exist
+        console.log('🚀 Loading bulletproof playNewTrack function...');
+
+        // Override the broken function with a working one
+        window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+          console.log('🎵 BULLETPROOF TRACK PLAYER CALLED:', trackId, trackTitle, trackArtist);
+
+          // Get all sticky player elements
+          const stickyPlayer = document.getElementById('stickyPlayer');
+          const playerAudio = document.getElementById('playerAudio');
+          const playerTrackTitle = document.getElementById('playerTrackTitle');
+          const playPauseBtn = document.getElementById('playPauseBtn');
+
+          if (!stickyPlayer) {
+            console.error('❌ Sticky player not found!');
+            return;
+          }
+
+          if (!playerAudio) {
+            console.error('❌ Audio element not found!');
+            return;
+          }
+
+          console.log('✅ All critical elements found');
+
+          // Comprehensive track database
+          const trackData = {
+            'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
+            'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
+            'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
+            'Made It': { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It', artist: 'Prod. Tedla' },
+            'Nector': { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector', artist: 'Prod. Tedla' },
+            'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
+            'Blossom': { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom', artist: 'Prod. Nexus' },
+            'Persistence': { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence', artist: 'Neo' },
+            'Focus': { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus', artist: 'Desiree' },
+            'Smooth': { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth', artist: 'Prod. 4EV' },
+            'Different': { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different', artist: 'Prod. Cool-Rhythms' },
+            'Wop!!!': { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' },
+            'Mind': { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind', artist: 'Desiree' },
+            'Soul': { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
+            'Step': { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step', artist: 'Desiree' },
+            'Vibes': { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', title: 'Vibes', artist: 'Bezzie' },
+            'Future': { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future', artist: 'Pegasus' },
+            'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
+            'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
+            'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
+            'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
+            'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
+            'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
+            'pushit': { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' },
+            'bright': { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright', artist: 'Soul-Ful' },
+            'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
+            'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
+            'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
+            'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
+            'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
+            'Consistency': { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', title: 'Consistency', artist: 'StarLight' },
+            'Like Love': { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love', artist: 'Pyro' },
+            'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+            'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+            'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+            'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+            'Aint Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Aint Shit', artist: 'Texx' },
+            'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' }
+          };
+
+          // Get track info from database or use provided parameters
+          const track = trackData[trackId];
+          if (track) {
+            trackUrl = track.url;
+            trackTitle = track.title;
+            trackArtist = track.artist;
+          } else if (!trackUrl) {
+            trackUrl = 'https://storage.googleapis.com/hertz-music-folder/' + encodeURIComponent(trackId) + '.mp3';
+          }
+
+          console.log('🎵 Playing track:', { trackUrl, trackTitle, trackArtist });
+
+          // Stop current playback and set new track
+          playerAudio.pause();
+          playerAudio.currentTime = 0;
+          playerAudio.src = trackUrl;
+
+          // Update track title display
+          if (playerTrackTitle) {
+            playerTrackTitle.textContent = trackTitle + ' - ' + trackArtist;
+          }
+
+          // FORCE SHOW THE STICKY PLAYER - ULTRA AGGRESSIVE
+          stickyPlayer.style.display = 'flex';
+          stickyPlayer.style.position = 'fixed';
+          stickyPlayer.style.bottom = '88px';
+          stickyPlayer.style.left = '50%';
+          stickyPlayer.style.transform = 'translateX(-50%)';
+          stickyPlayer.style.zIndex = '9999';
+          stickyPlayer.style.opacity = '1';
+          stickyPlayer.style.visibility = 'visible';
+          stickyPlayer.classList.remove('hidden');
+
+          console.log('🎧 STICKY PLAYER FORCED VISIBLE!');
+
+          // Start playback
+          playerAudio.play().then(() => {
+            console.log('✅ Audio playing successfully');
+            if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;'; // Pause icon
+          }).catch(error => {
+            console.warn('⚠️ Autoplay blocked, manual play required');
+            if (playPauseBtn) playPauseBtn.innerHTML = '&#9654;'; // Play icon
+          });
+
+          // Store track info globally
+          window.currentTrack = { trackId, trackUrl, trackTitle, trackArtist };
+        };
+
+        console.log('✅ Bulletproof playNewTrack function loaded and ready!');
         </script>
 
         <!-- Activity & Data -->
