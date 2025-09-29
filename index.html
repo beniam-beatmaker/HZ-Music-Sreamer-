@@ -418,26 +418,25 @@
           const getOptimizedMetadata = () => {
             if (deviceInfo.isIOS) {
               return {
-                title: 'HZ Music Streamer',
-                artist: 'Ready to Stream • HZ',
-                album: 'HZ Music Platform'
+                title: 'HZ Music',
+                artist: 'Music Streaming App',
+                album: 'HZ'
               };
             } else if (deviceInfo.isAndroid) {
+              // ANDROID SPECIFIC: Match Spotify's exact notification format
               return {
-                title: 'HZ Music Streamer',
-                artist: 'Tap to Play • HZ',
-                album: 'HZ Music'
+                title: 'HZ Music',
+                artist: 'Music & Audio',
+                album: 'HZ'
               };
             } else {
               return {
-                title: 'HZ Music Streamer',
-                artist: 'Desktop Media Player • HZ',
-                album: 'HZ Streaming Platform'
+                title: 'HZ Music Player',
+                artist: 'Desktop Streaming',
+                album: 'HZ Platform'
               };
             }
-          };
-
-          const metadata = getOptimizedMetadata();
+          };          const metadata = getOptimizedMetadata();
 
           // Ultra-high quality artwork for ALL screen densities
           const artworkSizes = [48, 64, 80, 96, 128, 144, 192, 256, 320, 384, 512, 640, 1024, 1280];
@@ -456,45 +455,155 @@
           // Step 2: BULLETPROOF activation using multiple simultaneous methods
           const activationPromises = [];
 
-          // Method A: Silent Audio Activation (Critical for mobile devices)
-          if (deviceInfo.isMobile) {
-            const silentActivation = new Promise((resolve) => {
-              console.log('📱 BULLETPROOF: Attempting silent audio activation for mobile...');
+          // Method 0: ANDROID INSTANT OVERLAY (Captures first pixel touch)
+          if (deviceInfo.isAndroid) {
+            console.log('🤖 ANDROID INSTANT: Creating invisible activation overlay...');
 
-              // Use longer, more reliable silent audio
-              const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
-              silentAudio.volume = 0.02; // Barely audible but detectable by system
-              silentAudio.preload = 'auto';
+            // Create invisible overlay that captures ANY touch instantly
+            const androidOverlay = document.createElement('div');
+            androidOverlay.style.cssText = `
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100vw;
+              height: 100vh;
+              z-index: 999999;
+              background: transparent;
+              pointer-events: auto;
+            `;
 
-              const attemptPlay = () => {
-                silentAudio.play().then(() => {
-                  console.log('🎵 BULLETPROOF: Silent audio started successfully');
+            let overlayActivated = false;
+            androidOverlay.addEventListener('touchstart', () => {
+              if (!overlayActivated) {
+                overlayActivated = true;
+                console.log('🤖 ANDROID INSTANT: First touch captured - activating HZ NOW!');
+
+                // Remove overlay immediately
+                androidOverlay.remove();
+
+                // Instant Android activation
+                const instantAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTMH0fPTgjEG');
+                instantAudio.volume = 0.08;
+
+                instantAudio.play().then(() => {
+                  navigator.mediaSession.playbackState = 'playing';
                   setTimeout(() => {
-                    silentAudio.pause();
-                    silentAudio.currentTime = 0;
+                    instantAudio.pause();
                     navigator.mediaSession.playbackState = 'paused';
-                    console.log('✅ BULLETPROOF: Mobile media session ACTIVATED via silent audio');
-                    resolve(true);
-                  }, 150);
+                    console.log('✅ ANDROID INSTANT: HZ activated and visible in notifications!');
+                  }, 250);
                 }).catch(() => {
-                  console.log('⚠️ Silent audio blocked - will activate on user interaction');
-                  resolve(false);
+                  navigator.mediaSession.playbackState = 'paused';
+                  console.log('✅ ANDROID INSTANT: Fallback activation completed');
                 });
-              };
-
-              // Multiple attempts to play silent audio
-              if (silentAudio.readyState >= 2) {
-                attemptPlay();
-              } else {
-                silentAudio.addEventListener('canplay', attemptPlay, { once: true });
-                silentAudio.addEventListener('loadeddata', attemptPlay, { once: true });
-                setTimeout(() => resolve(false), 1500); // Timeout fallback
               }
-            });
-            activationPromises.push(silentActivation);
+            }, { passive: false, once: true });
+
+            document.body.appendChild(androidOverlay);
+
+            // Auto-remove overlay after 10 seconds
+            setTimeout(() => {
+              if (androidOverlay.parentNode) {
+                androidOverlay.remove();
+              }
+            }, 10000);
           }
 
-          // Method B: Aggressive State Cycling (Works on desktop and some mobile)
+          // Method A: ANDROID ULTRA-AGGRESSIVE Activation (Spotify-level instant appearance)
+          if (deviceInfo.isMobile) {
+            const androidUltraActivation = new Promise((resolve) => {
+              if (deviceInfo.isAndroid) {
+                console.log('🤖 ANDROID ULTRA: Implementing Spotify-level instant activation...');
+
+                // ANDROID SPECIFIC: Use louder "silent" audio that Android actually detects
+                const androidAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+                androidAudio.volume = 0.1; // Android needs higher volume to register
+                androidAudio.preload = 'auto';
+                androidAudio.crossOrigin = 'anonymous';
+
+                // INSTANT user interaction capture for Android
+                let androidActivated = false;
+                const instantAndroidActivation = () => {
+                  if (!androidActivated) {
+                    androidActivated = true;
+                    console.log('🤖 ANDROID: User touched - activating immediately!');
+
+                    androidAudio.play().then(() => {
+                      console.log('🤖 ANDROID: Audio playing - forcing media session registration');
+
+                      // Android-specific forced state sequence
+                      navigator.mediaSession.playbackState = 'playing';
+                      setTimeout(() => {
+                        androidAudio.pause();
+                        androidAudio.currentTime = 0;
+                        navigator.mediaSession.playbackState = 'paused';
+
+                        // Force Android to show HZ in notification
+                        setTimeout(() => {
+                          navigator.mediaSession.playbackState = 'playing';
+                          setTimeout(() => {
+                            navigator.mediaSession.playbackState = 'paused';
+                            console.log('✅ ANDROID ULTRA: HZ now VISIBLE in Android notifications!');
+                            resolve(true);
+                          }, 100);
+                        }, 100);
+                      }, 200);
+                    }).catch(() => {
+                      console.log('🤖 ANDROID: Backup activation method');
+                      navigator.mediaSession.playbackState = 'paused';
+                      resolve(false);
+                    });
+                  }
+                };
+
+                // INSTANT capture - multiple Android interaction events
+                ['touchstart', 'touchend', 'click', 'pointerdown', 'mousedown', 'scroll'].forEach(event => {
+                  document.addEventListener(event, instantAndroidActivation, { once: true, passive: true });
+                });
+
+                // Try immediate activation (works if autoplay allowed)
+                const tryImmediateAndroid = () => {
+                  androidAudio.play().then(() => {
+                    console.log('🤖 ANDROID: Immediate activation SUCCESS!');
+                    setTimeout(() => {
+                      androidAudio.pause();
+                      navigator.mediaSession.playbackState = 'paused';
+                      resolve(true);
+                    }, 200);
+                  }).catch(() => {
+                    console.log('🤖 ANDROID: Waiting for user interaction...');
+                  });
+                };
+
+                if (androidAudio.readyState >= 2) {
+                  tryImmediateAndroid();
+                } else {
+                  androidAudio.addEventListener('canplay', tryImmediateAndroid, { once: true });
+                }
+
+                // Timeout for Android activation
+                setTimeout(() => {
+                  if (!androidActivated) resolve(false);
+                }, 8000);
+
+              } else {
+                // iOS fallback - lighter activation
+                console.log('📱 iOS: Attempting gentle activation...');
+                const iosAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+                iosAudio.volume = 0.01;
+
+                iosAudio.play().then(() => {
+                  setTimeout(() => {
+                    iosAudio.pause();
+                    navigator.mediaSession.playbackState = 'paused';
+                    console.log('✅ iOS: Media session activated');
+                    resolve(true);
+                  }, 100);
+                }).catch(() => resolve(false));
+              }
+            });
+            activationPromises.push(androidUltraActivation);
+          }          // Method B: Aggressive State Cycling (Works on desktop and some mobile)
           const stateActivation = new Promise((resolve) => {
             console.log('💻 BULLETPROOF: Attempting state cycling activation...');
 
@@ -520,32 +629,74 @@
           });
           activationPromises.push(stateActivation);
 
-          // Method C: Interaction-Based Activation (Guaranteed fallback)
+          // Method C: ANDROID PRIORITY Interaction Activation (Instant capture)
           const interactionActivation = new Promise((resolve) => {
-            console.log('👆 BULLETPROOF: Setting up interaction-based activation...');
+            console.log('👆 ANDROID PRIORITY: Setting up instant interaction capture...');
 
             let activated = false;
-            const activateOnInteraction = () => {
+            const activateOnInteraction = (event) => {
               if (!activated) {
                 activated = true;
-                navigator.mediaSession.playbackState = 'playing';
-                setTimeout(() => {
-                  navigator.mediaSession.playbackState = 'paused';
-                  console.log('✅ BULLETPROOF: Interaction activation COMPLETED');
-                  resolve(true);
-                }, 50);
+                console.log(`🤖 ANDROID: Captured ${event.type} - activating HZ media session!`);
+
+                if (deviceInfo.isAndroid) {
+                  // Android requires more aggressive activation with actual audio
+                  const androidActivationAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+                  androidActivationAudio.volume = 0.05; // Audible enough for Android to detect
+
+                  androidActivationAudio.play().then(() => {
+                    console.log('🤖 ANDROID: Activation audio playing - forcing notification visibility');
+                    navigator.mediaSession.playbackState = 'playing';
+
+                    setTimeout(() => {
+                      androidActivationAudio.pause();
+                      navigator.mediaSession.playbackState = 'paused';
+                      setTimeout(() => {
+                        navigator.mediaSession.playbackState = 'playing';
+                        setTimeout(() => {
+                          navigator.mediaSession.playbackState = 'paused';
+                          console.log('✅ ANDROID: Ultra-aggressive activation COMPLETED - HZ should be visible!');
+                          resolve(true);
+                        }, 75);
+                      }, 75);
+                    }, 200);
+                  }).catch(() => {
+                    // Fallback without audio
+                    navigator.mediaSession.playbackState = 'playing';
+                    setTimeout(() => {
+                      navigator.mediaSession.playbackState = 'paused';
+                      console.log('✅ ANDROID: Fallback activation COMPLETED');
+                      resolve(true);
+                    }, 50);
+                  });
+                } else {
+                  // Standard activation for other platforms
+                  navigator.mediaSession.playbackState = 'playing';
+                  setTimeout(() => {
+                    navigator.mediaSession.playbackState = 'paused';
+                    console.log('✅ INTERACTION: Standard activation COMPLETED');
+                    resolve(true);
+                  }, 50);
+                }
               }
             };
 
-            // Listen for ANY user interaction
-            ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'mousemove'].forEach(event => {
-              document.addEventListener(event, activateOnInteraction, { once: true, passive: true });
-            });
+            // PRIORITY capture for Android - immediate response
+            if (deviceInfo.isAndroid) {
+              ['touchstart', 'pointerdown', 'mousedown', 'click', 'scroll', 'touchend', 'touchmove'].forEach(event => {
+                document.addEventListener(event, activateOnInteraction, { once: true, passive: false });
+              });
+            } else {
+              // Standard capture for other platforms
+              ['click', 'touchstart', 'touchend', 'keydown', 'scroll', 'mousemove'].forEach(event => {
+                document.addEventListener(event, activateOnInteraction, { once: true, passive: true });
+              });
+            }
 
-            // Don't wait forever for interaction
+            // Android gets longer timeout
             setTimeout(() => {
               if (!activated) resolve(false);
-            }, 10000);
+            }, deviceInfo.isAndroid ? 15000 : 10000);
           });
           activationPromises.push(interactionActivation);
 
@@ -680,7 +831,7 @@
         if (deviceInfo.isIOS) {
           document.title = 'HZ Music';
         } else if (deviceInfo.isAndroid) {
-          document.title = 'HZ Music - Streaming';
+          document.title = 'HZ Music';  // Simplified for Android notifications
         } else if (deviceInfo.isDesktop) {
           document.title = 'HZ Music Streamer - Web Player';
         } else {
@@ -689,6 +840,54 @@
       };
 
       setOptimalTitle();
+
+      // ANDROID SPECIFIC: Additional enhancements for notification visibility
+      if (deviceInfo.isAndroid) {
+        console.log('🤖 ANDROID: Applying Android-specific enhancements...');
+
+        // Request notification permissions (critical for Android visibility)
+        if ('Notification' in window && Notification.permission === 'default') {
+          console.log('🤖 ANDROID: Requesting notification permissions...');
+          Notification.requestPermission().then(permission => {
+            console.log(`🤖 ANDROID: Notification permission: ${permission}`);
+          });
+        }
+
+        // Add Android-specific meta tags for better PWA recognition
+        const addAndroidMeta = () => {
+          const metaTags = [
+            { name: 'mobile-web-app-capable', content: 'yes' },
+            { name: 'application-name', content: 'HZ Music' },
+            { name: 'theme-color', content: '#1DB954' },
+            { name: 'msapplication-TileColor', content: '#1DB954' },
+            { name: 'msapplication-navbutton-color', content: '#1DB954' }
+          ];
+
+          metaTags.forEach(({ name, content }) => {
+            if (!document.querySelector(`meta[name="${name}"]`)) {
+              const meta = document.createElement('meta');
+              meta.name = name;
+              meta.content = content;
+              document.head.appendChild(meta);
+            }
+          });
+        };
+
+        addAndroidMeta();
+
+        // Android-specific CSS for media controls
+        const androidStyles = document.createElement('style');
+        androidStyles.textContent = `
+          @media (max-width: 768px) and (orientation: portrait) {
+            /* Android-specific optimizations */
+            body { -webkit-user-select: none; user-select: none; }
+            * { -webkit-tap-highlight-color: transparent; }
+          }
+        `;
+        document.head.appendChild(androidStyles);
+
+        console.log('✅ ANDROID: Android-specific enhancements applied');
+      }
 
       // Universal viewport optimization
       const viewport = document.querySelector('meta[name="viewport"]');
