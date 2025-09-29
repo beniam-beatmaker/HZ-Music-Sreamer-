@@ -126,26 +126,58 @@
         const defaultArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
         const artworkBase = trackArtworkMap[title] || defaultArtwork;
 
-        // Spotify-style metadata for perfect mobile lock screen and notification display
+        // Universal cross-platform metadata for ALL devices
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isDesktop = !isMobile;
+
+        // Platform-optimized HZ branding
+        const getUniversalBranding = () => {
+          if (isDesktop) {
+            return {
+              title: title,
+              artist: `${artist} • HZ Music`, // Desktop shows full "HZ Music"
+              album: `HZ Streaming Platform`   // Professional desktop branding
+            };
+          } else {
+            return {
+              title: title,
+              artist: `${artist} • HZ`,       // Mobile shows compact "HZ"
+              album: title                     // Clean mobile display
+            };
+          }
+        };
+
+        const branding = getUniversalBranding();
+
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: title,
-          artist: `${artist} • HZ`,  // Artist name with HZ branding (like Spotify shows "Artist • Spotify")
-          album: title,  // Use track title as album for cleaner display
+          title: branding.title,
+          artist: branding.artist,
+          album: branding.album,
           artwork: [
-            // High-quality artwork optimized for mobile lock screens
-            { src: artworkBase + '&w=80&q=100', sizes: '80x80', type: 'image/jpeg' },
-            { src: artworkBase + '&w=96&q=100', sizes: '96x96', type: 'image/jpeg' },
-            { src: artworkBase + '&w=128&q=100', sizes: '128x128', type: 'image/jpeg' },
-            { src: artworkBase + '&w=192&q=100', sizes: '192x192', type: 'image/jpeg' },
-            { src: artworkBase + '&w=256&q=100', sizes: '256x256', type: 'image/jpeg' },
-            { src: artworkBase + '&w=320&q=100', sizes: '320x320', type: 'image/jpeg' },
-            { src: artworkBase + '&w=512&q=100', sizes: '512x512', type: 'image/jpeg' },
-            { src: artworkBase + '&w=1024&q=100', sizes: '1024x1024', type: 'image/jpeg' }
+            // Universal artwork optimized for ALL devices and screen densities
+            { src: artworkBase + '&w=48&h=48&q=100&fit=crop', sizes: '48x48', type: 'image/jpeg' },
+            { src: artworkBase + '&w=64&h=64&q=100&fit=crop', sizes: '64x64', type: 'image/jpeg' },
+            { src: artworkBase + '&w=80&h=80&q=100&fit=crop', sizes: '80x80', type: 'image/jpeg' },
+            { src: artworkBase + '&w=96&h=96&q=100&fit=crop', sizes: '96x96', type: 'image/jpeg' },
+            { src: artworkBase + '&w=128&h=128&q=100&fit=crop', sizes: '128x128', type: 'image/jpeg' },
+            { src: artworkBase + '&w=144&h=144&q=100&fit=crop', sizes: '144x144', type: 'image/jpeg' },
+            { src: artworkBase + '&w=192&h=192&q=100&fit=crop', sizes: '192x192', type: 'image/jpeg' },
+            { src: artworkBase + '&w=256&h=256&q=100&fit=crop', sizes: '256x256', type: 'image/jpeg' },
+            { src: artworkBase + '&w=320&h=320&q=100&fit=crop', sizes: '320x320', type: 'image/jpeg' },
+            { src: artworkBase + '&w=384&h=384&q=100&fit=crop', sizes: '384x384', type: 'image/jpeg' },
+            { src: artworkBase + '&w=512&h=512&q=100&fit=crop', sizes: '512x512', type: 'image/jpeg' },
+            { src: artworkBase + '&w=640&h=640&q=100&fit=crop', sizes: '640x640', type: 'image/jpeg' },
+            { src: artworkBase + '&w=1024&h=1024&q=100&fit=crop', sizes: '1024x1024', type: 'image/jpeg' },
+            { src: artworkBase + '&w=1280&h=1280&q=100&fit=crop', sizes: '1280x1280', type: 'image/jpeg' }
           ]
         });
 
-        // Set document title to match mobile app display pattern
-        document.title = `HZ - ${title} by ${artist}`;
+        // Set platform-optimized document title
+        if (isDesktop) {
+          document.title = `HZ Music - ${title} by ${artist}`;
+        } else {
+          document.title = `HZ - ${title} by ${artist}`;
+        }
 
         // Enhanced action handlers with better error handling and fallbacks
         navigator.mediaSession.setActionHandler('play', () => {
@@ -313,87 +345,261 @@
       }
     };
 
-    // Spotify-style Mobile Branding for Perfect Lock Screen & Notification Display
-    function initializeMobileBranding() {
-      if ('mediaSession' in navigator) {
-        console.log('📱 Initializing Spotify-style HZ branding for mobile devices...');
+    // Universal Cross-Platform HZ Branding for ALL Devices
+    function initializeUniversalHZBranding() {
+      console.log('🌍 Initializing Universal HZ branding for ALL devices and platforms...');
 
-        // Create HZ logo artwork for lock screen branding
+      // Detect device and platform for optimal HZ display
+      const deviceInfo = {
+        isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        isIOS: /iPad|iPhone|iPod/.test(navigator.userAgent),
+        isAndroid: /Android/.test(navigator.userAgent),
+        isDesktop: !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        isChrome: /Chrome/.test(navigator.userAgent),
+        isSafari: /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent),
+        isFirefox: /Firefox/.test(navigator.userAgent),
+        isEdge: /Edge/.test(navigator.userAgent),
+        isMacOS: /Macintosh|MacIntel|MacPPC|Mac68K/.test(navigator.platform),
+        isWindows: /Win32|Win64|Windows|WinCE/.test(navigator.platform),
+        isLinux: /Linux/.test(navigator.platform)
+      };
+
+      console.log('🔍 Device detected:', deviceInfo);
+
+      // Universal Media Session Setup
+      if ('mediaSession' in navigator) {
+        console.log(`📱 Setting up Media Session for ${deviceInfo.isMobile ? 'mobile' : 'desktop'} device...`);
+
+        // Create platform-optimized HZ artwork
         const hzLogoArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
 
-        // Set Spotify-style default metadata for immediate HZ presence
+        // Platform-specific metadata optimization
+        const getOptimizedMetadata = () => {
+          if (deviceInfo.isIOS) {
+            return {
+              title: 'HZ Music Streamer',
+              artist: 'Ready to Stream • HZ',
+              album: 'HZ Music Platform'
+            };
+          } else if (deviceInfo.isAndroid) {
+            return {
+              title: 'HZ Music Streamer',
+              artist: 'Tap to Play • HZ',
+              album: 'HZ Music'
+            };
+          } else if (deviceInfo.isDesktop) {
+            return {
+              title: 'HZ Music Streamer',
+              artist: 'Desktop Media Player • HZ',
+              album: 'HZ Streaming Platform'
+            };
+          } else {
+            return {
+              title: 'HZ Music Streamer',
+              artist: 'Music Streaming • HZ',
+              album: 'HZ Platform'
+            };
+          }
+        };
+
+        const metadata = getOptimizedMetadata();
+
+        // Universal high-quality artwork for ALL screen sizes and densities
+        const artworkSizes = [
+          { size: 48, quality: 100 },
+          { size: 64, quality: 100 },
+          { size: 80, quality: 100 },
+          { size: 96, quality: 100 },
+          { size: 128, quality: 100 },
+          { size: 144, quality: 100 },
+          { size: 192, quality: 100 },
+          { size: 256, quality: 100 },
+          { size: 320, quality: 100 },
+          { size: 384, quality: 100 },
+          { size: 512, quality: 100 },
+          { size: 640, quality: 100 },
+          { size: 1024, quality: 100 },
+          { size: 1280, quality: 100 }
+        ];
+
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: 'HZ Music Streamer',
-          artist: 'Tap to Play • HZ',  // Matches Spotify's "Artist • Spotify" pattern
-          album: 'Music Streaming App',
-          artwork: [
-            { src: hzLogoArtwork + '&w=80&q=100', sizes: '80x80', type: 'image/jpeg' },
-            { src: hzLogoArtwork + '&w=96&q=100', sizes: '96x96', type: 'image/jpeg' },
-            { src: hzLogoArtwork + '&w=128&q=100', sizes: '128x128', type: 'image/jpeg' },
-            { src: hzLogoArtwork + '&w=192&q=100', sizes: '192x192', type: 'image/jpeg' },
-            { src: hzLogoArtwork + '&w=256&q=100', sizes: '256x256', type: 'image/jpeg' },
-            { src: hzLogoArtwork + '&w=512&q=100', sizes: '512x512', type: 'image/jpeg' }
-          ]
+          title: metadata.title,
+          artist: metadata.artist,
+          album: metadata.album,
+          artwork: artworkSizes.map(({size, quality}) => ({
+            src: `${hzLogoArtwork}&w=${size}&h=${size}&q=${quality}`,
+            sizes: `${size}x${size}`,
+            type: 'image/jpeg'
+          }))
         });
 
-        // Essential action handlers for mobile media session activation
-        navigator.mediaSession.setActionHandler('play', () => {
-          console.log('🔒 HZ Media session active in lock screen');
-          const playerAudio = document.getElementById('playerAudio');
-          if (playerAudio && playerAudio.paused && playerAudio.src) {
-            playerAudio.play().catch(e => console.log('No active track to resume'));
-          }
-        });
-
-        navigator.mediaSession.setActionHandler('pause', () => {
-          console.log('🔒 HZ Media session pause from lock screen');
-          const playerAudio = document.getElementById('playerAudio');
-          if (playerAudio && !playerAudio.paused) {
-            playerAudio.pause();
-          }
-        });
-
-        // Critical: Activate media session to ensure HZ appears in mobile controls
-        navigator.mediaSession.playbackState = 'paused';
-
-        // Force media session registration (Spotify-style activation)
-        setTimeout(() => {
-          // Create a silent activation to register with the system
-          const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
-          silentAudio.volume = 0;
-          silentAudio.play().then(() => {
-            silentAudio.pause();
-            silentAudio.currentTime = 0;
-            console.log('✅ HZ Media Session activated for mobile recognition');
-          }).catch(() => {
-            // Fallback for browsers that require user interaction
-            console.log('📱 HZ Media Session ready (user interaction required)');
+        // Universal action handlers that work across ALL platforms
+        const setupUniversalHandlers = () => {
+          // Play handler - works on mobile, desktop, tablets
+          navigator.mediaSession.setActionHandler('play', () => {
+            console.log('🔒 Universal HZ play from system controls');
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio && playerAudio.paused && playerAudio.src) {
+              playerAudio.play().then(() => {
+                navigator.mediaSession.playbackState = 'playing';
+                console.log('✅ HZ playback resumed from system controls');
+              }).catch(e => console.log('⚠️ No active track to resume'));
+            }
           });
-        }, 100);
 
-        console.log('✅ Spotify-style HZ branding ready for mobile lock screen');
+          // Pause handler - universal compatibility
+          navigator.mediaSession.setActionHandler('pause', () => {
+            console.log('🔒 Universal HZ pause from system controls');
+            const playerAudio = document.getElementById('playerAudio');
+            if (playerAudio && !playerAudio.paused) {
+              playerAudio.pause();
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('✅ HZ playback paused from system controls');
+            }
+          });
+
+          // Advanced handlers for supported platforms
+          try {
+            navigator.mediaSession.setActionHandler('previoustrack', () => {
+              console.log('🔒 Previous track from system controls');
+              const prevBtn = document.getElementById('prevBtn');
+              if (prevBtn) prevBtn.click();
+            });
+
+            navigator.mediaSession.setActionHandler('nexttrack', () => {
+              console.log('🔒 Next track from system controls');
+              const nextBtn = document.getElementById('nextBtn');
+              if (nextBtn) nextBtn.click();
+            });
+
+            // Desktop/advanced device features
+            if (deviceInfo.isDesktop || deviceInfo.isChrome) {
+              navigator.mediaSession.setActionHandler('stop', () => {
+                console.log('🔒 Stop from system controls');
+                const playerAudio = document.getElementById('playerAudio');
+                if (playerAudio) {
+                  playerAudio.pause();
+                  playerAudio.currentTime = 0;
+                  navigator.mediaSession.playbackState = 'paused';
+                }
+              });
+
+              navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+                console.log('🔒 Seek backward from system controls');
+                const playerAudio = document.getElementById('playerAudio');
+                if (playerAudio) {
+                  playerAudio.currentTime = Math.max(0, playerAudio.currentTime - (details.seekOffset || 10));
+                }
+              });
+
+              navigator.mediaSession.setActionHandler('seekforward', (details) => {
+                console.log('🔒 Seek forward from system controls');
+                const playerAudio = document.getElementById('playerAudio');
+                if (playerAudio) {
+                  playerAudio.currentTime = Math.min(playerAudio.duration || 0, playerAudio.currentTime + (details.seekOffset || 10));
+                }
+              });
+            }
+          } catch (error) {
+            console.log('⚠️ Some advanced features not supported on this platform:', error.message);
+          }
+        };
+
+        setupUniversalHandlers();
+
+        // Platform-specific activation strategies
+        const activateMediaSession = () => {
+          if (deviceInfo.isMobile) {
+            // Mobile activation
+            navigator.mediaSession.playbackState = 'paused';
+            setTimeout(() => {
+              const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+              silentAudio.volume = 0;
+              silentAudio.play().then(() => {
+                silentAudio.pause();
+                console.log('✅ Mobile HZ Media Session activated');
+              }).catch(() => console.log('📱 Mobile HZ ready (interaction required)'));
+            }, 100);
+          } else {
+            // Desktop activation
+            navigator.mediaSession.playbackState = 'none';
+            setTimeout(() => {
+              navigator.mediaSession.playbackState = 'paused';
+              console.log('✅ Desktop HZ Media Session activated');
+            }, 50);
+          }
+        };
+
+        activateMediaSession();
+        console.log(`✅ Universal HZ branding ready for ${deviceInfo.isMobile ? 'mobile' : 'desktop'} platform`);
       }
 
-      // Set document title to match mobile PWA pattern
-      document.title = 'HZ Music - Streaming App';
+      // Platform-specific document title optimization
+      const setOptimalTitle = () => {
+        if (deviceInfo.isIOS) {
+          document.title = 'HZ Music';
+        } else if (deviceInfo.isAndroid) {
+          document.title = 'HZ Music - Streaming';
+        } else if (deviceInfo.isDesktop) {
+          document.title = 'HZ Music Streamer - Web Player';
+        } else {
+          document.title = 'HZ Music - Universal Player';
+        }
+      };
 
-      // Optimize viewport for mobile media session display
+      setOptimalTitle();
+
+      // Universal viewport optimization
       const viewport = document.querySelector('meta[name="viewport"]');
       if (viewport) {
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover');
+        if (deviceInfo.isMobile) {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover');
+        } else {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+        }
       }
 
-      // Add mobile web app display mode optimization
-      if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
-        console.log('📱 Running as PWA - HZ branding optimized');
+      // PWA detection and optimization
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                   window.navigator.standalone === true ||
+                   document.referrer.includes('android-app://');
+
+      if (isPWA) {
+        console.log('📱 Running as PWA - HZ branding optimized for app mode');
         document.body.classList.add('pwa-mode');
+        document.body.setAttribute('data-platform', deviceInfo.isMobile ? 'mobile-pwa' : 'desktop-pwa');
       }
-    }    // Initialize mobile branding as soon as possible
+
+      // Add platform-specific classes for CSS targeting
+      document.body.classList.add(
+        deviceInfo.isMobile ? 'mobile-device' : 'desktop-device',
+        deviceInfo.isIOS ? 'ios-device' :
+        deviceInfo.isAndroid ? 'android-device' :
+        deviceInfo.isMacOS ? 'macos-device' :
+        deviceInfo.isWindows ? 'windows-device' : 'other-device'
+      );
+
+      console.log('🌍 Universal HZ branding initialized for ALL platforms and devices!');
+    }    // Initialize universal HZ branding for ALL devices and platforms
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeMobileBranding);
+      document.addEventListener('DOMContentLoaded', initializeUniversalHZBranding);
     } else {
-      initializeMobileBranding();
+      initializeUniversalHZBranding();
     }
+
+    // Additional platform-specific initializations
+    window.addEventListener('load', () => {
+      // Ensure media session persists across page interactions
+      if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+        console.log('🔄 Reinforcing HZ media session after page load');
+        // Re-establish media session after full page load
+        setTimeout(() => {
+          if (navigator.mediaSession.playbackState === 'none') {
+            navigator.mediaSession.playbackState = 'paused';
+          }
+        }, 1000);
+      }
+    });
 
 
 
@@ -472,7 +678,124 @@
 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
 
+<!-- Universal Browser and OS Support -->
+<meta name="msapplication-navbutton-color" content="#1a1a1a">
+<meta name="msapplication-starturl" content="/">
+<meta name="msapplication-window" content="width=1024;height=768">
+
+<!-- Enhanced Cross-Platform Meta Tags -->
+<meta name="mobile-web-app-title" content="HZ">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-status-bar-style" content="black">
+
+<!-- Firefox OS Support -->
+<meta name="mozilla-web-app-capable" content="yes">
+<meta name="mozilla-web-app-status-bar-style" content="black">
+
+<!-- Samsung Internet Support -->
+<meta name="samsung-internet-app-capable" content="yes">
+<meta name="samsung-internet-status-bar-style" content="black">
+
   <style>
+  /* Universal Cross-Platform Optimizations for ALL Devices */
+
+  /* Platform-specific body classes for targeted styling */
+  .mobile-device {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .desktop-device {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+    cursor: default;
+  }
+
+  /* iOS-specific optimizations */
+  .ios-device {
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* Android-specific optimizations */
+  .android-device {
+    overscroll-behavior: contain;
+  }
+
+  /* Windows-specific optimizations */
+  .windows-device {
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+  }
+
+  /* macOS-specific optimizations */
+  .macos-device {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* PWA mode optimizations */
+  .pwa-mode {
+    display: block !important;
+  }
+
+  .pwa-mode.mobile-device {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Media session artwork optimizations */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --media-artwork-background: #1a1a1a;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --media-artwork-background: #ffffff;
+    }
+  }
+
+  /* High DPI display optimizations */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .track-artwork {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+  }
+
+  /* Notification and lock screen compatibility */
+  @media (display-mode: standalone) {
+    body {
+      background-color: var(--bg-primary);
+      overflow-x: hidden;
+    }
+  }
+
+  /* Cross-browser media controls styling */
+  audio::-webkit-media-controls-panel {
+    background-color: var(--bg-secondary);
+  }
+
+  audio::-moz-media-controls {
+    background-color: var(--bg-secondary);
+  }
+
+  /* Ensure HZ branding visibility in all contexts */
+  .hz-branding {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
   .card-display { background: linear-gradient(135deg, #232526 0%, #414345 100%); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 22px 28px 18px 28px; margin: 0 auto 18px auto; min-width: 270px; max-width: 340px; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; border: 1.5px solid #333; }
   .card-chip { width: 38px; height: 24px; background: linear-gradient(90deg, #e0e0e0 0%, #bdbdbd 100%); border-radius: 6px; margin-bottom: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
   .card-number { font-size: 1.25rem; letter-spacing: 2.5px; font-family: 'Roboto Mono', 'Courier New', monospace; margin-bottom: 6px; font-weight: 700; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.18); }
