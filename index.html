@@ -126,20 +126,27 @@
         const defaultArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
         const artworkBase = trackArtworkMap[title] || defaultArtwork;
 
+        // Enhanced metadata for perfect mobile lock screen branding
         navigator.mediaSession.metadata = new MediaMetadata({
           title: title,
           artist: artist,
-          album: 'HZ Music Streamer', // Clean app name for notifications
+          album: 'HZ Music', // Shorter, cleaner branding for mobile displays
           artwork: [
-            { src: artworkBase + '&w=96&q=90', sizes: '96x96', type: 'image/jpeg' },
-            { src: artworkBase + '&w=128&q=90', sizes: '128x128', type: 'image/jpeg' },
-            { src: artworkBase + '&w=192&q=90', sizes: '192x192', type: 'image/jpeg' },
-            { src: artworkBase + '&w=256&q=90', sizes: '256x256', type: 'image/jpeg' },
-            { src: artworkBase + '&w=384&q=90', sizes: '384x384', type: 'image/jpeg' },
-            { src: artworkBase + '&w=512&q=90', sizes: '512x512', type: 'image/jpeg' },
-            { src: artworkBase + '&w=1024&q=95', sizes: '1024x1024', type: 'image/jpeg' }
+            // Comprehensive artwork sizes for all mobile devices
+            { src: artworkBase + '&w=96&q=95', sizes: '96x96', type: 'image/jpeg' },
+            { src: artworkBase + '&w=128&q=95', sizes: '128x128', type: 'image/jpeg' },
+            { src: artworkBase + '&w=192&q=95', sizes: '192x192', type: 'image/jpeg' },
+            { src: artworkBase + '&w=256&q=95', sizes: '256x256', type: 'image/jpeg' },
+            { src: artworkBase + '&w=320&q=95', sizes: '320x320', type: 'image/jpeg' },
+            { src: artworkBase + '&w=384&q=95', sizes: '384x384', type: 'image/jpeg' },
+            { src: artworkBase + '&w=512&q=95', sizes: '512x512', type: 'image/jpeg' },
+            { src: artworkBase + '&w=640&q=95', sizes: '640x640', type: 'image/jpeg' },
+            { src: artworkBase + '&w=1024&q=98', sizes: '1024x1024', type: 'image/jpeg' }
           ]
         });
+
+        // Force document title update for better mobile integration
+        document.title = `${title} • HZ Music`;
 
         // Enhanced action handlers with better error handling and fallbacks
         navigator.mediaSession.setActionHandler('play', () => {
@@ -307,6 +314,57 @@
       }
     };
 
+    // Enhanced Mobile Branding Initialization for Perfect Lock Screen Display
+    function initializeMobileBranding() {
+      if ('mediaSession' in navigator) {
+        console.log('📱 Initializing HZ branding for mobile devices...');
+
+        // Set default metadata to ensure HZ branding appears immediately
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'HZ Music Streamer',
+          artist: 'Ready to Play',
+          album: 'HZ Music',
+          artwork: [
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=95', sizes: '96x96', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=95', sizes: '192x192', type: 'image/jpeg' },
+            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=95', sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+
+        // Set up placeholder action handlers to establish media session context
+        navigator.mediaSession.setActionHandler('play', () => {
+          console.log('🔒 Media session initialized - HZ branding active');
+        });
+
+        navigator.mediaSession.setActionHandler('pause', () => {
+          console.log('🔒 Media session pause handler ready');
+        });
+
+        // Set initial state to enable lock screen presence
+        navigator.mediaSession.playbackState = 'paused';
+
+        console.log('✅ HZ branding initialized for mobile lock screen and notifications');
+      }
+
+      // Ensure document title reflects app branding
+      if (!document.title.includes('HZ')) {
+        document.title = 'HZ Music Streamer - Ethical Artist-First Streaming';
+      }
+
+      // Add mobile-specific viewport optimizations
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+      }
+    }
+
+    // Initialize mobile branding as soon as possible
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeMobileBranding);
+    } else {
+      initializeMobileBranding();
+    }
+
 
 
   </script>
@@ -329,9 +387,25 @@
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="manifest" href="/manifest.json">
-<meta name="msapplication-TileColor" content="#ffffff">
+<meta name="msapplication-TileColor" content="#1a1a1a">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#1a1a1a">
+
+<!-- Enhanced Mobile Web App Meta Tags for Perfect Lock Screen Branding -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HZ Music">
+<meta name="application-name" content="HZ Music">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Enhanced PWA Support for Better Mobile Integration -->
+<meta name="format-detection" content="telephone=no">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-orientations" content="portrait">
+
+<!-- Dark Theme Support for Lock Screen -->
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)">
 
   <style>
   .card-display { background: linear-gradient(135deg, #232526 0%, #414345 100%); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.18); padding: 22px 28px 18px 28px; margin: 0 auto 18px auto; min-width: 270px; max-width: 340px; color: #fff; font-family: 'Segoe UI', Arial, sans-serif; position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; border: 1.5px solid #333; }
