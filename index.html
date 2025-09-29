@@ -126,27 +126,26 @@
         const defaultArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
         const artworkBase = trackArtworkMap[title] || defaultArtwork;
 
-        // Enhanced metadata for perfect mobile lock screen branding
+        // Spotify-style metadata for perfect mobile lock screen and notification display
         navigator.mediaSession.metadata = new MediaMetadata({
           title: title,
-          artist: artist,
-          album: 'HZ Music', // Shorter, cleaner branding for mobile displays
+          artist: `${artist} • HZ`,  // Artist name with HZ branding (like Spotify shows "Artist • Spotify")
+          album: title,  // Use track title as album for cleaner display
           artwork: [
-            // Comprehensive artwork sizes for all mobile devices
-            { src: artworkBase + '&w=96&q=95', sizes: '96x96', type: 'image/jpeg' },
-            { src: artworkBase + '&w=128&q=95', sizes: '128x128', type: 'image/jpeg' },
-            { src: artworkBase + '&w=192&q=95', sizes: '192x192', type: 'image/jpeg' },
-            { src: artworkBase + '&w=256&q=95', sizes: '256x256', type: 'image/jpeg' },
-            { src: artworkBase + '&w=320&q=95', sizes: '320x320', type: 'image/jpeg' },
-            { src: artworkBase + '&w=384&q=95', sizes: '384x384', type: 'image/jpeg' },
-            { src: artworkBase + '&w=512&q=95', sizes: '512x512', type: 'image/jpeg' },
-            { src: artworkBase + '&w=640&q=95', sizes: '640x640', type: 'image/jpeg' },
-            { src: artworkBase + '&w=1024&q=98', sizes: '1024x1024', type: 'image/jpeg' }
+            // High-quality artwork optimized for mobile lock screens
+            { src: artworkBase + '&w=80&q=100', sizes: '80x80', type: 'image/jpeg' },
+            { src: artworkBase + '&w=96&q=100', sizes: '96x96', type: 'image/jpeg' },
+            { src: artworkBase + '&w=128&q=100', sizes: '128x128', type: 'image/jpeg' },
+            { src: artworkBase + '&w=192&q=100', sizes: '192x192', type: 'image/jpeg' },
+            { src: artworkBase + '&w=256&q=100', sizes: '256x256', type: 'image/jpeg' },
+            { src: artworkBase + '&w=320&q=100', sizes: '320x320', type: 'image/jpeg' },
+            { src: artworkBase + '&w=512&q=100', sizes: '512x512', type: 'image/jpeg' },
+            { src: artworkBase + '&w=1024&q=100', sizes: '1024x1024', type: 'image/jpeg' }
           ]
         });
 
-        // Force document title update for better mobile integration
-        document.title = `${title} • HZ Music`;
+        // Set document title to match mobile app display pattern
+        document.title = `HZ - ${title} by ${artist}`;
 
         // Enhanced action handlers with better error handling and fallbacks
         navigator.mediaSession.setActionHandler('play', () => {
@@ -314,51 +313,82 @@
       }
     };
 
-    // Enhanced Mobile Branding Initialization for Perfect Lock Screen Display
+    // Spotify-style Mobile Branding for Perfect Lock Screen & Notification Display
     function initializeMobileBranding() {
       if ('mediaSession' in navigator) {
-        console.log('📱 Initializing HZ branding for mobile devices...');
+        console.log('📱 Initializing Spotify-style HZ branding for mobile devices...');
 
-        // Set default metadata to ensure HZ branding appears immediately
+        // Create HZ logo artwork for lock screen branding
+        const hzLogoArtwork = 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop';
+
+        // Set Spotify-style default metadata for immediate HZ presence
         navigator.mediaSession.metadata = new MediaMetadata({
           title: 'HZ Music Streamer',
-          artist: 'Ready to Play',
-          album: 'HZ Music',
+          artist: 'Tap to Play • HZ',  // Matches Spotify's "Artist • Spotify" pattern
+          album: 'Music Streaming App',
           artwork: [
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=96&q=95', sizes: '96x96', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=95', sizes: '192x192', type: 'image/jpeg' },
-            { src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=95', sizes: '512x512', type: 'image/jpeg' }
+            { src: hzLogoArtwork + '&w=80&q=100', sizes: '80x80', type: 'image/jpeg' },
+            { src: hzLogoArtwork + '&w=96&q=100', sizes: '96x96', type: 'image/jpeg' },
+            { src: hzLogoArtwork + '&w=128&q=100', sizes: '128x128', type: 'image/jpeg' },
+            { src: hzLogoArtwork + '&w=192&q=100', sizes: '192x192', type: 'image/jpeg' },
+            { src: hzLogoArtwork + '&w=256&q=100', sizes: '256x256', type: 'image/jpeg' },
+            { src: hzLogoArtwork + '&w=512&q=100', sizes: '512x512', type: 'image/jpeg' }
           ]
         });
 
-        // Set up placeholder action handlers to establish media session context
+        // Essential action handlers for mobile media session activation
         navigator.mediaSession.setActionHandler('play', () => {
-          console.log('🔒 Media session initialized - HZ branding active');
+          console.log('🔒 HZ Media session active in lock screen');
+          const playerAudio = document.getElementById('playerAudio');
+          if (playerAudio && playerAudio.paused && playerAudio.src) {
+            playerAudio.play().catch(e => console.log('No active track to resume'));
+          }
         });
 
         navigator.mediaSession.setActionHandler('pause', () => {
-          console.log('🔒 Media session pause handler ready');
+          console.log('🔒 HZ Media session pause from lock screen');
+          const playerAudio = document.getElementById('playerAudio');
+          if (playerAudio && !playerAudio.paused) {
+            playerAudio.pause();
+          }
         });
 
-        // Set initial state to enable lock screen presence
+        // Critical: Activate media session to ensure HZ appears in mobile controls
         navigator.mediaSession.playbackState = 'paused';
 
-        console.log('✅ HZ branding initialized for mobile lock screen and notifications');
+        // Force media session registration (Spotify-style activation)
+        setTimeout(() => {
+          // Create a silent activation to register with the system
+          const silentAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+byvmceCTOH0fPTgjEG');
+          silentAudio.volume = 0;
+          silentAudio.play().then(() => {
+            silentAudio.pause();
+            silentAudio.currentTime = 0;
+            console.log('✅ HZ Media Session activated for mobile recognition');
+          }).catch(() => {
+            // Fallback for browsers that require user interaction
+            console.log('📱 HZ Media Session ready (user interaction required)');
+          });
+        }, 100);
+
+        console.log('✅ Spotify-style HZ branding ready for mobile lock screen');
       }
 
-      // Ensure document title reflects app branding
-      if (!document.title.includes('HZ')) {
-        document.title = 'HZ Music Streamer - Ethical Artist-First Streaming';
-      }
+      // Set document title to match mobile PWA pattern
+      document.title = 'HZ Music - Streaming App';
 
-      // Add mobile-specific viewport optimizations
+      // Optimize viewport for mobile media session display
       const viewport = document.querySelector('meta[name="viewport"]');
       if (viewport) {
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover');
       }
-    }
 
-    // Initialize mobile branding as soon as possible
+      // Add mobile web app display mode optimization
+      if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('📱 Running as PWA - HZ branding optimized');
+        document.body.classList.add('pwa-mode');
+      }
+    }    // Initialize mobile branding as soon as possible
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initializeMobileBranding);
     } else {
@@ -394,14 +424,49 @@
 <!-- Enhanced Mobile Web App Meta Tags for Perfect Lock Screen Branding -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="HZ Music">
-<meta name="application-name" content="HZ Music">
+<meta name="apple-mobile-web-app-title" content="HZ">
+<meta name="application-name" content="HZ">
 <meta name="mobile-web-app-capable" content="yes">
 
-<!-- Enhanced PWA Support for Better Mobile Integration -->
+<!-- Enhanced PWA Support for Spotify-style Mobile Integration -->
 <meta name="format-detection" content="telephone=no">
 <meta name="apple-touch-fullscreen" content="yes">
 <meta name="apple-mobile-web-app-orientations" content="portrait">
+
+<!-- Inline PWA Manifest for Perfect Mobile Recognition -->
+<script>
+  // Create inline manifest for immediate HZ recognition
+  const manifestData = {
+    "name": "HZ",
+    "short_name": "HZ",
+    "display": "standalone",
+    "start_url": "/",
+    "theme_color": "#1a1a1a",
+    "background_color": "#1a1a1a",
+    "icons": [
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=192&q=100",
+        "sizes": "192x192",
+        "type": "image/jpeg"
+      },
+      {
+        "src": "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=512&q=100",
+        "sizes": "512x512",
+        "type": "image/jpeg"
+      }
+    ]
+  };
+
+  // Create blob URL for manifest
+  const manifestBlob = new Blob([JSON.stringify(manifestData)], {type: 'application/json'});
+  const manifestURL = URL.createObjectURL(manifestBlob);
+
+  // Update manifest link
+  const manifestLink = document.querySelector('link[rel="manifest"]');
+  if (manifestLink) {
+    manifestLink.href = manifestURL;
+  }
+</script>
 
 <!-- Dark Theme Support for Lock Screen -->
 <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: light)">
