@@ -539,7 +539,10 @@
       setupAudioControls();
     }
 
-    // �🚀 BULLETPROOF GLOBAL TRACK PLAYER - ENSURES ALL TRACKS PLAY
+    // Global variables for track management
+    var currentTrackId = '';
+
+    // 🚀 BULLETPROOF GLOBAL TRACK PLAYER - ENSURES ALL TRACKS PLAY
     // This function MUST work for ALL track clicks and maintain sticky player
     // 🎵 RESTORED TRACK PLAYER - INTEGRATES WITH EXISTING STICKY PLAYER
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
@@ -548,6 +551,15 @@
       // Store current track info globally for the sticky player
       currentTrackId = trackId;
       window.currentTrackId = trackId;
+
+      // Store complete track data globally for like functionality
+      window.currentTrackData = {
+        id: trackId,
+        url: trackUrl,
+        title: trackTitle,
+        name: trackTitle,
+        artist: trackArtist
+      };
 
       // Get all sticky player elements
       const stickyPlayer = document.getElementById('stickyPlayer');
@@ -573,6 +585,7 @@
 
       // Comprehensive track database
       const trackData = {
+        'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
         'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
         'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
         'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
@@ -654,6 +667,11 @@
       playerAudio.play().then(() => {
         console.log('✅ Audio playing successfully');
         if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;'; // Pause icon
+
+        // Initialize like button state for the current track
+        if (typeof window.updateLikeButtonState === 'function') {
+          window.updateLikeButtonState(trackId);
+        }
 
         // Media Session API for lock screen
         if ('mediaSession' in navigator) {
@@ -7438,7 +7456,17 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
-              <!-- New Track: Ain't Shit at top -->
+              <!-- New Track: Where Dey At at top with gold effect -->
+              <div class="recent-track-item" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Where Dey At cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Where Dey At</div>
+                  <div class="recent-track-artist">Texx</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <!-- New Track: Ain't Shit -->
               <div class="recent-track-item" onclick="playNewTrack('Aint Shit', 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', 'Aint Shit', 'Texx')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Shining stars cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
@@ -7458,13 +7486,14 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+              <div class="recent-track-item" onclick="playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Times cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Times</div>
                   <div class="recent-track-artist">Stat Cross</div>
                 </div>
-          <div class="recent-track-time">Just now</div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
               <!-- New Track: Good Woman -->
               <div class="recent-track-item" onclick="playNewTrack('Good Woman', 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', 'Good Woman', 'Molly-Able')">
@@ -7767,15 +7796,22 @@
             </tr>
           </thead>
           <tbody>
-                <tr class="track-row" onclick="playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                <tr class="track-row" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Where Dey At cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Where Dey At</div><div class="track-artist">Texx</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Times', 'https://storage.googleapis.com/hertz-music-folder/Times.wav', 'Times', 'Stat Cross');">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Times cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Times</div><div class="track-artist">Stat Cross</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
                 <tr class="track-row" onclick="playNewTrack('Prime', 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', 'Prime', 'SlattZ')">
-                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80" alt="Prime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Prime</div><div class="track-artist">SlattZ</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
@@ -8142,8 +8178,8 @@
 
     <audio id="playerAudio" class="player-audio"></audio>
       <script>
-          // Global variables for sticky player like functionality
-          var currentTrackId = '';
+          // Use the global currentTrackId variable declared earlier
+          // var currentTrackId = ''; // Removed duplicate declaration
 
           // Global track playback function - uses trackData object for all tracks
           function playTrack(trackId) {
@@ -8159,6 +8195,7 @@
 
             // Get track data - check offline tracks first, then fallback to hardcoded tracks
             const hardcodedTrackData = {
+              'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
               'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
               'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
               'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
@@ -8447,13 +8484,26 @@
           // Function to update like button state when track changes
           window.updateLikeButtonState = function(trackId) {
             currentTrackId = trackId;
+            window.currentTrackId = trackId;
+
+            // Find like button each time to avoid scoping issues
+            const likeBtnElement = document.getElementById('likeBtn');
+            if (!likeBtnElement) {
+              console.log('⚠️ Like button not found in updateLikeButtonState');
+              return;
+            }
+
             const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
             if (likedTracks[trackId]) {
-              likeBtn.style.color = '#ffd700';
-              likeBtn.classList.add('liked');
+              likeBtnElement.style.color = '#ffd700';
+              likeBtnElement.classList.add('liked');
+              likeBtnElement.innerHTML = '&#10084;'; // Filled heart
+              console.log('✅ Like button set to liked state for:', trackId);
             } else {
-              likeBtn.style.color = 'rgba(255,255,255,0.4)';
-              likeBtn.classList.remove('liked');
+              likeBtnElement.style.color = 'rgba(255,255,255,0.4)';
+              likeBtnElement.classList.remove('liked');
+              likeBtnElement.innerHTML = '&#10084;'; // Empty heart
+              console.log('✅ Like button set to unliked state for:', trackId);
             }
           };
 
@@ -8481,6 +8531,7 @@
         console.log('🎶 Searching for track in local trackData:', trackId);
         // Use local trackData for default tracks
         let trackData = {
+  'Where Dey At': { id: 'Where Dey At', url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
   'Times': { id: 'Times', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
   'Prime': { id: 'Prime', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
   'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
@@ -9142,6 +9193,7 @@
 
           // Comprehensive track database
           const trackData = {
+            'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
             'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
             'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
             'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
@@ -9905,6 +9957,7 @@
 
       // Get actual track database for real search results
       const allTracks = {
+        'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
         'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
         'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
         'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
@@ -10034,6 +10087,7 @@ function showGenrePopup(genre) {
 
   // Get local tracks from showSearchSuggestions (same as used for suggestions)
   const localTracks = {
+    'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
     'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
     'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
     'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
@@ -12230,6 +12284,7 @@ function showGenrePopup(genre) {
 
       // Hardcoded track data (complete set matching first function)
       const hardcodedTrackData = {
+        'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
         'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
         'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
         'Aint Nough Dreamzz': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
@@ -16808,15 +16863,25 @@ function showGenrePopup(genre) {
           const trackTitle = song.name || song.title || song.id || 'Unknown Track';
           const trackArtist = song.artist || 'Unknown Artist';
 
+          // Ensure proper URL fallback with specific mappings for special cases
+          let trackUrl = song.url;
+          if (!trackUrl) {
+            // Special URL mappings for tracks with non-standard naming
+            const urlMappings = {
+              'Where Dey At': 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3'
+            };
+            trackUrl = urlMappings[song.id] || `https://storage.googleapis.com/hertz-music-folder/${song.id}.mp3`;
+          }
+
           songsHtml += `
             <div class="track-item" style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid #333; transition: background 0.2s;" onmouseover="this.style.background='#282828'" onmouseout="this.style.background='transparent'">
               <button class="track-like-btn liked" onclick="event.stopPropagation(); removeLikedTrack('${song.id}')" style="background: none; border: none; color: #ffd700; font-size: 1.5rem; cursor: pointer; padding: 8px; border-radius: 50%; transition: all 0.2s; display: flex; align-items: center; justify-content: center; margin-right: 12px;" onmouseover="this.style.color='#ff4444'; this.style.transform='scale(1.1)'" onmouseout="this.style.color='#ffd700'; this.style.transform='scale(1)'" title="Remove from liked songs">♥</button>
-              <div class="track-info" onclick="playNewTrack('${song.id}', '${song.url || "https://storage.googleapis.com/hertz-music-folder/" + song.id + ".mp3"}', '${trackTitle}', '${trackArtist}')" style="flex: 1; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+              <div class="track-info" onclick="playNewTrack('${song.id}', '${trackUrl}', '${trackTitle}', '${trackArtist}')" style="flex: 1; cursor: pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
                 <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${trackTitle}</div>
                 <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">${trackArtist} • Liked on ${likedDate}</div>
               </div>
               <div class="track-actions" style="display: flex; gap: 8px; align-items: center;">
-                <button class="play-btn" onclick="event.stopPropagation(); playNewTrack('${song.id}', '${song.url || 'https://storage.googleapis.com/hertz-music-folder/' + song.id + '.mp3'}', '${trackTitle}', '${trackArtist}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
+                <button class="play-btn" onclick="event.stopPropagation(); playNewTrack('${song.id}', '${trackUrl}', '${trackTitle}', '${trackArtist}')" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
               </div>
             </div>
           `;
@@ -17758,6 +17823,7 @@ function showGenrePopup(genre) {
       // Get track data to ensure ALL tracks are playable (complete list from homepage)
       const localTracks = {
         // Core tracks
+        'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
         'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
         'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
         'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
@@ -18835,19 +18901,26 @@ function showGenrePopup(genre) {
 
     // --- Enhanced Like Button Logic with Full Track Data ---
     function saveLikedTrackWithFullData(track) {
+      console.log('💾 saveLikedTrackWithFullData called with track:', track);
       try {
         let likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
 
         console.log('💾 Saving liked track:', track);
 
         // Enhance track data with metadata if available
-        const allTracksMetadata = [
-          ...hertzMetadata.featured,
-          ...hertzMetadata.trending,
-          ...hertzMetadata.recommended
-        ];
-
-        const trackMetadata = allTracksMetadata.find(t => t.id === track.id);
+        let trackMetadata = null;
+        try {
+          if (typeof hertzMetadata !== 'undefined' && hertzMetadata) {
+            const allTracksMetadata = [
+              ...(hertzMetadata.featured || []),
+              ...(hertzMetadata.trending || []),
+              ...(hertzMetadata.recommended || [])
+            ];
+            trackMetadata = allTracksMetadata.find(t => t.id === track.id);
+          }
+        } catch (error) {
+          console.log('⚠️ hertzMetadata not available, using basic track data');
+        }
         console.log('🔍 Found metadata for track:', trackMetadata);
 
         // Save comprehensive track data
@@ -18978,10 +19051,24 @@ function showGenrePopup(genre) {
     }
 
     function toggleCurrentTrackLike() {
+      console.log('🔧 toggleCurrentTrackLike called');
+      console.log('🔧 currentTrackId:', currentTrackId);
+      console.log('🔧 window.currentTrackId:', window.currentTrackId);
+      console.log('🔧 window.currentTrackData:', window.currentTrackData);
+
       if (!currentTrackId) {
-        console.log('⚠️ No current track to like/unlike');
-        return;
+        console.log('⚠️ No current track to like/unlike - trying window.currentTrackId');
+        if (window.currentTrackId) {
+          currentTrackId = window.currentTrackId;
+          console.log('✅ Using window.currentTrackId:', currentTrackId);
+        } else {
+          console.log('❌ No track ID available in either currentTrackId or window.currentTrackId');
+          return;
+        }
       }
+
+      // Ensure both variables are in sync
+      window.currentTrackId = currentTrackId;
 
       console.log('❤️ Toggling like for current track:', currentTrackId);
 
@@ -18991,30 +19078,48 @@ function showGenrePopup(genre) {
         console.log('⚠️ Like button not found');
         return;
       }
+      console.log('✅ Like button found:', likeBtn);
 
-      // Get track data from the trackData object in the playTrack function
-      const trackData = {
-        'Times': { id: 'Times', title: 'Times', name: 'Times', artist: 'Stat Cross' },
-        'Prime': { id: 'Prime', title: 'Prime', name: 'Prime', artist: 'SlattZ' },
-        'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', name: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
-        'Made It': { id: 'Made It', title: 'Made It', name: 'Made It', artist: 'Prod. Tedla' },
-        'Nector': { id: 'Nector', title: 'Nector', name: 'Nector', artist: 'Prod. Tedla' },
-        'Blossom': { id: 'Blossom', title: 'Blossom', name: 'Blossom', artist: 'Prod. Nexus' },
-        'Mach 1': { id: 'Mach 1', title: 'Mach 1', name: 'Mach 1', artist: 'Prod. Phantom' },
-        'Echo': { id: 'Echo', title: 'Echo', name: 'Echo', artist: 'Neon Gloww' },
-        'Lights': { id: 'Lights', title: 'Lights', name: 'Lights', artist: 'Bezzie' },
-        'Smilin': { id: 'Smilin', title: 'Smilin', name: 'Smilin', artist: 'Melody-Soull' },
-        'Buckets': { id: 'Buckets', title: 'Buckets', name: 'Buckets', artist: 'Bezzie' },
-        'Sweet': { id: 'Sweet', title: 'Sweet', name: 'Sweet', artist: 'Bezzie' },
-        'Persistence': { id: 'Persistence', title: 'Persistence', name: 'Persistence', artist: 'Neo' },
-        'Focus': { id: 'Focus', title: 'Focus', name: 'Focus', artist: 'Desiree' }
-      };
+      // Use the complete track data stored by playNewTrack function
+      let currentTrack = window.currentTrackData;
 
-      const currentTrack = trackData[currentTrackId];
+      // Fallback to basic track data if currentTrackData is not available
       if (!currentTrack) {
-        console.log('⚠️ Track data not found for:', currentTrackId);
-        return;
+        console.log('⚠️ No currentTrackData, creating fallback track data for:', currentTrackId);
+        const trackData = {
+          'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', name: 'Where Dey At', artist: 'Texx', url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3' },
+          'Times': { id: 'Times', title: 'Times', name: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav' },
+          'Prime': { id: 'Prime', title: 'Prime', name: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav' },
+          'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', name: 'Aint Nough Dreamzz', artist: 'Stage Rolla', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav' },
+          'Made It': { id: 'Made It', title: 'Made It', name: 'Made It', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3' },
+          'Nector': { id: 'Nector', title: 'Nector', name: 'Nector', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3' },
+          'Blossom': { id: 'Blossom', title: 'Blossom', name: 'Blossom', artist: 'Prod. Nexus', url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav' },
+          'Mach 1': { id: 'Mach 1', title: 'Mach 1', name: 'Mach 1', artist: 'Prod. Phantom', url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.wav' },
+          'Echo': { id: 'Echo', title: 'Echo', name: 'Echo', artist: 'Neon Gloww', url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav' },
+          'Lights': { id: 'Lights', title: 'Lights', name: 'Lights', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav' },
+          'Smilin': { id: 'Smilin', title: 'Smilin', name: 'Smilin', artist: 'Melody-Soull', url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav' },
+          'Buckets': { id: 'Buckets', title: 'Buckets', name: 'Buckets', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Buckets.wav' },
+          'Sweet': { id: 'Sweet', title: 'Sweet', name: 'Sweet', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Sweet.wav' },
+          'Persistence': { id: 'Persistence', title: 'Persistence', name: 'Persistence', artist: 'Neo', url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav' },
+          'Focus': { id: 'Focus', title: 'Focus', name: 'Focus', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav' }
+        };
+
+        currentTrack = trackData[currentTrackId];
+
+        // If still no track data, create minimal track data
+        if (!currentTrack) {
+          currentTrack = {
+            id: currentTrackId,
+            title: currentTrackId,
+            name: currentTrackId,
+            artist: 'Unknown Artist',
+            url: `https://storage.googleapis.com/hertz-music-folder/${encodeURIComponent(currentTrackId)}.mp3`
+          };
+          console.log('⚠️ Created minimal track data:', currentTrack);
+        }
       }
+
+      console.log('📊 Using track data for like operation:', currentTrack);
 
       // Check if track is currently liked
       const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
@@ -19031,10 +19136,11 @@ function showGenrePopup(genre) {
         likeBtn.innerHTML = '&#10084;'; // Empty heart
 
         // Show notification
-        showLikeNotification(currentTrack.title, 'unliked');
+        showLikeNotification(currentTrack.title || currentTrack.name || currentTrackId, 'unliked');
       } else {
         // Like: add to liked tracks
         console.log('❤️ Liking track:', currentTrackId);
+        console.log('❤️ Track data being saved:', currentTrack);
         saveLikedTrackWithFullData(currentTrack);
 
         // Update button state
@@ -19043,18 +19149,146 @@ function showGenrePopup(genre) {
         likeBtn.innerHTML = '&#10084;'; // Filled heart
 
         // Show notification
-        showLikeNotification(currentTrack.title, 'liked');
+        showLikeNotification(currentTrack.title || currentTrack.name || currentTrackId, 'liked');
       }
+
+      // Always refresh the liked songs popup to ensure it's updated
+      setTimeout(() => {
+        console.log('🔄 Refreshing liked songs popup after like operation');
+        if (typeof loadLikedSongs === 'function') {
+          loadLikedSongs();
+        }
+
+        // Double-check that the track was saved
+        const updatedLikedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+        console.log('📊 Current liked tracks after operation:', Object.keys(updatedLikedTracks));
+        console.log('📊 Is current track now liked?', !!updatedLikedTracks[currentTrackId]);
+      }, 100);
 
       // Refresh the liked songs popup if it's currently open
       const likedPopup = document.getElementById('likedPageOverlay');
       if (likedPopup && likedPopup.classList.contains('show')) {
-        console.log('🔄 Refreshing liked songs popup from sticky player');
-        loadLikedSongs();
+        console.log('🔄 Liked popup is open, refreshing immediately');
+        setTimeout(() => loadLikedSongs(), 50);
       }
     }
 
-    // Show like/unlike notification
+    // 🧪 TEST FUNCTION - Verify like system is working
+    window.testLikeSystem = function() {
+      console.log('🧪 TESTING LIKE SYSTEM...');
+
+      // Test 1: Check if currentTrackId is set
+      console.log('🔍 Test 1 - currentTrackId:', currentTrackId);
+      console.log('🔍 Test 1 - window.currentTrackId:', window.currentTrackId);
+      console.log('🔍 Test 1 - window.currentTrackData:', window.currentTrackData);
+
+      // Test 2: Check if like button exists
+      const likeBtn = document.getElementById('likeBtn');
+      console.log('🔍 Test 2 - Like button found:', !!likeBtn);
+
+      // Test 3: Check localStorage
+      const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      console.log('🔍 Test 3 - Current liked tracks:', Object.keys(likedTracks));
+
+      // Test 4: Try to like current track if one is playing
+      if (currentTrackId && likeBtn) {
+        console.log('🔍 Test 4 - Attempting to like current track...');
+        toggleCurrentTrackLike();
+      } else {
+        console.log('🔍 Test 4 - No track playing or no like button found');
+      }
+
+      console.log('🧪 LIKE SYSTEM TEST COMPLETE');
+    };
+
+    // 🚀 QUICK LIKE TEST - can be called from console: quickLikeTest()
+    window.quickLikeTest = function() {
+      console.log('🚀 QUICK LIKE TEST STARTING...');
+
+      // Set up test track if no track is playing
+      if (!currentTrackId && !window.currentTrackId) {
+        console.log('⚠️ No track playing, setting up test track...');
+        const testTrack = {
+          id: 'Where Dey At',
+          title: 'Where Dey At',
+          name: 'Where Dey At',
+          artist: 'Texx',
+          url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3'
+        };
+
+        currentTrackId = testTrack.id;
+        window.currentTrackId = testTrack.id;
+        window.currentTrackData = testTrack;
+
+        console.log('✅ Test track set up:', testTrack);
+      }
+
+      // Check like button
+      const likeBtn = document.getElementById('likeBtn');
+      if (!likeBtn) {
+        console.log('❌ Like button not found!');
+        return;
+      }
+
+      console.log('✅ Like button found, attempting to like track...');
+      console.log('📊 Current track:', currentTrackId || window.currentTrackId);
+
+      // Try to like the track
+      try {
+        toggleCurrentTrackLike();
+
+        // Check results after a delay
+        setTimeout(() => {
+          const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+          const trackId = currentTrackId || window.currentTrackId;
+          const isLiked = !!likedTracks[trackId];
+
+          console.log('📊 Like operation result:');
+          console.log('  Track ID:', trackId);
+          console.log('  Is now liked:', isLiked);
+          console.log('  Total liked tracks:', Object.keys(likedTracks).length);
+
+          if (isLiked) {
+            console.log('✅ SUCCESS: Track was liked and saved!');
+            console.log('📄 Track data:', likedTracks[trackId]);
+          } else {
+            console.log('❌ FAILED: Track was not saved to liked tracks');
+          }
+        }, 500);
+
+      } catch (error) {
+        console.error('❌ Error during like test:', error);
+      }
+    };
+
+    // 🎵 MANUAL LIKE TEST - Force like a specific track
+    window.manualLikeTest = function(trackId = 'Where Dey At') {
+      console.log('🎵 MANUAL LIKE TEST for:', trackId);
+
+      // Set up test track data
+      window.currentTrackData = {
+        id: trackId,
+        title: trackId,
+        name: trackId,
+        artist: 'Test Artist',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3'
+      };
+
+      currentTrackId = trackId;
+      window.currentTrackId = trackId;
+
+      console.log('✅ Set up test track data:', window.currentTrackData);
+
+      // Try to like it
+      toggleCurrentTrackLike();
+
+      // Check if it was saved
+      setTimeout(() => {
+        const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+        console.log('📊 Liked tracks after test:', Object.keys(likedTracks));
+        console.log('🔍 Test track saved:', !!likedTracks[trackId]);
+      }, 500);
+    };    // Show like/unlike notification
     function showLikeNotification(trackName, action) {
       // Remove any existing notification
       const existingNotification = document.getElementById('likeNotification');
@@ -19175,11 +19409,93 @@ function showGenrePopup(genre) {
       }
     }
 
-    // Add like button event listener
-    const likeBtn = document.getElementById('likeBtn');
-    if (likeBtn) {
-      likeBtn.addEventListener('click', toggleCurrentTrackLike);
+    // Add like button event listener with DOM ready check
+    function initializeLikeButton() {
+      const likeBtn = document.getElementById('likeBtn');
+      console.log('🔍 Looking for like button:', likeBtn);
+      if (likeBtn) {
+        console.log('✅ Like button found, adding event listener');
+        likeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('❤️ Like button clicked!');
+          toggleCurrentTrackLike();
+        });
+      } else {
+        console.log('❌ Like button not found');
+      }
     }
+
+    // Initialize like button when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeLikeButton);
+    } else {
+      initializeLikeButton();
+    }
+
+    // Additional initialization with delay to ensure sticky player is loaded
+    setTimeout(() => {
+      initializeLikeButton();
+      console.log('🔄 Re-initializing like button after delay');
+    }, 1000);
+
+    // Force like system to work - comprehensive initialization
+    window.initializeLikeSystemFully = function() {
+      console.log('🚀 FORCE INITIALIZING LIKE SYSTEM');
+
+      // Ensure global variables are set
+      if (!window.currentTrackId && currentTrackId) {
+        window.currentTrackId = currentTrackId;
+      }
+
+      // Re-attach event listeners
+      const likeBtn = document.getElementById('likeBtn');
+      if (likeBtn) {
+        // Remove existing listeners
+        const newLikeBtn = likeBtn.cloneNode(true);
+        likeBtn.parentNode.replaceChild(newLikeBtn, likeBtn);
+
+        // Add fresh event listener
+        newLikeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log('❤️ Like button clicked - FORCE SYSTEM!');
+
+          // Use currentTrackId or window.currentTrackId
+          const trackId = currentTrackId || window.currentTrackId;
+          if (!trackId) {
+            console.log('⚠️ No track ID available for liking');
+            return;
+          }
+
+          // Use current track data or create basic data
+          let trackData = window.currentTrackData;
+          if (!trackData && trackId) {
+            console.log('⚠️ No currentTrackData, creating basic track data');
+            trackData = {
+              id: trackId,
+              title: trackId,
+              name: trackId,
+              artist: 'Unknown Artist',
+              url: null
+            };
+          }
+
+          if (trackData) {
+            toggleCurrentTrackLike();
+          }
+        });
+
+        console.log('✅ FORCE LIKE SYSTEM: Event listener attached');
+      } else {
+        console.log('❌ FORCE LIKE SYSTEM: Like button not found');
+      }
+    };
+
+    // Auto-initialize after a delay
+    setTimeout(() => {
+      window.initializeLikeSystemFully();
+    }, 2000);
 
     // Update like button when track changes
     function updateLikeBtnForCurrent() {
