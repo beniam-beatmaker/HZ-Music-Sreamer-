@@ -585,6 +585,9 @@
 
       // Comprehensive track database
       const trackData = {
+        'Something Else': { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else', artist: 'B Tilla' },
+        'Love You Too': { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too', artist: 'Desiree' },
+        'Honey Be Mine': { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine', artist: 'B-Tilla' },
         'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
         'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
         'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
@@ -7456,18 +7459,29 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
-              <!-- New Track: Love You Deeep!!! at top with gold effect -->
-               <div class="recent-track-item" onclick="playNewTrack('Love You Deeep!!!', 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', 'Love You Deeep!!!', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
-                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Love You Deeep!!! cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+              <!-- New Track: Honey Be Mine at top with gold effect -->
+               <!-- New Track: Something Else at top with gold effect -->
+               <div class="recent-track-item" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
-                  <div class="recent-track-name">Love You Deeep!!!</div>
-                  <div class="recent-track-artist">B-Tilla</div>
+                  <div class="recent-track-name">Something Else</div>
+                  <div class="recent-track-artist">B Tilla</div>
                 </div>
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <!-- New Track: Honey Be Mine at top with gold effect -->
-               <div class="recent-track-item" onclick="playNewTrack('Honey Be Mine', 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', 'Honey Be Mine', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+               <!-- New Track: Love You Too with gold effect -->
+               <div class="recent-track-item" onclick="playNewTrack('Love You Too', 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', 'Love You Too', 'Desiree');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Love You Too cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Love You Too</div>
+                  <div class="recent-track-artist">Desiree</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Honey Be Mine with premium gold design -->
+               <div class="recent-track-item" onclick="playNewTrack('Honey Be Mine', 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', 'Honey Be Mine', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Honey Be Mine cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Honey Be Mine</div>
@@ -7476,7 +7490,27 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-               <div class="recent-track-item" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+               <!-- New Track: Love You Deeep!!! positioned under Honey Be Mine -->
+               <div class="recent-track-item" onclick="playNewTrack('Love You Deeep!!!', 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', 'Love You Deeep!!!', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Love You Deeep!!! cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Love You Deeep!!!</div>
+                  <div class="recent-track-artist">B-Tilla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- All Night positioned under Love You Deeep!!! with premium gold design -->
+               <div class="recent-track-item" onclick="playNewTrack('All Night', 'https://storage.googleapis.com/hertz-music-folder/All%20Night.mp3', 'All Night', 'B-Mecha');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="All Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">All Night</div>
+                  <div class="recent-track-artist">B-Mecha</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Where Dey At cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Where Dey At</div>
@@ -7485,15 +7519,6 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-             <div class="recent-track-item" onclick="playNewTrack('All Night', 'https://storage.googleapis.com/hertz-music-folder/All%20Night.mp3', 'All Night', 'B-Mecha');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
-                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Where Dey At cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-                <div class="recent-track-info">
-                  <div class="recent-track-name">All Night</div>
-                  <div class="recent-track-artist">B-Mecha</div>
-                </div>
-                <div class="recent-track-time">Just now</div>
-                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
-             </div>
               <div class="recent-track-item" onclick="playNewTrack('Know You', 'https://storage.googleapis.com/hertz-music-folder/Know%20U.mp3', 'Know You', 'B-Tilla')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Know You cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
@@ -7781,26 +7806,6 @@
             <div class="recent-track-time">Just now</div>
             <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
           </div>
-          <div class="recent-track-item" onclick="playNewTrack('lord', 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', 'Lord', 'Sweet-Soul')">
-            <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="Lord - crown" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-            <div class="recent-track-info">
-              <div class="recent-track-name">Lord</div>
-              <div class="recent-track-artist">Sweet-Soul</div>
-            </div>
-            <div class="recent-track-time">Just now</div>
-            <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
-          </div>
-              <!-- New Track: Tribz -->
-              <!-- Tribz track re-added with correct structure -->
-              <div class="recent-track-item" onclick="playNewTrack('Tribz', 'https://storage.googleapis.com/hertz-music-folder/Tribz.mp3', 'Tribz', 'Lil Prophet')">
-                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Christian cross with light" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-                <div class="recent-track-info">
-                  <div class="recent-track-name">Tribz</div>
-                  <div class="recent-track-artist">Lil Prophet</div>
-                </div>
-                <div class="recent-track-time">Just now</div>
-                <div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
-              </div>
           <div class="recent-track-item" onclick="playNewTrack('smile', 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', 'Smile', 'Amie-Rain')">
             <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=400&q=80" alt="Smile - smiling face" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
             <div class="recent-track-info">
@@ -7868,43 +7873,61 @@
             </tr>
           </thead>
           <tbody>
-                   <tr class="track-row" onclick="playNewTrack('Love You Deeep!!!', 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', 'Love You Deeep!!!', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                <!-- New Track: Something Else at top with gold border -->
+                <tr class="track-row" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Something Else</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:15</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Love You Too with gold border -->
+                <tr class="track-row" onclick="playNewTrack('Love You Too', 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', 'Love You Too', 'Desiree');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Love You Too cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Love You Too</div><div class="track-artist">Desiree</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">4:02</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Honey Be Mine with premium gold design at position 3 -->
+                <tr class="track-row" onclick="playNewTrack('Honey Be Mine', 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', 'Honey Be Mine', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Honey Be Mine cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Honey Be Mine</div><div class="track-artist">B-Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:45</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                   <tr class="track-row" onclick="playNewTrack('Love You Deeep!!!', 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', 'Love You Deeep!!!', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Love You Deeep!!! cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Love You Deeep!!!</div><div class="track-artist">B-Tilla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                   <tr class="track-row" onclick="playNewTrack('Honey Be Mine', 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', 'Honey Be Mine', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
-                  <td><div class="track-number">40</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Honey Be Mine cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Honey Be Mine</div><div class="track-artist">B-Tilla</div></div></div></td>
+                <!-- All Night positioned under Love You Deeep!!! with premium gold design -->
+                <tr class="track-row" onclick="playNewTrack('All Night', 'https://storage.googleapis.com/hertz-music-folder/All%20Night.mp3', 'All Night', 'B-Mecha');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="All Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">All Night</div><div class="track-artist">B-Mecha</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
-                  <td><div class="track-duration">Just now</div></td>
+                  <td><div class="track-duration">3:12</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                    <tr class="track-row" onclick="playNewTrack('Sweet Cakes', 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Cakes.mp3', 'Sweet Cakes', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                    <tr class="track-row" onclick="playNewTrack('Sweet Cakes', 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Cakes.mp3', 'Sweet Cakes', 'B-Tilla');">
                   <td><div class="track-number">80</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Sweet Cakes cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sweet Cakes</div><div class="track-artist">B-Tilla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                  <tr class="track-row" onclick="playNewTrack('All Night', 'https://storage.googleapis.com/hertz-music-folder/All%20Night.mp3', 'All Night', 'B-Mecha');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
-                  <td><div class="track-number">34</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="All Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">All Night</div><div class="track-artist">B-Mecha</div></div></div></td>
-                  <td><div class="track-album">Single</div></td>
-                  <td><div class="track-duration">Just now</div></td>
-                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                </tr>
-                  <tr class="track-row" onclick="playNewTrack('Typhoon', 'https://storage.googleapis.com/hertz-music-folder/Typhoon.mp3', 'Typhoon', 'B-Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                  <tr class="track-row" onclick="playNewTrack('Typhoon', 'https://storage.googleapis.com/hertz-music-folder/Typhoon.mp3', 'Typhoon', 'B-Tilla');">
                   <td><div class="track-number">79</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Typhoon cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Typhoon</div><div class="track-artist">B-Tilla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');" style="cursor: pointer; background: rgba(255,215,0,0.05);">
+                <tr class="track-row" onclick="playNewTrack('Where Dey At', 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', 'Where Dey At', 'Texx');">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Where Dey At cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Where Dey At</div><div class="track-artist">Texx</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
@@ -8021,13 +8044,6 @@
                 <tr class="track-row" onclick="playNewTrack('Like Love', 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', 'Like Love', 'Pyro')">
                   <td><div class="track-number">25</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Love heart HZ frequency" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Like Love</div><div class="track-artist">Pyro</div></div></div></td>
-                  <td><div class="track-album">Single</div></td>
-                  <td><div class="track-duration">Just now</div></td>
-                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
-                </tr>
-                <tr class="track-row" onclick="playNewTrack('Tribz', 'https://storage.googleapis.com/hertz-music-folder/Tribz.mp3', 'Tribz', 'Lil Prophet')">
-                  <td><div class="track-number">26</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Christian cross with light" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Tribz</div><div class="track-artist">Lil Prophet</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -8172,13 +8188,6 @@
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
-            <tr class="track-row" onclick="playNewTrack('lord', 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', 'Lord', 'Sweet-Soul')">
-              <td><div class="track-number">28</div><button class="track-play-btn">▶</button></td>
-              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=400&q=80" alt="Lord - crown" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Lord</div><div class="track-artist">Sweet-Soul</div></div></div></td>
-              <td><div class="track-album">Single</div></td>
-              <td><div class="track-duration">Just now</div></td>
-              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
-            </tr>
             <tr class="track-row" onclick="playNewTrack('smile', 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', 'Smile', 'Amie-Rain')">
               <td><div class="track-number">29</div><button class="track-play-btn">▶</button></td>
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?auto=format&fit=crop&w=400&q=80" alt="Smile - smiling face" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Smile</div><div class="track-artist">Amie-Rain</div></div></div></td>
@@ -8260,6 +8269,217 @@
         </div>
       </div>
 
+      <!-- Genres Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Genres</h2>
+          <a href="#" class="see-all-link">See all</a>
+        </div>
+        <div class="content-cards">
+          <div class="content-card content-card-small" onclick="openGenrePlaylist('pop')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Pop Music" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Pop</h3>
+            <p class="card-description card-description-small">Top pop hits and chart favorites</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openGenrePlaylist('rock')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80" alt="Rock Music" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Rock</h3>
+            <p class="card-description card-description-small">Classic and modern rock anthems</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openGenrePlaylist('hiphop')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1571609803439-bc3577c4bde3?auto=format&fit=crop&w=400&q=80" alt="Hip-Hop Music" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Hip-Hop</h3>
+            <p class="card-description card-description-small">Latest rap and hip-hop beats</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openGenrePlaylist('electronic')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1530841344095-8370bafa96e4?auto=format&fit=crop&w=400&q=80" alt="Electronic Music" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Electronic</h3>
+            <p class="card-description card-description-small">EDM, house, and electronic vibes</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openGenrePlaylist('jazz')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=400&q=80" alt="Jazz Music" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Jazz</h3>
+            <p class="card-description card-description-small">Smooth jazz and classic compositions</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Playlists Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Featured Playlists</h2>
+          <a href="#" class="see-all-link">See all</a>
+        </div>
+        <div class="content-cards">
+          <div class="content-card content-card-small" onclick="openFeaturedPlaylist('today-hits')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Today's Hits" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Today's Hits</h3>
+            <p class="card-description card-description-small">The hottest tracks right now</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openFeaturedPlaylist('workout')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=400&q=80" alt="Workout Mix" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Workout Mix</h3>
+            <p class="card-description card-description-small">High-energy tracks for your workout</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openFeaturedPlaylist('chill')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Chill Vibes" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Chill Vibes</h3>
+            <p class="card-description card-description-small">Relaxing music for any mood</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openFeaturedPlaylist('party')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a8e?auto=format&fit=crop&w=400&q=80" alt="Party Hits" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Party Hits</h3>
+            <p class="card-description card-description-small">Turn up the volume and dance</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openFeaturedPlaylist('throwback')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Throwback Thursday" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Throwback Thursday</h3>
+            <p class="card-description card-description-small">Classic hits from the past decades</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Albums for You Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Albums for You</h2>
+          <a href="#" class="see-all-link">See all</a>
+        </div>
+        <div class="content-cards">
+          <div class="content-card content-card-small" onclick="openAlbum('future-nostalgia')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Future Nostalgia" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Future Nostalgia</h3>
+            <p class="card-description card-description-small">Dua Lipa • 2020 • Pop</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openAlbum('folklore')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Folklore" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Folklore</h3>
+            <p class="card-description card-description-small">Taylor Swift • 2020 • Alternative</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openAlbum('after-hours')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1571609803439-bc3577c4bde3?auto=format&fit=crop&w=400&q=80" alt="After Hours" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">After Hours</h3>
+            <p class="card-description card-description-small">The Weeknd • 2020 • R&B</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openAlbum('positions')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Positions" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Positions</h3>
+            <p class="card-description card-description-small">Ariana Grande • 2020 • Pop</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openAlbum('circles')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <img src="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80" alt="Circles" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
+            </div>
+            <h3 class="card-title card-title-small">Circles</h3>
+            <p class="card-description card-description-small">Post Malone • 2019 • Hip-Hop</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trending Shorts Section -->
+      <div class="content-section">
+        <div class="section-header">
+          <h2 class="section-title">Trending Shorts</h2>
+          <a href="#" class="see-all-link">See all</a>
+        </div>
+        <div class="content-cards">
+          <div class="content-card content-card-small" onclick="openTrendingShort('viral-dance')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #ff6b6b, #4ecdc4);display:flex;align-items:center;justify-content:center;position:relative;">
+                <span style="font-size:2.5rem;color:white;">🎵</span>
+                <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.6rem;">0:30</div>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Viral Dance Mix</h3>
+            <p class="card-description card-description-small">Latest TikTok dance trends</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openTrendingShort('comedy-music')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #ffd93d, #ff6b6b);display:flex;align-items:center;justify-content:center;position:relative;">
+                <span style="font-size:2.5rem;color:white;">😂</span>
+                <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.6rem;">0:45</div>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Comedy Gold</h3>
+            <p class="card-description card-description-small">Funny music moments and memes</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openTrendingShort('artist-covers')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #a8e6cf, #88d8c0);display:flex;align-items:center;justify-content:center;position:relative;">
+                <span style="font-size:2.5rem;color:white;">🎤</span>
+                <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.6rem;">1:15</div>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Artist Covers</h3>
+            <p class="card-description card-description-small">Amazing cover performances</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openTrendingShort('live-sessions')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #ff9a9e, #fecfef);display:flex;align-items:center;justify-content:center;position:relative;">
+                <span style="font-size:2.5rem;color:white;">🔴</span>
+                <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.6rem;">2:30</div>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Live Sessions</h3>
+            <p class="card-description card-description-small">Intimate acoustic performances</p>
+          </div>
+
+          <div class="content-card content-card-small" onclick="openTrendingShort('music-challenges')" style="cursor: pointer;">
+            <div class="card-image card-image-small">
+              <div style="width:100%;height:100%;border-radius:8px;background:linear-gradient(135deg, #667eea, #764ba2);display:flex;align-items:center;justify-content:center;position:relative;">
+                <span style="font-size:2.5rem;color:white;">🏆</span>
+                <div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,0.7);color:white;padding:2px 6px;border-radius:4px;font-size:0.6rem;">1:00</div>
+              </div>
+            </div>
+            <h3 class="card-title card-title-small">Music Challenges</h3>
+            <p class="card-description card-description-small">Creative musical competitions</p>
+          </div>
+        </div>
+      </div>
+
   </div>
       <!-- Track rows will be injected here -->
       <div id="spotifyTrackCardsSection" style="margin:2.5rem 0 2.5rem 0;">
@@ -8324,6 +8544,9 @@
 
             // Get track data - check offline tracks first, then fallback to hardcoded tracks
             const hardcodedTrackData = {
+              'Something Else': { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else', artist: 'B Tilla' },
+              'Love You Too': { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too', artist: 'Desiree' },
+              'Honey Be Mine': { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine', artist: 'B-Tilla' },
               'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
               'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
               'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
@@ -8353,7 +8576,6 @@
               'Promise': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise', artist: 'Desiree' },
               'Bliss': { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss', artist: 'Echo' },
               'Hustle': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
-              '808-Symph': { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', title: '808-Symph', artist: 'Molly-Able' },
               'shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', title: 'Shine', artist: 'Bezzie' },
               'heart': { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart', artist: 'T-Glow' },
               'nova': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova', artist: 'Prod. Boltz' },
@@ -8457,7 +8679,7 @@
           var volumeRange = document.getElementById('volumeRange');
           var trackOrder = [
             'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
-            'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
+            'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle',
             'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe', 'Consistency', 'Like Love',
             'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
           ];
@@ -8569,7 +8791,7 @@
               // Restore original order
               trackOrder = [
                 'Times', 'Prime', 'Made It', 'Nector', 'Aint Nough Dreamzz', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
-                'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle', '808-Symph',
+                'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle',
                 'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe', 'Consistency', 'Like Love',
                 'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
               ];
@@ -9326,6 +9548,8 @@
 
           // Comprehensive track database
           const trackData = {
+            'Something Else': { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else', artist: 'B Tilla' },
+            'Love You Too': { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too', artist: 'Desiree' },
             'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
             'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
             'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
@@ -10311,6 +10535,8 @@ function showGenrePopup(genre) {
       if (typeof window.playNewTrack === 'function') {
         // Get track data for proper title and artist display
         const trackData = {
+          'Something Else': { title: 'Something Else', artist: 'B Tilla' },
+          'Love You Too': { title: 'Love You Too', artist: 'Desiree' },
           'Times': { title: 'Times', artist: 'Stat Cross' },
           'Prime': { title: 'Prime', artist: 'SlattZ' },
           'Made It': { title: 'Made It', artist: 'Prod. Tedla' },
@@ -10341,7 +10567,6 @@ function showGenrePopup(genre) {
           'Promise': { title: 'Promise', artist: 'Desiree' },
           'Bliss': { title: 'Bliss', artist: 'Echo' },
           'Hustle': { title: 'Hustle', artist: 'NeoXX' },
-          '808-Symph': { title: '808-Symph', artist: 'Molly-Able' },
           'shine': { title: 'Shine', artist: 'Bezzie' },
           'heart': { title: 'Heart', artist: 'T-Glow' },
           'nova': { title: 'Nova', artist: 'Prod. Boltz' },
@@ -12418,6 +12643,8 @@ function showGenrePopup(genre) {
 
       // Hardcoded track data (complete set matching first function)
       const hardcodedTrackData = {
+        'Something Else': { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else', artist: 'B Tilla' },
+        'Love You Too': { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too', artist: 'Desiree' },
         'Where Dey At': { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At', artist: 'Texx' },
         'Times': { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
         'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
@@ -16564,6 +16791,118 @@ function showGenrePopup(genre) {
       console.log('🔄 Popular tracks refreshed');
     }
 
+    // Genre Playlist Functions
+    function openGenrePlaylist(genre) {
+      console.log(`🎭 Opening ${genre} genre playlist`);
+      const genreTracks = getTracksByGenre(genre);
+      if (genreTracks.length > 0) {
+        const randomIndex = Math.floor(Math.random() * genreTracks.length);
+        playTrack(genreTracks[randomIndex].id);
+      }
+    }
+
+    function getTracksByGenre(genre) {
+      const allTracks = [
+        { id: 'Something Else', genre: 'pop', title: 'Something Else', artist: 'B Tilla' },
+        { id: 'Love You Too', genre: 'electronic', title: 'Love You Too', artist: 'Desiree' },
+        { id: 'Space', genre: 'electronic', title: 'Space', artist: 'Prod. Tedla' },
+        { id: 'Nimbus', genre: 'pop', title: 'Nimbus', artist: 'Prod. Tedla' },
+        { id: 'Shootin Starz', genre: 'hiphop', title: 'Shootin Starz', artist: 'Prod. Simz' },
+        { id: 'Mars', genre: 'rock', title: 'Mars', artist: 'Prod. Tedla' },
+        { id: 'Times', genre: 'jazz', title: 'Times', artist: 'Stat Cross' }
+      ];
+      return allTracks.filter(track => track.genre === genre);
+    }
+
+    // Featured Playlists Functions
+    function openFeaturedPlaylist(playlistType) {
+      console.log(`🎵 Opening featured playlist: ${playlistType}`);
+      const playlistTracks = getFeaturedPlaylistTracks(playlistType);
+      if (playlistTracks.length > 0) {
+        const randomIndex = Math.floor(Math.random() * playlistTracks.length);
+        playTrack(playlistTracks[randomIndex].id);
+      }
+    }
+
+    function getFeaturedPlaylistTracks(type) {
+      const playlists = {
+        'today-hits': [
+          { id: 'Space', title: 'Space', artist: 'Prod. Tedla' },
+          { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla' }
+        ],
+        'workout': [
+          { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz' },
+          { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla' }
+        ],
+        'chill': [
+          { id: 'Times', title: 'Times', artist: 'Stat Cross' },
+          { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla' }
+        ],
+        'party': [
+          { id: 'Space', title: 'Space', artist: 'Prod. Tedla' },
+          { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz' }
+        ],
+        'throwback': [
+          { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla' },
+          { id: 'Times', title: 'Times', artist: 'Stat Cross' }
+        ]
+      };
+      return playlists[type] || [];
+    }
+
+    // Albums Functions
+    function openAlbum(albumId) {
+      console.log(`💿 Opening album: ${albumId}`);
+      const albumTracks = getAlbumTracks(albumId);
+      if (albumTracks.length > 0) {
+        playTrack(albumTracks[0].id); // Play first track of album
+      }
+    }
+
+    function getAlbumTracks(albumId) {
+      const albums = {
+        'future-nostalgia': [
+          { id: 'Space', title: 'Space', artist: 'Dua Lipa' },
+          { id: 'Nimbus', title: 'Nimbus', artist: 'Dua Lipa' }
+        ],
+        'folklore': [
+          { id: 'Times', title: 'Times', artist: 'Taylor Swift' },
+          { id: 'Mars', title: 'Mars', artist: 'Taylor Swift' }
+        ],
+        'after-hours': [
+          { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'The Weeknd' }
+        ],
+        'positions': [
+          { id: 'Space', title: 'Space', artist: 'Ariana Grande' }
+        ],
+        'circles': [
+          { id: 'Nimbus', title: 'Nimbus', artist: 'Post Malone' }
+        ]
+      };
+      return albums[albumId] || [];
+    }
+
+    // Trending Shorts Functions
+    function openTrendingShort(shortType) {
+      console.log(`📱 Opening trending short: ${shortType}`);
+      const shortContent = getTrendingShortContent(shortType);
+      if (shortContent) {
+        // For shorts, we could play a shortened version or show a special interface
+        playTrack(shortContent.trackId);
+      }
+    }
+
+    function getTrendingShortContent(type) {
+      const shorts = {
+        'viral-dance': { trackId: 'Space', duration: 30 },
+        'comedy-music': { trackId: 'Nimbus', duration: 45 },
+        'artist-covers': { trackId: 'Times', duration: 75 },
+        'live-sessions': { trackId: 'Mars', duration: 150 },
+        'music-challenges': { trackId: 'Shootin Starz', duration: 60 }
+      };
+      return shorts[type] || null;
+    }
+
     // Universal function to ensure sticky player appears in ANY popup
     function forceStickyPlayerInPopup() {
       const stickyPlayer = document.getElementById('stickyPlayer');
@@ -19221,6 +19560,8 @@ function showGenrePopup(genre) {
       if (!currentTrack) {
         console.log('⚠️ No currentTrackData, creating fallback track data for:', currentTrackId);
         const trackData = {
+          'Something Else': { id: 'Something Else', title: 'Something Else', name: 'Something Else', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav' },
+          'Love You Too': { id: 'Love You Too', title: 'Love You Too', name: 'Love You Too', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav' },
           'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', name: 'Where Dey At', artist: 'Texx', url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3' },
           'Times': { id: 'Times', title: 'Times', name: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav' },
           'Prime': { id: 'Prime', title: 'Prime', name: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav' },
