@@ -2632,7 +2632,7 @@ input[type="file"] {
     <a href="Online25App.html" class="nav-btn">🌐 Online</a>
     <a href="Offline25App.html" class="nav-btn active">📱 Offline</a>
     <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
-    <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+
     <a href="Account25App.html" class="nav-btn">👤 Account</a>
     <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
   </div>
@@ -5872,12 +5872,11 @@ function renderOfflineVideoLibrary() {
 
   let html = '';
   offlineVideos.forEach((video, index) => {
-    // Reduce individual video logging for large libraries to prevent DevTools overload
     if (offlineVideos.length <= 10 || index === 0 || index === offlineVideos.length - 1) {
       console.log(`Rendering video ${index + 1}:`, video.name);
     }
     html += `
-      <div class="video-item" onclick="playOfflineVideo('${video.id}')" style="position:relative;margin-bottom:10px;cursor:pointer;">
+      <div class="video-item" data-video-id="${video.id}" style="position:relative;margin-bottom:10px;cursor:pointer;">
         <div class="video-square" style="position:relative;width:100%;height:120px;background:#333;border-radius:8px;overflow:hidden;">
           <video preload="metadata" style="width:100%;height:100%;object-fit:cover;" muted>
             <source src="${video.url}" type="${video.type}">
@@ -5904,6 +5903,15 @@ function renderOfflineVideoLibrary() {
 
   console.log('Generated HTML length:', html.length);
   libraryElement.innerHTML = html;
+  // Make each video-item clickable to play in mini player
+  libraryElement.querySelectorAll('.video-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+      // Prevent menu button clicks from triggering video play
+      if (e.target.closest('button')) return;
+      const vid = item.getAttribute('data-video-id');
+      if (vid) window.playOfflineVideo(vid);
+    });
+  });
   console.log('✅ Video library rendered successfully');
 }
 
