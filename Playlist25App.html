@@ -106,20 +106,23 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             width: 100vw;
         }
 
         .main-content {
             width: 100%;
-            max-width: 900px;
-            padding: 2rem;
+            max-width: 100%;
+            padding: 2rem 1rem;
             background: #1a1a1a;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 150px;
         }
 
         .nav-buttons {
@@ -178,65 +181,193 @@
             font-weight: 600;
         }
 
-        /* Sticky Player Styles */
+        /* Sticky Player Styles (From Hertz25App.html) */
         .sticky-player {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #181818;
-            padding: 0.2rem 0.7rem;
-            border-top: 1px solid #404040;
-            z-index: 1000;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.18);
-            display: none;
-            flex-direction: column;
-            min-height: 38px;
-            height: 38px;
-        }
-
-        .player-btn {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0.5rem;
-            margin: 0 0.3rem;
-            border-radius: 50%;
-            transition: color 0.2s;
-        }
-
-        .player-btn:hover { color: #0066ff; }
-        .player-loop.active, .player-shuffle.active { color: #1db954; }
-
-        .player-controls {
+            position: fixed !important;
+            left: 50% !important;
+            bottom: 88px !important;
+            transform: translateX(-50%) !important;
+            z-index: 1600;
+            background: rgba(18, 18, 18, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.2);
+            border-top: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 14px;
+            padding: 3px 10px 3px 10px !important;
             display: flex;
+            flex-direction: column;
             align-items: center;
-        }
-
-        .player-title {
-            font-weight: 500;
-            margin: 0 1.5rem;
-            flex: 1;
-            text-align: center;
+            justify-content: center;
+            transition: all 0.3s ease, box-shadow 0.2s, background 0.2s;
+            font-family: 'Segoe UI', Arial, sans-serif;
             color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            min-width: 320px;
+            max-width: 480px;
+            width: 88vw !important;
+            border: 2px solid #0a174e;
+            animation: stickyPlayerFadeIn 0.4s;
+            opacity: 0.95;
+            right: auto !important;
+            margin: 0 !important;
         }
 
-        #likeBtn {
-            margin-left: 1.5rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.7rem;
-            color: #b3b3b3;
-            transition: color 0.2s;
+        .sticky-player:hover {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 0 40px 0 rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        #likeBtn.liked { color: #ff6b6b; }
+        @keyframes stickyPlayerFadeIn {
+          from { opacity: 0; transform: translateX(-50%) translateY(40px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        .sticky-player .player-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          background: transparent;
+          border-radius: 0;
+          padding: 2px 8px;
+          width: 100%;
+          max-width: 340px;
+        }
+
+        .sticky-player .player-btn {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+          color: #fff;
+          border: none;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(255,215,0,0.18);
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+
+        .sticky-player .player-btn:hover {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+          transform: scale(1.08);
+          box-shadow: 0 4px 12px rgba(255,215,0,0.25);
+        }
+
+        .sticky-player .player-btn:focus {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          outline: none !important;
+          border: none !important;
+          box-shadow: 0 4px 12px rgba(255,215,0,0.25);
+        }
+
+        .sticky-player .player-btn:active {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          outline: none !important;
+        }
+
+        .sticky-player #playPauseBtn {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          color: #fff !important;
+          border: none !important;
+        }
+
+        .sticky-player #playPauseBtn:hover {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          transform: scale(1.08);
+          box-shadow: 0 4px 12px rgba(255,215,0,0.25);
+        }
+
+        .sticky-player #playPauseBtn:focus {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          outline: none !important;
+          border: none !important;
+          box-shadow: 0 4px 12px rgba(255,215,0,0.25) !important;
+        }
+
+        .sticky-player #playPauseBtn:active {
+          background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%) !important;
+          outline: none !important;
+          border: none !important;
+        }
+
+        .sticky-player .player-title {
+          font-weight: 700;
+          font-size: 0.75rem;
+          color: #FFD700;
+          text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+          letter-spacing: 0.03em;
+          text-align: center !important;
+          margin: 0;
+          width: 100%;
+          display: block;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        .sticky-player #progressBar {
+          accent-color: #FFD700;
+          height: 5px;
+          border-radius: 5px;
+          background: #232526;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        .sticky-player #likeBtn {
+          font-size: 1.1rem;
+          color: rgba(255,255,255,0.4);
+          transition: all 0.2s ease;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 3px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .sticky-player #likeBtn:hover {
+          color: #FFD700;
+          background: rgba(255,215,0,0.1);
+        }
+
+        .sticky-player #likeBtn.liked {
+          color: #FFD700 !important;
+        }
+
+        /* Mobile responsive styles for sticky player */
+        @media (max-width: 600px) {
+          .sticky-player {
+            padding: 4px 8px 3px 8px;
+            min-width: 280px;
+            left: 50%;
+            bottom: 88px;
+            transform: translateX(-50%);
+            border-radius: 14px 14px 0 0;
+            max-width: 95vw;
+            width: 92vw;
+          }
+
+          .sticky-player:hover {
+            transform: translateX(-50%) translateY(-2px);
+          }
+
+          .sticky-player .player-controls {
+            gap: 0.4rem;
+            padding: 1px 6px;
+          }
+
+          .sticky-player .player-title {
+            font-size: 0.8rem;
+          }
+
+          .sticky-player .player-btn {
+            transform: scale(0.9);
+          }
+        }
 
         /* Popup Player Modal (Offline blue style) */
         .modal {
@@ -256,9 +387,9 @@
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            background: #2a2a2a;
             border-radius: 24px;
-            box-shadow: 0 8px 32px rgba(33,150,243,0.32);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
             padding: 2.7rem 2.7rem 2.2rem 2.7rem;
             max-width: 420px;
             width: 95%;
@@ -266,7 +397,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 2px solid #1565c0;
+            border: 2px solid #404040;
         }
 
         .close {
@@ -583,7 +714,7 @@
         }
 
         .popup-player-btn {
-            background: linear-gradient(135deg, #1565c0 0%, #2196f3 100%);
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
             border: none;
             color: #fff;
             font-size: 1.05rem;
@@ -591,8 +722,8 @@
             padding: 0.45rem;
             margin: 0 0.12rem;
             border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(33,150,243,0.18);
-            transition: background 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.25);
+            transition: all 0.2s ease;
             min-width: 32px;
             min-height: 32px;
             width: 32px;
@@ -600,27 +731,38 @@
         }
 
         .popup-player-btn:hover {
-            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
-            color: gold;
+            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
+            transform: scale(1.08);
+            box-shadow: 0 4px 12px rgba(255,215,0,0.35);
         }
 
-        .popup-player-loop.active, .popup-player-shuffle.active { color: gold; }
+        .popup-player-loop.active, .popup-player-shuffle.active {
+            color: #fff;
+            background: linear-gradient(135deg, #1db954 0%, #148a3f 100%);
+        }
 
         #popupLikeBtn {
             font-size: 1.7rem;
-            color: #fff;
-            transition: color 0.2s;
-            background: linear-gradient(135deg, #1565c0 0%, #2196f3 100%);
-            border: none;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.2s ease;
+            background: rgba(255,215,0,0.15);
+            border: 2px solid rgba(255,215,0,0.3);
             cursor: pointer;
             border-radius: 50%;
             padding: 0.7rem;
-            box-shadow: 0 2px 8px rgba(33,150,243,0.18);
+            box-shadow: 0 2px 8px rgba(255,215,0,0.15);
+        }
+
+        #popupLikeBtn:hover {
+            color: #FFD700;
+            background: rgba(255,215,0,0.25);
+            border-color: #FFD700;
         }
 
         #popupLikeBtn.liked {
-            color: #ff6b6b;
-            background: linear-gradient(135deg, #2196f3 0%, #1565c0 100%);
+            color: #FFD700;
+            background: rgba(255,215,0,0.3);
+            border-color: #FFD700;
         }
 
         .popup-player-extra {
@@ -648,7 +790,11 @@
         }
 
         @media (max-width: 900px) {
-            .main-content { padding: 1rem; }
+            .main-content {
+                padding: 1rem 0.5rem;
+                padding-top: 80px;
+                padding-bottom: 150px;
+            }
             .nav-buttons { justify-content: center; width: 100%; }
 
             .nav-dropdown {
@@ -668,6 +814,89 @@
             .hamburger-line {
                 width: 18px;
                 height: 2.5px;
+            }
+
+            /* Make artist folders and track grids responsive */
+            #artistFoldersGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+                padding: 0 0.5rem;
+            }
+
+            #spotifyTrackGrid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 1rem !important;
+                padding: 0 0.5rem;
+            }
+
+            #artistFoldersSection, #spotifyTrackGridSection {
+                margin: 1rem 0.5rem !important;
+                padding: 1rem !important;
+            }
+
+            .section-title {
+                font-size: 1.25rem !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 0.75rem 0.25rem;
+                padding-top: 75px;
+                padding-bottom: 160px;
+            }
+
+            #artistFoldersGrid, #spotifyTrackGrid {
+                grid-template-columns: repeat(1, 1fr) !important;
+                gap: 0.8rem !important;
+            }
+
+            #artistFoldersSection, #spotifyTrackGridSection {
+                margin: 0.75rem 0.25rem !important;
+                padding: 0.75rem !important;
+                border-radius: 12px !important;
+            }
+
+            .section-title {
+                font-size: 1.1rem !important;
+                margin-bottom: 1rem !important;
+            }
+
+            #searchToggleBtn {
+                top: 15px !important;
+                right: 15px !important;
+                width: 42px !important;
+                height: 42px !important;
+            }
+        }
+
+        /* Large Desktop / Fullscreen optimizations */
+        @media (min-width: 1200px) {
+            #artistFoldersGrid, #spotifyTrackGrid {
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 1.5rem !important;
+            }
+
+            #artistFoldersSection, #spotifyTrackGridSection {
+                max-width: 1400px !important;
+                padding: 2rem !important;
+            }
+
+            .main-content {
+                padding: 2rem 2rem;
+                padding-top: 90px;
+                padding-bottom: 150px;
+            }
+        }
+
+        @media (min-width: 1600px) {
+            #artistFoldersGrid, #spotifyTrackGrid {
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 1.8rem !important;
+            }
+
+            #artistFoldersSection, #spotifyTrackGridSection {
+                max-width: 1800px !important;
             }
         }
 
@@ -950,6 +1179,115 @@
             font-style: italic;
         }
 
+        /* Artist Popup Modal Styles */
+        .artist-popup-modal {
+            display: none;
+            position: fixed;
+            z-index: 3500;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .artist-popup-content {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(255,215,0,0.3);
+            padding: 2rem;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid gold;
+        }
+
+        .artist-popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #404040;
+        }
+
+        .artist-popup-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: gold;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .artist-popup-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+
+        .artist-popup-close:hover {
+            color: gold;
+        }
+
+        .artist-tracks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1.5rem;
+            justify-items: center;
+        }
+
+        .artist-track-card {
+            background: #232526;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 120px;
+        }
+
+        .artist-track-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 16px rgba(255,215,0,0.3);
+        }
+
+        .artist-track-card img {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            margin-bottom: 0.7rem;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(255,215,0,0.3);
+            border: 2px solid gold;
+        }
+
+        .artist-track-name {
+            font-weight: 600;
+            color: #fff;
+            font-size: 0.95rem;
+            text-align: center;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @media (max-width: 600px) {
             .modal-content {
                 padding: 1.2rem 0.7rem 1.2rem 0.7rem;
@@ -983,6 +1321,16 @@
                 max-width: 95%;
                 padding: 0.8rem;
             }
+
+            .artist-popup-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .artist-tracks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 1rem;
+            }
         }
     </style>
 </head>
@@ -1007,7 +1355,7 @@
         <a href="Online25App.html" class="nav-btn">🌐 Online</a>
         <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn active">📋 Playlists</a>
-        <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
         <button class="nav-btn" onclick="openDashboard()" style="width: 100%; text-align: left; cursor: pointer;">📊 Dashboard</button>
@@ -1034,15 +1382,23 @@
                 <a href="Online25App.html" class="nav-btn">🌐 Online</a>
                 <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
                 <a href="Playlist25App.html" class="nav-btn active">📋 Playlists</a>
-                <a href="Liked25App.html" class="nav-btn">❤️ Liked</a>
+
                 <a href="Account25App.html" class="nav-btn">👤 Account</a>
                 <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
             </div>
 
-            <!-- ONLY ONE SECTION: FEATURED TRACKS -->
-            <div id="spotifyTrackGridSection" style="max-width:900px;margin:1.5rem auto 2.5rem auto;padding:1.5rem;background:#181818;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+            <!-- ARTIST ALBUMS SECTION -->
+            <div id="artistFoldersSection" style="display:block !important;visibility:visible !important;width:100%;max-width:1200px;margin:1.5rem auto 2rem auto;padding:1.5rem;background:#282828;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.12);min-height:200px;border:2px solid #FFD700;">
+                <h2 class="section-title" style="text-align:center;color:gold;font-size:1.5rem;margin-bottom:1.5rem;font-weight:bold;">🎵 ARTIST ALBUMS</h2>
+                <div id="artistFoldersGrid" style="display:grid !important;grid-template-columns:repeat(3,1fr);gap:1.3rem;justify-items:center;padding:0.5rem;min-height:150px;">
+                    <!-- Artist folders will be rendered here -->
+                </div>
+            </div>
+
+            <!-- FEATURED TRACKS SECTION -->
+            <div id="spotifyTrackGridSection" style="width:100%;max-width:1200px;margin:1.5rem auto 2.5rem auto;padding:1.5rem;background:#181818;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.12);">
                 <h2 class="section-title" style="text-align:center;color:gold;font-size:1.5rem;margin-bottom:1.5rem;">FEATURED TRACKS</h2>
-                <div id="spotifyTrackGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;justify-items:center;">
+                <div id="spotifyTrackGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;justify-items:center;padding:0.5rem;">
                     <!-- Track cards will be injected here -->
                 </div>
             </div>
@@ -1095,27 +1451,49 @@
                 </div>
             </div>
 
-            <!-- Sticky Player -->
-            <div class="sticky-player" id="stickyPlayer">
-                <div id="stickyPlayerMain" style="display:flex;align-items:center;width:100%;height:36px;cursor:pointer;">
-                    <div class="player-controls">
-                        <button class="player-btn" id="prevBtn" title="Previous">&#9198;</button>
-                        <button class="player-btn" id="playPauseBtn" title="Always Playing">&#10073;&#10073;</button>
-                        <button class="player-btn" id="nextBtn" title="Next">&#9197;</button>
-                        <button class="player-btn player-loop" id="loopBtn" title="Loop">&#128257;</button>
-                        <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle">&#128256;</button>
-                        <label for="volumeRange" style="margin-left:1rem;color:#b3b3b3;font-size:0.95em;">Volume</label>
-                        <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.7" style="width:100px;">
+            <!-- Artist Popup Modal -->
+            <div id="artistPopupModal" class="artist-popup-modal">
+                <div class="artist-popup-content">
+                    <div class="artist-popup-header">
+                        <div class="artist-popup-title" id="artistPopupTitle">Artist Name</div>
+                        <button class="artist-popup-close" id="closeArtistPopup">&times;</button>
                     </div>
-                    <span class="player-title" id="playerTrackTitle"></span>
-                    <div style="display:flex;align-items:center;gap:0.7rem;width:320px;max-width:90%;">
-                        <span id="currentTime" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
-                        <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="flex:1;">
-                        <span id="duration" style="font-size:0.95em;color:#b3b3b3;">0:00</span>
+                    <div class="artist-tracks-grid" id="artistTracksGrid">
+                        <!-- Artist tracks will be rendered here -->
                     </div>
-                    <button id="likeBtn" title="Like Track">&#10084;</button>
                 </div>
-                <audio id="playerAudio" style="display:none;" preload="metadata"></audio>
+            </div>
+
+            <!-- Sticky Player (From Hertz25App.html) -->
+            <div class="sticky-player" id="stickyPlayer" style="display:none;">
+                <!-- Time Display and Track Title Row -->
+                <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:1px;">
+                    <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1px;">
+                        <span id="currentTime" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+                        <span style="margin:0 2px;color:#fff;font-weight:500;">/</span>
+                        <span id="duration" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
+                    </div>
+                    <div style="width:100%;text-align:center;" id="stickyPlayerMain">
+                        <span class="player-title" id="playerTrackTitle" style="font-size:0.75rem;margin:0;cursor:pointer;"></span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar Row -->
+                <div style="width:100%;margin-bottom:2px;">
+                    <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1" style="width:100%;margin:0;">
+                </div>
+
+                <!-- Controls Row -->
+                <div class="player-controls">
+                    <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="width:28px;height:28px;font-size:0.9rem;">&#128256;</button>
+                    <button class="player-btn" id="prevBtn" title="Previous" style="width:38px;height:38px;font-size:1.2rem;">&#9198;</button>
+                    <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="width:42px;height:42px;font-size:1.4rem;">&#9654;</button>
+                    <button class="player-btn" id="nextBtn" title="Next" style="width:38px;height:38px;font-size:1.2rem;">&#9197;</button>
+                    <button class="player-btn player-loop" id="loopBtn" title="Loop" style="width:28px;height:28px;font-size:0.9rem;">&#128257;</button>
+                    <button id="likeBtn" title="Like">&#10084;</button>
+                </div>
+
+                <audio id="playerAudio" class="player-audio"></audio>
             </div>
         </div>
     </div>
@@ -1243,53 +1621,135 @@
             });
         });
 
-        // CLEAN TRACKS DATA
+        // COMPREHENSIVE TRACKS DATA - ALL TRACKS FROM HERTZ25APP
         const featuredTracks = [
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Me%20And%20You!%20Artist.%20Utopia.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/afro-dancehall-music.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/background-music.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/background-theme.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/background-upbeat.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/best-time-hip-hop.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/calm-mind.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/chill.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/eemotional-trap-beat.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/energetic-hip-hop.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/emotional-pop.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/for-her-chill-type-beat.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/hip-hop-music.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-chill.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-hiphop.mp3' },
-            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-music.mp3' }
+            // Original featured tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Me%20And%20You!%20Artist.%20Utopia.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Love%2CPeace%2CUnity_FULL_SONG_MusicGPT.mp3', artist: '', cover: '' },
+
+            // Prod. Tedla tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', artist: 'Prod. Tedla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', artist: 'Prod. Tedla', cover: '' },
+
+            // B Tilla / B-Tilla tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', artist: 'B Tilla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', artist: 'B-Tilla', cover: '' },
+
+            // Desiree tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', artist: 'Desiree', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', artist: 'Desiree', cover: '' },
+
+            // Bezzie tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Lights.wav', artist: 'Bezzie', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Bootiful.wav', artist: 'Bezzie', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Vibin.wav', artist: 'Bezzie', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3', artist: 'Bezzie', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Shine.wav', artist: 'Bezzie', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', artist: 'Bezzie', cover: '' },
+
+            // Texx tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', artist: 'Texx', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', artist: 'Texx', cover: '' },
+
+            // Molly-Able tracks
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', artist: 'Molly-Able', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/808-Symphony.mp3', artist: 'Molly-Able', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', artist: 'Molly-Able', cover: '' },
+
+            // Other artists (one track each)
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', artist: 'Stat Cross', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', artist: 'SlattZ', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', artist: 'Stage Rolla', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', artist: 'Prod. Nexus', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', artist: 'Prod. Phantom', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', artist: 'Neon Gloww', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', artist: 'Melody-Soull', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', artist: 'Neo', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', artist: 'Prod. 4EV', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', artist: 'Prod. Cool-Rhythms', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', artist: 'Klevv', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', artist: 'Prod. Legacy', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', artist: 'Pegasus', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', artist: 'Echo', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', artist: 'NeoXX', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', artist: 'T-Glow', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', artist: 'Prod. Boltz', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', artist: 'B-Gallop', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', artist: 'Soul-Ful', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', artist: 'Sweet-Soul', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', artist: 'Amie-Rain', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', artist: 'Lil Guava', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', artist: 'Aime-Rain', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', artist: 'StarLight', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', artist: 'Pyro', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', artist: 'Prod. Simz', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/vision.mp3', artist: 'C-All', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/faith.mp3', artist: 'B-I-R-M-P', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/yettobe.mp3', artist: 'Bey-Erus', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Call.wav', artist: 'Prod. Echo', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Livid%20type%20beat.wav', artist: 'Prod. Lucid', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Divine.wav', artist: 'Sacred Sounds', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Shore.wav', artist: 'Prod. Wav', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/Spittin.wav', artist: 'Prod. Jello', cover: '' },
+
+            // Generic tracks without specific artists
+            { url: 'https://storage.googleapis.com/hertz-music-folder/afro-dancehall-music.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-music.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-theme.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/background-upbeat.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/best-time-hip-hop.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/calm-mind.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/chill.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/eemotional-trap-beat.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/energetic-hip-hop.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/emotional-pop.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/for-her-chill-type-beat.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/hip-hop-music.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-chill.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-hiphop.mp3', artist: '', cover: '' },
+            { url: 'https://storage.googleapis.com/hertz-music-folder/lofi-music.mp3', artist: '', cover: '' }
        ];
 
-        function getTrackInfo(url) {
+        function getTrackInfo(url, trackObj = null) {
             const fileName = decodeURIComponent(url.split('/').pop());
             let name = fileName.replace(/\.(mp3|wav)$/i, '');
             // Remove _FULL_SONG_MusicGPT (case-insensitive, with or without underscores)
             name = name.replace(/_?FULL[_ ]?SONG[_ ]?MusicGPT/i, '').replace(/_+/g, ' ').replace(/\s{2,}/g, ' ').trim();
-            let artist = '';
-            if (/Prod\. Tedla/i.test(name)) {
+
+            // Use artist from trackObj if provided
+            let artist = (trackObj && trackObj.artist) ? trackObj.artist : '';
+
+            // Fallback artist detection from filename
+            if (!artist && /Prod\. Tedla/i.test(name)) {
                 artist = 'Prod. Tedla';
                 name = name.replace(/ ?Prod\. Tedla/i, '').replace(/!$/, '').trim();
             }
-            if (/Teddy Afro Prod\. Tedla/i.test(fileName)) {
+            if (!artist && /Teddy Afro Prod\. Tedla/i.test(fileName)) {
                 artist = 'Prod. Tedla';
                 name = 'Teddy Afro';
             }
-            if (!artist) artist = '';
+            if (!artist && /Prod\. Simz/i.test(name)) {
+                artist = 'Prod. Simz';
+                name = name.replace(/ ?Prod\. Simz/i, '').trim();
+            }
+
             return { name, artist, url };
         }
 
@@ -1304,7 +1764,7 @@
             const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
 
             featuredTracks.forEach((trackObj, idx) => {
-                let track = getTrackInfo(trackObj.url);
+                let track = getTrackInfo(trackObj.url, trackObj);
                 // Custom logic for the two new tracks
                 let customTitle = track.name;
                 let customArtist = track.artist;
@@ -1377,7 +1837,7 @@ window.addToQueue = function(trackId) {
     let idx = -1;
     if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
     if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
+    const track = getTrackInfo(featuredTracks[idx].url, featuredTracks[idx]);
     if (!window.queue) window.queue = [];
     if (!window.queue.find(t => t.url === track.url)) {
         window.queue.push(track);
@@ -1396,7 +1856,7 @@ window.shareTrack = function(trackId, event) {
     let idx = -1;
     if (trackId.startsWith('ft')) idx = parseInt(trackId.replace('ft', ''));
     if (isNaN(idx) || !featuredTracks[idx]) return;
-    const track = getTrackInfo(featuredTracks[idx].url);
+    const track = getTrackInfo(featuredTracks[idx].url, featuredTracks[idx]);
     // Social platforms and SVG icons (X replaces Twitter)
     const platforms = [
         {
@@ -1501,6 +1961,137 @@ window.removeTrack = function(trackId) {
             console.log('Featured tracks rendered:', grid.children.length);
         }
 
+        // Render Artist Folders (Albums)
+        function renderArtistFolders() {
+            console.log('🎵 === STARTING renderArtistFolders ===');
+            const grid = document.getElementById('artistFoldersGrid');
+            console.log('Grid element:', grid);
+
+            if (!grid) {
+                console.error('❌ artistFoldersGrid not found!');
+                return;
+            }
+
+            grid.innerHTML = '';
+            console.log('Grid cleared');
+
+            // Group tracks by artist
+            const artistTracks = {};
+            let totalTracksProcessed = 0;
+
+            featuredTracks.forEach((trackObj, idx) => {
+                totalTracksProcessed++;
+                const track = getTrackInfo(trackObj.url, trackObj);
+                console.log(`Track ${idx}: "${track.name}" by "${track.artist}"`);
+
+                if (track.artist && track.artist.trim() !== '') {
+                    if (!artistTracks[track.artist]) {
+                        artistTracks[track.artist] = [];
+                    }
+                    artistTracks[track.artist].push({ ...track, originalIndex: idx });
+                }
+            });
+
+            console.log(`📊 Processed ${totalTracksProcessed} tracks`);
+            console.log(`🎤 Found ${Object.keys(artistTracks).length} artists:`, Object.keys(artistTracks));
+
+            // Create folder for each artist - sorted by track count (most tracks first)
+            let cardsCreated = 0;
+            Object.keys(artistTracks).sort((a, b) => {
+                return artistTracks[b].length - artistTracks[a].length;
+            }).forEach(artistName => {
+                const tracks = artistTracks[artistName];
+                console.log(`Creating card for ${artistName} with ${tracks.length} tracks`);
+
+                const folderCard = document.createElement('div');
+                folderCard.className = 'spotify-track-card artist-folder-card';
+                folderCard.style.cssText = 'background:#232526;border-radius:22px;box-shadow:0 2px 8px rgba(0,0,0,0.10);padding:1.1rem 0.7rem;display:flex;flex-direction:column;align-items:center;cursor:pointer;transition:transform 0.18s;width:100%;max-width:180px;min-width:130px;';
+
+                const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+                folderCard.innerHTML = `
+                    <div style="position:relative;">
+                        <img src="${hzLogoDataUrl}" alt="${artistName}" style="width:90px;height:90px;border-radius:20px;margin-bottom:0.7rem;object-fit:cover;box-shadow:0 2px 8px rgba(255,215,0,0.3);border:2px solid gold;">
+                        <div style="position:absolute;top:5px;right:5px;background:rgba(255,215,0,0.9);color:#000;font-size:0.75rem;font-weight:700;padding:2px 6px;border-radius:8px;">${tracks.length}</div>
+                    </div>
+                    <div style="font-weight:600;color:gold;font-size:1rem;text-align:center;margin-bottom:0.3rem;">${artistName}</div>
+                    <div style="font-size:0.85rem;color:#b3b3b3;text-align:center;">${tracks.length} track${tracks.length > 1 ? 's' : ''}</div>
+                `;
+
+                folderCard.addEventListener('click', function() {
+                    showArtistPopup(artistName, tracks);
+                });
+
+                folderCard.addEventListener('mouseover', function() {
+                    folderCard.style.transform = 'scale(1.05)';
+                });
+
+                folderCard.addEventListener('mouseout', function() {
+                    folderCard.style.transform = 'scale(1)';
+                });
+
+                grid.appendChild(folderCard);
+                cardsCreated++;
+                console.log(`✅ Card ${cardsCreated} appended to grid`);
+            });
+
+            console.log(`✅ Artist folders rendered: ${cardsCreated} cards created`);
+            console.log(`📦 Grid now has ${grid.children.length} children`);
+            console.log('🎵 === renderArtistFolders COMPLETE ===');
+        }
+
+        // Show Artist Popup with all tracks
+        function showArtistPopup(artistName, tracks) {
+            const modal = document.getElementById('artistPopupModal');
+            const title = document.getElementById('artistPopupTitle');
+            const tracksGrid = document.getElementById('artistTracksGrid');
+
+            if (!modal || !title || !tracksGrid) return;
+
+            title.textContent = artistName;
+            tracksGrid.innerHTML = '';
+
+            const hzLogoDataUrl = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgZmlsbD0iIzAwMDAwMCIvPgogIDxnIGZpbGw9IiNGRkQ3MDAiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJjZW50cmFsIj4KICAgIDx0ZXh0IHg9IjEwMCIgeT0iMTAwIj5IWjwvdGV4dD4KICA8L2c+Cjwvc3ZnPg==';
+
+            tracks.forEach(track => {
+                const trackCard = document.createElement('div');
+                trackCard.className = 'artist-track-card';
+                trackCard.innerHTML = `
+                    <img src="${hzLogoDataUrl}" alt="${track.name}">
+                    <div class="artist-track-name">${track.name}</div>
+                `;
+
+                trackCard.addEventListener('click', function() {
+                    console.log('🎵 Playing track from artist popup:', track.name);
+                    enableAutoplay();
+                    loadTrack(track.originalIndex, true);
+                    modal.style.display = 'none';
+                });
+
+                tracksGrid.appendChild(trackCard);
+            });
+
+            modal.style.display = 'block';
+        }
+
+        // Close artist popup
+        document.addEventListener('DOMContentLoaded', function() {
+            const closeBtn = document.getElementById('closeArtistPopup');
+            const modal = document.getElementById('artistPopupModal');
+
+            if (closeBtn && modal) {
+                closeBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                    }
+                });
+            }
+        });
+
         // Player Logic
         let currentIndex = 0;
         let isPlaying = false;
@@ -1534,7 +2125,7 @@ window.removeTrack = function(trackId) {
 
             console.log(`🎧 Loading track ${idx} with autoplay: ${autoplay}`);
             stickyPlayer.style.display = 'flex';
-            const track = getTrackInfo(featuredTracks[idx].url);
+            const track = getTrackInfo(featuredTracks[idx].url, featuredTracks[idx]);
 
             // Stop current audio if playing
             if (!playerAudio.paused) {
@@ -1566,7 +2157,7 @@ window.removeTrack = function(trackId) {
             // Configure audio for autoplay
             playerAudio.autoplay = false; // We'll handle this manually
             playerAudio.muted = false;
-            playerAudio.volume = volumeRange.value || 0.7;
+            playerAudio.volume = volumeRange ? volumeRange.value : 0.7;
             console.log('🔊 Audio configured for autoplay, volume=', playerAudio.volume);
 
             // Set initial button state based on autoplay
@@ -1910,7 +2501,7 @@ window.removeTrack = function(trackId) {
             if (!featuredTracks[currentIndex]) return;
 
             totalViews += 1;
-            const track = getTrackInfo(featuredTracks[currentIndex].url);
+            const track = getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]);
 
             console.log(`🎉 VIEW LOGGED: ${track.name} (played for 30+ seconds) - Total Views: ${totalViews}`);
 
@@ -1931,7 +2522,7 @@ window.removeTrack = function(trackId) {
             // Get tracks that have been played (have plays > 0)
             const listenedTracks = featuredTracks
                 .map((trackObj, index) => {
-                    const track = getTrackInfo(trackObj.url);
+                    const track = getTrackInfo(trackObj.url, trackObj);
                     return {
                         id: index,
                         name: track.name,
@@ -1951,8 +2542,8 @@ window.removeTrack = function(trackId) {
                 avgSessionTime: Math.floor((Date.now() - sessionStartTime) / 60000), // minutes
                 currentTrack: currentIndex >= 0 && featuredTracks[currentIndex] ? {
                     id: currentIndex,
-                    name: getTrackInfo(featuredTracks[currentIndex].url).name,
-                    artist: getTrackInfo(featuredTracks[currentIndex].url).artist,
+                    name: getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]).name,
+                    artist: getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]).artist,
                     plays: featuredTracks[currentIndex].plays || 0
                 } : null,
                 topTracks: listenedTracks,
@@ -2073,7 +2664,7 @@ window.removeTrack = function(trackId) {
 
                 // Filter tracks based on search query
                 filteredTracks = featuredTracks
-                    .map((track, index) => ({ ...getTrackInfo(track.url), originalIndex: index }))
+                    .map((track, index) => ({ ...getTrackInfo(track.url, track), originalIndex: index }))
                     .filter(track => {
                         const searchTerm = query.toLowerCase();
                         return track.name.toLowerCase().includes(searchTerm) ||
@@ -2245,9 +2836,11 @@ window.removeTrack = function(trackId) {
         });
         loopBtn.addEventListener('click', toggleLoop);
         shuffleBtn.addEventListener('click', toggleShuffle);
-        volumeRange.addEventListener('input', function() {
-            playerAudio.volume = volumeRange.value;
-        });
+        if (volumeRange) {
+            volumeRange.addEventListener('input', function() {
+                playerAudio.volume = volumeRange.value;
+            });
+        }
         likeBtn.addEventListener('click', toggleLike);
 
         playerAudio.addEventListener('timeupdate', function() {
@@ -2322,8 +2915,29 @@ window.removeTrack = function(trackId) {
 
         // Initialize
         window.addEventListener('DOMContentLoaded', function() {
+            console.log('🎬 DOM Content Loaded - Starting initialization...');
+            console.log('📊 Featured tracks count:', featuredTracks.length);
+
+            const artistSection = document.getElementById('artistFoldersSection');
+            const artistGrid = document.getElementById('artistFoldersGrid');
+            console.log('📁 Artist section found:', !!artistSection);
+            console.log('📁 Artist grid found:', !!artistGrid);
+
+            if (artistSection) {
+                artistSection.style.display = 'block';
+                artistSection.style.visibility = 'visible';
+                console.log('✅ Artist section made visible');
+            }
+
+            renderArtistFolders();
             renderFeaturedTracks();
-            console.log('✅ CLEAN VERSION LOADED - NO MAIN PLAYLIST TRACKS SECTION');
+
+            setTimeout(() => {
+                const gridChildren = artistGrid ? artistGrid.children.length : 0;
+                console.log('🎵 Artist folders in grid after render:', gridChildren);
+            }, 100);
+
+            console.log('✅ CLEAN VERSION LOADED - Artist folders and featured tracks rendered');
 
             // Initialize search functionality
             initializeSearch();
@@ -2350,7 +2964,7 @@ window.removeTrack = function(trackId) {
             stickyPlayerMain.addEventListener('click', function(e) {
                 // Don't show popup if clicking on buttons, volume slider, or progress bar
                 if (e.target.closest('button') ||
-                    e.target === volumeRange ||
+                    (volumeRange && e.target === volumeRange) ||
                     e.target === progressBar ||
                     e.target.id === 'currentTime' ||
                     e.target.id === 'duration') {
@@ -2367,7 +2981,7 @@ window.removeTrack = function(trackId) {
                 popupPlayerContent.style.transform = 'translate(-50%, -50%)';
 
                 // Sync track info
-                const track = getTrackInfo(featuredTracks[currentIndex].url);
+                const track = getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]);
                 popupPlayerTrackInfo.innerHTML = `
                     <div class='popup-player-title'>${track.name}</div>
                     ${track.artist ? `<div class='popup-player-artist'>${track.artist}</div>` : ''}
@@ -2501,7 +3115,7 @@ window.removeTrack = function(trackId) {
                 }
 
                 orderedQueue.forEach((item, displayIndex) => {
-                    const trackInfo = getTrackInfo(item.track.url);
+                    const trackInfo = getTrackInfo(item.track.url, item.track);
                     const queueItem = document.createElement('div');
                     queueItem.className = `queue-item ${displayIndex === 0 ? 'current' : ''}`;
                     queueItem.draggable = true;
@@ -2734,7 +3348,7 @@ window.removeTrack = function(trackId) {
             if (e.key === 'hertzLikedTracks' || e.key === 'hertzLikedTracksUpdate') {
                 // Update like button state for current track
                 if (featuredTracks[currentIndex]) {
-                    const track = getTrackInfo(featuredTracks[currentIndex].url);
+                    const track = getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]);
                     const trackId = `track_${currentIndex}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
                     const likedTracksObj = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
                     const isLiked = likedTracksObj[trackId];
@@ -2817,7 +3431,7 @@ window.removeTrack = function(trackId) {
                 return;
             }
 
-            const track = getTrackInfo(featuredTracks[currentIndex].url);
+            const track = getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]);
             const trackId = `track_${currentIndex}_${track.name.replace(/[^a-zA-Z0-9]/g, '_')}`;
 
             console.log('🔄 Toggling like for track:', {
@@ -2844,7 +3458,6 @@ window.removeTrack = function(trackId) {
                     const popupLikeBtn = document.getElementById('popupLikeBtn');
                     if (popupLikeBtn) {
                         popupLikeBtn.classList.toggle('liked', liked);
-                        popupLikeBtn.style.color = liked ? '#ff6b6b' : '#fff';
                     }
                 }
 
@@ -2863,7 +3476,6 @@ window.removeTrack = function(trackId) {
                     // Remove from hertz_liked_tracks array for Liked25App.html
                     likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
                     likeBtn.classList.remove('liked');
-                    likeBtn.style.color = '#b3b3b3';
                     syncPopupLikeBtn(false);
                     showStatus(`Removed \"${track.name}\" from liked tracks`, 'info');
                 } else {
@@ -2883,6 +3495,7 @@ window.removeTrack = function(trackId) {
                     const likedTrack = {
                         id: trackId,
                         name: track.name,
+                        title: track.name,
                         artist: track.artist || 'Unknown Artist',
                         url: url,
                         likedAt: new Date().toISOString()
@@ -2890,7 +3503,8 @@ window.removeTrack = function(trackId) {
                     likedTracksObj[trackId] = {
                         ...likedTrack,
                         album: '',
-                        source: 'Playlist25App'
+                        source: 'Playlist25App',
+                        cover: track.cover || ''
                     };
                     // Only add if not already present (by id)
                     if (!sharedLikedTracks.some(t => t.id === trackId)) {
@@ -2909,7 +3523,6 @@ window.removeTrack = function(trackId) {
                     likedTracksArray = likedTracksArray.filter(t => t.id !== trackId);
                     likedTracksArray.unshift(likedTrack);
                     likeBtn.classList.add('liked');
-                    likeBtn.style.color = '#ff6b6b';
                     syncPopupLikeBtn(true);
                     showStatus(`Added \"${track.name}\" to liked tracks`, 'success');
                 }
@@ -2960,7 +3573,7 @@ window.removeTrack = function(trackId) {
                 return;
             }
 
-            const track = getTrackInfo(featuredTracks[currentIndex].url);
+            const track = getTrackInfo(featuredTracks[currentIndex].url, featuredTracks[currentIndex]);
             console.log('🎵 Testing with track:', track.name);
 
             // Test liking
