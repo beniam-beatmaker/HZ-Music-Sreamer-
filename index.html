@@ -17651,11 +17651,77 @@ function showGenrePopup(genre) {
         { id: 'party', title: 'Party Hits', description: 'Turn up the volume and dance', cover: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=400&q=80' }
       ];
 
+      // Define album tracks data
+      const albumTracksData = {
+        'Other Artists': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times - Stat Cross' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime - SlattZ' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav', title: 'Limitless Dreams - Stage Rolla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav', title: 'Blossom - Prod. Nexus' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3', title: 'Mach 1 - Prod. Phantom' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Echo.wav', title: 'Echo - Neon Gloww' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.wav', title: 'Smilin - Melody-Soull' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.wav', title: 'Persistence - Neo' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav', title: 'Smooth - Prod. 4EV' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Toon.wav', title: 'Different - Prod. Cool-Rhythms' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!! - Klevv' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', title: 'Huh - Prod. Legacy' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Future.wav', title: 'Future - Pegasus' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3', title: 'Bliss - Echo' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle - NeoXX' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Heart.wav', title: 'Heart - T-Glow' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav', title: 'Nova - Prod. Boltz' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It - B-Gallop' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright - Soul-Ful' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord - Sweet-Soul' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile - Amie-Rain' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights - Lil Guava' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe - Aime-Rain' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Consistency.wav', title: 'Consistency - StarLight' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Like%20Love.wav', title: 'Like Love - Pyro' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz - Prod. Simz' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/vision.mp3', title: 'Vision - C-All' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/faith.mp3', title: 'Faith - B-I-R-M-P' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/yettobe.mp3', title: 'Yet to be - Bey-Erus' }
+        ],
+        'Prod. Tedla': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3', title: 'Unity' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Tion%20Prod.%20Tedla.mp3', title: 'Tion' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Afro%20Prod.%20Tedla.mp3', title: 'Teddy Afro' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Sync%20Prod.%20Tedla.mp3', title: 'Sync' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Prod.%20Tedla.wav', title: 'Sweet' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', title: 'Nector' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It!%20Prod.%20Tedla.mp3', title: 'Made It!' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Luv%20Me%20Prod.%20Tedla.mp3', title: 'Luv Me' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Country%20Prod.%20Tedla.wav', title: 'Country' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Believe%20Prod.%20Tedla.mp3', title: 'Believe' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Astro.BET%20Prod.%20Tedla.mp3', title: 'Astro.BET' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars' }
+        ],
+        'Desiree': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Focus.wav', title: 'Focus' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Mind.wav', title: 'Mind' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Step.wav', title: 'Step' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Promise.mp3', title: 'Promise' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream' }
+        ],
+        'B-Tilla': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', title: 'Love You Deeep!!!' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/My%20Way.mp3', title: 'My Way' }
+        ]
+      };
+
       const albumsForYou = [
-        { id: 'future-nostalgia', title: 'Future Nostalgia', artist: 'Dua Lipa', year: '2020', genre: 'Pop', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
-        { id: 'folklore', title: 'Folklore', artist: 'Taylor Swift', year: '2020', genre: 'Alternative', cover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80' },
-        { id: 'after-hours', title: 'After Hours', artist: 'The Weeknd', year: '2020', genre: 'R&B', cover: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80' },
-        { id: 'positions', title: 'Positions', artist: 'Ariana Grande', year: '2020', genre: 'Pop', cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80' }
+        { id: 'various-artists', title: 'Various Artists Collection', artist: 'Other Artists', year: '28 tracks', genre: 'Mixed', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
+        { id: 'prod-tedla', title: 'Prod. Tedla Anthology', artist: 'Prod. Tedla', year: '14 tracks', genre: 'Hip-Hop', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
+        { id: 'desiree-collection', title: 'Desiree Collection', artist: 'Desiree', year: '7 tracks', genre: 'R&B', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
+        { id: 'b-tilla-essentials', title: 'B-Tilla Essentials', artist: 'B-Tilla', year: '4 tracks', genre: 'Hip-Hop', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' }
       ];
 
       let html = `
@@ -17686,11 +17752,12 @@ function showGenrePopup(genre) {
       `;
 
       albumsForYou.forEach(album => {
+        const tracks = albumTracksData[album.artist] || [];
         html += `
           <div class="album-card" style="width: 150px; background: rgba(255,255,255,0.08); border-radius: 14px; padding: 0; cursor: pointer; transition: all 0.3s; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"
                onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(255,215,0,0.2)'; this.style.background='rgba(255,255,255,0.12)'"
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'; this.style.background='rgba(255,255,255,0.08)'"
-               onclick="openAlbum('${album.id}')">
+               onclick="showAlbumForYouTracks('${album.artist.replace(/'/g, "\\'")}', ${JSON.stringify(tracks).replace(/"/g, '&quot;')})">
             <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #1a1a1a, #000); overflow: hidden; position: relative;">
               <img src="${album.cover}" alt="${album.title}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
               <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7)); pointer-events: none;"></div>
@@ -17703,6 +17770,65 @@ function showGenrePopup(genre) {
 
       html += '</div>';
       container.innerHTML = html;
+    };
+
+    // Show tracks for "Albums for You" section
+    window.showAlbumForYouTracks = function(artist, tracks) {
+      const container = document.getElementById('searchPageAlbumsGrid');
+      if (!container) return;
+
+      // Build HTML for track list
+      let html = `
+        <div style="grid-column: 1 / -1; margin-bottom: 1.5rem;">
+          <button onclick="loadSearchPageAlbums()" style="background: none; border: none; color: #ffd700; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0;">
+            <span style="font-size: 1.5rem;">←</span> Back to Albums
+          </button>
+        </div>
+        <h3 style="grid-column: 1 / -1; color: #fff; margin-bottom: 1.5rem; font-size: 1.8rem;">🎵 ${artist}</h3>
+        <div style="grid-column: 1 / -1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+      `;
+
+      tracks.forEach((track, index) => {
+        const trackId = `album_${artist}_${index}`;
+        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
+
+        // Extract track title and artist (for "Other Artists" category, title includes " - Artist")
+        let displayTitle = track.title;
+        let displayArtist = artist;
+        if (track.title.includes(' - ')) {
+          const parts = track.title.split(' - ');
+          displayTitle = parts[0];
+          displayArtist = parts[1] || artist;
+        }
+
+        html += `
+          <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;"
+               onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+               onmouseout="this.style.background='transparent'"
+               onclick="playAlbumForYouTrack('${trackId}', '${track.url}', '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}')">
+            <div style="flex: 1;">
+              <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${displayTitle}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist} • ${ext}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    };
+
+    // Play a track from the "Albums for You" section
+    window.playAlbumForYouTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      console.log('🎵 Playing album track:', trackTitle, 'by', trackArtist);
+
+      // Close search popup
+      closeSearchPopup();
+
+      // Use the existing playNewTrack function
+      if (typeof window.playNewTrack === 'function') {
+        window.playNewTrack(trackId, trackUrl, trackTitle, trackArtist);
+      }
     };
 
     // Genre Playlist Functions
