@@ -545,6 +545,8 @@
     // ========== GLOBAL TRACK DATABASE - AVAILABLE IMMEDIATELY ==========
     // This MUST be defined BEFORE any functions that use it
     window.trackData = {
+      'Watch': { url: 'https://storage.googleapis.com/hertz-music-folder/watch.mp3', title: 'Watch', artist: 'Slattz' },
+      'Berg': { url: 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', title: 'Berg', artist: 'B-Mecha' },
       'Something Else': { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else', artist: 'B Tilla' },
       'Love You Too': { url: 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', title: 'Love You Too', artist: 'Desiree' },
       'Honey Be Mine': { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine', artist: 'B-Tilla' },
@@ -7796,17 +7798,17 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
-              <!-- New Track: Honey Be Mine at top with gold effect -->
-               <!-- New Track: Something Else at top with gold effect -->
-               <div class="recent-track-item" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
-                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+              <!-- New Track: Watch at top with gold effect -->
+               <div class="recent-track-item" onclick="playNewTrack('Watch', 'https://storage.googleapis.com/hertz-music-folder/watch.mp3', 'Watch', 'Slattz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Watch cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
-                  <div class="recent-track-name">Something Else</div>
-                  <div class="recent-track-artist">B Tilla</div>
+                  <div class="recent-track-name">Watch</div>
+                  <div class="recent-track-artist">Slattz</div>
                 </div>
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+              <!-- New Track: Honey Be Mine at top with gold effect -->
                <!-- New Track: Love You Too with gold effect -->
                <div class="recent-track-item" onclick="playNewTrack('Love You Too', 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', 'Love You Too', 'Desiree');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Love You Too cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -7853,6 +7855,26 @@
                 <div class="recent-track-info">
                   <div class="recent-track-name">All Night</div>
                   <div class="recent-track-artist">B-Mecha</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Berg - First regular track after gold section -->
+               <div class="recent-track-item" onclick="playNewTrack('Berg', 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', 'Berg', 'B-Mecha');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Berg cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Berg</div>
+                  <div class="recent-track-artist">B-Mecha</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- Something Else moved to regular tracks section -->
+               <div class="recent-track-item" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Something Else</div>
+                  <div class="recent-track-artist">B Tilla</div>
                 </div>
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
@@ -8462,12 +8484,12 @@
             </tr>
           </thead>
           <tbody>
-                <!-- New Track: Something Else at top with gold border -->
-                <tr class="track-row" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <!-- New Track: Watch at top with gold border -->
+                <tr class="track-row" onclick="playNewTrack('Watch', 'https://storage.googleapis.com/hertz-music-folder/watch.mp3', 'Watch', 'Slattz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Something Else</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Watch cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Watch</div><div class="track-artist">Slattz</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
-                  <td><div class="track-duration">3:15</div></td>
+                  <td><div class="track-duration">3:22</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
                 <!-- New Track: Love You Too with gold border -->
@@ -8509,8 +8531,24 @@
                   <td><div class="track-duration">3:12</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Aqua Type Beat', 'https://storage.googleapis.com/hertz-music-folder/Aqua%20type%20beat.wav', 'Aqua Type Beat', 'Prod. Neon');" style="cursor: pointer;">
+                <!-- New Track: Berg - First regular track after gold section -->
+                <tr class="track-row" onclick="playNewTrack('Berg', 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', 'Berg', 'B-Mecha');" style="cursor: pointer;">
                   <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Berg cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Berg</div><div class="track-artist">B-Mecha</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:10</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- Something Else moved to regular tracks -->
+                <tr class="track-row" onclick="playNewTrack('Something Else', 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', 'Something Else', 'B Tilla');" style="cursor: pointer;">
+                  <td><div class="track-number">8</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Something Else cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Something Else</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:15</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Aqua Type Beat', 'https://storage.googleapis.com/hertz-music-folder/Aqua%20type%20beat.wav', 'Aqua Type Beat', 'Prod. Neon');" style="cursor: pointer;">
+                  <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80" alt="Aqua Type Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Aqua Type Beat</div><div class="track-artist">Prod. Neon</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
@@ -11143,6 +11181,8 @@
 
       // Get actual track database for real search results
       const allTracks = {
+        'Watch': { id: 'Watch', title: 'Watch', artist: 'Slattz', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+        'Berg': { id: 'Berg', title: 'Berg', artist: 'B-Mecha', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
         'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
         'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
         'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
@@ -11364,6 +11404,8 @@ function showGenrePopup(genre) {
       if (typeof window.playNewTrack === 'function') {
         // Get track data for proper title and artist display
         const trackData = {
+          'Watch': { title: 'Watch', artist: 'Slattz' },
+          'Berg': { title: 'Berg', artist: 'B-Mecha' },
           'Something Else': { title: 'Something Else', artist: 'B Tilla' },
           'Love You Too': { title: 'Love You Too', artist: 'Desiree' },
           'Times': { title: 'Times', artist: 'Stat Cross' },
@@ -17450,11 +17492,16 @@ function showGenrePopup(genre) {
     // Most Popular Functions
     function openMostPopular() {
       console.log('🔥 Opening Most Popular');
-      const overlay = document.getElementById('mostPopularOverlay');
-      if (overlay) {
-        overlay.style.display = 'flex';
-        loadMostPopular();
-      }
+
+      const popularTracks = [
+        { title: 'Space', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', genre: 'electronic', duration: '3:20' },
+        { title: 'Nimbus', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', genre: 'pop', duration: '3:53' },
+        { title: 'Shootin Starz', artist: 'Prod. Simz', url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', genre: 'hiphop', duration: '3:02' },
+        { title: 'Mars', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', genre: 'rock', duration: '2:54' },
+        { title: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', genre: 'jazz', duration: '3:03' }
+      ];
+
+      showPlaylistModal('Most Popular', 'Trending hits and chart toppers', popularTracks);
     }
 
     function closeMostPopular() {
@@ -17513,10 +17560,23 @@ function showGenrePopup(genre) {
     // Liked Songs Functions
     function openLikedSongs() {
       console.log('❤️ Opening Liked Songs');
-      const overlay = document.getElementById('likedSongsOverlay');
-      if (overlay) {
-        overlay.style.display = 'flex';
-        loadLikedSongs();
+
+      const likedSongs = JSON.parse(localStorage.getItem('likedSongs') || '[]');
+
+      if (likedSongs.length === 0) {
+        // If no liked songs, still show modal with empty message
+        showPlaylistModal('Liked Songs', 'No liked songs yet. Start liking songs to build your collection!', []);
+      } else {
+        // Convert liked songs format to match showPlaylistModal expected format
+        const tracks = likedSongs.map(song => ({
+          title: song.title,
+          artist: song.artist,
+          url: song.url || '#',
+          duration: song.duration || '3:45',
+          genre: song.genre || 'unknown'
+        }));
+
+        showPlaylistModal('Liked Songs', 'Your favorite tracks all in one place', tracks);
       }
     }
 
@@ -17713,7 +17773,15 @@ function showGenrePopup(genre) {
           { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', title: 'Love You Deeep!!!' },
-          { url: 'https://storage.googleapis.com/hertz-music-folder/My%20Way.mp3', title: 'My Way' }
+          { url: 'https://storage.googleapis.com/hertz-music-folder/My%20Way.mp3', title: 'My Way' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Cakes.mp3', title: 'Sweet Cakes' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Typhoon.mp3', title: 'Typhoon' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Know%20U.mp3', title: 'Know You' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/In%20the%20Zone.wav', title: 'In the Zone' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/No%20More%20Scars.wav', title: 'No More Scars' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/She%20a%20Prize.wav', title: 'She a Prize' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/She%20Fine.wav', title: 'She Fine' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/You%20a%20Diamond.wav', title: 'You a Diamond' }
         ]
       };
 
@@ -17721,7 +17789,7 @@ function showGenrePopup(genre) {
         { id: 'various-artists', title: 'Various Artists Collection', artist: 'Other Artists', year: '28 tracks', genre: 'Mixed', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80' },
         { id: 'prod-tedla', title: 'Prod. Tedla Anthology', artist: 'Prod. Tedla', year: '14 tracks', genre: 'Hip-Hop', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80' },
         { id: 'desiree-collection', title: 'Desiree Collection', artist: 'Desiree', year: '7 tracks', genre: 'R&B', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
-        { id: 'b-tilla-essentials', title: 'B-Tilla Essentials', artist: 'B-Tilla', year: '4 tracks', genre: 'Hip-Hop', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' }
+        { id: 'b-tilla-essentials', title: 'B-Tilla Essentials', artist: 'B-Tilla', year: '11 tracks', genre: 'Hip-Hop', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' }
       ];
 
       let html = `
@@ -17734,7 +17802,7 @@ function showGenrePopup(genre) {
           <div class="album-card" style="width: 150px; background: rgba(255,255,255,0.08); border-radius: 14px; padding: 0; cursor: pointer; transition: all 0.3s; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.3);"
                onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 20px rgba(255,215,0,0.2)'; this.style.background='rgba(255,255,255,0.12)'"
                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'; this.style.background='rgba(255,255,255,0.08)'"
-               onclick="openFeaturedPlaylist('${playlist.id}')">
+               onclick="showFeaturedPlaylistTracks('${playlist.id}', '${playlist.title.replace(/'/g, "\\'")}')">
             <div style="width: 150px; height: 150px; background: linear-gradient(135deg, #1a1a1a, #000); overflow: hidden; position: relative;">
               <img src="${playlist.cover}" alt="${playlist.title}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
               <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7)); pointer-events: none;"></div>
@@ -17821,6 +17889,87 @@ function showGenrePopup(genre) {
     // Play a track from the "Albums for You" section
     window.playAlbumForYouTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
       console.log('🎵 Playing album track:', trackTitle, 'by', trackArtist);
+
+      // Close search popup
+      closeSearchPopup();
+
+      // Use the existing playNewTrack function
+      if (typeof window.playNewTrack === 'function') {
+        window.playNewTrack(trackId, trackUrl, trackTitle, trackArtist);
+      }
+    };
+
+    // Show tracks for Featured Playlists section (without green play buttons)
+    window.showFeaturedPlaylistTracks = function(playlistId, playlistTitle) {
+      const container = document.getElementById('searchPageAlbumsGrid');
+      if (!container) return;
+
+      // Get playlist tracks with full URLs
+      const playlistTracksMap = {
+        'today-hits': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Unity%20Prod.%20Tedla.mp3', title: 'Unity', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' }
+        ],
+        'workout': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3', title: 'Hustle', artist: 'NeoXX' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', title: 'Push It', artist: 'B-Gallop' }
+        ],
+        'chill': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', title: 'Times', artist: 'Stat Cross' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', title: 'Soul', artist: 'Desiree' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' }
+        ],
+        'party': [
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Typhoon.mp3', title: 'Typhoon', artist: 'B-Tilla' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3', title: 'Wop!!!', artist: 'Klevv' }
+        ]
+      };
+
+      const tracks = playlistTracksMap[playlistId] || [];
+
+      // Build HTML for track list (without green play buttons)
+      let html = `
+        <div style="grid-column: 1 / -1; margin-bottom: 1.5rem;">
+          <button onclick="loadSearchPageAlbums()" style="background: none; border: none; color: #ffd700; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0;">
+            <span style="font-size: 1.5rem;">←</span> Back to Playlists
+          </button>
+        </div>
+        <h3 style="grid-column: 1 / -1; color: #fff; margin-bottom: 1.5rem; font-size: 1.8rem;">🎧 ${playlistTitle}</h3>
+        <div style="grid-column: 1 / -1; background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem;">
+      `;
+
+      tracks.forEach((track, index) => {
+        const trackId = `playlist_${playlistId}_${index}`;
+        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
+
+        html += `
+          <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;"
+               onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+               onmouseout="this.style.background='transparent'"
+               onclick="playFeaturedPlaylistTrack('${trackId}', '${track.url}', '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}')">
+            <div style="flex: 1;">
+              <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${track.title}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist} • ${ext}</div>
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+    };
+
+    // Play a track from the Featured Playlists section
+    window.playFeaturedPlaylistTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      console.log('🎵 Playing featured playlist track:', trackTitle, 'by', trackArtist);
 
       // Close search popup
       closeSearchPopup();
@@ -18224,7 +18373,17 @@ function showGenrePopup(genre) {
         ],
         'B-Tilla': [
           { url: 'https://storage.googleapis.com/hertz-music-folder/Something%20Else.wav', title: 'Something Else' },
-          { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine' }
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Honey%20Be%20Mine.mp3', title: 'Honey Be Mine' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Love%20Youuu%20Deep.mp3', title: 'Love You Deeep!!!' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/My%20Way.mp3', title: 'My Way' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Sweet%20Cakes.mp3', title: 'Sweet Cakes' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Typhoon.mp3', title: 'Typhoon' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/Know%20U.mp3', title: 'Know You' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/In%20the%20Zone.wav', title: 'In the Zone' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/No%20More%20Scars.wav', title: 'No More Scars' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/She%20a%20Prize.wav', title: 'She a Prize' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/She%20Fine.wav', title: 'She Fine' },
+          { url: 'https://storage.googleapis.com/hertz-music-folder/You%20a%20Diamond.wav', title: 'You a Diamond' }
         ],
         'Texx': [
           { url: 'https://storage.googleapis.com/hertz-music-folder/Where%20they%20at.mp3', title: 'Where Dey At' },
@@ -19968,6 +20127,8 @@ function showGenrePopup(genre) {
       // Get local tracks from the existing trackData object (defined in playTrack function)
       const localTracks = {
         // Core tracks
+        'Watch': { id: 'Watch', title: 'Watch', artist: 'Slattz', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/watch.mp3' },
+        'Berg': { id: 'Berg', title: 'Berg', artist: 'B-Mecha', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/berg.mp3' },
         'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav' },
         'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav' },
         'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav' },
