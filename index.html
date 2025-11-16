@@ -600,7 +600,16 @@
       'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
       'Vision': { url: 'https://storage.googleapis.com/hertz-music-folder/vision.mp3', title: 'Vision', artist: 'C-All' },
       'Faith': { url: 'https://storage.googleapis.com/hertz-music-folder/faith.mp3', title: 'Faith', artist: 'B-I-R-M-P' },
-      'Yet to be': { url: 'https://storage.googleapis.com/hertz-music-folder/yettobe.mp3', title: 'Yet to be', artist: 'Bey-Erus' }
+      'Yet to be': { url: 'https://storage.googleapis.com/hertz-music-folder/yettobe.mp3', title: 'Yet to be', artist: 'Bey-Erus' },
+      'Your Breath': { url: 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', title: 'Your Breath', artist: 'Slatt' },
+      'Truth': { url: 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', title: 'Truth', artist: 'Zion Wayde' },
+      'Nature': { url: 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', title: 'Nature', artist: 'Justin Livin' },
+      'Be With Me (Guitar Type Beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/Be%20With%20Me%20(Guitar%20Type%20Beat).wav', title: 'Be With Me (Guitar Type Beat)', artist: 'Prod. Justin Starr' },
+      'Beautiful': { url: 'https://storage.googleapis.com/hertz-music-folder/Beautiful.wav', title: 'Beautiful', artist: '' },
+      'Cute (Guitar Type Beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/Cute%20(Guitar%20Type%20Beat).wav', title: 'Cute (Guitar Type Beat)', artist: 'Prod. Justin Starr' },
+      'Dance (Type Beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/Dance%20(Type%20Beat).wav', title: 'Dance (Type Beat)', artist: 'Prod. Jazz-Handz' },
+      'Dreams n Trust': { url: 'https://storage.googleapis.com/hertz-music-folder/Dreams%20n%20Trust.wav', title: 'Dreams n Trust', artist: 'B-Tilla' },
+      'How It Feels (Type Beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/How%20It%20Feels%20(Type%20Beat).wav', title: 'How It Feels (Type Beat)', artist: 'Prod. Tedla' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -7859,6 +7868,36 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+               <!-- New Track: Your Breath -->
+               <div class="recent-track-item" onclick="playNewTrack('Your Breath', 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', 'Your Breath', 'Tory Nets');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Your Breath cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Your Breath</div>
+                  <div class="recent-track-artist">Tory Nets</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Truth -->
+               <div class="recent-track-item" onclick="playNewTrack('Truth', 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', 'Truth', 'B-Tilla');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Truth cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Truth</div>
+                  <div class="recent-track-artist">B-Tilla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Nature -->
+               <div class="recent-track-item" onclick="playNewTrack('Nature', 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', 'Nature', 'Patrick Reever');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80" alt="Nature cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Nature</div>
+                  <div class="recent-track-artist">Patrick Reever</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
                <!-- New Track: Berg - First regular track after gold section -->
                <div class="recent-track-item" onclick="playNewTrack('Berg', 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', 'Berg', 'B-Mecha');" style="cursor: pointer;">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Berg cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -8461,6 +8500,96 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+               <!-- New Track: Be With Me (Guitar Type Beat) -->
+               <div class="recent-track-item" onclick="playNewTrack('Be With Me (Guitar Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Be%20With%20Me%20(Guitar%20Type%20Beat).wav', 'Be With Me (Guitar Type Beat)', 'Prod. Justin Starr');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Guitar" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Be With Me (Guitar Type Beat)</div>
+                  <div class="recent-track-artist">Prod. Justin Starr</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Beautiful -->
+               <div class="recent-track-item" onclick="playNewTrack('Beautiful', 'https://storage.googleapis.com/hertz-music-folder/Beautiful.wav', 'Beautiful', '');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80" alt="Beautiful" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Beautiful</div>
+                  <div class="recent-track-artist"></div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Cute (Guitar Type Beat) -->
+               <div class="recent-track-item" onclick="playNewTrack('Cute (Guitar Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Cute%20(Guitar%20Type%20Beat).wav', 'Cute (Guitar Type Beat)', 'Prod. Justin Starr');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Guitar" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Cute (Guitar Type Beat)</div>
+                  <div class="recent-track-artist">Prod. Justin Starr</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Dance (Type Beat) -->
+               <div class="recent-track-item" onclick="playNewTrack('Dance (Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Dance%20(Type%20Beat).wav', 'Dance (Type Beat)', 'Prod. Jazz-Handz');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Dance" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Dance (Type Beat)</div>
+                  <div class="recent-track-artist">Prod. Jazz-Handz</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Dreams n Trust -->
+               <div class="recent-track-item" onclick="playNewTrack('Dreams n Trust', 'https://storage.googleapis.com/hertz-music-folder/Dreams%20n%20Trust.wav', 'Dreams n Trust', 'B-Tilla');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Dreams" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Dreams n Trust</div>
+                  <div class="recent-track-artist">B-Tilla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Nature -->
+               <div class="recent-track-item" onclick="playNewTrack('Nature', 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', 'Nature', 'Justin Livin');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80" alt="Nature cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Nature</div>
+                  <div class="recent-track-artist">Justin Livin</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Truth -->
+               <div class="recent-track-item" onclick="playNewTrack('Truth', 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', 'Truth', 'Zion Wayde');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Truth cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Truth</div>
+                  <div class="recent-track-artist">Zion Wayde</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: Your Breath -->
+               <div class="recent-track-item" onclick="playNewTrack('Your Breath', 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', 'Your Breath', 'Slatt');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Your Breath cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Your Breath</div>
+                  <div class="recent-track-artist">Slatt</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <!-- New Track: How It Feels (Type Beat) -->
+               <div class="recent-track-item" onclick="playNewTrack('How It Feels (Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/How%20It%20Feels%20(Type%20Beat).wav', 'How It Feels (Type Beat)', 'Prod. Tedla');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="How It Feels cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">How It Feels (Type Beat)</div>
+                  <div class="recent-track-artist">Prod. Tedla</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
         </div>
 
       <!-- Popular Tracks List -->
@@ -8529,6 +8658,30 @@
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="All Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">All Night</div><div class="track-artist">B-Mecha</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:12</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Your Breath -->
+                <tr class="track-row" onclick="playNewTrack('Your Breath', 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', 'Your Breath', 'Tory Nets');" style="cursor: pointer;">
+                  <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Your Breath cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Your Breath</div><div class="track-artist">Tory Nets</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:30</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Truth -->
+                <tr class="track-row" onclick="playNewTrack('Truth', 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', 'Truth', 'B-Tilla');" style="cursor: pointer;">
+                  <td><div class="track-number">8</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Truth cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Truth</div><div class="track-artist">B-Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:45</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <!-- New Track: Nature -->
+                <tr class="track-row" onclick="playNewTrack('Nature', 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', 'Nature', 'Patrick Reever');" style="cursor: pointer;">
+                  <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80" alt="Nature cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nature</div><div class="track-artist">Patrick Reever</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">4:10</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
                 <!-- New Track: Berg - First regular track after gold section -->
@@ -8693,6 +8846,61 @@
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 <tr class="track-row" onclick="playNewTrack('Nimbus', 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', 'Nimbus', 'Prod. Tedla')" style="cursor: pointer;">
                   <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80" alt="Cloud formation" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nimbus</div><div class="track-artist">Prod. Tedla</div></div></div></td>
@@ -9038,6 +9246,78 @@
               <td><div class="track-info"><div class="track-artwork"><img src=https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">All Night</div><div class="track-artist">B-Mecha</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">Just now</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Be With Me (Guitar Type Beat) -->
+            <tr class="track-row" onclick="playNewTrack('Be With Me (Guitar Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Be%20With%20Me%20(Guitar%20Type%20Beat).wav', 'Be With Me (Guitar Type Beat)', 'Prod. Justin Starr');">
+              <td><div class="track-number">34</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Guitar" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Be With Me (Guitar Type Beat)</div><div class="track-artist">Prod. Justin Starr</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:35</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Beautiful -->
+            <tr class="track-row" onclick="playNewTrack('Beautiful', 'https://storage.googleapis.com/hertz-music-folder/Beautiful.wav', 'Beautiful', '');">
+              <td><div class="track-number">35</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80" alt="Beautiful" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Beautiful</div><div class="track-artist"></div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:20</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Cute (Guitar Type Beat) -->
+            <tr class="track-row" onclick="playNewTrack('Cute (Guitar Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Cute%20(Guitar%20Type%20Beat).wav', 'Cute (Guitar Type Beat)', 'Prod. Justin Starr');">
+              <td><div class="track-number">36</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Guitar" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Cute (Guitar Type Beat)</div><div class="track-artist">Prod. Justin Starr</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:25</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Dance (Type Beat) -->
+            <tr class="track-row" onclick="playNewTrack('Dance (Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/Dance%20(Type%20Beat).wav', 'Dance (Type Beat)', 'Prod. Jazz-Handz');">
+              <td><div class="track-number">37</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Dance" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Dance (Type Beat)</div><div class="track-artist">Prod. Jazz-Handz</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:40</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Dreams n Trust -->
+            <tr class="track-row" onclick="playNewTrack('Dreams n Trust', 'https://storage.googleapis.com/hertz-music-folder/Dreams%20n%20Trust.wav', 'Dreams n Trust', 'B-Tilla');">
+              <td><div class="track-number">38</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Dreams" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Dreams n Trust</div><div class="track-artist">B-Tilla</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:55</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Nature -->
+            <tr class="track-row" onclick="playNewTrack('Nature', 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', 'Nature', 'Justin Livin');">
+              <td><div class="track-number">39</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=400&q=80" alt="Nature cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nature</div><div class="track-artist">Justin Livin</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">4:10</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Truth -->
+            <tr class="track-row" onclick="playNewTrack('Truth', 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', 'Truth', 'Zion Wayde');">
+              <td><div class="track-number">40</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="Truth cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Truth</div><div class="track-artist">Zion Wayde</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:45</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: Your Breath -->
+            <tr class="track-row" onclick="playNewTrack('Your Breath', 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', 'Your Breath', 'Slatt');">
+              <td><div class="track-number">41</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Your Breath cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Your Breath</div><div class="track-artist">Slatt</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:30</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <!-- New Track: How It Feels (Type Beat) -->
+            <tr class="track-row" onclick="playNewTrack('How It Feels (Type Beat)', 'https://storage.googleapis.com/hertz-music-folder/How%20It%20Feels%20(Type%20Beat).wav', 'How It Feels (Type Beat)', 'Prod. Tedla');">
+              <td><div class="track-number">42</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80" alt="How It Feels cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">How It Feels (Type Beat)</div><div class="track-artist">Prod. Tedla</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:50</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
           </tbody>
@@ -17858,7 +18138,6 @@ function showGenrePopup(genre) {
 
       tracks.forEach((track, index) => {
         const trackId = `album_${artist}_${index}`;
-        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
 
         // Extract track title and artist (for "Other Artists" category, title includes " - Artist")
         let displayTitle = track.title;
@@ -17876,7 +18155,7 @@ function showGenrePopup(genre) {
                onclick="playAlbumForYouTrack('${trackId}', '${track.url}', '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}')">
             <div style="flex: 1;">
               <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${displayTitle}</div>
-              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist} • ${ext}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist}</div>
             </div>
           </div>
         `;
@@ -17948,7 +18227,6 @@ function showGenrePopup(genre) {
 
       tracks.forEach((track, index) => {
         const trackId = `playlist_${playlistId}_${index}`;
-        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
 
         html += `
           <div style="display: flex; align-items: center; padding: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;"
@@ -17957,7 +18235,7 @@ function showGenrePopup(genre) {
                onclick="playFeaturedPlaylistTrack('${trackId}', '${track.url}', '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}')">
             <div style="flex: 1;">
               <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${track.title}</div>
-              <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist} • ${ext}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist}</div>
             </div>
           </div>
         `;
@@ -18289,7 +18567,6 @@ function showGenrePopup(genre) {
 
       tracks.forEach((track, index) => {
         const trackId = `playlist_${artist}_${index}`;
-        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
 
         // Extract track title and artist (for "Other Artists" category, title includes " - Artist")
         let displayTitle = track.title;
@@ -18307,7 +18584,7 @@ function showGenrePopup(genre) {
                onclick="playPlaylistTrack('${trackId}', '${track.url}', '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}')">
             <div style="flex: 1;">
               <div style="color: #fff; font-weight: 500; margin-bottom: 0.25rem;">${displayTitle}</div>
-              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist} • ${ext}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist}</div>
             </div>
             <button onclick="event.stopPropagation(); playPlaylistTrack('${trackId}', '${track.url}', '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}')"
                     style="background: linear-gradient(135deg, #1db954, #1ed760); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 600;">
@@ -18477,7 +18754,6 @@ function showGenrePopup(genre) {
 
       tracks.forEach((track, index) => {
         const trackId = `search_${artist}_${index}`;
-        const ext = track.url.includes('.wav') ? 'WAV' : 'MP3';
 
         // Extract track title and artist (for "Other Artists" category, title includes " - Artist")
         let displayTitle = track.title;
@@ -18495,7 +18771,7 @@ function showGenrePopup(genre) {
                onclick="playPlaylistTrack('${trackId}', '${track.url}', '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}')">
             <div style="flex: 1;">
               <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${displayTitle}</div>
-              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist} • ${ext}</div>
+              <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist}</div>
             </div>
           </div>
         `;
@@ -23302,6 +23578,9 @@ function getAllAvailableTracks() {
     { title: 'Boo', artist: 'Vlad Metri', url: 'https://storage.googleapis.com/hertz-music-folder/Boo.wav', genre: 'pop', duration: '3:12' },
     { title: 'Good Woman', artist: 'Molly-Able', url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', genre: 'pop', duration: '3:45' },
     { title: 'All Night', artist: 'B-Mecha', url: 'https://storage.googleapis.com/hertz-music-folder/All%20Night.mp3', genre: 'electronic', duration: '4:20' },
+    { title: 'Your Breath', artist: 'Tory Nets', url: 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', genre: 'pop', duration: '3:30' },
+    { title: 'Truth', artist: 'B-Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', genre: 'pop', duration: '3:45' },
+    { title: 'Nature', artist: 'Patrick Reever', url: 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', genre: 'jazz', duration: '4:10' },
     { title: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', genre: 'hiphop', duration: '3:33' },
     { title: 'My Own Dreams', artist: 'Tior Clique', url: 'https://storage.googleapis.com/hertz-music-folder/MyOwnDreams_FULL_SONG_MusicGPT.wav', genre: 'pop', duration: '4:15' },
     { title: 'Shore Type Beat', artist: 'Prod. Wav', url: 'https://storage.googleapis.com/hertz-music-folder/Shore.wav', genre: 'hiphop', duration: '3:50' },
@@ -23312,7 +23591,16 @@ function getAllAvailableTracks() {
     { title: 'Huh', artist: 'Prod. Legacy', url: 'https://storage.googleapis.com/hertz-music-folder/Huh.wav', genre: 'hiphop', duration: '3:22' },
     { title: 'Times', artist: 'Stat Cross', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav', genre: 'jazz', duration: '5:15' },
     { title: 'Nimbus', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus.wav', genre: 'pop', duration: '3:40' },
-    { title: 'Shootin Starz', artist: 'Prod. Simz', url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz.wav', genre: 'hiphop', duration: '3:55' }
+    { title: 'Shootin Starz', artist: 'Prod. Simz', url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz.wav', genre: 'hiphop', duration: '3:55' },
+    { title: 'Be With Me (Guitar Type Beat)', artist: 'Prod. Justin Starr', url: 'https://storage.googleapis.com/hertz-music-folder/Be%20With%20Me%20(Guitar%20Type%20Beat).wav', genre: 'pop', duration: '3:35' },
+    { title: 'Beautiful', artist: '', url: 'https://storage.googleapis.com/hertz-music-folder/Beautiful.wav', genre: 'pop', duration: '3:20' },
+    { title: 'Cute (Guitar Type Beat)', artist: 'Prod. Justin Starr', url: 'https://storage.googleapis.com/hertz-music-folder/Cute%20(Guitar%20Type%20Beat).wav', genre: 'pop', duration: '3:25' },
+    { title: 'Dance (Type Beat)', artist: 'Prod. Jazz-Handz', url: 'https://storage.googleapis.com/hertz-music-folder/Dance%20(Type%20Beat).wav', genre: 'jazz', duration: '3:40' },
+    { title: 'Dreams n Trust', artist: 'B-Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Dreams%20n%20Trust.wav', genre: 'pop', duration: '3:55' },
+    { title: 'Nature', artist: 'Justin Livin', url: 'https://storage.googleapis.com/hertz-music-folder/Nature.wav', genre: 'jazz', duration: '4:10' },
+    { title: 'Truth', artist: 'Zion Wayde', url: 'https://storage.googleapis.com/hertz-music-folder/Truth.wav', genre: 'pop', duration: '3:45' },
+    { title: 'Your Breath', artist: 'Slatt', url: 'https://storage.googleapis.com/hertz-music-folder/Your%20Breath.wav', genre: 'pop', duration: '3:30' },
+    { title: 'How It Feels (Type Beat)', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/How%20It%20Feels%20(Type%20Beat).wav', genre: 'hiphop', duration: '3:50' }
   ];
 }
 
