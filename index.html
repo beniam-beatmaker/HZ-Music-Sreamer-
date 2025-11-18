@@ -620,7 +620,10 @@
       'Lay': { url: 'https://storage.googleapis.com/hertz-music-folder/Lay.wav', title: 'Lay', artist: 'Chels-York' },
       'Nova (type beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/Nova%20(type%20beat).wav', title: 'Nova (type beat)', artist: 'Prod. Tedla' },
       'Passion': { url: 'https://storage.googleapis.com/hertz-music-folder/Passion.wav', title: 'Passion', artist: 'Slatt' },
-      'So Hungry': { url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav', title: 'So Hungry', artist: 'Chels-York' }
+      'So Hungry': { url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav', title: 'So Hungry', artist: 'Chels-York' },
+      'Hustle & Shine': { url: 'https://storage.googleapis.com/hertz-music-folder/Hustle%20%26%20Shine.wav', title: 'Hustle & Shine', artist: 'AI Drake' },
+      'Cloud': { url: 'https://storage.googleapis.com/hertz-music-folder/Cloud.wav', title: 'Cloud', artist: 'AI CB' },
+      'Tight': { url: 'https://storage.googleapis.com/hertz-music-folder/Tight.wav', title: 'Tight', artist: 'AI CB' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -7618,6 +7621,166 @@
     <div id="paymentModal" class="payment-modal" style="display:none;">
       <div class="payment-modal-content">
         <button class="payment-modal-close" id="closePaymentModalBtn" title="Close">&times;</button>
+        <div style="position:absolute;top:16px;left:16px;z-index:2;">
+          <button id="currencyToggleBtn" style="background:rgba(255,215,0,0.15);border:1px solid #FFD700;color:#FFD700;padding:8px 12px;border-radius:8px;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:6px;" onmouseover="this.style.background='rgba(255,215,0,0.25)'" onmouseout="this.style.background='rgba(255,215,0,0.15)'">
+            <span style="font-size:1.2rem;">💱</span>
+            <span id="selectedCurrencyText">USD</span>
+          </button>
+          <div id="currencyDropdown" style="display:none;position:absolute;top:45px;left:0;background:#181818;border:1px solid #FFD700;border-radius:8px;min-width:200px;box-shadow:0 4px 12px rgba(0,0,0,0.5);max-height:300px;overflow-y:auto;z-index:3;" class="custom-scrollbar">
+            <div class="currency-option" data-currency="USD" data-symbol="$" data-rate="1" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">USD - US Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">$</div>
+            </div>
+            <div class="currency-option" data-currency="EUR" data-symbol="€" data-rate="0.92" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">EUR - Euro</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">€</div>
+            </div>
+            <div class="currency-option" data-currency="GBP" data-symbol="£" data-rate="0.79" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">GBP - British Pound</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">£</div>
+            </div>
+            <div class="currency-option" data-currency="JPY" data-symbol="¥" data-rate="149.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">JPY - Japanese Yen</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">¥</div>
+            </div>
+            <div class="currency-option" data-currency="CNY" data-symbol="¥" data-rate="7.24" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">CNY - Chinese Yuan</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">¥</div>
+            </div>
+            <div class="currency-option" data-currency="INR" data-symbol="₹" data-rate="83.12" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">INR - Indian Rupee</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₹</div>
+            </div>
+            <div class="currency-option" data-currency="CAD" data-symbol="C$" data-rate="1.36" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">CAD - Canadian Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">C$</div>
+            </div>
+            <div class="currency-option" data-currency="AUD" data-symbol="A$" data-rate="1.53" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">AUD - Australian Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">A$</div>
+            </div>
+            <div class="currency-option" data-currency="KRW" data-symbol="₩" data-rate="1319.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">KRW - South Korean Won</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₩</div>
+            </div>
+            <div class="currency-option" data-currency="BRL" data-symbol="R$" data-rate="4.97" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">BRL - Brazilian Real</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">R$</div>
+            </div>
+            <div class="currency-option" data-currency="MXN" data-symbol="MX$" data-rate="17.05" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">MXN - Mexican Peso</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">MX$</div>
+            </div>
+            <div class="currency-option" data-currency="CHF" data-symbol="CHF" data-rate="0.88" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">CHF - Swiss Franc</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">CHF</div>
+            </div>
+            <div class="currency-option" data-currency="AED" data-symbol="د.إ" data-rate="3.67" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">AED - UAE Dirham</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">د.إ</div>
+            </div>
+            <div class="currency-option" data-currency="ARS" data-symbol="$" data-rate="1005.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">ARS - Argentine Peso</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">$</div>
+            </div>
+            <div class="currency-option" data-currency="CLP" data-symbol="$" data-rate="915.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">CLP - Chilean Peso</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">$</div>
+            </div>
+            <div class="currency-option" data-currency="COP" data-symbol="$" data-rate="4125" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">COP - Colombian Peso</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">$</div>
+            </div>
+            <div class="currency-option" data-currency="CZK" data-symbol="Kč" data-rate="22.54" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">CZK - Czech Koruna</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">Kč</div>
+            </div>
+            <div class="currency-option" data-currency="DKK" data-symbol="kr" data-rate="6.86" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">DKK - Danish Krone</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">kr</div>
+            </div>
+            <div class="currency-option" data-currency="EGP" data-symbol="£" data-rate="48.75" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">EGP - Egyptian Pound</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">£</div>
+            </div>
+            <div class="currency-option" data-currency="ETB" data-symbol="Br" data-rate="123.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">ETB - Ethiopian Birr</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">Br</div>
+            </div>
+            <div class="currency-option" data-currency="HKD" data-symbol="HK$" data-rate="7.82" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">HKD - Hong Kong Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">HK$</div>
+            </div>
+            <div class="currency-option" data-currency="HUF" data-symbol="Ft" data-rate="357.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">HUF - Hungarian Forint</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">Ft</div>
+            </div>
+            <div class="currency-option" data-currency="IDR" data-symbol="Rp" data-rate="15750" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">IDR - Indonesian Rupiah</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">Rp</div>
+            </div>
+            <div class="currency-option" data-currency="ILS" data-symbol="₪" data-rate="3.68" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">ILS - Israeli Shekel</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₪</div>
+            </div>
+            <div class="currency-option" data-currency="MYR" data-symbol="RM" data-rate="4.46" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">MYR - Malaysian Ringgit</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">RM</div>
+            </div>
+            <div class="currency-option" data-currency="NGN" data-symbol="₦" data-rate="1565" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">NGN - Nigerian Naira</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₦</div>
+            </div>
+            <div class="currency-option" data-currency="NOK" data-symbol="kr" data-rate="10.78" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">NOK - Norwegian Krone</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">kr</div>
+            </div>
+            <div class="currency-option" data-currency="NZD" data-symbol="NZ$" data-rate="1.65" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">NZD - New Zealand Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">NZ$</div>
+            </div>
+            <div class="currency-option" data-currency="PHP" data-symbol="₱" data-rate="55.75" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">PHP - Philippine Peso</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₱</div>
+            </div>
+            <div class="currency-option" data-currency="PLN" data-symbol="zł" data-rate="3.96" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">PLN - Polish Zloty</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">zł</div>
+            </div>
+            <div class="currency-option" data-currency="RUB" data-symbol="₽" data-rate="92.50" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">RUB - Russian Ruble</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₽</div>
+            </div>
+            <div class="currency-option" data-currency="SAR" data-symbol="﷼" data-rate="3.75" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">SAR - Saudi Riyal</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">﷼</div>
+            </div>
+            <div class="currency-option" data-currency="SEK" data-symbol="kr" data-rate="10.35" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">SEK - Swedish Krona</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">kr</div>
+            </div>
+            <div class="currency-option" data-currency="SGD" data-symbol="S$" data-rate="1.34" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">SGD - Singapore Dollar</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">S$</div>
+            </div>
+            <div class="currency-option" data-currency="THB" data-symbol="฿" data-rate="34.92" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">THB - Thai Baht</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">฿</div>
+            </div>
+            <div class="currency-option" data-currency="TRY" data-symbol="₺" data-rate="34.15" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">TRY - Turkish Lira</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₺</div>
+            </div>
+            <div class="currency-option" data-currency="VND" data-symbol="₫" data-rate="24500" style="padding:10px 14px;cursor:pointer;border-bottom:1px solid #282828;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">VND - Vietnamese Dong</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">₫</div>
+            </div>
+            <div class="currency-option" data-currency="ZAR" data-symbol="R" data-rate="18.75" style="padding:10px 14px;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,215,0,0.1)'" onmouseout="this.style.background='transparent'">
+              <div style="font-weight:600;color:#fff;">ZAR - South African Rand</div>
+              <div style="font-size:0.85rem;color:#b3b3b3;">R</div>
+            </div>
+          </div>
+        </div>
         <h2 class="payment-modal-title">Upgrade to Premium</h2>
         <!-- Professional Card Display -->
         <div id="cardDisplay" class="card-display">
@@ -7748,7 +7911,110 @@
   var openBtn = document.getElementById('openPaymentModalBtn');
   var modal = document.getElementById('paymentModal');
   var closeBtn = document.getElementById('closePaymentModalBtn');
-      openBtn.addEventListener('click', () => { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; });
+
+      // Currency Selection Logic
+      let selectedCurrency = { code: 'USD', symbol: '$', rate: 1 };
+      const basePrice = 9.99;
+
+      function getCurrencyCardPattern(currencyCode) {
+        const patterns = {
+          'USD': '1234 5678 9012 3456',
+          'EUR': '1234 5678 9012 3456',
+          'GBP': '1234 5678 9012 3456',
+          'JPY': '1234 5678 9012 3456',
+          'CAD': '1234 5678 9012 3456',
+          'AUD': '1234 5678 9012 3456',
+          'CHF': '1234 5678 9012 3456',
+          'CNY': '6221 1234 5678 9012',
+          'INR': '5123 4567 8901 2345',
+          'BRL': '5123 4567 8901 2345',
+          'MXN': '5123 4567 8901 2345',
+          'KRW': '9876 5432 1098 7654',
+          'ZAR': '5123 4567 8901 2345',
+          'SEK': '1234 5678 9012 3456',
+          'NOK': '1234 5678 9012 3456',
+          'DKK': '1234 5678 9012 3456',
+          'PLN': '1234 5678 9012 3456',
+          'TRY': '5123 4567 8901 2345',
+          'RUB': '2200 1234 5678 9012',
+          'SGD': '1234 5678 9012 3456',
+          'HKD': '1234 5678 9012 3456',
+          'NZD': '1234 5678 9012 3456',
+          'THB': '5123 4567 8901 2345',
+          'MYR': '5123 4567 8901 2345',
+          'IDR': '5123 4567 8901 2345',
+          'PHP': '5123 4567 8901 2345',
+          'VND': '9704 1234 5678 9012',
+          'AED': '5123 4567 8901 2345',
+          'SAR': '5123 4567 8901 2345',
+          'ILS': '5123 4567 8901 2345',
+          'CZK': '5123 4567 8901 2345',
+          'HUF': '5123 4567 8901 2345',
+          'CLP': '5123 4567 8901 2345',
+          'ARS': '5123 4567 8901 2345',
+          'COP': '5123 4567 8901 2345',
+          'EGP': '5123 4567 8901 2345',
+          'ETB': '5123 4567 8901 2345',
+          'NGN': '5123 4567 8901 2345'
+        };
+        return patterns[currencyCode] || '1234 5678 9012 3456';
+      }
+
+      function updatePaymentButton() {
+        const convertedPrice = (basePrice * selectedCurrency.rate).toFixed(2);
+        const submitBtn = document.querySelector('.payment-submit-btn');
+        if (submitBtn) {
+          submitBtn.textContent = `Pay ${selectedCurrency.symbol}${convertedPrice}`;
+        }
+      }
+
+      function updateCardDisplay() {
+        const displayCardNumber = document.getElementById('displayCardNumber');
+        const cardNumberInput = document.getElementById('cardNumber');
+        const cardPattern = getCurrencyCardPattern(selectedCurrency.code);
+
+        if (displayCardNumber) {
+          displayCardNumber.textContent = cardPattern;
+        }
+        if (cardNumberInput) {
+          cardNumberInput.placeholder = cardPattern;
+        }
+      }
+
+      document.addEventListener('click', function(e) {
+        const currencyToggle = document.getElementById('currencyToggleBtn');
+        const currencyDropdown = document.getElementById('currencyDropdown');
+
+        // Toggle dropdown
+        if (e.target.closest('#currencyToggleBtn')) {
+          e.stopPropagation();
+          currencyDropdown.style.display = currencyDropdown.style.display === 'none' ? 'block' : 'none';
+        }
+        // Select currency
+        else if (e.target.closest('.currency-option')) {
+          const option = e.target.closest('.currency-option');
+          selectedCurrency = {
+            code: option.dataset.currency,
+            symbol: option.dataset.symbol,
+            rate: parseFloat(option.dataset.rate)
+          };
+          document.getElementById('selectedCurrencyText').textContent = selectedCurrency.code;
+          currencyDropdown.style.display = 'none';
+          updatePaymentButton();
+          updateCardDisplay();
+        }
+        // Close dropdown when clicking outside
+        else if (!e.target.closest('#currencyDropdown')) {
+          if (currencyDropdown) currencyDropdown.style.display = 'none';
+        }
+      });
+
+      openBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        updatePaymentButton();
+        updateCardDisplay();
+      });
       closeBtn.addEventListener('click', () => { modal.style.display = 'none'; document.body.style.overflow = ''; });
       window.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.style.display === 'flex') { modal.style.display = 'none'; document.body.style.overflow = ''; } });
       modal.addEventListener('click', function(e) { if (e.target === modal) { modal.style.display = 'none'; document.body.style.overflow = ''; } });
@@ -8700,6 +8966,33 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+               <div class="recent-track-item" onclick="playNewTrack('Hustle & Shine', 'https://storage.googleapis.com/hertz-music-folder/Hustle%20%26%20Shine.wav', 'Hustle & Shine', 'AI Drake');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300" alt="Hustle & Shine cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Hustle & Shine</div>
+                  <div class="recent-track-artist">AI Drake</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Cloud', 'https://storage.googleapis.com/hertz-music-folder/Cloud.wav', 'Cloud', 'AI CB');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300" alt="Cloud cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Cloud</div>
+                  <div class="recent-track-artist">AI CB</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Tight', 'https://storage.googleapis.com/hertz-music-folder/Tight.wav', 'Tight', 'AI CB');">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300" alt="Tight cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Tight</div>
+                  <div class="recent-track-artist">AI CB</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
         </div>
 
       <!-- Popular Tracks List -->
@@ -9505,6 +9798,27 @@
               <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="So Hungry cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">So Hungry</div><div class="track-artist">Chels-York</div></div></div></td>
               <td><div class="track-album">Single</div></td>
               <td><div class="track-duration">3:45</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <tr class="track-row" onclick="playNewTrack('Hustle & Shine', 'https://storage.googleapis.com/hertz-music-folder/Hustle%20%26%20Shine.wav', 'Hustle & Shine', 'AI Drake');">
+              <td><div class="track-number">54</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300" alt="Hustle & Shine cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Hustle & Shine</div><div class="track-artist">AI Drake</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">4:20</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <tr class="track-row" onclick="playNewTrack('Cloud', 'https://storage.googleapis.com/hertz-music-folder/Cloud.wav', 'Cloud', 'AI CB');">
+              <td><div class="track-number">55</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300" alt="Cloud cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Cloud</div><div class="track-artist">AI CB</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:55</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <tr class="track-row" onclick="playNewTrack('Tight', 'https://storage.googleapis.com/hertz-music-folder/Tight.wav', 'Tight', 'AI CB');">
+              <td><div class="track-number">56</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300" alt="Tight cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Tight</div><div class="track-artist">AI CB</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">4:10</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
           </tbody>
@@ -20737,7 +21051,10 @@ function showGenrePopup(genre) {
         'Lay': { id: 'Lay', title: 'Lay', artist: 'Chels-York', cover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Lay.wav' },
         'Nova (type beat)': { id: 'Nova (type beat)', title: 'Nova (type beat)', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/Nova%20(type%20beat).wav' },
         'Passion': { id: 'Passion', title: 'Passion', artist: 'Slatt', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Passion.wav' },
-        'So Hungry': { id: 'So Hungry', title: 'So Hungry', artist: 'Chels-York', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav' }
+        'So Hungry': { id: 'So Hungry', title: 'So Hungry', artist: 'Chels-York', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav' },
+        'Hustle & Shine': { id: 'Hustle & Shine', title: 'Hustle & Shine', artist: 'AI Drake', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Hustle%20%26%20Shine.wav' },
+        'Cloud': { id: 'Cloud', title: 'Cloud', artist: 'AI CB', cover: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/Cloud.wav' },
+        'Tight': { id: 'Tight', title: 'Tight', artist: 'AI CB', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=300', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Tight.wav' }
       };
 
       // Filter tracks based on search query
@@ -23840,7 +24157,10 @@ function getAllAvailableTracks() {
     { title: 'Lay', artist: 'Chels-York', url: 'https://storage.googleapis.com/hertz-music-folder/Lay.wav', genre: 'pop', duration: '3:52' },
     { title: 'Nova (type beat)', artist: 'Prod. Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Nova%20(type%20beat).wav', genre: 'electronic', duration: '4:05' },
     { title: 'Passion', artist: 'Slatt', url: 'https://storage.googleapis.com/hertz-music-folder/Passion.wav', genre: 'pop', duration: '3:38' },
-    { title: 'So Hungry', artist: 'Chels-York', url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav', genre: 'pop', duration: '3:45' }
+    { title: 'So Hungry', artist: 'Chels-York', url: 'https://storage.googleapis.com/hertz-music-folder/So%20Hungry.wav', genre: 'pop', duration: '3:45' },
+    { title: 'Hustle & Shine', artist: 'AI Drake', url: 'https://storage.googleapis.com/hertz-music-folder/Hustle%20%26%20Shine.wav', genre: 'hiphop', duration: '4:20' },
+    { title: 'Cloud', artist: 'AI CB', url: 'https://storage.googleapis.com/hertz-music-folder/Cloud.wav', genre: 'electronic', duration: '3:55' },
+    { title: 'Tight', artist: 'AI CB', url: 'https://storage.googleapis.com/hertz-music-folder/Tight.wav', genre: 'hiphop', duration: '4:10' }
   ];
 }
 
