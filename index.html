@@ -8015,6 +8015,16 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <!-- New Track: Walk the Talk at top -->
+                 <div class="recent-track-item" onclick="playNewTrack('Walk the Talk', 'https://storage.googleapis.com/hertz-music-folder/Talk%20Walk.mp3', 'Walk the Talk', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80" alt="Walk the Talk cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Walk the Talk</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <!-- New Track: 3 AM at top with gold effect -->
                  <div class="recent-track-item" onclick="playNewTrack('3 AM', 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', '3 AM', 'AI-ght');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="3 AM cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -8751,6 +8761,14 @@
             </tr>
           </thead>
           <tbody>
+                <!-- New Track: Walk the Talk at top -->
+                  <tr class="track-row" onclick="playNewTrack('Walk the Talk', 'https://storage.googleapis.com/hertz-music-folder/Talk%20Walk.mp3', 'Walk the Talk', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                    <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                    <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80" alt="Walk the Talk cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Walk the Talk</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                    <td><div class="track-album">Single</div></td>
+                    <td><div class="track-duration">3:15</div></td>
+                    <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                  </tr>
                 <!-- New Track: Watch at top with gold border -->
                   <!-- New Track: 3 AM at top with gold border -->
                   <tr class="track-row" onclick="playNewTrack('3 AM', 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', '3 AM', 'AI-ght');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
@@ -9824,6 +9842,31 @@
               'If memory lives past silver and glass',
               'He hits the light',
               'And lets this night pass'
+            ].join('\n'),
+            'Walk the Talk': [
+              'Daddio a failure oh, talks the talk but can\'t walk the walk uh, look at the belly, yea or just lie n call me crazy, huh?',
+              '',
+              '',
+              'what trumps the success is the lies, he aims to talk stead of using his thighs, got a lotta problems, figures out the fix yet causes more struggle, no,',
+              '',
+              '',
+              'struggle for himself and the rest, claims he works hard then sends posts on x, uh',
+              'he don\'t know what real struggle is,',
+              'He knows how to act, just ask Howard how he is, hah.',
+              '',
+              '',
+              'claims to be positive when your wrong, better than being real and right I guess, oh, ',
+              'claims to work super hard oh, then takes all the credit for the things he ain\'t working on, yea',
+              '',
+              '',
+              ' all the people working real hard, getting shit done, he just leaves in the past, uh (whisper): hm fuck yea yea yea yea',
+              '',
+              '',
+              'struggle for himself and the rest, claims he works hard then sends posts on x, uh',
+              'he don\'t know what real struggle is,',
+              'He knows how to act, just ask Howard how he is, hah.',
+              '',
+              'struggle for himself and the rest, all to take credit n then flex'
             ].join('\n'),
             'Blicky Slap': [
               'Some hotties too fine, ya',
