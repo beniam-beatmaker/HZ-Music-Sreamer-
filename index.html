@@ -8015,6 +8015,16 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <!-- New Track: Paradise at top with gold effect -->
+                 <div class="recent-track-item" onclick="playNewTrack('Paradise', 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', 'Paradise', 'Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Paradise cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Paradise</div>
+                    <div class="recent-track-artist">Tedla</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <!-- New Track: 3 AM at top with gold effect -->
                  <div class="recent-track-item" onclick="playNewTrack('3 AM', 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', '3 AM', 'AI-ght');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="3 AM cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -8751,6 +8761,14 @@
             </tr>
           </thead>
           <tbody>
+                <!-- New Track: Paradise at top with gold border -->
+                <tr class="track-row" onclick="playNewTrack('Paradise', 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', 'Paradise', 'Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Paradise cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Paradise</div><div class="track-artist">Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <!-- New Track: Watch at top with gold border -->
                   <!-- New Track: 3 AM at top with gold border -->
                   <tr class="track-row" onclick="playNewTrack('3 AM', 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', '3 AM', 'AI-ght');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
@@ -9763,6 +9781,63 @@
 
           window.trackLyricsData = window.trackLyricsData || {};
           Object.assign(window.trackLyricsData, {
+            'Paradise': [
+              'Three a.m. the blue light cuts the room',
+              'Fingers hovering over the glass',
+              '',
+              '',
+              'Blocked the wall, it\'s a try',
+              'at times my heart burns bright',
+              'all i been through gave me sight',
+              'Felt a bad lil vibe',
+              'Now things are fuckin right',
+              'Been hurtin, thinkin of paradise',
+              'thought, though, thought, thought',
+              '',
+              '',
+              'Used to question things til I knew I was right',
+              'Amount of people that called me bright',
+              'Amount of chicks that bit their lips and made me feel real real liked',
+              '',
+              '',
+              'Knew they liked',
+              'When they walked right past me',
+              'Bet they\'re tight',
+              'Wanna get real funky',
+              'Gorgeous smiles, fit ass thighs, put that ass right on me',
+              'Makes me feel they wanna get to know me',
+              'I\'ll bite if ya want me',
+              '',
+              '',
+              'They like a light, put a spark right on me',
+              'Got cute eyes, makes me want their bodies',
+              'They sum hotties, shorties, defs not copies',
+              'If they through sum fuckin parties,',
+              'Wonder if they naughty',
+              'Can ya blame me?',
+              '',
+              '',
+              'Knew they liked',
+              'When they walked right past me',
+              'Bet they\'re tight',
+              'Wanna get real funky',
+              'Gorgeous smiles, fit ass thighs, put that ass right on me',
+              'Makes me feel they wanna get to know me',
+              'I\'ll bite if ya want me',
+              '',
+              '',
+              'Sight, Sight, Sight',
+              'put that ass right on me',
+              'Thought, Thoughts, Thought',
+              'wanna get to know me',
+              'lit a spark',
+              'within me.',
+              '',
+              '',
+              'Gorgeous Smiles',
+              'Fit Ass Thighs',
+              'Bit their lips, ooh'
+            ].join('\n'),
             '3 AM': [
               '[Intro]',
               'Cursor blinks in the dark',
