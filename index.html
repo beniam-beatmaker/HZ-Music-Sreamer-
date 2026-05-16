@@ -5088,6 +5088,30 @@
         display: none;
     }
 
+    /* Homepage title + time greeting under hamburger */
+    .home-greeting-wrap {
+      padding: 92px 24px 10px 24px;
+      text-align: center;
+    }
+
+    .home-brand-title {
+      font-size: 2.35rem;
+      font-weight: 900;
+      line-height: 1;
+      margin: 0;
+      color: #ffd700;
+      letter-spacing: -0.02em;
+    }
+
+    .home-time-greeting {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-top: 8px;
+      color: #87cefa;
+      line-height: 1.25;
+      font-family: "Brush Script MT", "Segoe Script", cursive;
+    }
+
     /* Spotify-style Bottom Navigation */
     .bottom-nav {
         position: fixed;
@@ -7786,6 +7810,11 @@
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
         <a href="Privacy Policy.html" class="nav-btn">📄 Privacy Policy</a>
+    </div>
+
+    <div class="home-greeting-wrap">
+      <h1 class="home-brand-title">HZ</h1>
+      <div class="home-time-greeting" id="greetingText">Good Morning</div>
     </div>
 
       <!-- Recently Played Tracks -->
@@ -11615,6 +11644,72 @@
       </div>
       <div class="bottom-nav-label">Settings</div>
     </button>
+  </div>
+
+  <!-- Account Popup -->
+  <div class="page-overlay" id="accountPageOverlay" style="display: none;">
+    <div class="page-content">
+      <div class="page-header">
+        <h1 class="page-title">Account</h1>
+        <button class="page-close-btn" onclick="closePage('accountPageOverlay')">Close</button>
+      </div>
+
+      <div style="max-width:540px;margin:0 auto;background:rgba(255,255,255,0.03);border:1px solid var(--border-color);border-radius:14px;padding:1.2rem;">
+        <div style="display:flex;justify-content:center;margin-bottom:1rem;">
+          <div id="userAvatar" style="width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#2c3e50,#4ca1af);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.6rem;overflow:hidden;"></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:0.75rem;color:var(--text-primary);">
+          <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
+            <div style="font-size:0.8rem;color:#a7a7a7;">Username</div>
+            <div id="userUsername" style="font-weight:600;"></div>
+          </div>
+          <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
+            <div style="font-size:0.8rem;color:#a7a7a7;">Name</div>
+            <div id="userName" style="font-weight:600;"></div>
+          </div>
+          <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
+            <div style="font-size:0.8rem;color:#a7a7a7;">DOB</div>
+            <div id="userDob" style="font-weight:600;"></div>
+          </div>
+          <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
+            <div style="font-size:0.8rem;color:#a7a7a7;">Email</div>
+            <div id="userEmail" style="font-weight:600;"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:0.6rem;align-items:flex-end;">
+          <button class="upload-btn" onclick="openQuickSignupPopup()" style="background:linear-gradient(45deg,#2c3e50,#1f2a36);">Sign Up</button>
+          <button class="upload-btn" onclick="signOutUser()" style="background:linear-gradient(45deg,#e74c3c,#c0392b);">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Sign Up Popup -->
+  <div class="page-overlay" id="quickSignupOverlay" style="display:none; z-index: 1600;">
+    <div class="page-content" style="display:flex;align-items:center;justify-content:center;padding:1.2rem;">
+      <div style="width:100%;max-width:430px;background:#121212;border:1px solid #333;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,0.7);padding:1.2rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem;">
+          <h2 style="margin:0;color:#fff;font-size:1.2rem;">Quick Sign Up</h2>
+          <button type="button" onclick="closeQuickSignupPopup()" style="background:transparent;border:none;color:#a7a7a7;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>
+        </div>
+
+        <form onsubmit="submitQuickSignup(event)" style="display:flex;flex-direction:column;gap:0.7rem;">
+          <input id="signupNameInput" type="text" placeholder="Name" required
+            style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.75rem;outline:none;">
+          <input id="signupUsernameInput" type="text" placeholder="Username" required
+            style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.75rem;outline:none;">
+          <input id="signupEmailInput" type="email" placeholder="Email" required
+            style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.75rem;outline:none;">
+
+          <div style="display:flex;justify-content:flex-end;gap:0.6rem;margin-top:0.4rem;">
+            <button type="button" class="upload-btn" onclick="closeQuickSignupPopup()" style="background:linear-gradient(45deg,#2b2b2b,#1f1f1f);">Cancel</button>
+            <button type="submit" class="upload-btn" style="background:linear-gradient(45deg,#1db954,#17a244);">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- Liked Songs Popup -->
@@ -21032,6 +21127,7 @@ function showGenrePopup(genre) {
       const userNameElement = document.getElementById('userName');
       const userUsernameElement = document.getElementById('userUsername');
       const userEmailElement = document.getElementById('userEmail');
+      const userDobElement = document.getElementById('userDob');
       const userCountryElement = document.getElementById('userCountry');
       const userBioElement = document.getElementById('userBio');
       const memberSinceElement = document.getElementById('memberSince');
@@ -21050,6 +21146,11 @@ function showGenrePopup(genre) {
       if (userEmailElement) {
         const email = userEmail.includes('@') ? userEmail : `${username.toLowerCase().replace(/\s+/g, '')}@hertz.music`;
         userEmailElement.textContent = `📧 ${email}`;
+      }
+
+      if (userDobElement) {
+        const dob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || 'Not set';
+        userDobElement.textContent = dob;
       }
 
       if (userCountryElement) {
@@ -21462,6 +21563,157 @@ function showGenrePopup(genre) {
         } else {
           alert('Password must be at least 6 characters long!');
         }
+      }
+    }
+
+    function signOutUser() {
+      persistActiveAccountLikedTracks();
+
+      localStorage.removeItem('hertzUser');
+      localStorage.removeItem('hertzUsername');
+      localStorage.removeItem('hertzUserEmail');
+      localStorage.removeItem('hertzRememberMe');
+      localStorage.removeItem('hertzActiveAccountKey');
+
+      closePage('accountPageOverlay');
+      updateBottomNavActive('home');
+
+      if (window.termsManager) {
+        window.termsManager.showTermsModal();
+        window.termsManager.blockApp();
+      }
+    }
+
+    function getStoredAccounts() {
+      try {
+        return JSON.parse(localStorage.getItem('hertzAccounts') || '{}');
+      } catch (e) {
+        console.error('Failed to read hertzAccounts:', e);
+        return {};
+      }
+    }
+
+    function setStoredAccounts(accountsObj) {
+      localStorage.setItem('hertzAccounts', JSON.stringify(accountsObj || {}));
+    }
+
+    function normalizeAccountKey(username, email) {
+      const u = String(username || '').trim().toLowerCase();
+      const e = String(email || '').trim().toLowerCase();
+      return u || e;
+    }
+
+    function findAccountKey(accountsObj, username, email) {
+      const normalizedUser = String(username || '').trim().toLowerCase();
+      const normalizedEmail = String(email || '').trim().toLowerCase();
+      let found = normalizeAccountKey(normalizedUser, normalizedEmail);
+
+      if (accountsObj[found]) return found;
+
+      const keys = Object.keys(accountsObj || {});
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const acc = accountsObj[key] || {};
+        const accUser = String(acc.username || '').trim().toLowerCase();
+        const accEmail = String(acc.email || '').trim().toLowerCase();
+        if ((normalizedUser && accUser === normalizedUser) || (normalizedEmail && accEmail === normalizedEmail)) {
+          return key;
+        }
+      }
+
+      return found;
+    }
+
+    function persistActiveAccountLikedTracks() {
+      const accountKey = localStorage.getItem('hertzActiveAccountKey');
+      if (!accountKey) return;
+
+      const accounts = getStoredAccounts();
+      if (!accounts[accountKey]) return;
+
+      accounts[accountKey].likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      accounts[accountKey].lastUpdated = new Date().toISOString();
+      setStoredAccounts(accounts);
+    }
+
+    function openQuickSignupPopup() {
+      const overlay = document.getElementById('quickSignupOverlay');
+      if (overlay) overlay.style.display = 'flex';
+    }
+
+    function closeQuickSignupPopup() {
+      const overlay = document.getElementById('quickSignupOverlay');
+      if (overlay) overlay.style.display = 'none';
+    }
+
+    function submitQuickSignup(event) {
+      event.preventDefault();
+
+      const nameInput = document.getElementById('signupNameInput');
+      const usernameInput = document.getElementById('signupUsernameInput');
+      const emailInput = document.getElementById('signupEmailInput');
+
+      const name = (nameInput && nameInput.value || '').trim();
+      const username = (usernameInput && usernameInput.value || '').trim();
+      const email = (emailInput && emailInput.value || '').trim();
+
+      if (!name || !username || !email) return;
+
+      const accounts = getStoredAccounts();
+      const accountKey = findAccountKey(accounts, username, email);
+
+      const currentLikedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const existingAccount = accounts[accountKey] || {};
+      const mergedLikedTracks = Object.keys(existingAccount.likedTracks || {}).length > 0
+        ? existingAccount.likedTracks
+        : currentLikedTracks;
+
+      const accountProfile = {
+        name: name,
+        username: username,
+        email: email,
+        dob: existingAccount.dob || '',
+        img: existingAccount.img || '',
+        likedTracks: mergedLikedTracks,
+        createdAt: existingAccount.createdAt || new Date().toISOString(),
+        lastLogin: new Date().toISOString(),
+        lastUpdated: new Date().toISOString()
+      };
+
+      accounts[accountKey] = accountProfile;
+      setStoredAccounts(accounts);
+
+      // Auto-login on sign up
+      localStorage.setItem('hertzUser', JSON.stringify(accountProfile));
+      localStorage.setItem('hertzUsername', name);
+      localStorage.setItem('hertzUserEmail', email);
+      localStorage.setItem('hertzActiveAccountKey', accountKey);
+      localStorage.setItem('hertzLikedTracks', JSON.stringify(mergedLikedTracks));
+      localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
+      localStorage.setItem('hertzTermsAccepted', 'true');
+      localStorage.setItem('hertzTermsAcceptedDate', new Date().toISOString());
+
+      const termsOverlay = document.getElementById('termsOverlay');
+      const appContainer = document.getElementById('appContainer');
+      if (termsOverlay) termsOverlay.style.display = 'none';
+      if (appContainer) {
+        appContainer.classList.remove('app-blocked');
+        appContainer.style.filter = '';
+        appContainer.style.opacity = '';
+        appContainer.style.pointerEvents = '';
+      }
+
+      closeQuickSignupPopup();
+      loadAccountInfo();
+
+      if (typeof initializeLikeButtons === 'function') {
+        setTimeout(() => initializeLikeButtons(), 50);
+      }
+      if (typeof updateLikeBtnForCurrent === 'function') {
+        setTimeout(() => updateLikeBtnForCurrent(), 50);
+      }
+      if (typeof loadLikedSongs === 'function') {
+        setTimeout(() => loadLikedSongs(), 50);
       }
     }
 
@@ -23490,6 +23742,11 @@ function showGenrePopup(genre) {
         showLikeNotification(currentTrack.title || currentTrack.name || activeTrackId, 'liked');
       }
 
+      // Final single-source sync for sticky + homepage like visuals
+      if (typeof updateLikeButtonState === 'function') {
+        updateLikeButtonState(activeTrackId);
+      }
+
       // Always refresh the liked songs popup to ensure it's updated
       setTimeout(() => {
         console.log('🔄 Refreshing liked songs popup after like operation');
@@ -23720,7 +23977,12 @@ function showGenrePopup(genre) {
           } else if (recentTrackItem) {
             // Recently played section
             const onclickAttr = recentTrackItem.getAttribute('onclick');
-            trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+            const newTrackMatch = onclickAttr ? onclickAttr.match(/playNewTrack\('([^']+)'/) : null;
+            if (newTrackMatch) {
+              trackId = newTrackMatch[1];
+            } else {
+              trackId = onclickAttr ? onclickAttr.match(/playTrack\('([^']+)'\)/)?.[1] : null;
+            }
             trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
           }
 
@@ -24163,6 +24425,11 @@ function showGenrePopup(genre) {
         }
       }
 
+      // Keep all matching like buttons in sync for this track
+      if (typeof updateLikeButtonState === 'function' && trackId) {
+        updateLikeButtonState(trackId);
+      }
+
       // Update liked songs count in the profile stats
       updateLikedSongsCount();
 
@@ -24491,18 +24758,19 @@ function showGenrePopup(genre) {
       const greetingElement = document.getElementById('greetingText');
 
       if (greetingElement) {
-        if (hour >= 6 && hour < 18) {
-          // Day time (6 AM to 6 PM): Show "Shine & Prosper"
-          greetingElement.textContent = 'Shine & Prosper';
+        if (hour >= 5 && hour < 12) {
+          greetingElement.textContent = 'Good Morning';
+        } else if (hour >= 12 && hour < 18) {
+          greetingElement.textContent = 'Prosper';
         } else {
-          // Night time (6 PM to 6 AM): Show "Good evening"
-          greetingElement.textContent = 'Good evening';
+          greetingElement.textContent = 'Good Night';
         }
       }
     }
 
     // Initialize greeting
     updateGreeting();
+    setInterval(updateGreeting, 60000);
 
   </script>
 
