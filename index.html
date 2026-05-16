@@ -593,6 +593,7 @@
       'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
       'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
       'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
+      'Slide (Type-Beat)': { url: 'https://storage.googleapis.com/hertz-music-folder/Slide%20(Type-Beat).mp3', title: 'Slide (Type-Beat)', artist: 'Prod. Wai', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
       'Ain&#39;t Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Ain\'t Shit', artist: 'Texx' },
       'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
       'Vision': { url: 'https://storage.googleapis.com/hertz-music-folder/vision.mp3', title: 'Vision', artist: 'C-All' },
@@ -7787,228 +7788,6 @@
         <a href="Privacy Policy.html" class="nav-btn">📄 Privacy Policy</a>
     </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <h1> <span style="color:#FFD700;"></span> <span style="color:#0066ff; font-size:2.0rem;"></span></h1>
-
-        <!-- Navigation Buttons -->
-        <div class="nav-buttons">
-          <a href="index.html" class="nav-btn active">🏠 Home</a>
-          <a href="Online25App.html" class="nav-btn">🌐 Online</a>
-          <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
-          <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
-
-          <a href="Account25App.html" class="nav-btn">👤 Account</a>
-          <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
-          <a href="Privacy Policy.html" class="nav-btn">📄 Privacy Policy</a>
-        </div>
-
-      <!-- Spotify Homepage Header -->
-      <div class="spotify-header">
-        <div class="spotify-greeting">
-          <h1 id="greetingText">Shine & Prosper</h1>
-        </div>
-        <div class="header-actions">
-          <button class="upgrade-btn" id="openPaymentModalBtn">Upgrade to Premium</button>
-        </div>
-    <!-- Payment Modal Popup -->
-    <div id="paymentModal" class="payment-modal" style="display:none;">
-      <div class="payment-modal-content">
-        <button class="payment-modal-close" id="closePaymentModalBtn" title="Close">&times;</button>
-        <h2 class="payment-modal-title">Upgrade to Premium</h2>
-        <!-- Professional Card Display -->
-        <div id="cardDisplay" class="card-display">
-          <div class="card-chip"></div>
-          <div class="card-number" id="displayCardNumber">1111 1111 1111 1111</div>
-          <div class="card-details-row">
-            <div class="card-label">Expiry</div>
-            <div class="card-expiry" id="displayCardExpiry">11/11</div>
-          </div>
-        </div>
-        <form id="paymentForm" autocomplete="off">
-          <label for="userEmail" class="payment-label">Email</label>
-          <input type="email" id="userEmail" name="userEmail" class="payment-input" placeholder="you@email.com" required>
-          <label for="cardNumber" class="payment-label">Card Number</label>
-          <input type="text" id="cardNumber" name="cardNumber" class="payment-input" maxlength="19" placeholder="1234 5678 9012 3456" required pattern="[0-9 ]{15,19}">
-          <div class="payment-row">
-            <div style="flex:2;">
-              <label for="cardExpiry" class="payment-label">Expiry</label>
-              <input type="text" id="cardExpiry" name="cardExpiry" class="payment-input" maxlength="5" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/\d{2}">
-            </div>
-            <div style="flex:1; margin-left:8px;">
-              <label for="cardCVV" class="payment-label">CVV</label>
-              <input type="password" id="cardCVV" name="cardCVV" class="payment-input" maxlength="4" placeholder="123" required pattern="\d{3,4}">
-            </div>
-          </div>
-          <button type="submit" class="payment-submit-btn">Pay $9.99</button>
-        </form>
-      </div>
-    </div>
-  <style>
-      .payment-modal {
-        position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0,0,0,0.85);
-        display: flex; align-items: center; justify-content: center;
-        z-index: 9999;
-        transition: opacity 0.2s;
-      }
-      .payment-modal-content {
-        background: linear-gradient(180deg, #181818 0%, #121212 100%);
-        border-radius: 16px;
-        padding: 32px 28px 24px 28px;
-        min-width: 340px; max-width: 95vw;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.7);
-        position: relative;
-        color: #fff;
-        font-family: inherit;
-        animation: fadeInModal 0.3s;
-      }
-      @keyframes fadeInModal { from { opacity: 0; transform: scale(0.98);} to { opacity: 1; transform: scale(1);} }
-      .payment-modal-close {
-        position: absolute; top: 16px; right: 16px;
-        background: none; border: none; color: #fff;
-        font-size: 2rem; font-weight: 700; cursor: pointer;
-        transition: color 0.15s;
-        z-index: 2;
-      }
-      .payment-modal-close:hover { color: #ffb700; }
-      .payment-modal-title {
-        font-size: 1.5rem; font-weight: 900; margin-bottom: 1.5rem; text-align: center;
-        letter-spacing: -0.03em;
-      }
-      .payment-label {
-        display: block; font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; margin-top: 16px;
-        color: #fff;
-      }
-      .payment-input {
-        width: 100%; padding: 10px 12px; border-radius: 6px; border: 1px solid #282828;
-        background: #181818; color: #fff; font-size: 1rem; margin-bottom: 0;
-        outline: none; transition: border 0.2s;
-        font-family: inherit;
-      }
-      .payment-input:focus { border: 1.5px solid #1db954; background: #222; }
-      .payment-row { display: flex; gap: 8px; }
-      .payment-submit-btn {
-        width: 100%; margin-top: 28px; padding: 12px 0; border-radius: 500px;
-        background: linear-gradient(90deg, #ffb700 0%, #ff6a00 100%);
-        color: #181818; font-weight: 900; font-size: 1.1rem; border: none; cursor: pointer;
-        box-shadow: 0 2px 8px rgba(255,186,0,0.08);
-        letter-spacing: 0.04em; transition: background 0.2s, color 0.2s;
-      }
-      .payment-submit-btn:hover { background: linear-gradient(90deg, #ff6a00 0%, #ffb700 100%); color: #fff; }
-      @media (max-width: 500px) {
-        .payment-modal-content { padding: 18px 4vw; min-width: 0; }
-      }
-    </style>
-    <script>
-      // EmailJS send function for Bluetooth connectivity prompt
-      function sendBluetoothPromptEmail(toEmail) {
-  emailjs.send('service_p6dv7ey', 'template_46ef7mf', {
-          to_email: toEmail,
-          hz_subject: 'Hertz25: Device Connectivity',
-          hz_message: 'To connect your devices via Bluetooth, please ensure Bluetooth is enabled and both devices are discoverable. Then use the Host/Join feature in the app. If you have any issues, reply to this email for support.\n\nThank you for using Hertz25!'
-        })
-        .then(function(response) {
-          console.log('Email sent successfully:', response);
-        }, function(error) {
-          console.error('Email send failed:', error);
-        });
-      }
-      // Card Display Live Update
-  var cardNumberInput = document.getElementById('cardNumber');
-  var displayCardNumber = document.getElementById('displayCardNumber');
-  var cardExpiryInput2 = document.getElementById('cardExpiry');
-  var displayCardExpiry = document.getElementById('displayCardExpiry');
-      function formatCardNumber(num) {
-        return num.replace(/[^\d]/g, '').replace(/(.{4})/g, '$1 ').trim();
-      }
-      cardNumberInput.addEventListener('input', function(e) {
-        let value = this.value.replace(/[^\d]/g, '');
-        let formatted = value.replace(/(.{4})/g, '$1 ').trim();
-        // Set the formatted value back to the input, preserving caret position
-        let caret = this.selectionStart;
-        let prevLength = this.value.length;
-        this.value = formatted;
-        let nextLength = formatted.length;
-        if (nextLength > prevLength && caret % 5 === 0 && caret < nextLength) {
-          this.selectionStart = this.selectionEnd = caret + 1;
-        } else {
-          this.selectionStart = this.selectionEnd = caret;
-        }
-        displayCardNumber.textContent = formatted || '1111 1111 1111 1111';
-      });
-      cardExpiryInput2.addEventListener('input', function() {
-        displayCardExpiry.textContent = this.value || '11/11';
-      });
-      // Payment Modal Logic
-  var openBtn = document.getElementById('openPaymentModalBtn');
-  var modal = document.getElementById('paymentModal');
-  var closeBtn = document.getElementById('closePaymentModalBtn');
-      openBtn.addEventListener('click', () => { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; });
-      closeBtn.addEventListener('click', () => { modal.style.display = 'none'; document.body.style.overflow = ''; });
-      window.addEventListener('keydown', function(e) { if (e.key === 'Escape' && modal.style.display === 'flex') { modal.style.display = 'none'; document.body.style.overflow = ''; } });
-      modal.addEventListener('click', function(e) { if (e.target === modal) { modal.style.display = 'none'; document.body.style.overflow = ''; } });
-      /* ...existing CSS... */
-  <!-- All JavaScript code should be placed inside <script> tags below, not inside <style> or outside tags. -->
-
-      // Expiry auto-formatting (MM/YY)
-  var cardExpiryInput = document.getElementById('cardExpiry');
-      cardExpiryInput.addEventListener('input', function(e) {
-        let value = this.value.replace(/[^\d]/g, '').slice(0, 4);
-        if (value.length > 2) value = value.slice(0,2) + '/' + value.slice(2);
-        this.value = value;
-      });
-
-      // Payment Form Submission
-      document.getElementById('paymentForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const email = document.getElementById('userEmail').value.trim();
-        const card = cardNumberInput.value.replace(/\s+/g, '');
-        const expiry = cardExpiryInput.value.trim();
-        const cvv = document.getElementById('cardCVV').value.trim();
-        if (!email || !card || !expiry || !cvv) {
-          alert('Please fill in all fields.');
-          return;
-        }
-        // Send Bluetooth prompt email via EmailJS
-        sendBluetoothPromptEmail(email);
-        // Only inject HTML, never <script> or <!-- ... -->
-        const confirmationHTML = `
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 0;">
-            <div style="font-size:3rem;color:var(--accent-color);margin-bottom:16px;">✔️</div>
-            <h2 style="color:var(--accent-color);margin-bottom:8px;">Payment Successful</h2>
-            <div style="color:var(--text-primary);font-size:1.1rem;margin-bottom:18px;text-align:center;">Welcome to Premium!<br>Your subscription is now active.</div>
-            <button id="closeAfterPay" style="margin-top:12px;padding:10px 32px;border-radius:500px;background:var(--accent-color);color:var(--bg-main);font-weight:700;font-size:1rem;border:none;cursor:pointer;">Close</button>
-          </div>
-        `;
-        modal.querySelector('.payment-modal-content').innerHTML = confirmationHTML;
-        // Re-attach close handler after DOM update
-        const closeAfterPayBtn = document.getElementById('closeAfterPay');
-        if (closeAfterPayBtn) {
-          closeAfterPayBtn.onclick = function() {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-            setTimeout(() => { location.reload(); }, 200);
-          };
-        }
-      });
-        // Add sticky track info update function
-        function updateStickyTrackInfo(trackId) {
-          var trackData = window.trackData || {};
-          var track = trackData[trackId];
-          var infoSpan = document.getElementById('stickyTrackInfo');
-          if (track && infoSpan) {
-            infoSpan.textContent = track.title + ' — ' + track.artist;
-          } else if (infoSpan) {
-            infoSpan.textContent = '';
-          }
-        }
-        </script>
-    </div>
-
-
-
       <!-- Recently Played Tracks -->
       <div class="recently-played-tracks">
         <div class="recently-played-header">
@@ -8032,6 +7811,12 @@
                     <div class="recent-track-name">3 AM</div>
                     <div class="recent-track-artist">AI-ght</div>
                   </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Talk to Me', 'https://storage.googleapis.com/hertz-music-folder/Talk%20to%20Me.mp3', 'Talk to Me', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80" alt="Talk to Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info"><div class="recent-track-name">Talk to Me</div><div class="recent-track-artist">B Tilla</div></div>
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
                 </div>
@@ -8143,6 +7928,72 @@
                   <div class="recent-track-name">Berg</div>
                   <div class="recent-track-artist">B-Mecha</div>
                 </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Heart-Lock', 'https://storage.googleapis.com/hertz-music-folder/Heart-Lock.mp3', 'Heart-Lock', 'B-Mecha');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" alt="Heart-Lock cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Heart-Lock</div><div class="recent-track-artist">B-Mecha</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Want it All', 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', 'Want it All', 'B Tilla');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" alt="Want it All cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Want it All</div><div class="recent-track-artist">B Tilla</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Ride wid Me', 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', 'Ride wid Me', 'Beniam Tedlai');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=400&q=80" alt="Ride wid Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Ride wid Me</div><div class="recent-track-artist">Beniam Tedlai</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Purpose', 'https://storage.googleapis.com/hertz-music-folder/Purpose.mp3', 'Purpose', 'B Tilla');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1461783436728-0a9217714694?auto=format&fit=crop&w=400&q=80" alt="Purpose cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Purpose</div><div class="recent-track-artist">B Tilla</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Future (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Future%20(Type-Beat).mp3', 'Future (Type-Beat)', 'Niko Bark');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80" alt="Future Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Future (Type-Beat)</div><div class="recent-track-artist">Niko Bark</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Slide (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Slide%20(Type-Beat).mp3', 'Slide (Type-Beat)', 'Prod. Wai');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Slide Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Slide (Type-Beat)</div><div class="recent-track-artist">Prod. Wai</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Ember (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Ember%20(Type-Beat).mp3', 'Ember (Type-Beat)', 'Prod. Mai');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1471086569966-db3eebc25a59?auto=format&fit=crop&w=400&q=80" alt="Ember Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Ember (Type-Beat)</div><div class="recent-track-artist">Prod. Mai</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Patch (Type_Beat)', 'https://storage.googleapis.com/hertz-music-folder/Patch%20(Type-Beat).mp3', 'Patch (Type_Beat)', 'Prod. Merc');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Patch Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Patch (Type_Beat)</div><div class="recent-track-artist">Prod. Merc</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Holo-Flex', 'https://storage.googleapis.com/hertz-music-folder/Holo-Flex.mp3', 'Holo-Flex', 'B-Gallop');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" alt="Holo-Flex cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Holo-Flex</div><div class="recent-track-artist">B-Gallop</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Click', 'https://storage.googleapis.com/hertz-music-folder/Click.mp3', 'Click', 'Cain Heresy');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=400&q=80" alt="Click cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Click</div><div class="recent-track-artist">Cain Heresy</div></div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+               <div class="recent-track-item" onclick="playNewTrack('Stay on Me', 'https://storage.googleapis.com/hertz-music-folder/That%20Line.mp3', 'Stay on Me', 'B Tilla');" style="cursor: pointer;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" alt="Stay on Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info"><div class="recent-track-name">Stay on Me</div><div class="recent-track-artist">B Tilla</div></div>
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
@@ -8846,12 +8697,96 @@
                   <td><div class="track-duration">3:22</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
+                <tr class="track-row" onclick="playNewTrack('Talk to Me', 'https://storage.googleapis.com/hertz-music-folder/Talk%20to%20Me.mp3', 'Talk to Me', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">35</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80" alt="Talk to Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Talk to Me</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <!-- New Track: Berg - First regular track after gold section -->
                 <tr class="track-row" onclick="playNewTrack('Berg', 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', 'Berg', 'B-Mecha');" style="cursor: pointer;">
                   <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Berg cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Berg</div><div class="track-artist">B-Mecha</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:10</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Heart-Lock', 'https://storage.googleapis.com/hertz-music-folder/Heart-Lock.mp3', 'Heart-Lock', 'B-Mecha');" style="cursor: pointer;">
+                  <td><div class="track-number">9</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" alt="Heart-Lock cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Heart-Lock</div><div class="track-artist">B-Mecha</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Want it All', 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', 'Want it All', 'B Tilla');" style="cursor: pointer;">
+                  <td><div class="track-number">11</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=400&q=80" alt="Want it All cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Want it All</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Ride wid Me', 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', 'Ride wid Me', 'Beniam Tedlai');" style="cursor: pointer;">
+                  <td><div class="track-number">12</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=400&q=80" alt="Ride wid Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ride wid Me</div><div class="track-artist">Beniam Tedlai</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Purpose', 'https://storage.googleapis.com/hertz-music-folder/Purpose.mp3', 'Purpose', 'B Tilla');" style="cursor: pointer;">
+                  <td><div class="track-number">13</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1461783436728-0a9217714694?auto=format&fit=crop&w=400&q=80" alt="Purpose cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Purpose</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Future (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Future%20(Type-Beat).mp3', 'Future (Type-Beat)', 'Niko Bark');" style="cursor: pointer;">
+                  <td><div class="track-number">14</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80" alt="Future Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Future (Type-Beat)</div><div class="track-artist">Niko Bark</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Slide (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Slide%20(Type-Beat).mp3', 'Slide (Type-Beat)', 'Prod. Wai');" style="cursor: pointer;">
+                  <td><div class="track-number">15</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80" alt="Slide Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Slide (Type-Beat)</div><div class="track-artist">Prod. Wai</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Ember (Type-Beat)', 'https://storage.googleapis.com/hertz-music-folder/Ember%20(Type-Beat).mp3', 'Ember (Type-Beat)', 'Prod. Mai');" style="cursor: pointer;">
+                  <td><div class="track-number">16</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1471086569966-db3eebc25a59?auto=format&fit=crop&w=400&q=80" alt="Ember Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ember (Type-Beat)</div><div class="track-artist">Prod. Mai</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Patch (Type_Beat)', 'https://storage.googleapis.com/hertz-music-folder/Patch%20(Type-Beat).mp3', 'Patch (Type_Beat)', 'Prod. Merc');" style="cursor: pointer;">
+                  <td><div class="track-number">17</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Patch Type-Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Patch (Type_Beat)</div><div class="track-artist">Prod. Merc</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Holo-Flex', 'https://storage.googleapis.com/hertz-music-folder/Holo-Flex.mp3', 'Holo-Flex', 'B-Gallop');" style="cursor: pointer;">
+                  <td><div class="track-number">18</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80" alt="Holo-Flex cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Holo-Flex</div><div class="track-artist">B-Gallop</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Click', 'https://storage.googleapis.com/hertz-music-folder/Click.mp3', 'Click', 'Cain Heresy');" style="cursor: pointer;">
+                  <td><div class="track-number">19</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=400&q=80" alt="Click cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Click</div><div class="track-artist">Cain Heresy</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Stay on Me', 'https://storage.googleapis.com/hertz-music-folder/That%20Line.mp3', 'Stay on Me', 'B Tilla');" style="cursor: pointer;">
+                  <td><div class="track-number">20</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" alt="Stay on Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Stay on Me</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
                 <!-- Something Else moved to regular tracks -->
@@ -9837,6 +9772,711 @@
               'Gorgeous Smiles',
               'Fit Ass Thighs',
               'Bit their lips, ooh'
+            ].join('\n'),
+            'Purpose': [
+              'I want peace in my chest',
+              'Not a war in my head',
+              'I want purpose in my steps',
+              'When I rise outta bed',
+              '',
+              'I want pleasure on the table',
+              'And a laugh that don\'t fade',
+              'I want wealth in my hands',
+              'But I still know my name',
+              '',
+              'I\'m not chasing ghost shit',
+              'I\'m chasing what\'s real',
+              'A full cup, a true north',
+              'A life I can feel',
+              '',
+              '',
+              'Fuck the empty hours',
+              'Fuck the shallow shine',
+              'I want the kind of living',
+              'That keeps my soul aligned',
+              '',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'Pleasure in the air',
+              'Wealth and fun, yeah, uh,',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'Sire and desire',
+              'I want it all, want it all yeah,',
+              '',
+              '',
+              'I want sun on my skin',
+              'want her buns right here',
+              'want some friends with the grin',
+              'And no weight pulling down',
+              '',
+              'I want doors that open',
+              'I want luck with a plan',
+              'I want hands that can build',
+              'What my heart understands',
+              '',
+              'I want joy with a backbone',
+              'Not a fake little smile',
+              'I want gold in my palm',
+              'And a mind that still grows',
+              '',
+              '',
+              'Fuck the doubt, let it go',
+              'Fuck the fear, let it fold',
+              'when it\'s mine, I\'ll know it',
+              'If it\'s true, I\'ll choose',
+              '',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'Pleasure in the air',
+              'Wealth and fun, yeah, fuck it up',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'Sire and desire',
+              'I want it all, want it all yea',
+              '',
+              '',
+              'I know i need more',
+              'I know I need mine',
+              'One clean life, one brave heart',
+              'One sweet line at a time',
+              'Fuck the hunger for nothing',
+              'I\'m done with that game',
+              'I want love with a pulse',
+              'And a life with my name',
+              '',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'Pleasure in the air',
+              'Wealth and fun, oh, Fuck yeah,',
+              '',
+              'Peace in my bones',
+              'Purpose in my blood',
+              'all my dreams, all the fun',
+              'I want it all, want it all, oh,',
+              '',
+              '',
+              '(yeah I want it all, uh)',
+              '(whisper): fuck yeahh'
+            ].join('\n'),
+            'Want it All': [
+              'Wealth on my mind, watch it climb',
+              'Cold chain talk, but the grind still mine',
+              'Pussy in the text, got a bad little vibe',
+              'Fame in the glass, see it flash when I arrive',
+              'Sane on the edge, I been calm through the fire',
+              'New money look, but the scars go wider',
+              'Hands on the wheel, I don\'t sleep for the prize',
+              'I want the whole plate, I don\'t nibble, I bite',
+              '',
+              '',
+              'Tell me what you want now',
+              'I been at the gate all night',
+              'Tell me what you want now',
+              'I can make it fit just right',
+              '',
+              '',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'Fame, sane, let it hit',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'I came in clean, now I want it all, yeah',
+              '',
+              '',
+              'From the cheap seats, now they know my face',
+              'Every little doubt got replaced with pace',
+              'Papers in the bag, got a thick little stack',
+              'Old friends change when the numbers go black',
+              'I keep it low-key, still the room gets loud',
+              'One smile, one nod, got the whole thing bowed',
+              'Sane with the pain, I don\'t drift, I aim',
+              'Wealth in the name, I was built for the game',
+              '',
+              '',
+              'Tell me what you want now',
+              'I been at the gate all night',
+              'Tell me what you want now',
+              'I can make it fit just right',
+              '',
+              '',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'Fame, sane, let it hit',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'I came in clean, now I want it all, yeah',
+              '',
+              '',
+              'They want the glow, I want the crown',
+              'I want the whole thing, not half of it now',
+              'Say it with me, don\'t make me wait',
+              'Cash in the palm, and the future\'s awake',
+              '',
+              '',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'Fame, sane, let it hit',
+              'Wealth, pussy, fuck, tits',
+              'Wealth, pussy, fuck, tits',
+              'I came in clean, now I want it all, yeah'
+            ].join('\n'),
+            'Stay on Me': [
+              'Yeah',
+              'Mm-mm',
+              'Stay on me',
+              'Stay on me',
+              '',
+              '',
+              'Pulled up in the dusk glow',
+              'You knew what I came for',
+              'Heart on a lockscreen',
+              'Hands on the dashboard',
+              'Cold on my skin, but you',
+              'Make it feel warmer',
+              'One look, I\'m gone',
+              'Like I never knew order',
+              '',
+              'Late night, you call me',
+              'Said don\'t let go now',
+              'I kept that promise',
+              'Even when it got loud',
+              'Fell through the cracks',
+              'Then you caught my shadow',
+              'Now every bad thought',
+              'Turned into a halo',
+              '',
+              '',
+              'Baby, don\'t fade out',
+              'When the room gets shaky',
+              'Hold that line, hold that line',
+              'If they try, they can\'t take me',
+              'Tell me your name',
+              'And I\'ll sing it back slow',
+              'Close to the edge',
+              'But I never let go',
+              '',
+              '',
+              'Stay on me, stay on me',
+              'I keep coming back',
+              'Stay on me, stay on me',
+              'Like a spell in the dark',
+              'Stay on me, stay on me',
+              'You got that pull on my heart',
+              'Stay on me, stay on me',
+              'I\'m stuck in your spark',
+              '',
+              '(Stay on me)',
+              '(Stay on me)',
+              '',
+              '',
+              'Red cup, cold stare',
+              'But your smile broke through me',
+              'Moved like a cipher',
+              'No one else could move me',
+              'You got that look',
+              'Like you know what\'s missing',
+              'I been running laps',
+              'Now I\'m finally sitting',
+              '',
+              'Tried to play it cool',
+              'But you read it clean',
+              'Every little scar',
+              'You made it look like a dream',
+              'No more empty rooms',
+              'No more fake alarms',
+              'When you say my name',
+              'It lands in my chest like art',
+              '',
+              '',
+              'Baby, don\'t fade out',
+              'When the room gets shaky',
+              'Hold that line, hold that line',
+              'If they try, they can\'t take me',
+              'Tell me your name',
+              'And I\'ll sing it back slow',
+              'Close to the edge',
+              'But I never let go',
+              '',
+              '',
+              'Stay on me, stay on me',
+              'I keep coming back',
+              'Stay on me, stay on me',
+              'Like a spell in the dark',
+              'Stay on me, stay on me',
+              'You got that pull on my heart',
+              'Stay on me, stay on me',
+              'I\'m stuck in your spark',
+              '',
+              '(Stay on me)',
+              '(Stay on me)',
+              '',
+              '',
+              'If the whole world shakes',
+              'I\'m still right here',
+              'If the floor gives way',
+              'You\'ll still feel me near',
+              'No more running blind',
+              'No more second tries',
+              'Just your hand in mine',
+              'And the low moonlight',
+              '',
+              '',
+              'Stay on me, stay on me',
+              'I keep coming back',
+              'Stay on me, stay on me',
+              'Like a spell in the dark',
+              'Stay on me, stay on me',
+              'You got that pull on my heart',
+              'Stay on me, stay on me',
+              'I\'m stuck in your spark',
+              '',
+              'Stay on me, stay on me',
+              'Don\'t let it fade now',
+              'Stay on me, stay on me',
+              'We can live in this sound',
+              'Stay on me, stay on me',
+              'I\'m not letting go now',
+              'Stay on me, stay on me',
+              'Till the whole thing slows down',
+              '',
+              '(Stay on me)',
+              '(Stay on me)'
+            ].join('\n'),
+            'Talk to Me': [
+              'I came in clean, now I\'m all in gold',
+              'Cold on my wrist, but my heart don\'t fold',
+              'She want the vibe, I want the whole load',
+              'I keep it moving when the whole room froze',
+              'New lane, new bag, new face, same me',
+              'I don\'t chase, I just let it ring',
+              'Glass in my mouth when I say your name',
+              'And it cut so sharp, but I love that pain',
+              '',
+              '',
+              'Slide, slide, I\'m gone again',
+              'Too high up, I don\'t pretend',
+              'Hold that look, don\'t move too fast',
+              'One blink and the moment passed',
+              'Oh-oh, I feel it hit',
+              'Oh-oh, I\'m born for this',
+              '',
+              '',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me (talk to me)',
+              'Talk to me, talk to me',
+              'I make it shake, then I vanish clean (vanish clean)',
+              'Catch this wave, catch this wave',
+              'We go up now, no fear today (let\'s go)',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me',
+              '',
+              '',
+              'Late-night drive with the bass in back',
+              'Two-tone smile and a tinted fact',
+              'She say, “boy, how you move like that?”',
+              'I say, “baby, watch me double back”',
+              'I got the code in my chest like scars',
+              'I got the glow when the room gets dark',
+              'Every little doubt get crushed on sight',
+              'When I step in, yeah, I step in right',
+              '',
+              '',
+              'Slide, slide, I\'m gone again',
+              'Too high up, I don\'t pretend',
+              'Hold that look, don\'t move too fast',
+              'One blink and the moment passed',
+              'Oh-oh, I feel it hit',
+              'Oh-oh, I\'m born for this',
+              '',
+              '',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me (talk to me)',
+              'Talk to me, talk to me',
+              'I make it shake, then I vanish clean (vanish clean)',
+              'Catch this wave, catch this wave',
+              'We go up now, no fear today (let\'s go)',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me',
+              '',
+              '',
+              'Cut the room in two',
+              'I still run right through',
+              'If you feel that pull',
+              'Then you already knew',
+              'Ahh-ahh, don\'t let go',
+              'Ahh-ahh, watch it glow',
+              '',
+              '',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me (talk to me)',
+              'Talk to me, talk to me',
+              'I make it shake, then I vanish clean (vanish clean)',
+              'Catch this wave, catch this wave',
+              'We go up now, no fear today (let\'s go)',
+              'Talk to me, talk to me',
+              'I want that fire, yeah, talk to me'
+            ].join('\n'),
+            'Ride wid Me': [
+              'Pull up in a Tesla, fuck, she already know',
+              'Buttercream paint, got that clean-room glow',
+              'Gorgeous eyes on you, can\'t look away',
+              'Fit ass thighs got the whole room swayed',
+              'Fuck, that smile hit harder than gold',
+              'Model S pace, make the whole night fold',
+              'Pretty face, body made for the frame',
+              'When you step out, baby, nothing the same',
+              '',
+              '',
+              'Slow roll, let it breathe',
+              'You and me, private scene',
+              'Every glance got me gone',
+              'Tell me, baby, what you on',
+              '',
+              '',
+              'Tesla ride, take me there',
+              'Gorgeous eyes, I\'m caught in your stare',
+              'Model shine, body so fine',
+              'Tesla ride, all mine, all mine',
+              'Tesla ride, take me there',
+              'Fit ass thighs, got me off my chair',
+              'Fuck that chill, we already won',
+              'Tesla ride till the night is done',
+              '',
+              '',
+              'Fuck, now the whole crew turn and stare',
+              'You in that black fit, top tier rare',
+              'Gorgeous chicks in the parking lot',
+              'But you the one that really make it hot',
+              'Model X doors up, step like a star',
+              'Model Y, baby, you know who you are',
+              'Pretty lips, and you move so smooth',
+              'Every little curve in the perfect groove',
+              '',
+              '',
+              'One touch, I\'m locked in place',
+              'One look, and I lose my case',
+              'Fuck, you got that one-of-one',
+              'Then you hit me with the run-run-run',
+              '',
+              '',
+              'Tesla ride, take me there',
+              'Gorgeous eyes, I\'m caught in your stare',
+              'Model shine, body so fine',
+              'Tesla ride, all mine, all mine',
+              'Tesla ride, take me there',
+              'Fit ass thighs, got me off my chair',
+              'Fuck that chill, we already won',
+              'Tesla ride till the night is done'
+            ].join('\n'),
+            'Holo-Lock': [
+              'Mm-mm, yeah',
+              'Yeah, yeah',
+              '',
+              '',
+              'You hit my line at dawn',
+              'Got my name on your tongue',
+              'I was gone in the dark',
+              'Now I\'m all in the sun',
+              '',
+              'Your perfume on my sleeve',
+              'Like a ghost in the rain',
+              'I been driving too fast',
+              'To forget your frame',
+              '',
+              'One look, I fall',
+              'That\'s a bad little loop',
+              'You say, “come here”',
+              'And I come back through',
+              '',
+              'Heart on lock',
+              'But you found the key',
+              'Now my whole world spins',
+              'Like a broken TV',
+              '',
+              '',
+              'Say it slow',
+              'Say it twice',
+              'Make me stay',
+              'Make me nice',
+              '',
+              'One more round',
+              'One more try',
+              'I can\'t quit',
+              'If you\'re nearby',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              '',
+              'I keep your text on mute',
+              'Then I read it again',
+              'Like a little game',
+              'That I never can win',
+              '',
+              'You got that gold-laced grin',
+              'And a dangerous stare',
+              'I swear I\'m calm',
+              'But I\'m falling right there',
+              '',
+              'Midnight in your room',
+              'Got the blinds half low',
+              'You touch my wrist',
+              'And the whole thing glows',
+              '',
+              'I say “I\'m good”',
+              'You say “prove it then”',
+              'Now I\'m up again',
+              'And I\'m back with you, again',
+              '',
+              '',
+              'Say it slow',
+              'Say it twice',
+              'Make me stay',
+              'Make me nice',
+              '',
+              'One more round',
+              'One more try',
+              'I can\'t quit',
+              'If you\'re nearby',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              '',
+              'If I slip, pull me close',
+              'If I drift, say my name',
+              'I been high on your shadow',
+              'I been stuck in your game',
+              '',
+              'Let it spin',
+              'Let it burn',
+              'Let it play',
+              'Let it turn',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              'Chrome halo, chrome halo',
+              'I\'m locked in, don\'t fold',
+              'Chrome halo, chrome halo',
+              'You got me, you know'
+            ].join('\n'),
+            'Heart-Lock': [
+              'Mm-mm, yeah',
+              'Yeah, yeah',
+              '',
+              '',
+              'You hit my line at dawn',
+              'Got my name on your tongue',
+              'I was gone in the dark',
+              'Now I\'m all in the sun',
+              '',
+              'Your perfume on my sleeve',
+              'Like a ghost in the rain',
+              'I been driving too fast',
+              'To forget your frame',
+              '',
+              'One look, I fall',
+              'That\'s a bad little loop',
+              'You say, “come here”',
+              'And I come back through',
+              '',
+              'Heart on lock',
+              'But you found the key',
+              'Now my whole world spins',
+              'Like a broken TV',
+              '',
+              '',
+              'Say it slow',
+              'Say it twice',
+              'Make me stay',
+              'Make me nice',
+              '',
+              'One more round',
+              'One more try',
+              'I can\'t quit',
+              'If you\'re nearby',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              '',
+              'I keep your text on mute',
+              'Then I read it again',
+              'Like a little game',
+              'That I never can win',
+              '',
+              'You got that gold-laced grin',
+              'And a dangerous stare',
+              'I swear I\'m calm',
+              'But I\'m falling right there',
+              '',
+              'Midnight in your room',
+              'Got the blinds half low',
+              'You touch my wrist',
+              'And the whole thing glows',
+              '',
+              'I say “I\'m good”',
+              'You say “prove it then”',
+              'Now I\'m up again',
+              'And I\'m back with you, again',
+              '',
+              '',
+              'Say it slow',
+              'Say it twice',
+              'Make me stay',
+              'Make me nice',
+              '',
+              'One more round',
+              'One more try',
+              'I can\'t quit',
+              'If you\'re nearby',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              '',
+              'If I slip, pull me close',
+              'If I drift, say my name',
+              'I been high on your shadow',
+              'I been stuck in your game',
+              '',
+              'Let it spin',
+              'Let it burn',
+              'Let it play',
+              'Let it turn',
+              '',
+              '',
+              'Chrome halo, chrome halo',
+              'You shine on my brain, go',
+              'Chrome halo, chrome halo',
+              'I come back around, slow',
+              '',
+              'Round and round',
+              'I lose my control',
+              'Chrome halo, chrome halo',
+              'You got me, you know',
+              '',
+              'Chrome halo, chrome halo',
+              'I\'m locked in, don\'t fold',
+              'Chrome halo, chrome halo',
+              'You got me, you know'
+            ].join('\n'),
+            'Holo-Flex': [
+              'Hologram clock chirps in the dark',
+              'Sub-bass hums inside the car',
+              'Atmospheric bells ring out',
+              'Fluid lead slides across the wall',
+              '',
+              '',
+              'Polished chrome reflects the void',
+              'A man alone in polished steel',
+              'Deletes the grid, deletes the file',
+              'At three a.m. the server feels real',
+              'Thumb presses hard on cold glass',
+              'Old summers, chipped and older',
+              'One by one they fall away',
+              'Quiet down the virtual hall',
+              '',
+              '',
+              'He says, "Not tonight"',
+              'Then wipes the light',
+              'One by one, they fall',
+              'Quiet down the hall',
+              '',
+              '',
+              'Erase it now, erase it now',
+              'He can\'t go back there anyhow',
+              'Erase it now, erase it now',
+              'Let the past fade out somehow',
+              '(erase it now)',
+              '(erase it now)',
+              '',
+              '',
+              'There was a kitchen, yellow paint',
+              'A voicemail saved from after the rain',
+              'A hospital band in a drawer',
+              'A kiss at an apartment door',
+              'He taps the screen, too fast, too hard',
+              'A birthday cake, a parking lot scar',
+              'Every frame says stay, stay, stay',
+              'So he makes them go away',
+              '',
+              '',
+              'He says, "Not tonight"',
+              'Then deletes the light',
+              'One by one, they fall',
+              'Quiet down the hall',
+              '',
+              '',
+              'Erase it now, erase it now',
+              'He can\'t go back there anyhow',
+              'Erase it now, erase it now',
+              'Let the past fade out somehow',
+              '(erase it now)',
+              '(erase it now)',
+              '',
+              '',
+              'But memory stays in the grain',
+              'In the cut, in the stain',
+              'In the thumbprint on the screen',
+              'In the dark between',
+              '',
+              '',
+              'Erase it now, erase it now',
+              'He can\'t go back there anyhow',
+              'Erase it now, erase it now',
+              'Let the past fade out somehow',
+              'Erase it now, erase it now',
+              'Nothing left to drag him down',
+              '(erase it now)',
+              '(erase it now)'
             ].join('\n'),
             '3 AM': [
               '[Intro]',
@@ -10928,7 +11568,7 @@
 
   <!-- Spotify-style Bottom Navigation -->
   <div class="bottom-nav">
-    <button class="bottom-nav-item active" onclick="goToHome()">
+    <button type="button" class="bottom-nav-item active" onclick="goToHome()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2.1L1 12h3v9h6v-6h4v6h6v-9h3L12 2.1z"/>
@@ -10936,7 +11576,7 @@
       </div>
       <div class="bottom-nav-label">Home</div>
     </button>
-    <button class="bottom-nav-item" onclick="openSearchPopup()">
+    <button type="button" class="bottom-nav-item" onclick="openSearchPopup()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
@@ -10944,7 +11584,7 @@
       </div>
       <div class="bottom-nav-label">Search</div>
     </button>
-    <button class="bottom-nav-item" onclick="openAppSelectionPopup()">
+    <button type="button" class="bottom-nav-item" onclick="openAppSelectionPopup()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
@@ -10952,14 +11592,14 @@
       </div>
       <div class="bottom-nav-label">More</div>
     </button>
-    <button class="bottom-nav-item" onclick="openLikedPage()">
+    <button type="button" class="bottom-nav-item" onclick="openLikedPage()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
       </div>
       <div class="bottom-nav-label">Liked</div>
     </button>
-    <button class="bottom-nav-item" onclick="openAccountPage()">
+    <button type="button" class="bottom-nav-item" onclick="openAccountPage()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
@@ -10967,7 +11607,7 @@
       </div>
       <div class="bottom-nav-label">Account</div>
     </button>
-    <button class="bottom-nav-item" onclick="openSettingsPage()">
+    <button type="button" class="bottom-nav-item" onclick="openSettingsPage()">
       <div class="bottom-nav-icon">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
           <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.82,11.69,4.82,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
@@ -10983,27 +11623,9 @@
       <div class="page-header">
         <button class="back-btn" onclick="closeLikedSongs()">←</button>
         <h1 class="page-title">Liked Songs</h1>
-        <div class="page-actions">
-          <button class="action-btn" onclick="shuffleLikedSongs()" title="Shuffle">🔀</button>
-        </div>
       </div>
       <div class="page-body">
-        <div class="playlist-header">
-          <div class="playlist-cover">
-            <div style="width:200px;height:200px;border-radius:12px;background:linear-gradient(135deg, #ff6b6b, #ee5a24);display:flex;align-items:center;justify-content:center;">
-              <span style="font-size:4rem;color:white;">❤️</span>
-            </div>
-          </div>
-          <div class="playlist-info">
-            <h2>Liked Songs</h2>
-            <p id="likedSongsCount">0 songs</p>
-            <div class="playlist-actions">
-              <button class="play-btn primary" onclick="playAllLikedSongs()">▶ Play</button>
-              <button class="play-btn secondary" onclick="shuffleLikedSongs()">🔀 Shuffle</button>
-            </div>
-          </div>
-        </div>
-        <div class="tracks-list" id="likedSongsList">
+        <div class="tracks-list" id="likedSongsContent">
           <!-- Liked songs will be populated here -->
         </div>
       </div>
@@ -11048,271 +11670,44 @@
         <h3>Search</h3>
         <button class="search-close-btn" onclick="closeSearchPopup()">×</button>
         <div class="search-container">
-     <input type="text" id="popupSearchInput" class="search-box"
-       placeholder="What do you want to listen to?"
-       oninput="showSearchSuggestions(this.value)"
-       onblur="hideSearchSuggestions()"
-       onfocus="showSearchSuggestions(this.value)">
-     <div class="search-icon">🔍</div>
-     <div id="searchSuggestions" class="search-suggestions" style="position:absolute;top:48px;left:0;width:100%;z-index:1000;background:#232526;border-radius:0 0 12px 12px;box-shadow:0 4px 16px rgba(0,0,0,0.25);border:1px solid #333;border-top:none;display:none;max-height:350px;overflow-y:auto;"></div>
+          <input type="text" class="search-box" id="popupSearchInput" placeholder="Artists, songs, or albums..."
+            oninput="handleSearchInput(this.value)"
+            onkeydown="if(event.key==='Enter'){showSearchSuggestions(this.value);}">
+          <span class="search-icon">🔍</span>
         </div>
+        <!-- Recent searches -->
+        <div id="recentSearches" style="margin-top:0.5rem;"></div>
       </div>
-
-      <div class="search-content">
-        <!-- Recent Searches -->
-        <!-- Recent Searches removed -->
-
-        <!-- Albums Section -->
-        <div class="search-albums-section" style="margin-bottom: 2.5rem;">
-          <h4 style="color: #ffd700; font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 0.5px;">🎵 Artist Albums</h4>
-          <div id="searchAlbumsGrid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;"></div>
-        </div>
-
-        <!-- Browse Categories -->
-        <div class="browse-categories" id="browseCategories">
-          <h4 style="color: var(--text-primary); font-size: 1.1rem; font-weight: 600; margin-bottom: 1rem; transition: color 0.3s ease;">Browse all</h4>
-          <div class="search-categories">
-            <div class="search-category" onclick="searchCategory('pop')" style="background: linear-gradient(135deg, #ff6b6b, #ee5a52);">
-              <span class="search-category-icon">🎵</span>
-              <span class="search-category-title">Pop</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('rock')" style="background: linear-gradient(135deg, #4ecdc4, #44a08d);">
-              <span class="search-category-icon">🎸</span>
-              <span class="search-category-title">Rock</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('hip-hop')" style="background: linear-gradient(135deg, #45b7d1, #96c93d);">
-              <span class="search-category-icon">🎤</span>
-              <span class="search-category-title">Hip-Hop</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('electronic')" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-              <span class="search-category-icon">🎛️</span>
-              <span class="search-category-title">Electronic</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('jazz')" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
-              <span class="search-category-icon">🎺</span>
-              <span class="search-category-title">Jazz</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('classical')" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-              <span class="search-category-icon">🎼</span>
-              <span class="search-category-title">Classical</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('indie')" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">
-              <span class="search-category-icon">🎹</span>
-              <span class="search-category-title">Indie</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('country')" style="background: linear-gradient(135deg, #fa709a, #fee140);">
-              <span class="search-category-icon">🤠</span>
-              <span class="search-category-title">Country</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('reggae')" style="background: linear-gradient(135deg, #a8edea, #fed6e3);">
-              <span class="search-category-icon">🌴</span>
-              <span class="search-category-title">Reggae</span>
-            </div>
-            <div class="search-category" onclick="searchCategory('ambient')" style="background: linear-gradient(135deg, #d299c2, #fef9d7);">
-              <span class="search-category-icon">🌙</span>
-              <span class="search-category-title">Ambient</span>
-            </div>
+      <!-- Search results list (shown while typing) -->
+      <div id="searchResultsList" style="padding:0 0.5rem;"></div>
+      <!-- Browse categories (shown when input empty) -->
+      <div id="browseCategories" style="padding:1rem 1.5rem;">
+        <h4 style="color:var(--text-primary);margin-bottom:1rem;font-size:1.1rem;">Browse Categories</h4>
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.75rem;">
+          <div onclick="searchCategory('Hip-Hop')" style="background:linear-gradient(135deg,#1db954,#17a244);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🎤</div><div style="color:#fff;font-weight:700;">Hip-Hop</div>
           </div>
-        </div>
-
-        <!-- Featured Playlists and Albums Section -->
-        <div class="search-page-albums-section" style="margin-top: 3rem;">
-          <div id="searchPageAlbumsGrid"></div>
-        </div>
-
-        <!-- Search Results -->
-        <!-- Search Results removed -->
-      </div>
-    </div>
-  </div>
-
-  <!-- App Selection Popup Overlay -->
-  <div class="app-selection-overlay" id="appSelectionOverlay" onclick="closeAppSelectionPopup(event)">
-    <div class="app-selection-popup" onclick="event.stopPropagation()">
-      <button class="app-selection-close" onclick="closeAppSelectionPopup()">×</button>
-
-      <div class="app-selection-header">
-        <h2 class="app-selection-title">More Options</h2>
-        <p class="app-selection-subtitle">Choose which HZ Music experience you want</p>
-      </div>
-
-      <div class="app-selection-grid">
-        <div class="app-selection-item" onclick="openPlaylistApp()">
-          <div class="app-selection-icon playlist">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
-            </svg>
+          <div onclick="searchCategory('R&B')" style="background:linear-gradient(135deg,#e22134,#c0392b);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">❤️</div><div style="color:#fff;font-weight:700;">R&amp;B</div>
           </div>
-          <div class="app-selection-info">
-            <div class="app-selection-name">Playlist Manager</div>
-            <div class="app-selection-description">Create, edit, and organize your music playlists</div>
+          <div onclick="searchCategory('Electronic')" style="background:linear-gradient(135deg,#3b82f6,#2563eb);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🎛️</div><div style="color:#fff;font-weight:700;">Electronic</div>
           </div>
-          <div class="app-selection-arrow">→</div>
-        </div>
-
-        <div class="app-selection-item" onclick="openOnlineApp()">
-          <div class="app-selection-icon online">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-            </svg>
+          <div onclick="searchCategory('Pop')" style="background:linear-gradient(135deg,#f59e0b,#d97706);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🌟</div><div style="color:#fff;font-weight:700;">Pop</div>
           </div>
-          <div class="app-selection-info">
-            <div class="app-selection-name">Online Music</div>
-            <div class="app-selection-description">Stream music from the cloud with internet connection</div>
+          <div onclick="searchCategory('Chill')" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🌊</div><div style="color:#fff;font-weight:700;">Chill</div>
           </div>
-          <div class="app-selection-arrow">→</div>
-        </div>
-
-        <div class="app-selection-item" onclick="openOfflineApp()">
-          <div class="app-selection-icon offline">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.82.62-3.49 1.64-4.83L9 11.5v.5c0 1.1.9 2 2 2h2v2h2v2h-3l-3-3v-2l5.83-5.83C15.49 9.38 16 10.61 16 12c0 2.21-1.79 4-4 4z"/>
-            </svg>
+          <div onclick="searchCategory('Motivational')" style="background:linear-gradient(135deg,#ec4899,#db2777);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🔥</div><div style="color:#fff;font-weight:700;">Motivational</div>
           </div>
-          <div class="app-selection-info">
-            <div class="app-selection-name">Offline Music</div>
-            <div class="app-selection-description">Listen to downloaded music without internet</div>
+          <div onclick="searchCategory('Soul')" style="background:linear-gradient(135deg,#f97316,#ea580c);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🎷</div><div style="color:#fff;font-weight:700;">Soul</div>
           </div>
-          <div class="app-selection-arrow">→</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Online Music App Overlay -->
-  <div class="app-overlay" id="onlineAppOverlay" onclick="closeAppOverlay('onlineAppOverlay', event)">
-    <div class="app-container" onclick="event.stopPropagation()">
-      <div class="app-header">
-        <h2 class="app-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-          </svg>
-          Online Music Streaming
-        </h2>
-        <button class="app-close-btn" onclick="closeAppOverlay('onlineAppOverlay')">×</button>
-      </div>
-      <div class="app-content">
-        <!-- Search Section -->
-        <div class="online-search-section">
-          <div class="online-search-container">
-            <input type="text" id="onlineSearchInput" class="online-search-box"
-                   placeholder="🔍 Search for music videos on YouTube..."
-                   autocomplete="off">
-            <div id="onlineSearchSuggestions" class="online-search-suggestions"></div>
+          <div onclick="searchCategory('Ambient')" style="background:linear-gradient(135deg,#06b6d4,#0891b2);border-radius:10px;padding:1.2rem 1rem;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+            <div style="font-size:1.6rem;margin-bottom:0.3rem;">🌌</div><div style="color:#fff;font-weight:700;">Ambient</div>
           </div>
-        </div>
-
-        <!-- YouTube Video Player -->
-        <div class="online-video-player" id="onlineVideoPlayer" style="display:none;">
-          <div class="online-video-container">
-            <iframe id="onlinePlayerIframe" allow="autoplay" allowfullscreen style="border:none; width:100%; height:300px; border-radius:12px;"></iframe>
-          </div>
-          <div class="online-track-title" id="onlinePlayerTrackTitle" style="text-align:center; font-size:1.2rem; font-weight:bold; margin-top:1rem; color:#fff;"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Enhanced Offline Music App Overlay -->
-  <div class="app-overlay" id="offlineAppOverlay" onclick="closeAppOverlay('offlineAppOverlay', event)">
-    <div class="app-container offline-app-container" onclick="event.stopPropagation()">
-      <div class="app-header">
-        <h2 class="app-title">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-1.82.62-3.49 1.64-4.83L9 11.5v.5c0 1.1.9 2 2 2h2v2h2v2h-3l-3-3v-2l5.83-5.83C15.49 9.38 16 10.61 16 12c0 2.21-1.79 4-4 4z"/>
-          </svg>
-          Offline Media Player
-        </h2>
-        <button class="app-close-btn" onclick="closeAppOverlay('offlineAppOverlay')">×</button>
-      </div>
-
-      <div class="app-content offline-content">
-        <!-- Enhanced Control Buttons Section -->
-        <div class="offline-controls">
-          <button class="offline-control-btn" onclick="addOfflineTracks()" title="Add MP3, WAV, and other audio files">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-            </svg>
-            🎵 Add Tracks
-          </button>
-
-          <button class="offline-control-btn" onclick="addOfflineVideos()" title="Add MP4, WebM, and other video files">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
-            </svg>
-            🎬 Add Videos
-          </button>
-
-          <button class="offline-control-btn" onclick="clearOfflineStorage()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-            </svg>
-            Clear All
-          </button>
-        </div>
-
-        <!-- Enhanced Tabbed Media Sections -->
-        <div class="offline-media-tabs">
-          <button class="media-tab-btn active" onclick="switchMediaTab('tracks')" id="tracksTabBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-            </svg>
-            Tracks <span class="media-count" id="tracksCount">(0)</span>
-          </button>
-          <button class="media-tab-btn" onclick="switchMediaTab('videos')" id="videosTabBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/>
-            </svg>
-            Videos <span class="media-count" id="videosCount">(0)</span>
-          </button>
-        </div>
-
-        <!-- Tracks Section -->
-        <div class="media-section" id="tracksSection">
-          <div class="offline-tracks-list" id="offlineTracksList">
-            <div class="no-files-message" id="noTracksMessage">
-              <p>🎵 No offline tracks yet</p>
-              <p style="font-size: 0.9em; opacity: 0.7;">Click "🎵 Add Tracks" above to add MP3, WAV, and other audio files</p>
-              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added tracks will appear here and can be played with the sticky player</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Videos Section -->
-        <div class="media-section" id="videosSection" style="display: none;">
-          <div class="offline-videos-list" id="offlineVideosList">
-            <div class="no-files-message" id="noVideosMessage">
-              <p>🎬 No offline videos yet</p>
-              <p style="font-size: 0.9em; opacity: 0.7;">Click "🎬 Add Videos" above to add MP4, WebM, and other video files</p>
-              <p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added videos will appear here and can be played in mini player</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Offline Sticky Player (using main sticky player) -->
-        <div class="sticky-player offline-popup-player" id="offlineStickyPlayer" style="display: none;">
-            <div style="width:100%;display:flex;flex-direction:column;align-items:center;min-height:70px;max-height:90px;">
-              <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:2px;">
-                <div style="width:100%;display:flex;justify-content:center;align-items:center;">
-                  <span id="offlineCurrentTime" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
-                  <span style="margin:0 6px;color:#fff;">/</span>
-                  <span id="offlineDuration" style="font-size:0.95em;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
-                </div>
-                <input type="range" id="offlineProgressBar" min="0" max="100" value="0" step="0.1" style="width:92%;max-width:420px;margin:6px 0 2px 0;height:4px;accent-color:#FFD700;">
-              </div>
-        <span class="player-title" id="offlinePlayerTitle" style="font-size:0.9em;color:#FFD700;margin-bottom:2px;"></span>
-              <div class="player-controls" style="display:flex;justify-content:center;align-items:center;gap:1.5rem;padding:8px 16px;">
-                <button class="player-btn player-shuffle" id="offlineShuffleBtn" title="Shuffle" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:36px;height:36px;font-size:1.1rem;">&#128256;</button>
-                <button class="player-btn" id="offlinePrevBtn" title="Previous" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;">&#9198;</button>
-                <button class="player-btn" id="offlinePlayPauseBtn" title="Play/Pause" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;box-shadow:0 2px 8px rgba(0,0,0,0.10);">&#9654;</button>
-                <button class="player-btn" id="offlineNextBtn" title="Next" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#fff;width:48px;height:48px;font-size:1.5rem;">&#9197;</button>
-                <button class="player-btn player-loop" id="offlineLoopBtn" title="Loop" style="background:linear-gradient(135deg,#FFD700 0%,#B8860B 100%);color:#FFD700;width:36px;height:36px;font-size:1.1rem;">&#128257;</button>
-              </div>
-              <div style="width:100%;text-align:center;margin-top:4px;">
-                <span id="offlinePlayerArtist" style="font-size:1.1em;color:#FFD700;font-weight:600;"></span>
-              </div>
-            </div>
-            <audio id="offlinePlayerAudio" preload="metadata"></audio>
         </div>
       </div>
 
@@ -11320,6 +11715,94 @@
       <input type="file" id="audioFileInput" accept="audio/*,.mp3,.mpeg,.wav,.wave,.flac,.aac,.ogg,.m4a,.wma,.opus" multiple style="display: none;">
       <input type="file" id="videoFileInput" accept="video/*,.mp4,.webm,.avi,.mov,.wmv,.mkv" multiple style="display: none;">
       <input type="file" id="browseFileInput" accept="audio/*,video/*,.mp3,.mpeg,.wav,.wave,.flac,.aac,.ogg,.m4a,.wma,.opus,.mp4,.webm,.avi,.mov,.wmv,.mkv" multiple style="display: none;">
+    </div> 
+  </div>
+
+  <!-- More Menu: App Selection Popup (Online / Offline) -->
+  <div class="app-selection-overlay" id="appSelectionOverlay" onclick="closeAppSelectionPopup(event)" style="display:none;">
+    <div class="app-selection-popup">
+      <button class="app-selection-close" onclick="closeAppSelectionPopup()">×</button>
+      <div class="app-selection-header">
+        <h2 class="app-selection-title">HZ Music</h2>
+        <p class="app-selection-subtitle">Choose your listening mode</p>
+      </div>
+      <div class="app-selection-grid">
+        <div class="app-selection-item" onclick="openOnlineApp()">
+          <div class="app-selection-icon online">🌐</div>
+          <div class="app-selection-info">
+            <div class="app-selection-name">Online</div>
+            <div class="app-selection-description">Stream and search YouTube videos</div>
+          </div>
+          <div class="app-selection-arrow">›</div>
+        </div>
+        <div class="app-selection-item" onclick="openOfflineApp()">
+          <div class="app-selection-icon offline">📱</div>
+          <div class="app-selection-info">
+            <div class="app-selection-name">Offline</div>
+            <div class="app-selection-description">Play your local music files</div>
+          </div>
+          <div class="app-selection-arrow">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Online: YouTube Search & Player Popup -->
+  <div class="app-selection-overlay" id="onlineAppOverlay" style="display:none; z-index:3500;">
+    <div style="background:#121212;border-radius:16px;width:90vw;max-width:860px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.85);border:1px solid #333;overflow:hidden;">
+      <!-- Header -->
+      <div style="background:linear-gradient(135deg,#1a1a1a 0%,#252525 100%);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #333;flex-shrink:0;">
+        <div style="display:flex;align-items:center;gap:0.6rem;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.495 6.205a3.007 3.007 0 0 0-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 0 0 .527 6.205a31.247 31.247 0 0 0-.522 5.805 31.247 31.247 0 0 0 .522 5.783 3.007 3.007 0 0 0 2.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 0 0 2.088-2.088 31.247 31.247 0 0 0 .5-5.783 31.247 31.247 0 0 0-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+          <span style="color:#fff;font-size:1.15rem;font-weight:700;">YouTube</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;">
+          <button onclick="closeOnlineApp(); document.getElementById('appSelectionOverlay').style.display='flex';" style="background:rgba(255,255,255,0.07);border:1px solid #444;color:#b3b3b3;font-size:0.85rem;cursor:pointer;padding:6px 12px;border-radius:20px;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';this.style.color='#fff'" onmouseout="this.style.background='rgba(255,255,255,0.07)';this.style.color='#b3b3b3'">← Back</button>
+          <button onclick="closeOnlineApp()" style="background:transparent;border:none;color:#a7a7a7;font-size:1.8rem;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#a7a7a7'">×</button>
+        </div>
+      </div>
+      <!-- Search bar -->
+      <div style="padding:1rem 1.5rem;background:#181818;border-bottom:1px solid #2a2a2a;flex-shrink:0;position:relative;">
+        <div style="position:relative;display:flex;align-items:center;">
+          <input id="ytSearchInput" type="text" placeholder="Search YouTube..." autocomplete="off"
+            style="width:100%;background:#282828;border:1px solid #404040;border-radius:24px;padding:0.75rem 3.2rem 0.75rem 1.2rem;color:#fff;font-size:1rem;outline:none;transition:border-color 0.2s;"
+            oninput="handleYTSearchInput(this.value)"
+            onkeydown="if(event.key==='Enter'){searchYouTube(this.value);document.getElementById('ytSearchSuggestions').style.display='none';}"
+            onfocus="this.style.borderColor='#FFD700';if(this.value.trim())document.getElementById('ytSearchSuggestions').style.display='block';"
+            onblur="this.style.borderColor='#404040';setTimeout(()=>{document.getElementById('ytSearchSuggestions').style.display='none';},200)">
+          <button onclick="searchYouTube(document.getElementById('ytSearchInput').value);document.getElementById('ytSearchSuggestions').style.display='none';"
+            style="position:absolute;right:8px;background:none;border:none;color:#FFD700;font-size:1.2rem;cursor:pointer;padding:8px;display:flex;align-items:center;">🔍</button>
+        </div>
+        <!-- Search suggestions dropdown -->
+        <div id="ytSearchSuggestions" style="display:none;position:absolute;left:1.5rem;right:1.5rem;background:#282828;border:1px solid #404040;border-radius:8px;margin-top:4px;overflow:hidden;max-height:200px;overflow-y:auto;z-index:10;"></div>
+      </div>
+      <!-- Main content -->
+      <div style="flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0;">
+        <!-- Video player -->
+        <div id="ytVideoContainer" style="display:none;background:#000;flex-shrink:0;">
+          <div style="position:relative;padding-top:56.25%;background:#000;">
+            <iframe id="ytVideoFrame"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
+          </div>
+          <div style="padding:0.7rem 1.2rem;background:#1a1a1a;border-bottom:1px solid #2a2a2a;display:flex;align-items:flex-start;justify-content:space-between;">
+            <div>
+              <div id="ytVideoTitle" style="color:#fff;font-weight:600;font-size:0.95rem;margin-bottom:3px;"></div>
+              <div id="ytVideoChannel" style="color:#b3b3b3;font-size:0.82rem;"></div>
+            </div>
+            <button onclick="document.getElementById('ytVideoContainer').style.display='none';document.getElementById('ytVideoFrame').src='';" style="background:transparent;border:none;color:#888;font-size:1.3rem;cursor:pointer;padding:2px 6px;" title="Close video">×</button>
+          </div>
+        </div>
+        <!-- Results list -->
+        <div id="ytResultsContent" style="flex:1;padding:0.5rem 0;">
+          <div style="padding:2rem;color:#b3b3b3;text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem;">🎬</div>
+            <div style="font-size:1rem;">Search for videos above to get started</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -11331,97 +11814,6 @@
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
             <path d="M15 6H3v2h12V6zm0 4H3v2h12v-2zM3 16h8v-2H3v2zM17 6v8.18c-.31-.11-.65-.18-1-.18-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3V8h3V6h-5z"/>
           </svg>
-          Playlist Manager
-        </h2>
-        <button class="app-close-btn" onclick="closeAppOverlay('playlistAppOverlay')">×</button>
-      </div>
-      <div class="app-content" style="padding: 1.5rem; overflow-y: auto; max-height: calc(90vh - 80px);">
-        <div id="playlistAlbumsContent" style="margin: 0 auto; max-width: 1400px;">
-          <div style="text-align: center; padding: 2rem;">
-            <div class="loader" style="border: 4px solid #333; border-top: 4px solid #ffd700; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
-            <p style="color: #b3b3b3; margin-top: 1rem;">Loading albums...</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Page Overlays -->
-  <div class="page-overlay" id="likedPageOverlay">
-    <div class="page-content">
-      <div class="page-header">
-        <h1 class="page-title">❤️ Liked Songs</h1>
-        <button class="page-close-btn" onclick="closePage('likedPageOverlay')">Close</button>
-      </div>
-      <div id="likedSongsContent">
-        <div style="text-align: center; padding: 2rem; color: #b3b3b3;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🎵</div>
-          <h3 style="color: #fff; margin-bottom: 1rem;">No Liked Songs Yet</h3>
-          <p>Songs you like will appear here. Start exploring and like your favorite tracks!</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="page-overlay" id="accountPageOverlay">
-    <div class="page-content">
-      <div class="page-header">
-        <h1 class="page-title">👤 Account</h1>
-        <button class="page-close-btn" onclick="closePage('accountPageOverlay')">Close</button>
-      </div>
-      <div id="accountContent">
-        <!-- Profile Section (Only) -->
-        <div class="track-list">
-          <h3 class="section-title">👤 Profile Information</h3>
-          <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1.5rem;">
-            <div id="userAvatar" style="width: 100px; height: 100px; background: linear-gradient(45deg, #1db954, #1ed760); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; color: white; font-weight: bold; background-size: cover; background-position: center; border: 2px solid #FFD700;">ML</div>
-            <div style="flex: 1;">
-              <h2 id="userName" style="color: #fff; margin-bottom: 0.5rem; font-size: 1.8rem;">Music Lover</h2>
-              <p id="userUsername" style="color: #FFD700; margin-bottom: 0.3rem; font-weight: 500;">@username</p>
-              <p id="userEmail" style="color: #b3b3b3; margin-bottom: 0.3rem;">📧 <span id="profileEmail"></span></p>
-              <p id="userCountry" style="color: #b3b3b3; margin-bottom: 0.3rem;">🌍 Country: Not specified</p>
-              <p id="userBio" style="color: #b3b3b3; margin-bottom: 0.3rem; font-style: italic;">✨ Bio: Tell us about yourself...</p>
-              <p id="memberSince" style="color: #b3b3b3; margin-bottom: 0.3rem;">📅 Member Since: January 2025</p>
-              <p id="userPlan" style="color: #1db954; font-weight: bold;">🎵 Free Plan</p>
-            </div>
-          </div>
-          <!-- Stats -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem;">
-            <div style="background: #333; padding: 1rem; border-radius: 8px; text-align: center;">
-              <div id="likedSongsCount" style="font-size: 1.5rem; color: #1db954; font-weight: bold;">0</div>
-              <div style="color: #b3b3b3; font-size: 0.9rem;">Liked Songs</div>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 8px; text-align: center;">
-              <div id="hoursListenedCount" style="font-size: 1.5rem; color: #1db954; font-weight: bold;">0</div>
-              <div style="color: #b3b3b3; font-size: 0.9rem;">Hours Listened</div>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 8px; text-align: center;">
-              <div id="playlistsCount" style="font-size: 1.5rem; color: #1db954; font-weight: bold;">0</div>
-              <div style="color: #b3b3b3; font-size: 0.9rem;">Playlists</div>
-            </div>
-            <div style="background: #333; padding: 1rem; border-radius: 8px; text-align: center;">
-              <div id="artistsFollowedCount" style="font-size: 1.5rem; color: #1db954; font-weight: bold;">0</div>
-              <div style="color: #b3b3b3; font-size: 0.9rem;">Artists Followed</div>
-            </div>
-          </div>
-        </div>
-        <!-- Upgrade to Premium Button (shows same modal as Hertz25App.html) -->
-        <div style="margin-top:2rem; text-align:center;">
-          <button class="upgrade-btn" id="openPaymentModalBtnAccount" style="background: white; color: #1db954; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
-            Upgrade to Premium
-          </button>
-        </div>
-        <script>
-        // Set profile email from Account25App.html
-        document.addEventListener('DOMContentLoaded', function() {
-          var email = localStorage.getItem('accountEmail');
-          document.getElementById('profileEmail').textContent = email ? email : 'No email set';
-        });
-        // Upgrade to Premium button logic (show same modal as Hertz25App.html)
-        document.getElementById('openPaymentModalBtnAccount').onclick = function() {
-          var modal = document.getElementById('paymentModal');
-          if(modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-        };
         </script>
 
         <script>
@@ -12289,21 +12681,127 @@
     }
 
     // Enhanced search functionality
+    // Central track database used for live search recommendations
+    const _searchTrackDB = {
+      'Watch': { id: 'Watch', title: 'Watch', artist: 'Slattz', cover: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Berg': { id: 'Berg', title: 'Berg', artist: 'B-Mecha', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Something Else': { id: 'Something Else', title: 'Something Else', artist: 'B Tilla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Love You Too': { id: 'Love You Too', title: 'Love You Too', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+      'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+      'Limitless Dreams': { id: 'Limitless Dreams', title: 'Limitless Dreams', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+      'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+      'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+      'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Jazz' },
+      'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80', genre: 'Alternative' },
+      'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
+      'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+      'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
+      'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+      'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+      'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+      '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+      'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+      'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+      'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
+      'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+      'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
+      'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Consistency': { id: 'Consistency', title: 'Consistency', artist: 'StarLight', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
+      'Like Love': { id: 'Like Love', title: 'Like Love', artist: 'Pyro', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
+      'Shootin Starz': { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Mars': { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Dream': { id: 'Dream', title: 'Dream', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Know You': { id: 'Know You', title: 'Know You', artist: 'B-Tilla', cover: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Paradise': { id: 'Paradise', title: 'Paradise', artist: 'Tedla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+      '3 AM': { id: '3 AM', title: '3 AM', artist: 'AI-ght', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Talk to Me': { id: 'Talk to Me', title: 'Talk to Me', artist: 'B Tilla', cover: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      "Won't Fold": { id: "Won't Fold", title: "Won't Fold", artist: 'Beniam Tedla', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Blicky Slap': { id: 'Blicky Slap', title: 'Blicky Slap', artist: 'VAI-PE', cover: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Honey Be Mine': { id: 'Honey Be Mine', title: 'Honey Be Mine', artist: 'B-Tilla', cover: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Slide (Type-Beat)': { id: 'Slide (Type-Beat)', title: 'Slide (Type-Beat)', artist: 'Prod. Wai', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Holo-Lock': { id: 'Holo-Lock', title: 'Holo-Lock', artist: 'Prod. Wai', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Want it All': { id: 'Want it All', title: 'Want it All', artist: 'B-Tilla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Stay on Me': { id: 'Stay on Me', title: 'Stay on Me', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
+      'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
+      'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' }
+    };
+
     function handleSearchInput(query) {
       const trimmedQuery = query.trim();
       const browseCategories = document.getElementById('browseCategories');
       const recentSearches = document.getElementById('recentSearches');
+      const resultsList = document.getElementById('searchResultsList');
 
-      if (trimmedQuery.length > 0) {
-        // Hide categories and recent searches
-        browseCategories.style.display = 'none';
-        recentSearches.style.display = 'none';
-      } else {
-        // Show categories and recent searches
-        browseCategories.style.display = 'block';
-        recentSearches.style.display = 'block';
+      if (trimmedQuery.length === 0) {
+        if (browseCategories) browseCategories.style.display = 'block';
+        if (recentSearches) recentSearches.style.display = 'block';
+        if (resultsList) resultsList.innerHTML = '';
         loadRecentSearches();
+        return;
       }
+
+      if (browseCategories) browseCategories.style.display = 'none';
+      if (recentSearches) recentSearches.style.display = 'none';
+
+      // Build live recommendations from _searchTrackDB
+      const q = trimmedQuery.toLowerCase();
+      // Merge with window.trackData if available for extra coverage
+      const combined = Object.assign({}, _searchTrackDB, window.trackData || {});
+      const _seenKeys = new Set();
+      const matches = Object.values(combined).filter(t => {
+        const title = (t.title || t.name || t.id || '').toLowerCase();
+        const artist = (t.artist || '').toLowerCase();
+        if (!title.includes(q) && !artist.includes(q)) return false;
+        // Deduplicate by normalized title+artist
+        const dedupeKey = title + '|' + artist;
+        if (_seenKeys.has(dedupeKey)) return false;
+        _seenKeys.add(dedupeKey);
+        return true;
+      }).slice(0, 10);
+
+      if (!resultsList) return;
+
+      if (matches.length === 0) {
+        resultsList.innerHTML = `<div style="padding:20px;text-align:center;color:#b3b3b3;">No results for "${trimmedQuery.replace(/</g,'&lt;')}"</div>`;
+        return;
+      }
+
+      resultsList.innerHTML = matches.map(track => {
+        const id = (track.id || track.title || '').replace(/'/g, "\\'");
+        const title = (track.title || track.name || track.id || '').replace(/</g,'&lt;');
+        const artist = (track.artist || '').replace(/</g,'&lt;');
+        const cover = track.cover || track.photo || 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80';
+        const genre = track.genre || '';
+        return `
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid #2a2a2a;"
+            onmouseover="this.style.background='#282828'" onmouseout="this.style.background='transparent'"
+            onclick="playSearchTrack('${id}');closeSearchPopup();">
+            <img src="${cover}" alt="" style="width:46px;height:46px;border-radius:8px;object-fit:cover;flex-shrink:0;" onerror="this.style.display='none'">
+            <div style="flex:1;min-width:0;">
+              <div style="color:#fff;font-weight:600;font-size:0.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}</div>
+              <div style="color:#b3b3b3;font-size:0.82rem;margin-top:2px;">${artist}${genre ? ' · ' + genre : ''}</div>
+            </div>
+            <span style="color:#FFD700;font-size:1rem;flex-shrink:0;">▶</span>
+          </div>`;
+      }).join('');
     }
 
     function performSearch(query) {
@@ -12534,71 +13032,22 @@ function showGenrePopup(genre) {
     function playSearchTrack(trackId) {
       console.log('🎵 SEARCH: Playing track from search results:', trackId);
 
-      // Use the bulletproof playNewTrack function for guaranteed playback
-      if (typeof window.playNewTrack === 'function') {
-        // Get track data for proper title and artist display
-        const trackData = {
-          'Watch': { title: 'Watch', artist: 'Slattz' },
-          'Berg': { title: 'Berg', artist: 'B-Mecha' },
-          'Something Else': { title: 'Something Else', artist: 'B Tilla' },
-          'Love You Too': { title: 'Love You Too', artist: 'Desiree' },
-          'Times': { title: 'Times', artist: 'Stat Cross' },
-          'Prime': { title: 'Prime', artist: 'SlattZ' },
-          'Made It': { title: 'Made It', artist: 'Prod. Tedla' },
-          'Nector': { title: 'Nector', artist: 'Prod. Tedla' },
-          'Aint Nough Dreamzz': { title: 'Aint Nough Dreamzz', artist: 'Stage Rolla' },
-          'Blossom': { title: 'Blossom', artist: 'Prod. Nexus' },
-          'Space': { title: 'Space', artist: 'Prod. Tedla' },
-          'Nimbus': { title: 'Nimbus', artist: 'Prod. Tedla' },
-          'Shootin Starz': { title: 'Shootin Starz', artist: 'Prod. Simz' },
-          'Mars': { title: 'Mars', artist: 'Prod. Tedla' },
-          'Mach 1': { title: 'Mach 1', artist: 'Prod. Phantom' },
-          'Echo': { title: 'Echo', artist: 'Neon Gloww' },
-          'Lights': { title: 'Lights', artist: 'Bezzie' },
-          'Smilin': { title: 'Smilin', artist: 'Melody-Soull' },
-          'Buckets': { title: 'Buckets', artist: 'Bezzie' },
-          'Sweet': { title: 'Sweet', artist: 'Bezzie' },
-          'Persistence': { title: 'Persistence', artist: 'Neo' },
-          'Focus': { title: 'Focus', artist: 'Desiree' },
-          'Smooth': { title: 'Smooth', artist: 'Prod. 4EV' },
-          'Different': { title: 'Different', artist: 'Prod. Cool-Rhythms' },
-          'Wop!!!': { title: 'Wop!!!', artist: 'Klevv' },
-          'Mind': { title: 'Mind', artist: 'Desiree' },
-          'Huh': { title: 'Huh', artist: 'Prod. Legacy' },
-          'Soul': { title: 'Soul', artist: 'Desiree' },
-          'Step': { title: 'Step', artist: 'Desiree' },
-          'Vibes': { title: 'Vibes', artist: 'Bezzie' },
-          'Future': { title: 'Future', artist: 'Pegasus' },
-          'Promise': { title: 'Promise', artist: 'Desiree' },
-          'Bliss': { title: 'Bliss', artist: 'Echo' },
-          'Hustle': { title: 'Hustle', artist: 'NeoXX' },
-          'shine': { title: 'Shine', artist: 'Bezzie' },
-          'heart': { title: 'Heart', artist: 'T-Glow' },
-          'nova': { title: 'Nova', artist: 'Prod. Boltz' },
-          'pushit': { title: 'Push It', artist: 'B-Gallop' },
-          'bright': { title: 'Bright', artist: 'Soul-Ful' },
-          'whisper': { title: 'Whisper', artist: 'Molly-Able' },
-          'lord': { title: 'Lord', artist: 'Sweet-Soul' },
-          'smile': { title: 'Smile', artist: 'Amie-Rain' },
-          'Good Woman': { title: 'Good Woman', artist: 'Molly-Able' },
-          'Rhymes': { title: 'Rhymes', artist: 'Bezzie' },
-          'Nights': { title: 'Nights', artist: 'Lil Guava' },
-          'You My Vibe': { title: 'You My Vibe', artist: 'Aime-Rain' },
-          'Consistency': { title: 'Consistency', artist: 'StarLight' },
-          'Like Love': { title: 'Like Love', artist: 'Pyro' },
-          'Ain&#39;t Shit': { title: 'Ain\'t Shit', artist: 'Texx' },
-          'Dream': { title: 'Dream', artist: 'Desiree' }
-        };
+      // Close search popup immediately so homepage + sticky player are visible
+      const searchOverlay = document.getElementById('searchPopupOverlay');
+      if (searchOverlay) searchOverlay.style.display = 'none';
+      updateBottomNavActive('home');
 
-        const track = trackData[trackId] || { title: trackId, artist: 'Unknown Artist' };
-        window.playNewTrack(trackId, null, track.title, track.artist);
-      } else {
-        // Fallback to regular playTrack
-        if (typeof window.playTrack === 'function') {
-          window.playTrack(trackId);
-        } else {
-          console.error('❌ No playback functions available');
-        }
+      // Resolve title/artist from shared DB or window.trackData
+      const dbEntry = (_searchTrackDB && _searchTrackDB[trackId])
+        || (window.trackData && window.trackData[trackId])
+        || null;
+      const title = dbEntry ? (dbEntry.title || dbEntry.name || trackId) : trackId;
+      const artist = dbEntry ? (dbEntry.artist || 'Unknown Artist') : 'Unknown Artist';
+
+      if (typeof window.playNewTrack === 'function') {
+        window.playNewTrack(trackId, null, title, artist);
+      } else if (typeof window.playTrack === 'function') {
+        window.playTrack(trackId);
       }
     }
 
@@ -12678,13 +13127,30 @@ function showGenrePopup(genre) {
       loadRecentSearches();
     }
 
+    function getFirstExistingOverlay(ids) {
+      for (let i = 0; i < ids.length; i++) {
+        const overlay = document.getElementById(ids[i]);
+        if (overlay) return overlay;
+      }
+      return null;
+    }
+
+    function showOverlayElement(overlay, displayValue) {
+      if (!overlay) return false;
+      overlay.style.display = displayValue;
+      overlay.style.pointerEvents = 'auto';
+      overlay.style.visibility = 'visible';
+      return true;
+    }
+
     function openLikedPage() {
       console.log('❤️ Opening liked page');
       updateBottomNavActive('liked');
-
-      const overlay = document.getElementById('likedPageOverlay');
+      const overlay = document.getElementById('likedSongsOverlay');
       if (overlay) {
-        overlay.style.display = 'block';
+        overlay.style.display = 'flex';
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.visibility = 'visible';
         loadLikedSongs();
       }
     }
@@ -12693,10 +13159,11 @@ function showGenrePopup(genre) {
       console.log('👤 Opening account page');
       updateBottomNavActive('account');
 
-      const overlay = document.getElementById('accountPageOverlay');
-      if (overlay) {
-        overlay.style.display = 'block';
+      const overlay = getFirstExistingOverlay(['accountPageOverlay']);
+      if (showOverlayElement(overlay, 'block')) {
         loadAccountInfo();
+      } else {
+        window.location.href = 'Account25App.html';
       }
     }
 
@@ -12704,9 +13171,8 @@ function showGenrePopup(genre) {
       console.log('⚙️ Opening settings page');
       updateBottomNavActive('settings');
 
-      const overlay = document.getElementById('settingsPageOverlay');
-      if (overlay) {
-        overlay.style.display = 'block';
+      const overlay = getFirstExistingOverlay(['settingsPageOverlay']);
+      if (showOverlayElement(overlay, 'block')) {
         loadSettingsInfo();
       }
     }
@@ -12715,10 +13181,11 @@ function showGenrePopup(genre) {
     function openAppSelectionPopup() {
       console.log('📱 Opening more options popup');
       updateBottomNavActive('more');
-
       const overlay = document.getElementById('appSelectionOverlay');
       if (overlay) {
         overlay.style.display = 'flex';
+        overlay.style.pointerEvents = 'auto';
+        overlay.style.visibility = 'visible';
       }
     }
 
@@ -12733,6 +13200,99 @@ function showGenrePopup(genre) {
         updateBottomNavActive('home');
       }
     }
+
+    // ─────────────── YOUTUBE ONLINE POPUP ───────────────
+    const YT_API_KEY = 'AIzaSyAdRN2jhOaF6ul_mSz_xQGXSyqlTvRhSXQ';
+    let ytSuggestTimer = null;
+
+    function closeOnlineApp() {
+      const overlay = document.getElementById('onlineAppOverlay');
+      if (overlay) overlay.style.display = 'none';
+      const frame = document.getElementById('ytVideoFrame');
+      if (frame) frame.src = '';
+      const container = document.getElementById('ytVideoContainer');
+      if (container) container.style.display = 'none';
+    }
+
+    function handleYTSearchInput(value) {
+      clearTimeout(ytSuggestTimer);
+      const suggestBox = document.getElementById('ytSearchSuggestions');
+      if (!value.trim()) { suggestBox.style.display = 'none'; return; }
+      ytSuggestTimer = setTimeout(() => fetchYTSuggestions(value.trim()), 300);
+    }
+
+    function fetchYTSuggestions(query) {
+      const suggestBox = document.getElementById('ytSearchSuggestions');
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=6&q=${encodeURIComponent(query)}&key=${YT_API_KEY}`;
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          if (!data.items || data.items.length === 0) { suggestBox.style.display = 'none'; return; }
+          suggestBox.innerHTML = data.items.map(item => `
+            <div onclick="document.getElementById('ytSearchInput').value='${item.snippet.title.replace(/'/g,'&#39;')}';searchYouTube('${item.snippet.title.replace(/'/g,'&#39;')}');document.getElementById('ytSearchSuggestions').style.display='none';"
+              style="padding:10px 14px;cursor:pointer;color:#fff;font-size:0.9rem;border-bottom:1px solid #333;transition:background 0.15s;display:flex;align-items:center;gap:10px;"
+              onmouseover="this.style.background='#383838'" onmouseout="this.style.background='transparent'">
+              <span style="color:#888;font-size:0.8rem;">🔍</span>
+              <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.snippet.title.replace(/</g,'&lt;')}</span>
+            </div>
+          `).join('');
+          suggestBox.style.display = 'block';
+        })
+        .catch(() => { suggestBox.style.display = 'none'; });
+    }
+
+    function searchYouTube(query) {
+      if (!query || !query.trim()) return;
+      const resultsEl = document.getElementById('ytResultsContent');
+      resultsEl.innerHTML = '<div style="padding:2rem;color:#b3b3b3;text-align:center;"><div style="font-size:1.5rem;margin-bottom:0.5rem;">⏳</div><div>Searching...</div></div>';
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=15&q=${encodeURIComponent(query)}&key=${YT_API_KEY}`;
+      fetch(url)
+        .then(r => r.json())
+        .then(data => {
+          if (!data.items || data.items.length === 0) {
+            resultsEl.innerHTML = '<div style="padding:2rem;color:#b3b3b3;text-align:center;"><div style="font-size:1.5rem;margin-bottom:0.5rem;">😕</div><div>No results found</div></div>';
+            return;
+          }
+          resultsEl.innerHTML = data.items.map(item => {
+            const vid = item.id.videoId;
+            const title = item.snippet.title.replace(/</g,'&lt;');
+            const channel = item.snippet.channelTitle.replace(/</g,'&lt;');
+            // Use direct YouTube CDN thumbnail URL — always available, no CORS issues
+            const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
+            return `
+              <div onclick="playYouTubeVideo('${vid}','${title.replace(/'/g,'&#39;')}','${channel.replace(/'/g,'&#39;')}')"
+                style="display:flex;align-items:center;gap:14px;padding:12px 16px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid #252525;"
+                onmouseover="this.style.background='#1e1e1e'" onmouseout="this.style.background='transparent'">
+                <img src="${thumb}" alt="${title.replace(/"/g,'&quot;')}"
+                  style="width:180px;height:101px;object-fit:cover;border-radius:8px;flex-shrink:0;background:#222;"
+                  onerror="this.src='https://img.youtube.com/vi/${vid}/mqdefault.jpg'">
+                <div style="flex:1;min-width:0;">
+                  <div style="color:#fff;font-size:0.9rem;font-weight:600;margin-bottom:5px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${title}</div>
+                  <div style="color:#888;font-size:0.8rem;">${channel}</div>
+                </div>
+                <div style="color:#FFD700;font-size:1.2rem;flex-shrink:0;">▶</div>
+              </div>`;
+          }).join('');
+        })
+        .catch(err => {
+          console.error('YT search error:', err);
+          resultsEl.innerHTML = '<div style="padding:2rem;color:#ff4444;text-align:center;"><div style="font-size:1.5rem;margin-bottom:0.5rem;">⚠️</div><div>Search failed. Check your connection.</div></div>';
+        });
+    }
+
+    function playYouTubeVideo(videoId, title, channel) {
+      const container = document.getElementById('ytVideoContainer');
+      const frame = document.getElementById('ytVideoFrame');
+      const titleEl = document.getElementById('ytVideoTitle');
+      const channelEl = document.getElementById('ytVideoChannel');
+      if (!frame || !container) return;
+      frame.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&fs=1&color=white&iv_load_policy=3`;
+      if (titleEl) titleEl.textContent = title;
+      if (channelEl) channelEl.textContent = channel;
+      container.style.display = 'block';
+      container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    // ────────────── END YOUTUBE ONLINE POPUP ──────────────
 
     function openOnlineApp() {
       console.log('🌐 Opening Online Music Popup');
