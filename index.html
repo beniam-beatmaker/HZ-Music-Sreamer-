@@ -1145,6 +1145,17 @@
 
         // Add new random autoplay handler
         window.randomAutoplayHandler = function() {
+          if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+            return;
+          }
+          if (typeof window.hasManualQueueTracks === 'function' && window.hasManualQueueTracks()) {
+            if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
+              return;
+            }
+            if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+              return;
+            }
+          }
           console.log('🏁 Track ended - triggering random autoplay');
           setTimeout(() => {
             window.playRandomTrack();
@@ -9587,6 +9598,7 @@
 
       <!-- Controls Row -->
       <div class="player-controls">
+        <button class="player-btn" id="queueBtn" title="Queue" aria-label="Open queue" style="width:28px;height:28px;font-size:0.9rem;">&#9776;</button>
         <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="width:28px;height:28px;font-size:0.9rem;">&#128256;</button>
         <button class="player-btn" id="prevBtn" title="Previous" style="width:38px;height:38px;font-size:1.2rem;">&#9198;</button>
         <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="width:42px;height:42px;font-size:1.4rem;">&#9654;</button>
@@ -9594,6 +9606,17 @@
         <button class="player-btn player-loop" id="loopBtn" title="Loop" style="width:28px;height:28px;font-size:0.9rem;">&#128257;</button>
         <button id="likeBtn" title="Like">&#10084;</button>
         <button id="lyricsBtn" title="Lyrics" aria-label="Show lyrics" onclick="window.toggleLyricsPanel && window.toggleLyricsPanel()">📝</button>
+      </div>
+
+      <div id="queuePopup" aria-hidden="true" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:88px;width:min(92vw,420px);max-height:320px;background:rgba(15,15,15,0.98);border:1px solid rgba(255,215,0,0.35);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,0.55);z-index:10010;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div style="font-size:0.9rem;color:#FFD700;font-weight:700;letter-spacing:0.02em;">Queue <span id="queueCount" style="color:#fff;font-weight:600;">(0)</span></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <button id="clearQueuePopupBtn" type="button" style="background:linear-gradient(135deg,#5c0f0f 0%,#2f0505 100%);border:1px solid rgba(255,120,120,0.35);color:#fff;font-size:0.72rem;font-weight:700;letter-spacing:0.02em;border-radius:999px;cursor:pointer;padding:5px 10px;">Clear Queue</button>
+            <button id="closeQueuePopupBtn" aria-label="Close queue" style="background:transparent;border:none;color:#fff;font-size:1.1rem;line-height:1;cursor:pointer;padding:2px 6px;">&times;</button>
+          </div>
+        </div>
+        <ul id="queueTrackList" style="list-style:none;margin:0;padding:8px 12px 12px;max-height:260px;overflow-y:auto;"></ul>
       </div>
 
       <div class="lyrics-panel" id="lyricsPanel" aria-hidden="true">
@@ -11353,6 +11376,15 @@
 
               // Set up autoplay for next track (all available tracks)
               playerAudio.onended = function() {
+                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+                  return;
+                }
+                if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
+                  return;
+                }
+                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+                  return;
+                }
                 if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
                   console.log('🎲 Random autoplay override (playTrack branch)');
                   setTimeout(() => {
@@ -11547,6 +11579,15 @@
 
           // Track autoplay logic with three-state loop system
           playerAudio.onended = function() {
+            if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+              return;
+            }
+            if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
+              return;
+            }
+            if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+              return;
+            }
             if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
               console.log('🎲 Random autoplay override (sticky player loop logic)');
               setTimeout(() => {
@@ -23222,11 +23263,261 @@ function showGenrePopup(genre) {
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const loopBtn = document.getElementById('loopBtn');
+    const queueBtn = document.getElementById('queueBtn');
     const shuffleBtn = document.getElementById('shuffleBtn');
     const volumeRange = document.getElementById('volumeRange');
     const progressBar = document.getElementById('progressBar');
     const currentTimeSpan = document.getElementById('currentTime');
     const durationSpan = document.getElementById('duration');
+
+    let manualQueueTracks = [];
+
+    function loadManualQueueTracks() {
+      try {
+        const storedQueue = JSON.parse(
+          localStorage.getItem('hertzManualQueueTracks') ||
+          sessionStorage.getItem('hertzManualQueueTracks') ||
+          '[]'
+        );
+        manualQueueTracks = Array.isArray(storedQueue) ? storedQueue : [];
+      } catch (error) {
+        manualQueueTracks = [];
+      }
+      return manualQueueTracks;
+    }
+
+    loadManualQueueTracks();
+
+    function escapeQueueText(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function saveManualQueueTracks() {
+      localStorage.setItem('hertzManualQueueTracks', JSON.stringify(manualQueueTracks));
+      sessionStorage.setItem('hertzManualQueueTracks', JSON.stringify(manualQueueTracks));
+    }
+
+    function clearManualQueueTracks() {
+      manualQueueTracks = [];
+      window.__hzQueueAutoplayLockUntil = 0;
+      saveManualQueueTracks();
+      renderQueuePopup();
+    }
+
+    function extractTrackPlaybackData(trackElement) {
+      if (!trackElement || typeof trackElement.getAttribute !== 'function') return null;
+
+      const onclickCode = trackElement.getAttribute('onclick') || '';
+      if (!onclickCode.includes('playNewTrack(')) return null;
+
+      try {
+        const argsStart = onclickCode.indexOf('playNewTrack(') + 'playNewTrack('.length;
+        const argsEnd = onclickCode.lastIndexOf(')');
+        const argsExpression = onclickCode.slice(argsStart, argsEnd);
+        const parsedArgs = Function('return [' + argsExpression + '];')();
+
+        return {
+          trackId: parsedArgs[0] || '',
+          trackUrl: parsedArgs[1] || '',
+          trackTitle: parsedArgs[2] || parsedArgs[0] || '',
+          trackArtist: parsedArgs[3] || ''
+        };
+      } catch (error) {
+        console.warn('⚠️ Unable to parse track playback data from element', error);
+        return null;
+      }
+    }
+
+    function normalizeQueueValue(value) {
+      return String(value || '')
+        .replace(/&#39;/g, "'")
+        .replace(/&amp;/g, '&')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    }
+
+    function hasManualQueueTracks() {
+      loadManualQueueTracks();
+      return manualQueueTracks.length > 0;
+    }
+
+    function activateQueueAutoplayLock(duration) {
+      window.__hzQueueAutoplayLockUntil = Date.now() + (duration || 1200);
+    }
+
+    function isQueueAutoplayLocked() {
+      return Date.now() < (window.__hzQueueAutoplayLockUntil || 0);
+    }
+
+    window.hasManualQueueTracks = hasManualQueueTracks;
+    window.isQueueAutoplayLocked = isQueueAutoplayLocked;
+
+    function findTrackIndexFromQueueItem(queueItem) {
+      if (!queueItem || !Array.isArray(allTracks) || allTracks.length === 0) return -1;
+
+      if (queueItem.trackId || queueItem.id) {
+        const queueTrackId = queueItem.trackId || queueItem.id;
+        const byId = allTracks.findIndex(track => String(track.id || '') === String(queueTrackId));
+        if (byId !== -1) return byId;
+      }
+
+      const queueName = normalizeQueueValue(queueItem.name);
+      const queueArtist = normalizeQueueValue(queueItem.artist);
+
+      return allTracks.findIndex(track => {
+        const trackName = normalizeQueueValue(track.name);
+        const trackTitle = normalizeQueueValue(track.title || '');
+        const trackArtist = normalizeQueueValue(track.artist || '');
+        const combined = normalizeQueueValue(`${track.title || ''} - ${track.artist || ''}`);
+        const matchesName = queueName && (trackName === queueName || trackTitle === queueName || trackName.includes(queueName) || queueName.includes(trackTitle));
+        const matchesArtist = !queueArtist || trackArtist === queueArtist || trackName.includes(queueArtist) || combined.includes(queueArtist);
+        return matchesName && matchesArtist;
+      });
+    }
+
+    function playQueueEntry(queueItem) {
+      if (!queueItem) return false;
+
+      const queueTrackId = queueItem.trackId || queueItem.id || queueItem.name || '';
+      const queueTrackUrl = queueItem.trackUrl || queueItem.url || null;
+      const queueTrackTitle = queueItem.trackTitle || queueItem.name || queueTrackId;
+      const queueTrackArtist = queueItem.trackArtist || queueItem.artist || 'Unknown Artist';
+
+      if (queueTrackId && typeof window.playNewTrack === 'function') {
+        window.playNewTrack(queueTrackId, queueTrackUrl, queueTrackTitle, queueTrackArtist);
+        return true;
+      }
+
+      if (queueTrackId && typeof window.playTrack === 'function') {
+        window.playTrack(queueTrackId);
+        return true;
+      }
+
+      updateAllTracksFromRows();
+      const trackIndex = findTrackIndexFromQueueItem(queueItem);
+      if (trackIndex === -1) return false;
+
+      loadTrack(trackIndex, true);
+      return true;
+    }
+
+    function playQueuedTrackAtIndex(queueIndex) {
+      loadManualQueueTracks();
+      if (queueIndex < 0 || queueIndex >= manualQueueTracks.length) return false;
+
+      const selectedQueueItem = manualQueueTracks[queueIndex];
+      activateQueueAutoplayLock();
+      if (!playQueueEntry(selectedQueueItem)) {
+        window.__hzQueueAutoplayLockUntil = 0;
+        console.warn('⚠️ Queue track not found in playable list:', selectedQueueItem);
+        return false;
+      }
+
+      manualQueueTracks.splice(queueIndex, 1);
+      saveManualQueueTracks();
+      renderQueuePopup();
+      return true;
+    }
+
+    function playNextQueuedTrack() {
+      loadManualQueueTracks();
+      if (manualQueueTracks.length === 0) return false;
+      activateQueueAutoplayLock();
+
+      while (manualQueueTracks.length > 0) {
+        if (playQueueEntry(manualQueueTracks[0])) {
+          manualQueueTracks.shift();
+          saveManualQueueTracks();
+          renderQueuePopup();
+          return true;
+        }
+
+        // Remove unresolvable queue items so autoplay can continue with remaining items.
+        manualQueueTracks.shift();
+      }
+
+      saveManualQueueTracks();
+      renderQueuePopup();
+      window.__hzQueueAutoplayLockUntil = 0;
+      return false;
+    }
+
+    window.playNextQueuedTrack = playNextQueuedTrack;
+
+    function renderQueuePopup() {
+      loadManualQueueTracks();
+      const queueTrackList = document.getElementById('queueTrackList');
+      const queueCount = document.getElementById('queueCount');
+      if (!queueTrackList || !queueCount) return;
+
+      queueCount.textContent = `(${manualQueueTracks.length})`;
+
+      if (manualQueueTracks.length === 0) {
+        queueTrackList.innerHTML = '<li style="padding:8px 0;color:#c7c7c7;font-size:0.85rem;">No tracks queued yet.</li>';
+        return;
+      }
+
+      queueTrackList.innerHTML = manualQueueTracks.map((track, index) => {
+        const name = escapeQueueText(track.name || 'Unknown Track');
+        const artist = escapeQueueText(track.artist || 'Unknown Artist');
+        return `<li class="queue-track-item" data-queue-index="${index}" style="padding:7px 8px;border-radius:8px;border-bottom:${index < manualQueueTracks.length - 1 ? '1px solid rgba(255,255,255,0.08)' : 'none'};cursor:pointer;transition:background 0.15s ease;"><div style="color:#fff;font-size:0.86rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${name}</div><div style="color:#bdbdbd;font-size:0.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${artist}</div></li>`;
+      }).join('');
+
+      queueTrackList.querySelectorAll('.queue-track-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+          item.style.background = 'rgba(255, 215, 0, 0.12)';
+        });
+
+        item.addEventListener('mouseleave', function() {
+          item.style.background = 'transparent';
+        });
+
+        item.addEventListener('click', function(event) {
+          event.stopPropagation();
+          const queueIndex = parseInt(item.getAttribute('data-queue-index') || '-1', 10);
+          const played = playQueuedTrackAtIndex(queueIndex);
+          if (played) {
+            closeQueuePopup();
+          } else {
+            showNotification('Track is unavailable to play right now.', 'info');
+          }
+        });
+      });
+    }
+
+    function closeQueuePopup() {
+      const queuePopup = document.getElementById('queuePopup');
+      if (!queuePopup) return;
+      queuePopup.style.display = 'none';
+      queuePopup.setAttribute('aria-hidden', 'true');
+      if (queueBtn) queueBtn.classList.remove('active');
+    }
+
+    function openQueuePopup() {
+      const queuePopup = document.getElementById('queuePopup');
+      if (!queuePopup) return;
+      loadManualQueueTracks();
+      renderQueuePopup();
+      queuePopup.style.display = 'block';
+      queuePopup.setAttribute('aria-hidden', 'false');
+      if (queueBtn) queueBtn.classList.add('active');
+    }
+
+    function toggleQueuePopup() {
+      const queuePopup = document.getElementById('queuePopup');
+      if (!queuePopup) return;
+      if (queuePopup.style.display === 'block') {
+        closeQueuePopup();
+      } else {
+        openQueuePopup();
+      }
+    }
 
     // Enhanced player state management for cross-page persistence
     function savePlayerState() {
@@ -23457,6 +23748,38 @@ function showGenrePopup(genre) {
       if (nextBtn) nextBtn.addEventListener('click', playNext);
       if (loopBtn) loopBtn.addEventListener('click', toggleLoop);
       if (shuffleBtn) shuffleBtn.addEventListener('click', toggleShuffle);
+      if (queueBtn) queueBtn.addEventListener('click', function(event) {
+        event.stopPropagation();
+        toggleQueuePopup();
+      });
+
+      const closeQueuePopupBtn = document.getElementById('closeQueuePopupBtn');
+      if (closeQueuePopupBtn) {
+        closeQueuePopupBtn.addEventListener('click', function(event) {
+          event.stopPropagation();
+          closeQueuePopup();
+        });
+      }
+
+      const clearQueuePopupBtn = document.getElementById('clearQueuePopupBtn');
+      if (clearQueuePopupBtn) {
+        clearQueuePopupBtn.addEventListener('click', function(event) {
+          event.stopPropagation();
+          clearManualQueueTracks();
+          showNotification('Queue cleared.', 'info');
+        });
+      }
+
+      document.addEventListener('click', function(event) {
+        const queuePopup = document.getElementById('queuePopup');
+        if (!queuePopup || queuePopup.style.display !== 'block') return;
+        if (queuePopup.contains(event.target)) return;
+        if (queueBtn && queueBtn.contains(event.target)) return;
+        closeQueuePopup();
+      });
+
+      loadManualQueueTracks();
+      renderQueuePopup();
     });
 
     // Sync button state with actual audio player state
@@ -23473,6 +23796,15 @@ function showGenrePopup(genre) {
     playerAudio.addEventListener('ended', function() {
       playPauseBtn.innerHTML = '&#9654;'; // Show play button when ended
       isPlaying = false;
+      if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+        return;
+      }
+      if (!isLoop && playNextQueuedTrack()) {
+        return;
+      }
+      if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+        return;
+      }
       if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
         console.log('🎲 Random autoplay override (main player ended handler)');
         setTimeout(() => {
@@ -24609,6 +24941,7 @@ function showGenrePopup(genre) {
 
       let trackName = arguments.length > 1 ? arguments[1] : undefined;
       let trackArtist = 'Unknown Artist';
+      let trackPlaybackData = null;
 
       if (!trackName) {
         // Get track info from the clicked row or recent track item
@@ -24617,12 +24950,19 @@ function showGenrePopup(genre) {
         if (trackRow) {
           trackName = trackRow.querySelector('.track-name')?.textContent || 'Unknown Track';
           trackArtist = trackRow.querySelector('.track-artist')?.textContent || 'Unknown Artist';
+          trackPlaybackData = extractTrackPlaybackData(trackRow);
         } else if (recentTrackItem) {
           trackName = recentTrackItem.querySelector('.recent-track-name')?.textContent || 'Unknown Track';
           trackArtist = recentTrackItem.querySelector('.recent-track-artist')?.textContent || 'Unknown Artist';
+          trackPlaybackData = extractTrackPlaybackData(recentTrackItem);
         } else {
           trackName = 'Unknown Track';
         }
+      }
+
+      if (trackPlaybackData) {
+        trackName = trackPlaybackData.trackTitle || trackName;
+        trackArtist = trackPlaybackData.trackArtist || trackArtist;
       }
 
       // Create context menu
@@ -24642,7 +24982,7 @@ function showGenrePopup(genre) {
       menu.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.5)';
 
       const menuItems = [
-        { text: 'Add to queue', icon: '⏵', action: () => addToQueue(trackName, trackArtist) },
+        { text: 'Add to queue', icon: '⏵', action: () => addToQueue(trackName, trackArtist, trackPlaybackData) },
         { text: 'Go to song radio', icon: '📻', action: () => goToSongRadio(trackName, trackArtist) },
         { text: 'Add to playlist', icon: '➕', action: () => addToPlaylist(trackName, trackArtist) },
         { text: 'Share', icon: '🔗', action: (menuItem) => showSocialShare(menuItem, trackName, trackArtist) },
@@ -24700,8 +25040,34 @@ function showGenrePopup(genre) {
     }
 
     // Track Menu Action Functions
-    function addToQueue(trackName, trackArtist) {
+    function addToQueue(trackName, trackArtist, trackPlaybackData) {
       console.log(`Adding "${trackName}" by ${trackArtist} to queue...`);
+      loadManualQueueTracks();
+      updateAllTracksFromRows();
+      const matchedTrackIndex = allTracks.findIndex(track => {
+        const normalizedTrackName = normalizeQueueValue(track.name || track.title || '');
+        const normalizedQueueName = normalizeQueueValue(trackName || '');
+        const normalizedTrackArtist = normalizeQueueValue(track.artist || '');
+        const normalizedQueueArtist = normalizeQueueValue(trackArtist || '');
+        const nameMatches = normalizedTrackName === normalizedQueueName || normalizedTrackName.includes(normalizedQueueName) || normalizedQueueName.includes(normalizedTrackName);
+        const artistMatches = !normalizedQueueArtist || normalizedTrackArtist === normalizedQueueArtist || normalizedTrackName.includes(normalizedQueueArtist);
+        return nameMatches && artistMatches;
+      });
+
+      const matchedTrack = matchedTrackIndex !== -1 ? allTracks[matchedTrackIndex] : null;
+      manualQueueTracks.push({
+        name: trackName || 'Unknown Track',
+        artist: trackArtist || 'Unknown Artist',
+        trackId: trackPlaybackData?.trackId || matchedTrack?.id || null,
+        trackUrl: trackPlaybackData?.trackUrl || matchedTrack?.url || null,
+        trackTitle: trackPlaybackData?.trackTitle || trackName || matchedTrack?.title || 'Unknown Track',
+        trackArtist: trackPlaybackData?.trackArtist || trackArtist || matchedTrack?.artist || 'Unknown Artist',
+        id: matchedTrack ? matchedTrack.id : null,
+        url: matchedTrack ? matchedTrack.url : null,
+        addedAt: Date.now()
+      });
+      saveManualQueueTracks();
+      renderQueuePopup();
       // Add visual feedback
       showNotification(`Added "${trackName}" to queue!`, 'success');
     }
