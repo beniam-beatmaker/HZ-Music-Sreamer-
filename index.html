@@ -671,6 +671,11 @@
       const lyricsBtn = document.getElementById('lyricsBtn');
       if (!panel) return;
 
+      // Keep the panel outside transformed containers so fixed positioning works on all devices.
+      if (panel.parentElement !== document.body) {
+        document.body.appendChild(panel);
+      }
+
       const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
       if (shouldOpen) {
         const activeTrack = window.currentTrack || window.currentTrackData || {};
@@ -680,6 +685,8 @@
           activeTrack.trackArtist || activeTrack.artist
         );
       }
+
+      panel.style.display = shouldOpen ? 'block' : 'none';
 
       panel.classList.toggle('open', shouldOpen);
       panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
@@ -4774,7 +4781,7 @@
           pointer-events: none;
           overflow: hidden;
           transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s ease;
-          z-index: 1701;
+          z-index: 10011;
         }
 
         .lyrics-panel.open {
@@ -8016,6 +8023,42 @@
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+              <div class="recent-track-item" onclick="playNewTrack('Neat Rep', 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', 'Neat Rep', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:radio.svg?color=%23ffd700" alt="Neat Rep cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Neat Rep</div>
+                  <div class="recent-track-artist">Beniam TedlAI</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <div class="recent-track-item" onclick="playNewTrack('Blast Off', 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', 'Blast Off', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:rocket-launch.svg?color=%23ffd700" alt="Blast Off cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Blast Off</div>
+                  <div class="recent-track-artist">Beniam TedlAI</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <div class="recent-track-item" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Feel Right</div>
+                  <div class="recent-track-artist">Beniam TedlAI</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <div class="recent-track-item" onclick="playNewTrack('Love It', 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', 'Love It', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:heart-multiple.svg?color=%23ffd700" alt="Love It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Love It</div>
+                  <div class="recent-track-artist">Beniam TedlAI</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
               <!-- New Track: Honey Be Mine at top with gold effect -->
                <!-- New Track: Love You Too with gold effect -->
                <div class="recent-track-item" onclick="playNewTrack('Love You Too', 'https://storage.googleapis.com/hertz-music-folder/Teddy%20Tedla.wav', 'Love You Too', 'Desiree');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
@@ -8917,6 +8960,34 @@
                 <tr class="track-row" onclick="playNewTrack('Flex is Wealth', 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', 'Flex is Wealth', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:dumbbell.svg?color=%23ffd700" alt="Flex is Wealth cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Flex is Wealth</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:22</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Neat Rep', 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', 'Neat Rep', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:radio.svg?color=%23ffd700" alt="Neat Rep cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Neat Rep</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:22</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Blast Off', 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', 'Blast Off', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:rocket-launch.svg?color=%23ffd700" alt="Blast Off cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Blast Off</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:22</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Feel Right</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:22</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Love It', 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', 'Love It', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:heart-multiple.svg?color=%23ffd700" alt="Love It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Love It</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:22</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -11267,7 +11338,7 @@
               '',
               'all i know is treat em well if their good, not solid when they\'re not, uh',
               'be a loving man, not a menace to the lot uh, see the flaws in all & see the glows, stead of falls, really push em to make em ball, wait for their call, clear the flaws so they can grow through the falls uh yea yea yea yea',
-              ''
+              '',
               'she a beaut uh, wanna show ya somethin cool, lemme take you to the pools, see your body in the light, ya pretty lips i like, ya delight, in the light, really give me sight, wanna see ya dance all night, uh',
               '',
               'lemme love ya love ya love ya, all day n all night, matter fact lemme love ya all life, you a slick beaut n i want ya, ooh',
@@ -11391,6 +11462,90 @@
               'Really finna build my neck as well, uh',
               'ya wanna build ya health, start with ya muscles,',
               'When ya fuckin flex, feel the hustle, don\'t wanna feel perplexed start the hustle, uh'
+            ].join('\n'),
+            'Neat Rep': [
+              'reps what matters, if ya trynna lead, if ya trynna seem, real real good, yeah',
+              '',
+              'If ya trynna build, if ya trynna grow, all the things ya need, never let a bit of sleep lead to pain for free, only seek a sleep that\'s good, when ya try to build a biz, only thing to keep it rizzed, is the image you got, that\'s all that\'d be stuck, never good if ya trynna build, there\'s rare people out there hearing the lies in the hood, some wanna see ya break, least to see ya fraid, uh, what matter\'s is the rep, guard with ya life, less you a pleb, yeah',
+              '',
+              'if ya got a bad rep, scrap it, if ya got a neat rep, flash it, people wanna see the people with a good name, everytime it\'s spoken they wanna celebrate, stead o seein you as a slave, be brave yeah, never let the talk confuse you, only seek the shine to boost you, oh yeah',
+              '',
+              'Guard that shit with ya life, so peeps can see ya shine so bright, everyone can spot ya light, nobody wants to fight, uh, build ya biz, build the rizz, stead of sittin there so fritzed, yea yea yea',
+              '',
+              'reps what matters, if ya trynna lead, if ya trynna seem, real real good, oh yeah, uh uh uh',
+              '',
+              'Make ya name spoken to celebrate, seek to be brave in the world, instead of afraid, uh',
+              '',
+              'if ya got a bad rep, scrap it, if ya got a neat rep, fuckin flash it, people wanna see the people with a good name, everytime it\'s spoken they wanna celebrate, stead o seein you as a fuckin slave, be brave yeah, never let the talk confuse you, only seek the shine to boost you, oh yeah',
+              '',
+              'reps what matters, if ya trynna lead, if ya trynna seem, real real good, yeah, guard that shit with ya life oh yeah, yeah'
+            ].join('\n'),
+            'Feel Right': [
+              'All should be grateful for this, please see',
+              '',
+              'Health is wealth, even fit, somethings could cause harm, ya can feel ya body fightin ya all day long, can feel the hurt all night long, it\'s why healthcares out there for ya maybe',
+              'If ya need some help to feel right, look to see a nurse that\'s real real nice, yea, better treat her right, let her know ya wanna feel alright, name ya problems, n see if she can get ya right, there\'s some smart, pretty workers out there ooh jus make sure you don\'t hurt yaself to see em ooh.',
+              '',
+              'They can Tame ya, they can help ya, they can save ya, it\'s too true, oh my days, you\'ll find em cute, when you do don\'t call em boo, it\'s way too soon, maybe ask 4 their name, n if ya brave their number too, uh yea yea yea yea',
+              '',
+              'If ya need the help they\'ll help you, just only think bout that, less your weird ooh, maybe if ya run some track it\'ll help ooh, but be sure to take the meds they require you to, uh, uh, yea yea yea yea',
+              '',
+              'please see, all the workers there care bout ya wellbeing, they wanna see ya healthy, else they\'d look for other work, ya get me',
+              '',
+              'be sure to take the meds they require you to, never dance in a hospital ooh, it\'s there for help, look at ya dancing out in public with a smile on ya face, people out there hurtin see flash around the place, nah',
+              '',
+              'They can Tame ya, they can help ya, they can save ya, it\'s too true, oh my days, you\'ll find em cute, when you do don\'t call em boo, it\'s way too soon, maybe ask 4 their name, n if ya brave their number too, uh yea yea yea yea',
+              '',
+              'All should be grateful for this, please see, healthcares out there for ya maybe'
+            ].join('\n'),
+            'Love It': [
+              'all can be made to feel free, in these times we are free, look at the signs to really see, uh yea',
+              '',
+              'Really Love engineering yea, all deez work hard, they see all the parts needed to cause a spark, if ya like all the cool whips out on the road, like the models, like trucks n forever more, y\'all fuckin luv it, yea,',
+              'If ya wanna build a whip, ooh, youll fuckin really luv all deez parts, might cause a spark too, yea yea yea yeaa, Watch learn learn, all diis ooh,',
+              '',
+              'Special, civil, electrical, uh yea yea yea yea',
+              'Com science, physics, python projects, lovely science, ooh yea',
+              'It\'s all there for all to see, all ya need is a lappy, ooh,',
+              'Learn to make each part fit, learn how to cad, look at it, then sit back n say ya got this this this, this knowledge, under ya belt, you\'ll see, all that can be, oh yea',
+              '',
+              'Once ya got knowledge, you\'ll be all ya can be, follow ya instincts to really see, follow that nudge ya feel in ya gut ooh e, then watch what ya make superseed, let the guts lead, start with the seed, viding gnostics honestly',
+              '',
+              'all ya need\'s a lappy, It\'s all there for yall to see',
+              '',
+              'then sit back n say ya got this, if ya like all the cool whips ya see, watch this so you know, uh',
+              '',
+              'Special, civil, electrical, uh yea yea yea yea',
+              'Com science, physics, python projects, lovely science, ooh yea',
+              'It\'s all there for all to see, all ya fuckin need is a lappy, ooh,',
+              'Learn to make each part fit, learn how to cad, look at it, then sit back n say ya got this this this, this knowledge, under ya belt, you\'ll see, all that can be yea',
+              '',
+              'look at the signs to really see, yea, in these times we really free, uh'
+            ].join('\n'),
+            'Blast Off': [
+              'used to wanna spark up, used to wanna blast off, seein stem was a bit annoyin yea yea,',
+              '',
+              'in the past used to feel lots of phlemm whenever i heard bout stem, uh, used to think i was sick til i grew up n saw all dis, oh,  used to wanna blast off, used to wanna spark up, now i see, all dis is meant to be, life like a movie, dis shit is fuel for the distance human beings need, uh, yea',
+              '',
+              'this knowledge works like lip balm, if ya dry it\'ll bring it back, uh,',
+              'it\'s like porridge for the tum tum, once ya know ya can sit back, uh,',
+              'if ya like to learn it\'s curry meaning summary, yea,',
+              'gotta seek it to learn all that can be, yea yea yea yea,',
+              'learn learn learn fuckin learn dis yea,',
+              '',
+              'Seek to learn all that can be, stead o thinkin ya needa blast off to feel free, learn the tools ya need to feel free, when ya clutch peeps can see, don\'t look at it sour, see it sweet, so all can see it\'s a treat, if ya like ya hobbies, luv em, if ya like to learn, clutch em, if ya like to earn read em, oh yea yea',
+              '',
+              'Seek to learn all that can be, least then ya won\'t needa blast off to feel free',
+              '',
+              ' this knowledge works like lip balm, if ya dry it\'ll bring it back, life like a movie, really wanna see it breathe, uh',
+              '',
+              'this knowledge works like lip balm, if ya dry it\'ll bring it back, uh,',
+              'it\'s like porridge for the tum tum, once ya know ya can sit back, uh,',
+              'if ya like to learn it\'s curry meaning summary, yea,',
+              'gotta seek it to learn all that can be, yea yea yea yea,',
+              'learn learn learn fuckin learn dis yea,',
+              '',
+              'if ya wanna blast to feel free, sit back n read to see, oh yeaa'
             ].join('\n'),
             "Won't Fold": [
               'Gym bag on the floor',
@@ -11794,6 +11949,11 @@
             const lyricsBtn = document.getElementById('lyricsBtn');
             if (!panel) return;
 
+            // Keep the panel outside transformed containers so fixed positioning works on all devices.
+            if (panel.parentElement !== document.body) {
+              document.body.appendChild(panel);
+            }
+
             const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
             if (!shouldOpen && panel.contains(document.activeElement)) {
               document.activeElement.blur();
@@ -11802,6 +11962,8 @@
             if (!shouldOpen) {
               window.stopLyricsAutoScroll();
             }
+
+            panel.style.display = shouldOpen ? 'block' : 'none';
 
             panel.classList.toggle('open', shouldOpen);
             panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
@@ -11828,6 +11990,68 @@
           }
 
           window.renderLyricsForTrack();
+        })();
+      </script>
+
+      <script>
+        (function() {
+          if (typeof window.toggleLyricsPanel === 'function') return;
+
+          window.renderLyricsForTrack = window.renderLyricsForTrack || function(trackId, trackTitle, trackArtist) {
+            const panelTitle = document.getElementById('lyricsPanelTitle');
+            const panelBody = document.getElementById('lyricsPanelBody');
+            const trackDatabase = window.trackData || {};
+            const manualLyrics = window.trackLyricsData || {};
+            const playerTrack = document.getElementById('playerTrackTitle')?.textContent?.trim() || '';
+
+            if (!panelTitle || !panelBody) return;
+
+            if ((!trackTitle || !trackArtist) && playerTrack.includes(' - ')) {
+              const pieces = playerTrack.split(' - ');
+              trackTitle = trackTitle || pieces.shift();
+              trackArtist = trackArtist || pieces.join(' - ');
+            }
+
+            const key = trackId || trackTitle || window.currentTrackId || '';
+            const knownTrack = (key && trackDatabase[key]) || null;
+            const resolvedTitle = knownTrack?.title || trackTitle || key || 'Lyrics Ready';
+            const resolvedArtist = knownTrack?.artist || trackArtist || '';
+            const resolvedLyrics = knownTrack?.lyrics || manualLyrics[key] || manualLyrics[resolvedTitle] || '';
+
+            panelTitle.textContent = resolvedArtist ? (resolvedTitle + ' — ' + resolvedArtist) : resolvedTitle;
+            panelBody.textContent = resolvedLyrics || 'Play any track and tap the lyrics icon on the far right of the player to load its scrollable lyrics here.';
+            panelBody.scrollTop = 0;
+          };
+
+          window.toggleLyricsPanel = function(forceOpen) {
+            const panel = document.getElementById('lyricsPanel');
+            const lyricsBtn = document.getElementById('lyricsBtn');
+            if (!panel) return;
+
+            if (panel.parentElement !== document.body) {
+              document.body.appendChild(panel);
+            }
+
+            const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
+
+            if (shouldOpen) {
+              const activeTrack = window.currentTrack || window.currentTrackData || {};
+              window.renderLyricsForTrack(
+                activeTrack.trackId || activeTrack.id || window.currentTrackId,
+                activeTrack.trackTitle || activeTrack.title,
+                activeTrack.trackArtist || activeTrack.artist
+              );
+            }
+
+            panel.style.display = shouldOpen ? 'block' : 'none';
+            panel.classList.toggle('open', shouldOpen);
+            panel.setAttribute('aria-hidden', shouldOpen ? 'false' : 'true');
+            if (lyricsBtn) lyricsBtn.classList.toggle('active', shouldOpen);
+          };
+
+          window.closeLyricsPanel = function() {
+            window.toggleLyricsPanel(false);
+          };
         })();
       </script>
 
