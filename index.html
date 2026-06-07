@@ -386,7 +386,6 @@
     console.log(`🚀 HZ: INSTANT LOCK SCREEN ACTIVATION COMPLETE for ${window.HZ_APP_TYPE}!`);  } else {
     console.log('❌ HZ: MediaSession not supported on this device');
   }
-})();
 </script>
   <!-- EmailJS SDK for sending emails from frontend -->
   <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
@@ -468,7 +467,11 @@
       const ensureStickyPlayer = () => {
         const stickyPlayer = document.getElementById('stickyPlayer');
         if (stickyPlayer) {
-          stickyPlayer.style.pointerEvents = 'auto';
+          stickyPlayer.style.display = 'none';
+          stickyPlayer.style.opacity = '0';
+          stickyPlayer.style.visibility = 'hidden';
+          stickyPlayer.style.pointerEvents = 'none';
+          stickyPlayer.classList.add('hidden');
           console.log('🎧 Sticky player found and configured');
         } else {
           console.warn('⚠️ Sticky player not found');
@@ -697,6 +700,71 @@
       window.toggleLyricsPanel(false);
     };
 
+    // Capture which section a track was selected from so autoplay follows that section order.
+    document.addEventListener('click', function(event) {
+      const trackItem = event.target.closest('.recent-track-item, .track-row');
+      if (!trackItem) return;
+
+      const onclickValue = trackItem.getAttribute('onclick') || '';
+      const idMatch = onclickValue.match(/playNewTrack\('((?:\\'|[^'])+)'/);
+      if (!idMatch) return;
+
+      window.__hzLastClickedTrackId = idMatch[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
+
+      if (trackItem.closest('.recently-played-list')) {
+        window.__hzLastSelectedSection = 'recent';
+      } else if (trackItem.closest('.track-table')) {
+        window.__hzLastSelectedSection = 'popular';
+      }
+    }, true);
+
+    window.getSectionTrackOrder = function(sectionType) {
+      const selector = sectionType === 'popular'
+        ? '.track-table .track-row'
+        : '.recently-played-list .recent-track-item';
+
+      const nodes = document.querySelectorAll(selector);
+      const orderedIds = [];
+      const seen = new Set();
+
+      nodes.forEach((node) => {
+        const onclickValue = node.getAttribute('onclick') || '';
+        const idMatch = onclickValue.match(/playNewTrack\('((?:\\'|[^'])+)'/);
+        if (!idMatch) return;
+
+        const trackId = idMatch[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
+        if (!trackId || seen.has(trackId)) return;
+
+        seen.add(trackId);
+        orderedIds.push(trackId);
+      });
+
+      return orderedIds;
+    };
+
+    window.syncAutoplayOrderForTrack = function(trackId) {
+      const preferredSection = window.__hzLastSelectedSection;
+      let orderedIds = [];
+
+      if (preferredSection === 'recent' || preferredSection === 'popular') {
+        orderedIds = window.getSectionTrackOrder(preferredSection);
+      }
+
+      if (!orderedIds.includes(trackId)) {
+        const recentOrder = window.getSectionTrackOrder('recent');
+        const popularOrder = window.getSectionTrackOrder('popular');
+        orderedIds = recentOrder.includes(trackId) ? recentOrder : popularOrder;
+      }
+
+      if (!orderedIds || orderedIds.length === 0) return;
+
+      window.trackOrder = orderedIds;
+      const currentIndex = orderedIds.indexOf(trackId);
+      if (currentIndex >= 0) {
+        window.currentTrackIndex = currentIndex;
+      }
+    };
+
     // 🚀 BULLETPROOF GLOBAL TRACK PLAYER - ENSURES ALL TRACKS PLAY
     // This function MUST work for ALL track clicks and maintain sticky player
     // 🎵 RESTORED TRACK PLAYER - INTEGRATES WITH EXISTING STICKY PLAYER
@@ -706,6 +774,9 @@
       // Store current track info globally for the sticky player
       currentTrackId = trackId;
       window.currentTrackId = trackId;
+      if (typeof window.syncAutoplayOrderForTrack === 'function') {
+        window.syncAutoplayOrderForTrack(trackId);
+      }
 
       // 🎯 PRIORITY: Use provided URL if valid (from liked tracks, playlist, etc.)
       let finalUrl = trackUrl;
@@ -2884,6 +2955,8 @@
         }, 1000);
       }
     });
+
+  }
 
 
 
@@ -7633,7 +7706,7 @@
 <body>
 
   <!-- Terms and Conditions Modal for Users Without Accounts -->
-  <div id="termsOverlay" class="terms-overlay" style="display: flex;">
+  <div id="termsOverlay" class="terms-overlay" style="display: none;">
     <div class="terms-modal">
       <div class="terms-header">
         Terms and Conditions
@@ -7727,8 +7800,9 @@
     }
     .video-mini-player {
       position: fixed;
-      bottom: 20px;
+      top: 50%;
       right: 20px;
+      transform: translateY(-50%);
       width: 320px;
       height: 180px;
       background: #000;
@@ -7738,7 +7812,21 @@
       z-index: 2000;
       display: none;
       border: 2px solid #1db954;
-      cursor: pointer;
+      cursor: grab;
+    }
+    .video-mini-player.dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+    .video-mini-resize-handle {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      height: 18px;
+      cursor: nwse-resize;
+      z-index: 2002;
+      background: linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.9) 58%, transparent 60%);
     }
     .video-mini-player video {
       width: 100%;
@@ -7847,6 +7935,33 @@
                   <div class="recent-track-info">
                     <div class="recent-track-name">Paradise</div>
                     <div class="recent-track-artist">Tedla</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Vinyl', 'https://storage.googleapis.com/hertz-music-folder/Vinyl_Eyes_FULL_SONG_MusicGPT%20(1).mp3', 'Vinyl', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:record-circle.svg?color=%23ffd700" alt="Vinyl cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Vinyl</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Ease Race', 'https://storage.googleapis.com/hertz-music-folder/Ease%20Race.mp3', 'Ease Race', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:run-fast.svg?color=%23ffd700" alt="Ease Race cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Ease Race</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Hi Smile 😁', 'https://storage.googleapis.com/hertz-music-folder/Hi%20Smile%20%F0%9F%98%81.mp3', 'Hi Smile 😁', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:emoticon-happy-outline.svg?color=%23ffd700" alt="Hi Smile cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Hi Smile 😁</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
                   </div>
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
@@ -8831,6 +8946,27 @@
                 <tr class="track-row" onclick="playNewTrack('Paradise', 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', 'Paradise', 'Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:beach.svg?color=%23ffd700" alt="Paradise cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Paradise</div><div class="track-artist">Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Vinyl', 'https://storage.googleapis.com/hertz-music-folder/Vinyl_Eyes_FULL_SONG_MusicGPT%20(1).mp3', 'Vinyl', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:record-circle.svg?color=%23ffd700" alt="Vinyl cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Vinyl</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Ease Race', 'https://storage.googleapis.com/hertz-music-folder/Ease%20Race.mp3', 'Ease Race', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:run-fast.svg?color=%23ffd700" alt="Ease Race cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ease Race</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Hi Smile 😁', 'https://storage.googleapis.com/hertz-music-folder/Hi%20Smile%20%F0%9F%98%81.mp3', 'Hi Smile 😁', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:emoticon-happy-outline.svg?color=%23ffd700" alt="Hi Smile cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Hi Smile 😁</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -11547,6 +11683,40 @@
               '',
               'if ya wanna blast to feel free, sit back n read to see, oh yeaa'
             ].join('\n'),
+            'Hi Smile 😁': [
+              'If ya need a smile, i got this, lemme tell ya bout this, uh uh, Fuck.',
+              '',
+              'if ya want a neat smile, hismiles the way uh, 30 minute application n this will bring back to play uh, if ya like to smile with ya mouth shut jus look away, but if ya like to smile with your teeth out, then this will be your fave, uh',
+              '',
+              'be first to dry all ya teeth, if ya dry apply it with ease, yea, wait a lil while then pull it out like with a smile uh, brush ya teeth to get some out, then see ya smile, lookin white as fuck yea',
+              '',
+              '',
+              'i\'d say to try it every week, once ya done it\'s out to the streets, got that v34 makin time for ya today, boutta whiten ya, color correction tech bouta pound ya, uh, using pap, cos it wants to, make things white when its on ya, lookin right, it\'ll pound ya, jus takes 30 minutes til it\'s done wid ya, ooh,',
+              '',
+              '30 minutes n ye lit, lookin real white it\'s legit, uh',
+              '',
+              'be first to dry all ya teeth, if ya dry apply it with ease, yea, wait a lil while then pull it out like with a smile uh, brush ya teeth to get some out, then see ya smile, lookin white as fuck yea',
+              '',
+              'PAP, V34, it\'s yours, make that smile, uh,  HiSmile uh yeh'
+            ].join('\n'),
+            'Vinyl': [
+              'Hope she like vinyl, hope she not blind tho, really wanna see her eyes, listen to these afrobeats, thinkin it\'s real sharp yea uh huh uh,',
+              '',
+              'Know ya cute, know i really like ya, think about the past when i saw ya, think about the size o ya smile oh yea yea, think bout the future wid ya baby, uh, yea',
+              '',
+              'When i see ya face, imma guy but that makes me phased, uh oh uh, seein ya in that dress makes me stay, seein ya with that top, makes me wanna play yea yea',
+              '',
+              'When i went to get my teeth checked seen a nice woman, made her giggle yea, when i went to the gym, seen a gorgeous blondie tippin orange cones, seen her pretty eyes n asked is that ya job uh, she replied not to put cones just to clean em up, i said ha alright, then i left her fast, uh yea',
+              '',
+              'like the size o ya smile oh, yeayea',
+              'wanna see ya now ooh, wanna make ya flow, seen ya vibe n i though ya should be mine, ooh',
+              '',
+              'Went to the gym n got my pay checked, went to the ortho to get my teeth checked, uh spotted these dolls, n i tried to flirt, ooh, yea yea yea yea, i want ya though',
+              '',
+              'When i see ya face, imma guy but that makes me phased, uh oh uh, seein ya in that dress makes me stay, seein ya with that top, makes me wanna play yea yea',
+              '',
+              'Hope she like vinyl, uh'
+            ].join('\n'),
             "Won't Fold": [
               'Gym bag on the floor',
               'Keys still in the lock',
@@ -11598,6 +11768,52 @@
               '',
               'Door clicks shut behind',
               'New world waiting there.'
+            ].join('\n'),
+            'Ease Race': [
+              'Goin out, seein chicks as hot as lava skippin wid a smile got me thinkin,',
+              'Yall look really hot,',
+              'oh my days uh',
+              '',
+              'skippin wid a smile through',
+              'The streets, its wow,',
+              'at the beach they aint a cloud, they more',
+              'like the sun wid that heat, ooh wow',
+              'seein em bite their lip, gets me real stiff',
+              'makes me tingle, shit, they turn me on',
+              'imma boutta flip, oh',
+              '',
+              'Seein em makes me wanna race, hope ya like the pace,',
+              'really got me seekin space, from my place',
+              'they some angels at the beach',
+              'lookin like some models with them sexy ass tees,',
+              'Really think they smell real neat,',
+              'All Deez honeys make me feel the heat,',
+              'i could feel the peace, but can they give me that',
+              'Release? uh, yea yea',
+              '',
+              'Gorgeous Hotties walkin tight',
+              'wid a smile on their face like its real hype,',
+              'got me thinkin they my type, real real nice,',
+              'uh, if i chat wid one imma let her know,',
+              'she fine as fuck, but she already knows,',
+              'they can tell they a baddie, wish i saw em sooner sadly, yuh',
+              '',
+              'skippin wid a smile through the streets, livin life wid ease,',
+              'uh, turn me on',
+              'imma boutta flip yea, got me wildin, ooh',
+              '',
+              'just needa say they bad, lookin gorgeous wid that smile,',
+              'sun so warm makes em extra hot uh yuh,',
+              'really wanna meet one, if they say hey, imma fly to em ooh yea,',
+              '',
+              'Seein em makes me wanna race, hope ya like the pace,',
+              'really got me seekin space, from my place',
+              'they some angels at the beach',
+              'lookin like some models with them sexy ass tees,',
+              'Really think they smell real neat,',
+              'All Deez honeys make me feel the heat,',
+              'i could feel the peace, but can they give me that',
+              'Release? uh,'
             ].join('\n'),
             Scrollin: [
               'Streetlights paint the bedroom wall',
@@ -11731,12 +11947,31 @@
             const manualLyricsDatabase = window.trackLyricsData || {};
             const fromPlayer = splitPlayerTrackText();
             const activeTrack = window.currentTrack || window.currentTrackData || {};
+            const findManualLyricsByCandidates = function(lookupCandidates) {
+              const normalizedCandidates = lookupCandidates
+                .filter(Boolean)
+                .map(value => normalizeValue(value));
+              if (!normalizedCandidates.length) return '';
+
+              for (const [key, value] of Object.entries(manualLyricsDatabase)) {
+                const normalizedKey = normalizeValue(key);
+                if (!normalizedKey) continue;
+                if (normalizedCandidates.includes(normalizedKey)) {
+                  return String(value || '');
+                }
+              }
+
+              return '';
+            };
+
             const candidates = [
               trackId,
               trackTitle,
               fromPlayer.title,
               activeTrack.trackId,
               activeTrack.id,
+              activeTrack.trackTitle,
+              activeTrack.title,
               window.currentTrackId
             ].filter(Boolean);
 
@@ -11746,7 +11981,7 @@
                 return {
                   id: candidate,
                   ...matchedTrack,
-                  lyrics: matchedTrack.lyrics || manualLyricsDatabase[candidate] || manualLyricsDatabase[matchedTrack.title] || ''
+                  lyrics: matchedTrack.lyrics || findManualLyricsByCandidates([candidate, matchedTrack.title, trackTitle, fromPlayer.title]) || ''
                 };
               }
 
@@ -11760,18 +11995,18 @@
                 return {
                   id: matchedKey,
                   ...matchedTrack,
-                  lyrics: matchedTrack.lyrics || manualLyricsDatabase[matchedKey] || manualLyricsDatabase[matchedTrack.title] || ''
+                  lyrics: matchedTrack.lyrics || findManualLyricsByCandidates([matchedKey, matchedTrack.title, trackTitle, fromPlayer.title]) || ''
                 };
               }
             }
 
-            const resolvedTitle = trackTitle || activeTrack.trackTitle || activeTrack.title || fromPlayer.title || trackId || '';
+            const resolvedTitle = fromPlayer.title || trackTitle || activeTrack.trackTitle || activeTrack.title || trackId || '';
             return {
               id: trackId || resolvedTitle,
               title: resolvedTitle,
-              artist: trackArtist || activeTrack.trackArtist || activeTrack.artist || fromPlayer.artist || '',
+              artist: fromPlayer.artist || trackArtist || activeTrack.trackArtist || activeTrack.artist || '',
               url: activeTrack.trackUrl || activeTrack.url || '',
-              lyrics: manualLyricsDatabase[trackId] || manualLyricsDatabase[resolvedTitle] || ''
+              lyrics: findManualLyricsByCandidates([trackId, resolvedTitle, trackTitle, fromPlayer.title]) || ''
             };
           };
 
@@ -11919,8 +12154,8 @@
               return;
             }
 
-            const resolvedTitle = resolvedTrack.title || fromPlayer.title || 'Unknown Track';
-            const resolvedArtist = resolvedTrack.artist || fromPlayer.artist || 'Unknown Artist';
+            const resolvedTitle = fromPlayer.title || resolvedTrack.title || 'Unknown Track';
+            const resolvedArtist = fromPlayer.artist || resolvedTrack.artist || 'Unknown Artist';
             const requestKey = normalizeValue(resolvedTitle) + '::' + normalizeValue(resolvedArtist) + '::' + Date.now() + '::' + Math.random();
             window.activeLyricsRequestKey = requestKey;
 
@@ -11961,6 +12196,9 @@
 
             if (!shouldOpen) {
               window.stopLyricsAutoScroll();
+              if (typeof window.stopLyricsPanelLiveSync === 'function') {
+                window.stopLyricsPanelLiveSync();
+              }
             }
 
             panel.style.display = shouldOpen ? 'block' : 'none';
@@ -11971,6 +12209,9 @@
             if (lyricsBtn) lyricsBtn.classList.toggle('active', shouldOpen);
 
             if (shouldOpen) {
+              if (typeof window.startLyricsPanelLiveSync === 'function') {
+                window.startLyricsPanelLiveSync();
+              }
               window.renderLyricsForTrack();
             }
           };
@@ -11987,6 +12228,52 @@
                 window.renderLyricsForTrack();
               }
             }).observe(playerTitleElement, { childList: true, subtree: true, characterData: true });
+          }
+
+          const playerAudioForLyrics = document.getElementById('playerAudio');
+          if (playerAudioForLyrics && !playerAudioForLyrics.dataset.lyricsSyncBound) {
+            playerAudioForLyrics.dataset.lyricsSyncBound = 'true';
+
+            let lyricsSyncTimer = null;
+            let lyricsLiveSyncInterval = null;
+            const syncOpenLyricsPanel = function(delayMs = 0) {
+              if (!document.getElementById('lyricsPanel')?.classList.contains('open')) return;
+              clearTimeout(lyricsSyncTimer);
+              lyricsSyncTimer = setTimeout(() => {
+                window.renderLyricsForTrack();
+              }, delayMs);
+            };
+
+            const normalizeForLyricsSync = function(value) {
+              return String(value || '').replace(/\s+/g, ' ').trim().toLowerCase();
+            };
+
+            window.startLyricsPanelLiveSync = function() {
+              if (lyricsLiveSyncInterval) return;
+              lyricsLiveSyncInterval = setInterval(() => {
+                const panel = document.getElementById('lyricsPanel');
+                const panelTitle = document.getElementById('lyricsPanelTitle');
+                const playerTrack = document.getElementById('playerTrackTitle')?.textContent?.trim() || '';
+                if (!panel || !panel.classList.contains('open') || !panelTitle || !playerTrack) return;
+
+                const playerTitle = normalizeForLyricsSync(playerTrack.split(' - ')[0]);
+                const panelTrackTitle = normalizeForLyricsSync(String(panelTitle.textContent || '').split('—')[0]);
+                if (playerTitle && playerTrack && playerTitle !== panelTrackTitle) {
+                  window.renderLyricsForTrack();
+                }
+              }, 600);
+            };
+
+            window.stopLyricsPanelLiveSync = function() {
+              if (!lyricsLiveSyncInterval) return;
+              clearInterval(lyricsLiveSyncInterval);
+              lyricsLiveSyncInterval = null;
+            };
+
+            // Keep lyrics in sync when tracks start, autoplay-next begins, or source changes.
+            playerAudioForLyrics.addEventListener('play', () => syncOpenLyricsPanel(60));
+            playerAudioForLyrics.addEventListener('loadstart', () => syncOpenLyricsPanel(60));
+            playerAudioForLyrics.addEventListener('ended', () => syncOpenLyricsPanel(220));
           }
 
           window.renderLyricsForTrack();
@@ -12884,6 +13171,7 @@
             <iframe id="ytVideoFrame"
               style="position:absolute;top:0;left:0;width:100%;height:100%;"
               frameborder="0"
+              referrerpolicy="origin-when-cross-origin"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen></iframe>
           </div>
@@ -12892,7 +13180,10 @@
               <div id="ytVideoTitle" style="color:#fff;font-weight:600;font-size:0.95rem;margin-bottom:3px;"></div>
               <div id="ytVideoChannel" style="color:#b3b3b3;font-size:0.82rem;"></div>
             </div>
-            <button onclick="document.getElementById('ytVideoContainer').style.display='none';document.getElementById('ytVideoFrame').src='';" style="background:transparent;border:none;color:#888;font-size:1.3rem;cursor:pointer;padding:2px 6px;" title="Close video">×</button>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <a id="ytOpenOnYouTube" href="#" target="_blank" rel="noopener noreferrer" style="display:none;background:#282828;border:1px solid #404040;color:#f4f4f4;font-size:0.78rem;padding:6px 10px;border-radius:14px;text-decoration:none;">Watch on YouTube</a>
+              <button onclick="document.getElementById('ytVideoContainer').style.display='none';document.getElementById('ytVideoFrame').src='';" style="background:transparent;border:none;color:#888;font-size:1.3rem;cursor:pointer;padding:2px 6px;" title="Close video">×</button>
+            </div>
           </div>
         </div>
         <!-- Results list -->
@@ -12902,6 +13193,63 @@
             <div style="font-size:1rem;">Search for videos above to get started</div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Offline: Local Music App Overlay -->
+  <div class="app-selection-overlay app-overlay" id="offlineAppOverlay" onclick="closeAppOverlay('offlineAppOverlay', event)" style="display:none; z-index:3600; align-items:center; justify-content:center; padding:12px 12px 96px 12px; box-sizing:border-box; overflow-y:auto;">
+    <div id="offlinePopup" onclick="event.stopPropagation()" style="background:#121212;border-radius:16px;width:92vw;max-width:900px;max-height:92vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,0.85);border:1px solid #333;overflow:hidden;">
+      <div style="background:linear-gradient(135deg,#1a1a1a 0%,#252525 100%);padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #333;flex-shrink:0;gap:0.75rem;">
+        <div style="display:flex;align-items:center;gap:0.6rem;min-width:0;">
+          <span style="font-size:1.2rem;">📱</span>
+          <div style="min-width:0;">
+            <div style="color:#fff;font-size:1.05rem;font-weight:700;line-height:1.2;">Offline Music</div>
+            <div style="color:#b3b3b3;font-size:0.82rem;line-height:1.2;"><span id="offlineFileCount">0</span> files available</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.45rem;flex-shrink:0;">
+          <button onclick="closeAppOverlay('offlineAppOverlay'); document.getElementById('appSelectionOverlay').style.display='flex';" style="background:rgba(255,255,255,0.07);border:1px solid #444;color:#b3b3b3;font-size:0.82rem;cursor:pointer;padding:6px 12px;border-radius:20px;">← Back</button>
+          <button class="app-close-btn" onclick="closeAppOverlay('offlineAppOverlay')" style="background:transparent;border:none;color:#a7a7a7;font-size:1.7rem;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;">×</button>
+        </div>
+      </div>
+
+      <div style="padding:0.95rem 1rem;border-bottom:1px solid #2b2b2b;display:flex;gap:0.55rem;flex-wrap:wrap;background:#171717;flex-shrink:0;">
+        <button class="upload-btn" onclick="addOfflineTracks()" style="margin:0;">🎵 Add Music</button>
+        <button class="upload-btn" onclick="addOfflineVideos()" style="margin:0;">🎬 Add Video</button>
+        <button class="upload-btn" onclick="browseOfflineFiles()" style="margin:0;">📁 Browse Files</button>
+        <button class="upload-btn" onclick="clearOfflineStorage()" style="margin:0;">🧹 Clear All</button>
+      </div>
+
+      <div style="padding:0.85rem 1rem 0.55rem 1rem;background:#181818;display:flex;gap:0.5rem;flex-shrink:0;">
+        <button id="tracksTabBtn" onclick="switchMediaTab('tracks')" class="active" style="flex:1;background:#2a2a2a;color:#fff;border:1px solid #3a3a3a;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Tracks <span id="tracksCount">(0)</span></button>
+        <button id="videosTabBtn" onclick="switchMediaTab('videos')" style="flex:1;background:#202020;color:#bdbdbd;border:1px solid #333;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Videos <span id="videosCount">(0)</span></button>
+      </div>
+
+      <div style="flex:1;min-height:260px;overflow-y:auto;padding:0.7rem 1rem 1rem 1rem;">
+        <section id="tracksSection" style="display:block;">
+          <div id="offlineTracksList"></div>
+          <div id="offlineFilesList" style="display:none;"></div>
+          <div id="noFilesMessage" style="display:none;color:#9f9f9f;text-align:center;padding:1rem 0;">No offline files yet</div>
+        </section>
+        <section id="videosSection" style="display:none;">
+          <div id="offlineVideosList"></div>
+        </section>
+      </div>
+
+      <div id="offlineStickyPlayer" style="display:none;">
+        <audio id="offlinePlayerAudio" preload="metadata"></audio>
+        <button id="offlinePrevBtn" type="button" style="display:none;">Prev</button>
+        <button id="offlinePlayPauseBtn" type="button" style="display:none;">Play</button>
+        <button id="offlineNextBtn" type="button" style="display:none;">Next</button>
+        <button id="offlineShuffleBtn" type="button" style="display:none;">Shuffle</button>
+        <button id="offlineLoopBtn" type="button" style="display:none;">Loop</button>
+        <input id="offlineProgressBar" type="range" min="0" max="100" value="0" style="display:none;" />
+        <span id="offlineCurrentTime" style="display:none;">0:00</span>
+        <span id="offlineDuration" style="display:none;">0:00</span>
+        <span id="offlinePlayerTitle" style="display:none;"></span>
+        <span id="offlinePlayerArtist" style="display:none;"></span>
+        <span id="offlinePlayerArtwork" style="display:none;"></span>
       </div>
     </div>
   </div>
@@ -13765,6 +14113,9 @@
         setTimeout(() => {
           input.focus();
         }, 100);
+        if (typeof forceStickyPlayerInPopup === 'function') {
+          setTimeout(forceStickyPlayerInPopup, 0);
+        }
       }
     }
 
@@ -14313,8 +14664,14 @@ function showGenrePopup(genre) {
       const overlay = document.getElementById('appSelectionOverlay');
       if (overlay) {
         overlay.style.display = 'flex';
+        overlay.style.alignItems = 'flex-start';
+        overlay.style.justifyContent = 'center';
+        overlay.style.paddingTop = '0';
         overlay.style.pointerEvents = 'auto';
         overlay.style.visibility = 'visible';
+        if (typeof forceStickyPlayerInPopup === 'function') {
+          setTimeout(forceStickyPlayerInPopup, 0);
+        }
       }
     }
 
@@ -14339,6 +14696,11 @@ function showGenrePopup(genre) {
       if (overlay) overlay.style.display = 'none';
       const frame = document.getElementById('ytVideoFrame');
       if (frame) frame.src = '';
+      const externalLink = document.getElementById('ytOpenOnYouTube');
+      if (externalLink) {
+        externalLink.href = '#';
+        externalLink.style.display = 'none';
+      }
       const container = document.getElementById('ytVideoContainer');
       if (container) container.style.display = 'none';
     }
@@ -14409,13 +14771,42 @@ function showGenrePopup(genre) {
         });
     }
 
+    function buildYouTubeEmbedUrl(videoId) {
+      const safeVideoId = String(videoId || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+      const params = new URLSearchParams({
+        autoplay: '1',
+        rel: '0',
+        modestbranding: '1',
+        playsinline: '1'
+      });
+      return safeVideoId ? `https://www.youtube.com/embed/${safeVideoId}?${params.toString()}` : '';
+    }
+
+    function buildYouTubeWatchUrl(videoId) {
+      const safeVideoId = String(videoId || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+      return safeVideoId ? `https://www.youtube.com/watch?v=${safeVideoId}` : '';
+    }
+
     function playYouTubeVideo(videoId, title, channel) {
       const container = document.getElementById('ytVideoContainer');
       const frame = document.getElementById('ytVideoFrame');
       const titleEl = document.getElementById('ytVideoTitle');
       const channelEl = document.getElementById('ytVideoChannel');
+      const externalLink = document.getElementById('ytOpenOnYouTube');
       if (!frame || !container) return;
-      frame.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&fs=1&color=white&iv_load_policy=3`;
+      const embedUrl = buildYouTubeEmbedUrl(videoId);
+      const watchUrl = buildYouTubeWatchUrl(videoId);
+      if (!embedUrl) return;
+      frame.src = embedUrl;
+      if (externalLink) {
+        if (watchUrl) {
+          externalLink.href = watchUrl;
+          externalLink.style.display = 'inline-flex';
+        } else {
+          externalLink.href = '#';
+          externalLink.style.display = 'none';
+        }
+      }
       if (titleEl) titleEl.textContent = title;
       if (channelEl) channelEl.textContent = channel;
       container.style.display = 'block';
@@ -14448,51 +14839,22 @@ function showGenrePopup(genre) {
         overlay.style.display = 'flex';
         initializeOfflineApp();
 
-        // Immediately force sticky player visibility
-        setTimeout(() => {
-          forceStickyPlayerInPopup();
-        }, 50);
+        // In offline popup, only show sticky player after an offline track is selected.
+        const stickyPlayer = document.getElementById('stickyPlayer');
+        const playerAudio = document.getElementById('playerAudio');
+        const hasSelectedTrack = !!(window.currentTrackId || window.currentTrackData);
+        const isAudioActive = !!(playerAudio && ((!playerAudio.paused && !playerAudio.ended) || (playerAudio.src && playerAudio.readyState >= 2)));
+        if (stickyPlayer && !window.offlineStickyTrackSelected && !hasSelectedTrack && !isAudioActive) {
+          stickyPlayer.style.display = 'none';
+        }
 
-        // Force sticky player visibility in offline popup with proper z-index
+        if (typeof forceStickyPlayerInPopup === 'function') {
+          setTimeout(forceStickyPlayerInPopup, 0);
+        }
+
+        // Keep player state synced without forcing visibility.
         setTimeout(() => {
           loadOfflinePlayerState();
-
-          // FORCE sticky player visibility in offline popup context
-          const stickyPlayer = document.getElementById('stickyPlayer');
-          if (stickyPlayer) {
-            console.log('🔄 FORCING sticky player visibility in offline popup');
-
-            // Force display and positioning above popup overlay - maintain centering
-            stickyPlayer.style.display = 'flex';
-            stickyPlayer.style.position = 'fixed';
-            stickyPlayer.style.bottom = '88px';
-            stickyPlayer.style.left = '50%';
-            stickyPlayer.style.transform = 'translateX(-50%)';
-            stickyPlayer.style.right = 'auto';
-            stickyPlayer.style.zIndex = '10001'; // Higher than popup overlay (10000)
-            stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
-            stickyPlayer.style.backdropFilter = 'blur(10px)';
-            stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
-            stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
-            stickyPlayer.style.padding = '3px 10px 3px 10px';
-            stickyPlayer.style.width = '88vw';
-            stickyPlayer.style.maxWidth = '480px';
-
-            // Ensure track info is displayed if there's a current track
-            if (globalPlayerState.currentTrack) {
-              const playerTitle = document.getElementById('playerTrackTitle');
-              const stickyTrackInfo = document.getElementById('stickyTrackInfo');
-              const playerAudio = document.getElementById('playerAudio');
-
-              if (playerTitle) playerTitle.textContent = globalPlayerState.currentTrack.name;
-              if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
-              if (playerAudio && !playerAudio.src) {
-                playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
-              }
-            }
-
-            console.log('✅ Sticky player FORCED visible in offline popup with z-index 10001');
-          }
 
           // Hide separate offline player since we're using main player
           const offlinePlayer = document.getElementById('offlineStickyPlayer');
@@ -14728,11 +15090,14 @@ function showGenrePopup(genre) {
 
     function toggleOfflineLoop() {
       const offlineLoopBtn = document.getElementById('offlineLoopBtn');
-      offlinePlayerState.isLooped = !offlinePlayerState.isLooped;
+      offlinePlayerState.isLooped = false;
 
       if (offlineLoopBtn) {
-        offlineLoopBtn.style.color = offlinePlayerState.isLooped ? '#1db954' : '#FFD700';
+        offlineLoopBtn.style.color = '#FFD700';
       }
+
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+      if (offlineAudio) offlineAudio.loop = false;
       saveOfflinePlayerState();
     }
 
@@ -14774,8 +15139,27 @@ function showGenrePopup(genre) {
       return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
+    // Ensure only one offline track plays at a time across all offline playback paths.
+    function stopCurrentOfflineTrackPlayback() {
+      const mainPlayerAudio = document.getElementById('playerAudio');
+      const legacyMainAudio = document.getElementById('audioPlayer');
+      const offlineAudio = document.getElementById('offlinePlayerAudio');
+
+      [mainPlayerAudio, legacyMainAudio, offlineAudio].forEach((audio) => {
+        if (!audio) return;
+        try {
+          audio.loop = false;
+          audio.pause();
+          audio.currentTime = 0;
+        } catch (error) {
+          console.warn('⚠️ Could not fully reset audio element:', error);
+        }
+      });
+    }
+
     function playOfflineTrackById(trackId) {
       console.log('🎵 Playing offline track by ID:', trackId);
+      stopCurrentOfflineTrackPlayback();
       const offlineMedia = getOfflineMedia();
       const track = offlineMedia.audio.find(t => t.id === trackId);
 
@@ -14803,6 +15187,7 @@ function showGenrePopup(genre) {
 
       // Set audio source and play
       offlineAudio.src = track.base64 || track.audioUrl;
+      offlineAudio.loop = false;
       offlineAudio.play().then(() => {
         if (offlinePlayPauseBtn) offlinePlayPauseBtn.innerHTML = '&#9208;';
         offlinePlayerState.isPlaying = true;
@@ -14919,6 +15304,9 @@ function showGenrePopup(genre) {
         console.log('✅ Using SECONDARY tracks:', offlineTracks.length);
       }
 
+      // Keep the tracks row strictly audio-only.
+      offlineTracks = offlineTracks.filter(track => !isOfflineVideoLikeFile(track));
+
       if (primaryVideos.length >= (secondaryData.video ? secondaryData.video.length : 0)) {
         offlineVideos = primaryVideos;
         console.log('✅ Using PRIMARY videos:', offlineVideos.length);
@@ -14927,7 +15315,7 @@ function showGenrePopup(genre) {
         console.log('✅ Using SECONDARY videos:', offlineVideos.length);
       }
 
-      // Update queue with loaded tracks
+      // Update queue with loaded audio tracks only
       queue = [...offlineTracks];
       console.log('🔄 Queue updated with', queue.length, 'tracks');
 
@@ -15026,7 +15414,7 @@ function showGenrePopup(genre) {
         if (storedTracks) {
           const parsed = JSON.parse(storedTracks);
           offlineTracks.splice(0); // Clear array
-          offlineTracks.push(...parsed); // Add saved tracks
+          offlineTracks.push(...parsed.filter(track => !isOfflineVideoLikeFile(track))); // Add saved audio tracks only
           console.log('✅ INIT: Restored', offlineTracks.length, 'tracks');
         } else {
           console.log('⚠️ INIT: No saved tracks found');
@@ -16018,6 +16406,7 @@ function showGenrePopup(genre) {
     // BULLETPROOF instant offline track playback - guaranteed to work
     function playOfflineTrackInstant(trackId) {
       console.log('⚡ INSTANT PLAYBACK: Starting for trackId:', trackId);
+      stopCurrentOfflineTrackPlayback();
 
       if (!trackId) {
         console.error('❌ No trackId provided');
@@ -16683,6 +17072,15 @@ function showGenrePopup(genre) {
       const videoInput = document.getElementById('videoFileInput');
       const browseInput = document.getElementById('browseFileInput');
 
+      function resetOfflineMediaForBrowseSelection() {
+        offlineTracks = [];
+        offlineVideos = [];
+        queue = [];
+        localStorage.setItem('offlineTracks', JSON.stringify([]));
+        localStorage.setItem('offlineVideos', JSON.stringify([]));
+        localStorage.setItem('hertzOfflineMedia', JSON.stringify({ audio: [], video: [] }));
+      }
+
       if (audioInput) {
         audioInput.addEventListener('change', (e) => {
           console.log('🎵 Audio input changed, files:', e.target.files.length);
@@ -16716,7 +17114,14 @@ function showGenrePopup(genre) {
       if (browseInput) {
         browseInput.addEventListener('change', (e) => {
           console.log('📁 Browse input changed, files:', e.target.files.length);
-          handleFileSelection(e.target.files, 'mixed');
+          const selectedFiles = Array.from(e.target.files || []);
+          if (selectedFiles.length === 0) return;
+
+          // Browse Files should present only the newly selected file.
+          const selectedFile = selectedFiles[0];
+          resetOfflineMediaForBrowseSelection();
+          handleFileSelection([selectedFile], 'mixed');
+          e.target.value = '';
         });
         console.log('✅ Browse input handler added');
       } else {
@@ -16916,25 +17321,23 @@ function showGenrePopup(genre) {
 
               if (finalIsAudio) {
                 // Check if file already exists to prevent duplicates
-                const existingFile = freshOfflineMedia.audio.find(a => a.id === fileData.id);
+                const existingFile = isDuplicateOfflineEntry(freshOfflineMedia.audio, fileData);
                 if (!existingFile) {
                   freshOfflineMedia.audio.push(fileData);
                   addedFiles++;
                   console.log(`✅ AUDIO ADDED: ${isMp3 ? 'MP3' : isWav ? 'WAV' : 'Other'} - ${file.name}`);
                 } else {
                   console.log('ℹ️ File already exists in storage:', file.name);
-                  addedFiles++;
                 }
               } else if (finalIsVideo) {
                 // Check if file already exists to prevent duplicates
-                const existingFile = freshOfflineMedia.video.find(v => v.id === fileData.id);
+                const existingFile = isDuplicateOfflineEntry(freshOfflineMedia.video, fileData);
                 if (!existingFile) {
                   freshOfflineMedia.video.push(fileData);
                   addedFiles++;
                   console.log('✅ VIDEO ADDED:', file.name);
                 } else {
                   console.log('ℹ️ File already exists in storage:', file.name);
-                  addedFiles++;
                 }
               }
 
@@ -17789,12 +18192,14 @@ function showGenrePopup(genre) {
       } else {
         console.error('❌ CRITICAL: offlineFilesList container not found in loadOfflineFiles!');
         return;
-      }      const allFiles = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])];
-      console.log('📁 Total files to display:', allFiles.length);
+      }
+
+      const allFiles = (offlineMedia.audio || []).filter(file => !isOfflineVideoLikeFile(file));
+      console.log('📁 Total files to display in tracks row:', allFiles.length);
       console.log('🔍 Files breakdown:', {
-        audio: offlineMedia.audio ? offlineMedia.audio.length : 0,
+        audio: offlineMedia.audio ? offlineMedia.audio.filter(file => !isOfflineVideoLikeFile(file)).length : 0,
         video: offlineMedia.video ? offlineMedia.video.length : 0,
-        audioFiles: offlineMedia.audio ? offlineMedia.audio.map(f => ({id: f.id, name: f.name})) : [],
+        audioFiles: offlineMedia.audio ? offlineMedia.audio.filter(file => !isOfflineVideoLikeFile(file)).map(f => ({id: f.id, name: f.name})) : [],
         videoFiles: offlineMedia.video ? offlineMedia.video.map(f => ({id: f.id, name: f.name})) : []
       });
 
@@ -18410,15 +18815,8 @@ function showGenrePopup(genre) {
 
         console.log('🔗 Created video blob URL:', blobUrl);
 
-        // Use existing mini video player if available
-        if (typeof window.showMiniVideoPlayer === 'function') {
-          console.log('🎥 Using mini video player');
-          window.showMiniVideoPlayer(blobUrl);
-        } else {
-          // Enhanced fallback: create video element for playback
-          console.log('📺 Creating video playback element');
-          playDirectVideo(video, blobUrl);
-        }
+        // Always open in mini popup when possible.
+        playOfflineVideoInMiniPlayer(video, blobUrl);
 
         // Close the offline popup after starting playback
         setTimeout(() => {
@@ -18439,6 +18837,11 @@ function showGenrePopup(genre) {
       videoElement.src = blobUrl;
       videoElement.controls = true;
       videoElement.autoplay = true;
+      videoElement.muted = true;
+      videoElement.loop = true;
+      videoElement.playsInline = true;
+      videoElement.setAttribute('muted', '');
+      videoElement.setAttribute('loop', '');
       videoElement.style.cssText = `
         position: fixed;
         bottom: 100px;
@@ -18479,9 +18882,199 @@ function showGenrePopup(genre) {
       console.log('✅ Video player created and started');
     }
 
+    // Shared helper: open selected video in mini popup as muted loop until user closes it.
+    function playOfflineVideoInMiniPlayer(videoData, providedSrc) {
+      if (!videoData && !providedSrc) return;
+
+      const source = providedSrc || videoData?.url || videoData?.blobUrl || createBlobUrl(videoData);
+      if (!source) {
+        console.error('❌ Could not resolve video source for mini player');
+        return;
+      }
+
+      const miniPlayer = document.getElementById('miniVideoPlayer');
+      const miniVideo = document.getElementById('miniVideoElement');
+      const overlay = document.getElementById('videoOverlay');
+      const playBtn = document.getElementById('miniPlayPauseBtn');
+      const muteBtn = document.getElementById('miniMuteBtn');
+
+      if (miniPlayer && miniVideo && overlay) {
+        miniVideo.pause();
+        miniVideo.src = source;
+        miniPlayer.style.top = '50%';
+        miniPlayer.style.right = '20px';
+        miniPlayer.style.left = 'auto';
+        miniPlayer.style.transform = 'translateY(-50%)';
+        miniPlayer.style.display = 'block';
+        overlay.style.display = 'block';
+
+        miniVideo.muted = true;
+        miniVideo.loop = true;
+        miniVideo.playsInline = true;
+        miniVideo.volume = 0;
+        miniVideo.setAttribute('muted', '');
+        miniVideo.setAttribute('loop', '');
+
+        miniVideo.play().then(() => {
+          if (playBtn) playBtn.textContent = '⏸';
+          if (muteBtn) muteBtn.textContent = '🔇';
+        }).catch((error) => {
+          console.error('❌ Mini video playback failed:', error);
+        });
+        return;
+      }
+
+      if (typeof window.showMiniVideoPlayer === 'function') {
+        window.showMiniVideoPlayer(source);
+        return;
+      }
+
+      console.log('📺 Mini popup unavailable, using direct video fallback');
+      playDirectVideo(videoData || { name: 'Offline Video' }, source);
+    }
+
+    // Ensure global mini popup function exists in the main script context.
+    if (typeof window.showMiniVideoPlayer !== 'function') {
+      window.showMiniVideoPlayer = function(src) {
+        const miniPlayer = document.getElementById('miniVideoPlayer');
+        const miniVideo = document.getElementById('miniVideoElement');
+        const overlay = document.getElementById('videoOverlay');
+        const playBtn = document.getElementById('miniPlayPauseBtn');
+        const muteBtn = document.getElementById('miniMuteBtn');
+
+        if (!miniPlayer || !miniVideo || !overlay || !src) return;
+
+        miniVideo.pause();
+        miniVideo.src = src;
+        miniPlayer.style.top = '50%';
+        miniPlayer.style.right = '20px';
+        miniPlayer.style.left = 'auto';
+        miniPlayer.style.transform = 'translateY(-50%)';
+        miniPlayer.style.display = 'block';
+        overlay.style.display = 'block';
+
+        miniVideo.muted = true;
+        miniVideo.loop = true;
+        miniVideo.playsInline = true;
+        miniVideo.volume = 0;
+
+        miniVideo.play().then(() => {
+          if (playBtn) playBtn.textContent = '⏸';
+          if (muteBtn) muteBtn.textContent = '🔇';
+        }).catch((error) => {
+          console.error('❌ showMiniVideoPlayer failed:', error);
+        });
+      };
+    }
+
+    window.playOfflineVideoInMiniPlayer = playOfflineVideoInMiniPlayer;
+
+    // Make mini video popup draggable.
+    (function bindMiniVideoDrag() {
+      const miniPlayer = document.getElementById('miniVideoPlayer');
+      if (!miniPlayer || miniPlayer.dataset.dragBound === 'true') return;
+      miniPlayer.dataset.dragBound = 'true';
+
+      if (!miniPlayer.querySelector('.video-mini-resize-handle')) {
+        const resizeHandle = document.createElement('div');
+        resizeHandle.className = 'video-mini-resize-handle';
+        miniPlayer.appendChild(resizeHandle);
+      }
+
+      let dragging = false;
+      let startX = 0;
+      let startY = 0;
+      let startLeft = 0;
+      let startTop = 0;
+      let resizing = false;
+      let startWidth = 0;
+      let startHeight = 0;
+      const minWidth = 220;
+      const maxWidth = 720;
+      const aspectRatio = 16 / 9;
+
+      miniPlayer.addEventListener('mousedown', (event) => {
+        const isResizeHandle = event.target.classList && event.target.classList.contains('video-mini-resize-handle');
+        if (isResizeHandle) {
+          resizing = true;
+          const rect = miniPlayer.getBoundingClientRect();
+          startX = event.clientX;
+          startY = event.clientY;
+          startWidth = rect.width;
+          startHeight = rect.height;
+          miniPlayer.style.left = `${rect.left}px`;
+          miniPlayer.style.top = `${rect.top}px`;
+          miniPlayer.style.right = 'auto';
+          miniPlayer.style.transform = 'none';
+          event.preventDefault();
+          return;
+        }
+
+        if (event.target.closest('button')) return;
+        dragging = true;
+        miniPlayer.classList.add('dragging');
+
+        const rect = miniPlayer.getBoundingClientRect();
+        startX = event.clientX;
+        startY = event.clientY;
+        startLeft = rect.left;
+        startTop = rect.top;
+
+        miniPlayer.style.left = `${startLeft}px`;
+        miniPlayer.style.top = `${startTop}px`;
+        miniPlayer.style.right = 'auto';
+        miniPlayer.style.transform = 'none';
+        event.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (event) => {
+        if (resizing) {
+          const deltaX = event.clientX - startX;
+          const proposedWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX));
+          const proposedHeight = Math.max(124, Math.round(proposedWidth / aspectRatio));
+
+          const rect = miniPlayer.getBoundingClientRect();
+          const maxAllowedWidth = window.innerWidth - rect.left;
+          const maxAllowedHeight = window.innerHeight - rect.top;
+
+          const width = Math.max(minWidth, Math.min(proposedWidth, maxAllowedWidth));
+          const height = Math.max(124, Math.min(proposedHeight, maxAllowedHeight));
+
+          miniPlayer.style.width = `${width}px`;
+          miniPlayer.style.height = `${height}px`;
+          return;
+        }
+
+        if (!dragging) return;
+
+        const nextLeft = Math.min(
+          Math.max(0, startLeft + (event.clientX - startX)),
+          window.innerWidth - miniPlayer.offsetWidth
+        );
+        const nextTop = Math.min(
+          Math.max(0, startTop + (event.clientY - startY)),
+          window.innerHeight - miniPlayer.offsetHeight
+        );
+
+        miniPlayer.style.left = `${nextLeft}px`;
+        miniPlayer.style.top = `${nextTop}px`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (resizing) {
+          resizing = false;
+          return;
+        }
+        if (!dragging) return;
+        dragging = false;
+        miniPlayer.classList.remove('dragging');
+      });
+    })();
+
     // Enhanced direct audio playback fallback
     function playDirectAudio(audioData, audioId) {
       console.log('🎯 playDirectAudio called with:', audioData.name, audioId);
+      stopCurrentOfflineTrackPlayback();
 
       const stickyPlayer = document.getElementById('stickyPlayer');
       const playerAudio = document.getElementById('playerAudio');
@@ -18489,81 +19082,44 @@ function showGenrePopup(genre) {
       const stickyTrackInfo = document.getElementById('stickyTrackInfo');
       const playPauseBtn = document.getElementById('playPauseBtn');
 
-      console.log('🔍 Sticky player elements found:', {
-        stickyPlayer: !!stickyPlayer,
-        playerAudio: !!playerAudio,
-        playerTrackTitle: !!playerTrackTitle,
-        stickyTrackInfo: !!stickyTrackInfo,
-        playPauseBtn: !!playPauseBtn
-      });
-
-      if (stickyPlayer && playerAudio && playerTrackTitle) {
-        // Update track info
-        const trackTitle = audioData.name.replace(/\.[^/.]+$/, "");
-        playerTrackTitle.textContent = trackTitle;
-
-        if (stickyTrackInfo) {
-          stickyTrackInfo.textContent = `${trackTitle} • Offline Track`;
-        }
-
-        // Set current track ID for global reference
-        window.currentTrackId = audioId;
-
-        // Create fresh blob URL if needed
-        const blobUrl = audioData.url || createBlobUrl(audioData);
-        console.log('🔗 Using blob URL for direct playback:', blobUrl);
-
-        if (!blobUrl) {
-          console.error('❌ No valid blob URL available');
-          alert('Unable to create playback URL for this audio file.');
-          return;
-        }
-
-        // Update audio source
-        playerAudio.src = blobUrl;
-
-        // Add error handlers to audio element
-        playerAudio.addEventListener('error', (e) => {
-          console.error('❌ PlayerAudio error:', e);
-          console.error('❌ Error code:', playerAudio.error?.code);
-          console.error('❌ Error message:', playerAudio.error?.message);
-          alert('Failed to load audio. The file format may not be supported.');
-        }, { once: true });
-
-        playerAudio.addEventListener('canplay', () => {
-          console.log('✅ Audio can play, starting playback');
-        }, { once: true });
-
-        // Show sticky player with smooth animation
-        stickyPlayer.style.display = 'flex';
-        stickyPlayer.style.opacity = '0';
-
-        setTimeout(() => {
-          stickyPlayer.style.transition = 'opacity 0.3s ease';
-          stickyPlayer.style.opacity = '0.95';
-        }, 50);
-
-        // Play audio and update button
-        playerAudio.play().then(() => {
-          if (playPauseBtn) {
-            playPauseBtn.innerHTML = '⏸️';
-          }
-          console.log('✅ Offline audio playing successfully through direct player');
-        }).catch(error => {
-          console.error('❌ Error playing offline audio:', error);
-          console.error('❌ Audio src:', playerAudio.src);
-          console.error('❌ Audio readyState:', playerAudio.readyState);
-          alert('Error playing audio file. Please try again or check if the file format is supported.');
-        });
-      } else {
-        console.error('❌ Missing sticky player elements:', {
-          stickyPlayer: !!stickyPlayer,
-          playerAudio: !!playerAudio,
-          playerTrackTitle: !!playerTrackTitle
-        });
+      if (!stickyPlayer || !playerAudio || !playerTrackTitle) {
+        console.error('❌ Missing sticky player elements for direct audio playback');
         alert('Media player not available. Please refresh the page.');
+        return;
       }
-    }    // Remove offline media
+
+      const trackTitle = (audioData.name || 'Offline Track').replace(/\.[^/.]+$/, '');
+      playerTrackTitle.textContent = trackTitle;
+      if (stickyTrackInfo) stickyTrackInfo.textContent = `${trackTitle} • Offline Track`;
+
+      window.currentTrackId = audioId;
+
+      const blobUrl = audioData.url || createBlobUrl(audioData);
+      console.log('🔗 Using blob URL for direct playback:', blobUrl);
+
+      if (!blobUrl) {
+        console.error('❌ No valid blob URL available for audio playback');
+        alert('Unable to create playback URL for this audio file.');
+        return;
+      }
+
+      playerAudio.src = blobUrl;
+      playerAudio.loop = false;
+      stickyPlayer.style.display = 'flex';
+      stickyPlayer.style.opacity = '1';
+
+      playerAudio.play().then(() => {
+        console.log('✅ Offline audio playing successfully through direct player');
+        if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
+      }).catch(error => {
+        console.error('❌ Error playing offline audio:', error);
+        console.error('❌ Audio src:', playerAudio.src);
+        console.error('❌ Audio readyState:', playerAudio.readyState);
+        alert('Error playing audio file. Please try again or check if the file format is supported.');
+      });
+    }
+
+    // Remove offline media
     function removeOfflineMedia(mediaId, type) {
       if (confirm('Are you sure you want to remove this file from offline storage?')) {
         const offlineMedia = getOfflineMedia();
@@ -18623,9 +19179,10 @@ function showGenrePopup(genre) {
       // STEP 2: Use existing browse input with instant handling
       const browseInput = document.getElementById('browseFileInput');
       if (browseInput) {
+        browseInput.multiple = false;
         browseInput.click();
         console.log('✅ INSTANT: Universal file browser opened');
-        showNotification('📁 Select audio/video files - they will be added instantly!');
+        showNotification('📁 Select one audio/video file - it will be shown instantly.');
       } else {
         console.error('❌ Browse input not found!');
         showNotification('❌ File browser not available - please refresh page');
@@ -18953,6 +19510,36 @@ function showGenrePopup(genre) {
     }
 
     // INSTANT FILE PROCESSING - EXACT COPY FROM OFFLINE25APP.HTML
+    function getOfflineFileSignature(fileLike) {
+      const rawName = ((fileLike && fileLike.name) ? String(fileLike.name) : '').trim().toLowerCase();
+      const nameNoExt = rawName.replace(/\.[^/.]+$/, '');
+      const size = Number((fileLike && fileLike.size) || 0);
+      const type = ((fileLike && fileLike.type) ? String(fileLike.type) : '').toLowerCase();
+      const category = type.startsWith('audio/') ? 'audio' : (type.startsWith('video/') ? 'video' : '');
+
+      return { rawName, nameNoExt, size, type, category };
+    }
+
+    function isDuplicateOfflineEntry(collection, fileLike) {
+      if (!Array.isArray(collection) || !fileLike) return false;
+
+      const incoming = getOfflineFileSignature(fileLike);
+      return collection.some((item) => {
+        const existing = getOfflineFileSignature(item || {});
+        const namesMatch =
+          (incoming.rawName && incoming.rawName === existing.rawName) ||
+          (incoming.rawName && incoming.rawName === existing.nameNoExt) ||
+          (incoming.nameNoExt && incoming.nameNoExt === existing.rawName) ||
+          (incoming.nameNoExt && incoming.nameNoExt === existing.nameNoExt);
+        const sizeMatch = incoming.size > 0 && existing.size > 0 ? incoming.size === existing.size : true;
+        const typeMatch = (incoming.category && existing.category)
+          ? incoming.category === existing.category
+          : (!incoming.type || !existing.type || incoming.type === existing.type);
+
+        return namesMatch && sizeMatch && typeMatch;
+      });
+    }
+
     function processFilesInstantly(files, mediaType) {
       console.log('=== PROCESSING FILES INSTANTLY ===');
       console.log('Processing', files.length, 'files');
@@ -18972,6 +19559,7 @@ function showGenrePopup(genre) {
       let processed = 0;
       let audioCount = 0;
       let videoCount = 0;
+      let skippedCount = 0;
 
       Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
@@ -18988,6 +19576,12 @@ function showGenrePopup(genre) {
 
           // Check if it's an audio file - EXACT LOGIC FROM OFFLINE25APP.HTML
           if (file.type.startsWith('audio/') || /\.(mp3|wav|ogg|aac|flac|m4a|wma|opus|webm)$/i.test(file.name)) {
+            const duplicateInTracks = isDuplicateOfflineEntry(offlineTracks, file);
+            const duplicateInStorage = isDuplicateOfflineEntry((getOfflineMedia().audio || []), file);
+            if (duplicateInTracks || duplicateInStorage) {
+              skippedCount++;
+              console.log('ℹ️ Skipping duplicate audio file:', file.name);
+            } else {
             // Create track object with proper structure - EXACT FROM OFFLINE25APP.HTML
             const newTrack = {
               id: fileId,
@@ -19038,7 +19632,14 @@ function showGenrePopup(genre) {
             // Backup UI update
             setTimeout(() => {
               renderOfflineLibrary();
-            }, 100);          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
+            }, 100);
+            }
+          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
+            const duplicateInStorage = isDuplicateOfflineEntry((getOfflineMedia().video || []), file);
+            if (duplicateInStorage) {
+              skippedCount++;
+              console.log('ℹ️ Skipping duplicate video file:', file.name);
+            } else {
             const newVideo = {
               id: fileId,
               name: fileName,
@@ -19061,6 +19662,7 @@ function showGenrePopup(genre) {
             setTimeout(() => {
               renderEnhancedOfflineVideoLibrary();
             }, 50);
+            }
           }
 
           processed++;
@@ -19092,7 +19694,8 @@ function showGenrePopup(genre) {
             if (videoCount === 0) {
               console.log('No video files processed, using render function');
               renderEnhancedOfflineVideoLibrary();
-            }            showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully!`);
+            }
+            showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully${skippedCount > 0 ? ` (${skippedCount} duplicate file(s) skipped)` : ''}!`);
           }
         };
 
@@ -19263,6 +19866,14 @@ function showGenrePopup(genre) {
     let isPlaying = false;
 
     // ENHANCED RENDER FUNCTIONS - EXACT LOGIC FROM OFFLINE25APP.HTML
+    function isOfflineVideoLikeFile(file) {
+      const type = ((file && file.type) ? String(file.type) : '').toLowerCase();
+      if (type.startsWith('video/')) return true;
+
+      const name = ((file && (file.name || file.title)) ? String(file.name || file.title) : '').toLowerCase();
+      return /\.(mp4|webm|avi|mov|wmv|mkv|flv|3gp|ogv)$/i.test(name);
+    }
+
     // EXACT COPY OF RENDEROFFLINELIBRARY FROM OFFLINE25APP.HTML
     function renderOfflineLibrary() {
       console.log('=== RENDERING OFFLINE LIBRARY ===');
@@ -19279,13 +19890,15 @@ function showGenrePopup(genre) {
 
       console.log('✅ Library element found:', libraryElement);
 
-      if (offlineTracks.length === 0) {
+      const visibleTracks = offlineTracks.filter(track => !isOfflineVideoLikeFile(track));
+
+      if (visibleTracks.length === 0) {
         console.log('No tracks to display, showing empty message');
         libraryElement.innerHTML = '<div class="no-files-message" id="noTracksMessage"><p>🎵 No offline tracks yet</p><p style="font-size: 0.9em; opacity: 0.7;">Click "🎵 Add Tracks" above to add MP3, WAV, and other audio files</p><p style="font-size: 0.85em; opacity: 0.6; margin-top: 8px;">✨ Added tracks will appear here and can be played with the sticky player</p></div>';
         return;
       }
 
-      console.log('Rendering', offlineTracks.length, 'tracks');
+      console.log('Rendering', visibleTracks.length, 'tracks');
 
       // Hide empty message and render tracks
       if (emptyMusicMessage) {
@@ -19293,7 +19906,7 @@ function showGenrePopup(genre) {
       }
 
       let html = '';
-      offlineTracks.forEach((track, index) => {
+      visibleTracks.forEach((track, index) => {
         console.log(`Rendering track ${index + 1}:`, track.name);
         const fileName = track.name || track.title || 'Unknown Track';
         const artist = track.artist || '';
@@ -19319,7 +19932,7 @@ function showGenrePopup(genre) {
       });
 
       libraryElement.innerHTML = html;
-      console.log('✅ Tracks rendered:', offlineTracks.length, 'items displayed');
+      console.log('✅ Tracks rendered:', visibleTracks.length, 'items displayed');
     }
 
     // Alias for compatibility
@@ -19454,6 +20067,7 @@ function showGenrePopup(genre) {
     // Enhanced offline track playback - ACTIVATES MAIN STICKY PLAYER
     function playOfflineTrack(trackId) {
       console.log('🎵 playOfflineTrack called with ID:', trackId);
+      stopCurrentOfflineTrackPlayback();
 
       // Find the track in stored tracks
       const track = offlineTracks.find(t => t.id === trackId);
@@ -19465,8 +20079,10 @@ function showGenrePopup(genre) {
       console.log('✅ Track found:', track.name);
 
       // Update global state
+      track.isOfflineTrack = true;
       globalPlayerState.currentTrack = track;
       currentTrack = track;
+      window.offlineStickyTrackSelected = true;
 
       // USE MAIN STICKY PLAYER (same as homepage)
       const stickyPlayer = document.getElementById('stickyPlayer');
@@ -19478,17 +20094,19 @@ function showGenrePopup(genre) {
       if (stickyPlayer && playerTitle && playerAudio) {
         console.log('📱 Activating main sticky player in offline popup:', track.name);
 
-        // Show and position the main sticky player with HIGH z-index for popup visibility
+        // Match homepage sticky player style while staying above offline popup.
         stickyPlayer.style.display = 'flex';
         stickyPlayer.style.position = 'fixed';
-        stickyPlayer.style.bottom = '88px'; // Above navigation menu
-        stickyPlayer.style.left = '0';
-        stickyPlayer.style.right = '0';
-        stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '1600'; // Higher z-index in popup
-        stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
-        stickyPlayer.style.backdropFilter = 'blur(10px)';
-        stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
-        stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+        stickyPlayer.style.bottom = '88px';
+        stickyPlayer.style.left = '50%';
+        stickyPlayer.style.transform = 'translateX(-50%)';
+        stickyPlayer.style.right = 'auto';
+        stickyPlayer.style.width = '88vw';
+        stickyPlayer.style.maxWidth = '480px';
+        stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '9999';
+        stickyPlayer.style.opacity = '1';
+        stickyPlayer.style.visibility = 'visible';
+        stickyPlayer.classList.remove('hidden');
 
         // Set track info
         playerTitle.textContent = track.name;
@@ -19496,6 +20114,7 @@ function showGenrePopup(genre) {
 
         // Set audio source and play
         playerAudio.src = track.base64 || track.audioUrl;
+        playerAudio.loop = false;
 
         // Save state immediately for cross-navigation persistence
         globalPlayerState.isPlaying = true;
@@ -19652,15 +20271,18 @@ function showGenrePopup(genre) {
       // Use main player loop button if available
       const loopBtn = document.getElementById('loopBtn') || document.getElementById('offlineLoopBtn');
 
-      isLooping = !isLooping;
+      isLooping = false;
 
       // Update button state
       if (loopBtn) {
-        loopBtn.style.color = isLooping ? '#1db954' : '#b3b3b3';
-        loopBtn.style.transform = isLooping ? 'scale(1.1)' : 'scale(1)';
+        loopBtn.style.color = '#b3b3b3';
+        loopBtn.style.transform = 'scale(1)';
       }
 
-      console.log(isLooping ? '🔁 Loop enabled' : '🔁 Loop disabled');
+      const playerAudio = document.getElementById('playerAudio');
+      if (playerAudio) playerAudio.loop = false;
+
+      console.log('🔁 Loop disabled for offline tracks');
     }
 
     function updateOfflineDurationDisplay() {
@@ -19686,12 +20308,8 @@ function showGenrePopup(genre) {
         return;
       }
 
-      // Use existing video player or create mini player
-      if (typeof playOfflineVideoInMiniPlayer === 'function') {
-        playOfflineVideoInMiniPlayer(video);
-      } else {
-        console.log('🎬 Video playback:', video.name);
-      }
+      // Use reliable shared path so play button always opens mini popup.
+      playOfflineVideo(videoId);
     }
 
     // Remove enhanced file
@@ -19850,6 +20468,7 @@ function showGenrePopup(genre) {
     // Enhanced track playback for offline sticky player
     function playOfflineTrackEnhanced(trackId) {
       console.log('🎵 Playing enhanced offline track:', trackId);
+      stopCurrentOfflineTrackPlayback();
 
       const offlineMedia = getOfflineMedia();
       const track = [...(offlineMedia.audio || []), ...(offlineMedia.video || [])].find(item => item.id === trackId);
@@ -19889,6 +20508,7 @@ function showGenrePopup(genre) {
           const blobUrl = URL.createObjectURL(blob);
 
           playerAudio.src = blobUrl;
+          playerAudio.loop = false;
           playerAudio.play();
 
           // Update play/pause button
@@ -19915,8 +20535,8 @@ function showGenrePopup(genre) {
         return;
       }
 
-      // Use existing mini video player logic
-      playOfflineVideoInMiniPlayer(video);
+      // Use reliable shared path so play button always opens mini popup.
+      playOfflineVideo(videoId);
     }
 
     // Enhanced sticky player controls
@@ -19952,11 +20572,11 @@ function showGenrePopup(genre) {
       const playerAudio = document.getElementById('offlinePlayerAudio');
 
       if (playerAudio) {
-        playerAudio.loop = !playerAudio.loop;
+        playerAudio.loop = false;
         if (loopBtn) {
-          loopBtn.style.opacity = playerAudio.loop ? '1' : '0.6';
+          loopBtn.style.opacity = '0.6';
         }
-        console.log('🔁 Loop:', playerAudio.loop ? 'ON' : 'OFF');
+        console.log('🔁 Loop: OFF');
       }
     }
 
@@ -19978,10 +20598,10 @@ function showGenrePopup(genre) {
       switchMediaTab('tracks');
       updateMediaCounts();
 
-      // Set up main sticky player button event listeners
-      const playPauseBtn = document.getElementById('playPauseBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const prevBtn = document.getElementById('prevBtn');
+      // Set up offline sticky player button event listeners
+      const playPauseBtn = document.getElementById('offlinePlayPauseBtn');
+      const nextBtn = document.getElementById('offlineNextBtn');
+      const prevBtn = document.getElementById('offlinePrevBtn');
 
       if (playPauseBtn) {
         playPauseBtn.addEventListener('click', toggleOfflinePlayPause);
@@ -20916,7 +21536,12 @@ function showGenrePopup(genre) {
     // Universal function to ensure sticky player appears in ANY popup
     function forceStickyPlayerInPopup() {
       const stickyPlayer = document.getElementById('stickyPlayer');
-      if (stickyPlayer && globalPlayerState.currentTrack) {
+      const playerAudio = document.getElementById('playerAudio');
+      const hasSelectedTrack = !!(window.currentTrackId || window.currentTrackData);
+      const isTrackLoaded = !!(playerAudio && playerAudio.src && playerAudio.readyState >= 2);
+      const isAudioPlaying = !!(playerAudio && !playerAudio.paused);
+
+      if (stickyPlayer && globalPlayerState.currentTrack && ((hasSelectedTrack && isTrackLoaded) || isAudioPlaying)) {
         console.log('🎵 FORCING sticky player visibility in popup context');
 
         stickyPlayer.style.display = 'flex';
@@ -20932,7 +21557,6 @@ function showGenrePopup(genre) {
 
         const playerTitle = document.getElementById('playerTrackTitle');
         const stickyTrackInfo = document.getElementById('stickyTrackInfo');
-        const playerAudio = document.getElementById('playerAudio');
 
         if (playerTitle) playerTitle.textContent = globalPlayerState.currentTrack.name;
         if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
@@ -20944,19 +21568,7 @@ function showGenrePopup(genre) {
       }
     }
 
-    // Ensure sticky player appears on page load if there's a current track
-    document.addEventListener('DOMContentLoaded', function() {
-      setTimeout(() => {
-        ensureStickyPlayerVisibility();
-      }, 1000);
-    });
-
-    // Also check on window load as backup
-    window.addEventListener('load', function() {
-      setTimeout(() => {
-        ensureStickyPlayerVisibility();
-      }, 1500);
-    });
+    // Do not auto-show sticky player on initial page load.
 
     function openPlaylistApp() {
       console.log('📋 Opening Playlist Manager Popup');
@@ -21391,39 +22003,52 @@ function showGenrePopup(genre) {
 
     // Function to ensure sticky player is visible when there's a current track
     function ensureStickyPlayerVisibility() {
-      if (globalPlayerState.currentTrack) {
-        const stickyPlayer = document.getElementById('stickyPlayer');
-        const playerTitle = document.getElementById('playerTrackTitle');
-        const playerAudio = document.getElementById('playerAudio');
-        const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const playerTitle = document.getElementById('playerTrackTitle');
+      const playerAudio = document.getElementById('playerAudio');
+      const stickyTrackInfo = document.getElementById('stickyTrackInfo');
+      const hasSelectedTrack = !!(window.currentTrackId || window.currentTrackData);
+      const isTrackLoaded = !!(playerAudio && playerAudio.src && playerAudio.readyState >= 2);
+      const isAudioPlaying = !!(playerAudio && !playerAudio.paused);
+      const shouldShowSticky = (hasSelectedTrack && isTrackLoaded) || isAudioPlaying;
 
-        if (stickyPlayer && playerTitle) {
-          console.log('🔄 Ensuring sticky player visibility for:', globalPlayerState.currentTrack.name);
+      if (!stickyPlayer) return;
 
-          // Show and position sticky player with appropriate z-index
-          stickyPlayer.style.display = 'flex';
-          stickyPlayer.style.position = 'fixed';
-          stickyPlayer.style.bottom = '88px';
-          stickyPlayer.style.left = '0';
-          stickyPlayer.style.right = '0';
-          stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '1600';
-          stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
-          stickyPlayer.style.backdropFilter = 'blur(10px)';
-          stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
-          stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+      if (!shouldShowSticky) {
+        stickyPlayer.style.display = 'none';
+        stickyPlayer.style.opacity = '0';
+        stickyPlayer.style.visibility = 'hidden';
+        stickyPlayer.style.pointerEvents = 'none';
+        stickyPlayer.classList.add('hidden');
+        return;
+      }
 
-          // Ensure track info is displayed
-          playerTitle.textContent = globalPlayerState.currentTrack.name;
-          if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
+      // Show and position sticky player with appropriate z-index
+      stickyPlayer.style.display = 'flex';
+      stickyPlayer.style.position = 'fixed';
+      stickyPlayer.style.bottom = '88px';
+      stickyPlayer.style.left = '0';
+      stickyPlayer.style.right = '0';
+      stickyPlayer.style.zIndex = globalPlayerState.isOfflinePopupActive ? '10001' : '1600';
+      stickyPlayer.style.backgroundColor = 'rgba(18, 18, 18, 0.95)';
+      stickyPlayer.style.backdropFilter = 'blur(10px)';
+      stickyPlayer.style.boxShadow = '0 -2px 15px rgba(0,0,0,0.2)';
+      stickyPlayer.style.borderTop = '1px solid rgba(255, 215, 0, 0.3)';
+      stickyPlayer.style.opacity = '0.95';
+      stickyPlayer.style.visibility = 'visible';
+      stickyPlayer.style.pointerEvents = 'auto';
+      stickyPlayer.classList.remove('hidden');
 
-          // Ensure audio source is set
-          if (playerAudio && !playerAudio.src) {
-            playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
-          }
+      if (globalPlayerState.currentTrack && playerTitle) {
+        playerTitle.textContent = globalPlayerState.currentTrack.name;
+        if (stickyTrackInfo) stickyTrackInfo.textContent = globalPlayerState.currentTrack.artist || '';
 
-          console.log('✅ Sticky player visibility ensured');
+        if (playerAudio && !playerAudio.src) {
+          playerAudio.src = globalPlayerState.currentTrack.base64 || globalPlayerState.currentTrack.audioUrl;
         }
       }
+
+      console.log('✅ Sticky player visibility ensured');
     }
 
     function closePage(overlayId) {
@@ -21611,10 +22236,13 @@ function showGenrePopup(genre) {
       if (videoPlayer && iframe && titleElement) {
         videoPlayer.style.display = 'block';
         titleElement.textContent = title;
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+        iframe.src = buildYouTubeEmbedUrl(videoId);
 
         // Scroll to video player
         videoPlayer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        // Fallback to the primary YouTube player when alternate online player markup is unavailable.
+        playYouTubeVideo(videoId, title, 'YouTube');
       }
     }
 
@@ -24600,9 +25228,49 @@ function showGenrePopup(genre) {
     }
 
     function toggleLoop() {
-      isLoop = !isLoop;
-      playerAudio.loop = isLoop;
-      loopBtn.classList.toggle('active', isLoop);
+      if (typeof window.loopMode === 'number') {
+        // Sync with the primary three-state loop handler.
+        const mode = window.loopMode;
+        isLoop = mode === 2;
+        playerAudio.loop = isLoop;
+        loopBtn.classList.toggle('active', mode !== 0);
+
+        // First click (loop mode 1): follow UI section order from current track onward.
+        if (mode === 1) {
+          const orderedTrackIds = [];
+          const seen = new Set();
+          const sectionItems = document.querySelectorAll('.recently-played-list .recent-track-item, .track-table .track-row');
+
+          sectionItems.forEach((item) => {
+            const onclick = item.getAttribute('onclick') || '';
+            const match = onclick.match(/playNewTrack\('((?:\\'|[^'])+)'/);
+            if (!match) return;
+
+            const trackId = match[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
+            if (!trackId || seen.has(trackId)) return;
+
+            seen.add(trackId);
+            orderedTrackIds.push(trackId);
+          });
+
+          if (orderedTrackIds.length > 0) {
+            trackOrder = orderedTrackIds;
+            window.trackOrder = orderedTrackIds;
+
+            const activeTrackId = window.currentTrackId || window.currentTrackData?.id || window.currentTrackData?.title;
+            const activeIndex = orderedTrackIds.indexOf(activeTrackId);
+            if (activeIndex >= 0) {
+              currentTrackIndex = activeIndex;
+              window.currentTrackIndex = activeIndex;
+            }
+          }
+        }
+      } else {
+        // Fallback for legacy contexts where loopMode is unavailable.
+        isLoop = !isLoop;
+        playerAudio.loop = isLoop;
+        loopBtn.classList.toggle('active', isLoop);
+      }
       savePlayerState();
     }
 
@@ -24711,10 +25379,14 @@ function showGenrePopup(genre) {
     playerAudio.addEventListener('ended', function() {
       playPauseBtn.innerHTML = '&#9654;'; // Show play button when ended
       isPlaying = false;
+      if (typeof window.syncAutoplayOrderForTrack === 'function' && window.currentTrackId) {
+        window.syncAutoplayOrderForTrack(window.currentTrackId);
+      }
+      const activeLoopMode = typeof window.loopMode === 'number' ? window.loopMode : (isLoop ? 2 : 0);
       if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
         return;
       }
-      if (!isLoop && playNextQueuedTrack()) {
+      if (activeLoopMode !== 2 && playNextQueuedTrack()) {
         return;
       }
       if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
@@ -24727,7 +25399,9 @@ function showGenrePopup(genre) {
         }, 300);
         return;
       }
-      if (!isLoop) {
+
+      // Loop mode 1: continue in section order; mode 2 loops current track via playerAudio.loop.
+      if (activeLoopMode === 1) {
         // Use sticky player sequential logic instead of random playlist logic
         if (window.currentTrackIndex !== undefined && window.trackOrder) {
           const currentIndex = window.currentTrackIndex;
@@ -26208,7 +26882,7 @@ function showGenrePopup(genre) {
   </div> <!-- End App Container -->
 
   <script>
-    console.log('🚨 TERMS ENFORCEMENT ACTIVE - Modal shown by default, will be hidden only if user has account or accepted terms');
+    console.log('🚨 TERMS ENFORCEMENT ACTIVE - Modal hidden on load and shown only by explicit actions');
     console.log('📋 ACCOUNT LOGIC: "Music Lover" = NO account, any other username = HAS account');
 
     // Immediate Terms Check - Run as soon as script loads
@@ -26250,7 +26924,7 @@ function showGenrePopup(genre) {
           }
         }, 10);
       } else {
-        console.log('🚨 NO ACCOUNT AND NO TERMS ACCEPTED - Modal remains visible');
+        console.log('ℹ️ NO ACCOUNT AND NO TERMS ACCEPTED - keeping modal hidden on page load');
       }
     })();    // Terms and Conditions Management
     class TermsManager {
@@ -26303,9 +26977,9 @@ function showGenrePopup(genre) {
             this.unblockApp();
           }, 50);
         } else {
-          console.log('🚨 NO ACCOUNT AND NO TERMS - Modal remains visible');
-          // Ensure app stays blocked (it should already be blocked by default)
-          this.blockApp();
+          console.log('ℹ️ NO ACCOUNT AND NO TERMS - keeping modal hidden on page load');
+          this.hideTermsModal();
+          this.unblockApp();
         }
       }
 
@@ -26499,13 +27173,15 @@ function showGenrePopup(genre) {
           appContainer.style.pointerEvents = '';
         }
       } else {
-        console.log('🚨 EMERGENCY - No account and no terms, ensuring modal visible');
+        console.log('ℹ️ EMERGENCY - No account and no terms, keeping modal hidden on page load');
         if (modal) {
-          modal.style.display = 'flex';
-          modal.style.zIndex = '99999';
+          modal.style.display = 'none';
         }
         if (appContainer) {
-          appContainer.classList.add('app-blocked');
+          appContainer.classList.remove('app-blocked');
+          appContainer.style.filter = '';
+          appContainer.style.opacity = '';
+          appContainer.style.pointerEvents = '';
         }
       }
     }, 2000);
@@ -26868,42 +27544,216 @@ let isMiniMuted = true;
 let isMiniFullscreen = false;
 
 function showMiniVideoPlayer(src) {
+  if (!miniVideoElement || !miniVideoPlayer || !videoOverlay) return;
+
+  miniVideoElement.pause();
   miniVideoElement.src = src;
+  miniVideoPlayer.style.top = '50%';
+  miniVideoPlayer.style.right = '20px';
+  miniVideoPlayer.style.left = 'auto';
+  miniVideoPlayer.style.transform = 'translateY(-50%)';
   miniVideoPlayer.style.display = 'block';
   videoOverlay.style.display = 'block';
+
+  // Required behavior: muted and looped video playback.
   miniVideoElement.muted = true;
-  miniVideoElement.volume = 0.1;
+  miniVideoElement.loop = true;
+  miniVideoElement.playsInline = true;
+  miniVideoElement.volume = 0;
+  miniVideoElement.setAttribute('muted', '');
+  miniVideoElement.setAttribute('loop', '');
+
   miniVideoElement.play().then(() => {
-    miniPlayPauseBtn.textContent = '⏸';
+    if (miniPlayPauseBtn) miniPlayPauseBtn.textContent = '⏸';
+    if (miniMuteBtn) miniMuteBtn.textContent = '🔇';
     isMiniPlaying = true;
-    isMiniMuted = false;
+    isMiniMuted = true;
   }).catch(() => {
-    miniPlayPauseBtn.textContent = '▶';
+    if (miniPlayPauseBtn) miniPlayPauseBtn.textContent = '▶';
+    isMiniPlaying = false;
     isMiniMuted = true;
   });
+}
 
-miniFullscreenBtn.addEventListener('click', () => {
-  if (!isMiniFullscreen) {
-    if (miniVideoPlayer.requestFullscreen) miniVideoPlayer.requestFullscreen();
-    isMiniFullscreen = true;
-  } else {
-    if (document.exitFullscreen) document.exitFullscreen();
-    isMiniFullscreen = false;
+
+window.showMiniVideoPlayer = showMiniVideoPlayer;
+window.playOfflineVideoInMiniPlayer = function(videoData) {
+  if (!videoData) return;
+
+  const existingUrl = videoData.url || videoData.blobUrl;
+  const generatedUrl = (typeof createBlobUrl === 'function') ? createBlobUrl(videoData) : null;
+  const source = existingUrl || generatedUrl;
+
+  if (source) {
+    showMiniVideoPlayer(source);
   }
-});
+};
 
-miniCloseBtn.addEventListener('click', () => {
-  miniVideoPlayer.style.display = 'none';
-  videoOverlay.style.display = 'none';
-  miniVideoElement.pause();
-  miniVideoElement.src = '';
-  isMiniPlaying = false;
-});
+if (miniVideoPlayer && !miniVideoPlayer.dataset.dragBound) {
+  miniVideoPlayer.dataset.dragBound = 'true';
 
-videoOverlay.addEventListener('click', () => {
-  miniCloseBtn.click();
-});
+  if (!miniVideoPlayer.querySelector('.video-mini-resize-handle')) {
+    const resizeHandle = document.createElement('div');
+    resizeHandle.className = 'video-mini-resize-handle';
+    miniVideoPlayer.appendChild(resizeHandle);
+  }
 
+  let dragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startLeft = 0;
+  let startTop = 0;
+  let resizing = false;
+  let startWidth = 0;
+  let startHeight = 0;
+  const minWidth = 220;
+  const maxWidth = 720;
+  const aspectRatio = 16 / 9;
+
+  miniVideoPlayer.addEventListener('mousedown', (event) => {
+    const isResizeHandle = event.target.classList && event.target.classList.contains('video-mini-resize-handle');
+    if (isResizeHandle) {
+      resizing = true;
+      const rect = miniVideoPlayer.getBoundingClientRect();
+      startX = event.clientX;
+      startY = event.clientY;
+      startWidth = rect.width;
+      startHeight = rect.height;
+      miniVideoPlayer.style.left = `${rect.left}px`;
+      miniVideoPlayer.style.top = `${rect.top}px`;
+      miniVideoPlayer.style.right = 'auto';
+      miniVideoPlayer.style.transform = 'none';
+      event.preventDefault();
+      return;
+    }
+
+    if (event.target.closest('button')) return;
+    dragging = true;
+    miniVideoPlayer.classList.add('dragging');
+
+    const rect = miniVideoPlayer.getBoundingClientRect();
+    startX = event.clientX;
+    startY = event.clientY;
+    startLeft = rect.left;
+    startTop = rect.top;
+
+    miniVideoPlayer.style.left = `${startLeft}px`;
+    miniVideoPlayer.style.top = `${startTop}px`;
+    miniVideoPlayer.style.right = 'auto';
+    miniVideoPlayer.style.transform = 'none';
+    event.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (event) => {
+    if (resizing) {
+      const deltaX = event.clientX - startX;
+      const proposedWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX));
+      const proposedHeight = Math.max(124, Math.round(proposedWidth / aspectRatio));
+
+      const rect = miniVideoPlayer.getBoundingClientRect();
+      const maxAllowedWidth = window.innerWidth - rect.left;
+      const maxAllowedHeight = window.innerHeight - rect.top;
+
+      const width = Math.max(minWidth, Math.min(proposedWidth, maxAllowedWidth));
+      const height = Math.max(124, Math.min(proposedHeight, maxAllowedHeight));
+
+      miniVideoPlayer.style.width = `${width}px`;
+      miniVideoPlayer.style.height = `${height}px`;
+      return;
+    }
+
+    if (!dragging) return;
+
+    const nextLeft = Math.min(
+      Math.max(0, startLeft + (event.clientX - startX)),
+      window.innerWidth - miniVideoPlayer.offsetWidth
+    );
+    const nextTop = Math.min(
+      Math.max(0, startTop + (event.clientY - startY)),
+      window.innerHeight - miniVideoPlayer.offsetHeight
+    );
+
+    miniVideoPlayer.style.left = `${nextLeft}px`;
+    miniVideoPlayer.style.top = `${nextTop}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (resizing) {
+      resizing = false;
+      return;
+    }
+    if (!dragging) return;
+    dragging = false;
+    miniVideoPlayer.classList.remove('dragging');
+  });
+}
+
+if (miniPlayPauseBtn && !miniPlayPauseBtn.dataset.boundMiniControls) {
+  miniPlayPauseBtn.dataset.boundMiniControls = 'true';
+  miniPlayPauseBtn.addEventListener('click', () => {
+    if (!miniVideoElement) return;
+
+    if (miniVideoElement.paused) {
+      miniVideoElement.play().then(() => {
+        miniPlayPauseBtn.textContent = '⏸';
+        isMiniPlaying = true;
+      }).catch(() => {
+        miniPlayPauseBtn.textContent = '▶';
+      });
+    } else {
+      miniVideoElement.pause();
+      miniPlayPauseBtn.textContent = '▶';
+      isMiniPlaying = false;
+    }
+  });
+}
+
+if (miniMuteBtn && !miniMuteBtn.dataset.boundMiniControls) {
+  miniMuteBtn.dataset.boundMiniControls = 'true';
+  miniMuteBtn.addEventListener('click', () => {
+    if (!miniVideoElement) return;
+
+    // Keep mini-player videos muted per requested behavior.
+    miniVideoElement.muted = true;
+    miniVideoElement.volume = 0;
+    miniMuteBtn.textContent = '🔇';
+    isMiniMuted = true;
+  });
+}
+
+if (miniFullscreenBtn && !miniFullscreenBtn.dataset.boundMiniControls) {
+  miniFullscreenBtn.dataset.boundMiniControls = 'true';
+  miniFullscreenBtn.addEventListener('click', () => {
+    if (!miniVideoPlayer) return;
+
+    if (!isMiniFullscreen) {
+      if (miniVideoPlayer.requestFullscreen) miniVideoPlayer.requestFullscreen();
+      isMiniFullscreen = true;
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      isMiniFullscreen = false;
+    }
+  });
+}
+
+if (miniCloseBtn && !miniCloseBtn.dataset.boundMiniControls) {
+  miniCloseBtn.dataset.boundMiniControls = 'true';
+  miniCloseBtn.addEventListener('click', () => {
+    if (!miniVideoPlayer || !videoOverlay || !miniVideoElement) return;
+    miniVideoPlayer.style.display = 'none';
+    videoOverlay.style.display = 'none';
+    miniVideoElement.pause();
+    miniVideoElement.src = '';
+    isMiniPlaying = false;
+  });
+}
+
+if (videoOverlay && !videoOverlay.dataset.boundMiniControls) {
+  videoOverlay.dataset.boundMiniControls = 'true';
+  videoOverlay.addEventListener('click', () => {
+    if (miniCloseBtn) miniCloseBtn.click();
+  });
+}
 // Example usage: showMiniVideoPlayer('path/to/video.mp4');
 // You can call showMiniVideoPlayer with the video URL to open the popup player.
 </script>
@@ -26969,6 +27819,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const stickyPlayer = document.getElementById('stickyPlayer');
   const playerAudio = document.getElementById('playerAudio');
   let isPlayerVisible = false;
+  let hasTrackActivation = false;
   let scrollTimeout = null;
   let lastScrollY = window.scrollY;
 
@@ -27012,36 +27863,59 @@ document.addEventListener('DOMContentLoaded', function() {
   function updatePlayerVisibility() {
     if (!stickyPlayer || !playerAudio) return;
 
+    const isTrackLoaded = !!(playerAudio.src && playerAudio.readyState >= 2);
     const isAudioActive = !playerAudio.paused ||
       (playerAudio.currentTime > 0 && playerAudio.readyState >= 2);
+    const trackHasEnded = !!playerAudio.ended;
+    const canShowPlayer = isAudioActive || (isTrackLoaded && hasTrackActivation);
 
-    if (isAudioActive && stickyPlayer.style.display === 'none') {
-      // Show player when audio becomes active
-      stickyPlayer.style.display = 'flex';
-      stickyPlayer.style.opacity = '0';
+    if (canShowPlayer) {
+      if (stickyPlayer.style.display === 'none') {
+        // Show player immediately when audio becomes active.
+        stickyPlayer.style.display = 'flex';
+        stickyPlayer.style.opacity = '1';
+        stickyPlayer.style.visibility = 'visible';
+        stickyPlayer.style.transition = 'all 0.2s ease';
 
-      // Smooth fade in
-      setTimeout(() => {
-        stickyPlayer.style.transition = 'all 0.3s ease';
+        // Add scroll tracking
+        window.addEventListener('scroll', handleScroll, { passive: true });
+      } else if (stickyPlayer.style.opacity === '0' || stickyPlayer.style.visibility === 'hidden') {
+        // Ensure player stays visible without requiring hover.
+        stickyPlayer.style.visibility = 'visible';
         stickyPlayer.style.opacity = '0.95';
-      }, 50);
+      }
 
       isPlayerVisible = true;
-
-      // Add scroll tracking
-      window.addEventListener('scroll', handleScroll, { passive: true });
-    } else if (!isAudioActive && isPlayerVisible) {
-      // Hide player when audio stops
+    } else if (!hasTrackActivation && !isAudioActive && !isTrackLoaded && !trackHasEnded) {
+      // Hide player when there is no loaded/playing track.
       stickyPlayer.style.opacity = '0';
 
       setTimeout(() => {
-        if (!playerAudio.paused && playerAudio.currentTime === 0) {
+        const stillNotReady = !playerAudio.src || playerAudio.readyState < 2;
+        const stillInactive = playerAudio.paused && playerAudio.currentTime === 0;
+        if (stillNotReady || stillInactive) {
           stickyPlayer.style.display = 'none';
           isPlayerVisible = false;
           window.removeEventListener('scroll', handleScroll);
         }
       }, 300);
     }
+  }
+
+  // Never allow pre-selection auto-show.
+  if (stickyPlayer && stickyPlayer.style.display !== 'none') {
+    stickyPlayer.style.display = 'none';
+  }
+
+  // Guard against any other scripts forcing visibility before a track is selected.
+  if (stickyPlayer && !stickyPlayer.dataset.preselectVisibilityGuard) {
+    stickyPlayer.dataset.preselectVisibilityGuard = 'true';
+    const preselectGuard = new MutationObserver(() => {
+      if (!hasTrackActivation && stickyPlayer.style.display !== 'none') {
+        stickyPlayer.style.display = 'none';
+      }
+    });
+    preselectGuard.observe(stickyPlayer, { attributes: true, attributeFilter: ['style'] });
   }
 
   // Enhanced hover effects
@@ -27061,9 +27935,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Monitor audio state changes
   if (playerAudio) {
-    playerAudio.addEventListener('play', updatePlayerVisibility);
+    playerAudio.addEventListener('play', function() {
+      hasTrackActivation = true;
+      updatePlayerVisibility();
+    });
     playerAudio.addEventListener('pause', updatePlayerVisibility);
-    playerAudio.addEventListener('loadstart', updatePlayerVisibility);
+    playerAudio.addEventListener('loadstart', function() {
+      hasTrackActivation = true;
+      updatePlayerVisibility();
+    });
     playerAudio.addEventListener('ended', updatePlayerVisibility);
 
     // Handle window resize for responsive behavior
@@ -27073,6 +27953,173 @@ document.addEventListener('DOMContentLoaded', function() {
           'translateY(0px)' : 'translateX(-50%) translateY(0px)';
       }
     });
+  }
+
+  // Sticky controls harmonizer: enforce deterministic button behavior.
+  const playPauseBtnEl = document.getElementById('playPauseBtn');
+  const nextBtnEl = document.getElementById('nextBtn');
+  const prevBtnEl = document.getElementById('prevBtn');
+  const playedTrackHistory = window.stickyPlayedTrackHistory || [];
+  window.stickyPlayedTrackHistory = playedTrackHistory;
+
+  const normalizeTrackKey = function(value) {
+    return String(value || '')
+      .replace(/&#39;/g, "'")
+      .replace(/\\'/g, "'")
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  };
+
+  const getCurrentTrackRef = function() {
+    const currentTrack = window.currentTrack || window.currentTrackData || {};
+    const fromPlayerTitle = (document.getElementById('playerTrackTitle')?.textContent || '').split(' - ')[0].trim();
+    return currentTrack.id || currentTrack.trackId || window.currentTrackId || currentTrack.title || fromPlayerTitle || '';
+  };
+
+  const getHomepageTrackOrder = function() {
+    const seen = new Set();
+    const ordered = [];
+    const nodes = document.querySelectorAll('.recently-played-list .recent-track-item, .track-table .track-row');
+
+    nodes.forEach(function(node) {
+      const onclick = node.getAttribute('onclick') || '';
+      const match = onclick.match(/playNewTrack\('((?:\\'|[^'])+)'/);
+      if (!match) return;
+
+      const id = match[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
+      const key = normalizeTrackKey(id);
+      if (!key || seen.has(key)) return;
+
+      seen.add(key);
+      ordered.push(id);
+    });
+
+    return ordered;
+  };
+
+  const playTrackById = function(trackId) {
+    if (!trackId) return false;
+
+    if (typeof window.playTrack === 'function') {
+      window.playTrack(trackId);
+      return true;
+    }
+
+    const targetKey = normalizeTrackKey(trackId);
+    const nodes = document.querySelectorAll('.recently-played-list .recent-track-item, .track-table .track-row');
+    for (const node of nodes) {
+      const onclick = node.getAttribute('onclick') || '';
+      const match = onclick.match(/playNewTrack\('((?:\\'|[^'])+)'/);
+      if (!match) continue;
+
+      const id = match[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
+      if (normalizeTrackKey(id) !== targetKey) continue;
+
+      node.click();
+      return true;
+    }
+
+    return false;
+  };
+
+  const syncPlayPauseIcon = function() {
+    if (!playPauseBtnEl) return;
+    playPauseBtnEl.innerHTML = (!playerAudio.paused && !playerAudio.ended) ? '&#10073;&#10073;' : '&#9654;';
+  };
+
+  if (typeof window.playNewTrack === 'function' && !window.playNewTrack._hzStickyControlWrapped) {
+    const originalPlayNewTrack = window.playNewTrack;
+    window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      const currentRef = getCurrentTrackRef();
+      const nextRef = trackId || trackTitle || '';
+      if (currentRef && nextRef && normalizeTrackKey(currentRef) !== normalizeTrackKey(nextRef)) {
+        playedTrackHistory.push(currentRef);
+        if (playedTrackHistory.length > 200) playedTrackHistory.shift();
+      }
+
+      hasTrackActivation = true;
+      return originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
+    };
+    window.playNewTrack._hzStickyControlWrapped = true;
+    window.playNewTrack._hzOriginalPlayNewTrack = originalPlayNewTrack;
+  }
+
+  if (playPauseBtnEl && !playPauseBtnEl.dataset.stickyControlsBound) {
+    playPauseBtnEl.dataset.stickyControlsBound = 'true';
+    playPauseBtnEl.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      if (playerAudio.paused || playerAudio.ended) {
+        playerAudio.play().then(function() {
+          hasTrackActivation = true;
+          syncPlayPauseIcon();
+          updatePlayerVisibility();
+        }).catch(function() {});
+      } else {
+        playerAudio.pause();
+        syncPlayPauseIcon();
+        updatePlayerVisibility();
+      }
+    }, true);
+  }
+
+  if (nextBtnEl && !nextBtnEl.dataset.stickyControlsBound) {
+    nextBtnEl.dataset.stickyControlsBound = 'true';
+    nextBtnEl.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      const order = getHomepageTrackOrder();
+      const currentRef = getCurrentTrackRef();
+      const currentKey = normalizeTrackKey(currentRef);
+      const currentIndex = order.findIndex(function(id) { return normalizeTrackKey(id) === currentKey; });
+
+      if (currentRef) {
+        playedTrackHistory.push(currentRef);
+        if (playedTrackHistory.length > 200) playedTrackHistory.shift();
+      }
+
+      if (order.length > 0 && currentIndex >= 0) {
+        const nextId = order[(currentIndex + 1) % order.length];
+        if (playTrackById(nextId)) return;
+      }
+
+      if (typeof window.playNext === 'function') {
+        window.playNext();
+      }
+    }, true);
+  }
+
+  if (prevBtnEl && !prevBtnEl.dataset.stickyControlsBound) {
+    prevBtnEl.dataset.stickyControlsBound = 'true';
+    prevBtnEl.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      let previousRef = '';
+      while (playedTrackHistory.length > 0 && !previousRef) {
+        const candidate = playedTrackHistory.pop();
+        if (candidate && normalizeTrackKey(candidate) !== normalizeTrackKey(getCurrentTrackRef())) {
+          previousRef = candidate;
+        }
+      }
+
+      if (previousRef && playTrackById(previousRef)) return;
+
+      const order = getHomepageTrackOrder();
+      const currentRef = getCurrentTrackRef();
+      const currentKey = normalizeTrackKey(currentRef);
+      const currentIndex = order.findIndex(function(id) { return normalizeTrackKey(id) === currentKey; });
+      if (order.length > 0 && currentIndex >= 0) {
+        const prevId = order[(currentIndex - 1 + order.length) % order.length];
+        playTrackById(prevId);
+      }
+    }, true);
   }
 
   // Initialize player state
@@ -27641,118 +28688,3 @@ window.repairAllLikedTracks = function() {
 
   console.log('');
   console.log('📊 REPAIR SUMMARY:');
-  console.log(`   ✅ Valid tracks: ${validCount}`);
-  console.log(`   🔧 Repaired tracks: ${repairedCount}`);
-  console.log(`   ❌ Failed repairs: ${trackIds.length - validCount - repairedCount}`);
-  console.log('');
-  console.log('💡 Refresh the liked popup to see all playable tracks!');
-  console.log('🔧 ===============================================');
-
-  // Reload liked songs popup if it's open
-  if (typeof loadLikedSongs === 'function') {
-    setTimeout(() => {
-      const likedPopup = document.getElementById('likedPageOverlay');
-      if (likedPopup && likedPopup.classList.contains('show')) {
-        console.log('🔄 Refreshing liked popup...');
-        loadLikedSongs();
-      }
-    }, 100);
-  }
-};
-
-console.log('💡 Run window.repairAllLikedTracks() to fix any tracks with missing URLs');
-
-// 🎯 INSTANT TEST FUNCTION - Verify liked tracks are playable
-window.testLikedTracksPlayback = function() {
-  console.log('🎯 ========== TESTING LIKED TRACKS PLAYBACK ==========');
-
-  const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
-  const trackIds = Object.keys(likedTracks);
-
-  if (trackIds.length === 0) {
-    console.log('⚠️  No liked tracks to test. Like some tracks first!');
-    return;
-  }
-
-  console.log(`📊 Testing ${trackIds.length} liked tracks...`);
-  console.log('');
-
-  let readyToPlay = 0;
-  let needsRepair = 0;
-
-  trackIds.forEach((trackId, idx) => {
-    const track = likedTracks[trackId];
-    const hasUrl = track.url && track.url.startsWith('http');
-    const inTrackData = window.trackData && window.trackData[trackId];
-
-    if (hasUrl) {
-      readyToPlay++;
-      console.log(`${idx + 1}. ✅ "${track.title || trackId}" - READY TO PLAY`);
-      console.log(`     URL: ${track.url.substring(0, 60)}...`);
-    } else if (inTrackData) {
-      needsRepair++;
-      console.log(`${idx + 1}. 🔧 "${track.title || trackId}" - NEEDS REPAIR (URL available in trackData)`);
-    } else {
-      needsRepair++;
-      console.log(`${idx + 1}. ❌ "${track.title || trackId}" - NOT FOUND (missing from trackData)`);
-    }
-  });
-
-  console.log('');
-  console.log('📊 PLAYBACK TEST RESULTS:');
-  console.log(`   ✅ Ready to play: ${readyToPlay} / ${trackIds.length}`);
-  console.log(`   🔧 Need repair: ${needsRepair} / ${trackIds.length}`);
-  console.log('');
-
-  if (needsRepair > 0) {
-    console.log('💡 Run window.repairAllLikedTracks() to fix tracks');
-  } else {
-    console.log('🎉 ALL TRACKS ARE READY TO PLAY!');
-    console.log('💡 Open the liked popup and click any track to test');
-  }
-
-  console.log('🎯 ================================================');
-};
-
-console.log('💡 Run window.testLikedTracksPlayback() to verify all liked tracks');
-
-// 🔍 INSTANT CHECK - Show all liked tracks
-window.showAllLikedTracks = function() {
-  console.log('🔍 ========== ALL LIKED TRACKS ==========');
-  const likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
-  const trackIds = Object.keys(likedTracks);
-
-  if (trackIds.length === 0) {
-    console.log('📭 No liked tracks found');
-    console.log('💡 Click the heart ♥ button on any track to like it');
-    return;
-  }
-
-  console.log(`📊 Found ${trackIds.length} liked track(s):`);
-  console.log('');
-
-  trackIds.forEach((trackId, idx) => {
-    const track = likedTracks[trackId];
-    console.log(`${idx + 1}. "${track.title || track.name || trackId}"`);
-    console.log(`   Artist: ${track.artist || 'Unknown'}`);
-    console.log(`   ID: ${trackId}`);
-    console.log(`   URL: ${track.url ? '✅ Valid' : '❌ Missing'}`);
-    console.log(`   Liked: ${new Date(track.timestamp || Date.now()).toLocaleString()}`);
-    console.log('');
-  });
-
-  console.log('💡 Open the liked popup (heart icon) to see all tracks');
-  console.log('🔍 ========================================');
-};
-
-console.log('💡 Run window.showAllLikedTracks() to see all liked tracks instantly');
-console.log('');
-console.log('🎵 ========== LIKED TRACKS SYSTEM READY ==========');
-console.log('✅ All functions loaded successfully');
-console.log('✅ Enhanced logging for debugging');
-console.log('✅ Tracks will use playNewTrack for perfect playback');
-console.log('✅ URL validation and repair system active');
-console.log('💡 Like any track and it will be instantly saved!');
-console.log('🎵 ================================================');
-</script>
-</html>
