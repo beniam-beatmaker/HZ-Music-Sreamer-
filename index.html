@@ -931,7 +931,8 @@
         playerTrackTitle.textContent = trackTitle + ' - ' + trackArtist;
       }
 
-      // Show the comprehensive sticky player with all controls - FORCE VISIBLE
+      // Unlock sticky-player visibility after a track is selected.
+      window.__hzStickySelectionUnlocked = true;
       stickyPlayer.style.display = 'flex';
       stickyPlayer.style.position = 'fixed';
       stickyPlayer.style.bottom = '88px';
@@ -941,7 +942,7 @@
       stickyPlayer.style.opacity = '1';
       stickyPlayer.style.visibility = 'visible';
       stickyPlayer.classList.remove('hidden');
-      console.log('🎧 STICKY PLAYER FORCED VISIBLE!');
+      console.log('🎧 STICKY PLAYER READY AFTER SELECTION');
 
       // Update global track info for all controls
       window.currentTrack = { trackId, trackUrl, trackTitle, trackArtist };
@@ -8072,6 +8073,24 @@
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
                 </div>
+                <div class="recent-track-item" onclick="playNewTrack('Lambo-Ambo', 'https://storage.googleapis.com/hertz-music-folder/Biology_Heals_FULL_SONG_MusicGPT.mp3', 'Lambo-Ambo', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:car-sports.svg?color=%23ffd700" alt="Lambo-Ambo cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info"><div class="recent-track-name">Lambo-Ambo</div><div class="recent-track-artist">Beniam TedlAI</div></div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Sirens', 'https://storage.googleapis.com/hertz-music-folder/Sirens__Spark_FULL_SONG_MusicGPT.mp3', 'Sirens', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff2b2b'/%3E%3Cstop offset='100%25' stop-color='%23004dff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%2313182b'/%3E%3Cpath d='M20 39h24l-2-11c-.4-2.1-2.2-3.6-4.3-3.6H26.3c-2.1 0-3.9 1.5-4.3 3.6L20 39Z' fill='url(%23b)'/%3E%3Cpath d='M28 18h8v6h-8z' fill='%23f6f7fb'/%3E%3Ccircle cx='21' cy='22' r='6' fill='%23ff2b2b'/%3E%3Ccircle cx='43' cy='22' r='6' fill='%23004dff'/%3E%3Ccircle cx='21' cy='22' r='2.5' fill='%23fff'/%3E%3Ccircle cx='43' cy='22' r='2.5' fill='%23fff'/%3E%3Cpath d='M17 18c2.6-3.1 5.5-4.7 8.7-4.7M47 18c-2.6-3.1-5.5-4.7-8.7-4.7' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M12 29c3.1 1.8 5.4 2.5 8.7 2.5M52 29c-3.1 1.8-5.4 2.5-8.7 2.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' opacity='.7'/%3E%3C/svg%3E" alt="Sirens cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info"><div class="recent-track-name">Sirens</div><div class="recent-track-artist">Beniam TedlAI</div></div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Troops', 'https://storage.googleapis.com/hertz-music-folder/Stop_The_Spark_FULL_SONG_MusicGPT.mp3', 'Troops', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:shield-account.svg?color=%23ffd700" alt="Troops cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info"><div class="recent-track-name">Troops</div><div class="recent-track-artist">Beniam TedlAI</div></div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                   <!-- New Track: Blicky Slap above Won't Fold -->
                    <div class="recent-track-item" onclick="playNewTrack('Blicky Slap', 'https://storage.googleapis.com/hertz-music-folder/Blicky%20Slap.mp3', 'Blicky Slap', 'VAI-PE');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                     <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Blicky Slap cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -9209,6 +9228,27 @@
                 <tr class="track-row" onclick="playNewTrack('Talk to Me', 'https://storage.googleapis.com/hertz-music-folder/Talk%20to%20Me.mp3', 'Talk to Me', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">35</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=400&q=80" alt="Talk to Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Talk to Me</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Lambo-Ambo', 'https://storage.googleapis.com/hertz-music-folder/Biology_Heals_FULL_SONG_MusicGPT.mp3', 'Lambo-Ambo', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">36</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:car-sports.svg?color=%23ffd700" alt="Lambo-Ambo cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Lambo-Ambo</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Sirens', 'https://storage.googleapis.com/hertz-music-folder/Sirens__Spark_FULL_SONG_MusicGPT.mp3', 'Sirens', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">37</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%23ff2b2b'/%3E%3Cstop offset='100%25' stop-color='%23004dff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='12' fill='%2313182b'/%3E%3Cpath d='M20 39h24l-2-11c-.4-2.1-2.2-3.6-4.3-3.6H26.3c-2.1 0-3.9 1.5-4.3 3.6L20 39Z' fill='url(%23b)'/%3E%3Cpath d='M28 18h8v6h-8z' fill='%23f6f7fb'/%3E%3Ccircle cx='21' cy='22' r='6' fill='%23ff2b2b'/%3E%3Ccircle cx='43' cy='22' r='6' fill='%23004dff'/%3E%3Ccircle cx='21' cy='22' r='2.5' fill='%23fff'/%3E%3Ccircle cx='43' cy='22' r='2.5' fill='%23fff'/%3E%3Cpath d='M17 18c2.6-3.1 5.5-4.7 8.7-4.7M47 18c-2.6-3.1-5.5-4.7-8.7-4.7' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' opacity='.8'/%3E%3Cpath d='M12 29c3.1 1.8 5.4 2.5 8.7 2.5M52 29c-3.1 1.8-5.4 2.5-8.7 2.5' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' opacity='.7'/%3E%3C/svg%3E" alt="Sirens cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sirens</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Troops', 'https://storage.googleapis.com/hertz-music-folder/Stop_The_Spark_FULL_SONG_MusicGPT.mp3', 'Troops', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">38</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:shield-account.svg?color=%23ffd700" alt="Troops cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Troops</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -10399,6 +10439,50 @@
               'if ya feelin stressed uh, keep it pushin n flex uh yea',
               '',
               'Heavy Heavy Heavy Heavy'
+            ].join('\n'),
+            'Lambo-Ambo': [
+              'healer healer healer uh, oh uhh',
+              '',
+              'many times i was hurtin, used to flatulate, had to call an ambulance, made me feel the ambience, sittin there reliant, havin real compliance, uh, made me think i needa trust the science, oh science yea yea,',
+              '',
+              'biology, trust the process n you\'ll really see, healed is what they want ya to be, all deez workers care bout ya health, makin ya feel well, never put em off cos they be workin to save ya, oh, like to make people heal, it\'s so awesome real real real',
+              '',
+              'If ya get picked by a gorgeous chick, she\'ll make the ambo feel like a lambo real quick, sexy paramedic makes things real hectic, some might find they heal when they see her, so gorgeous really fuckin saves ya, princess charmin to heal ya',
+              '',
+              'Princess princess princess, paramedic, uh',
+              '',
+              'biology, trust the process n you\'ll really see, healed is what they want ya to be, all deez workers care bout ya health, makin ya feel well, never put em off cos they be workin to save ya, oh, like to make people heal, it\'s so awesome real real real'
+            ].join('\n'),
+            'Troops': [
+              'troops troops troops troops',
+              '',
+              'they go to wars, seekin to stop a phase, they fight real hard to just save their space, they jus pull up wid their guns out to block the opps, uh, they wish to stop the war, stead of causin the spark, uh,',
+              '',
+              'they wish to fight for the peeps in their homeland, wish to stop a country seekin violence, wish to see they family yea yea, if that means they have to dead the plebs uh',
+              '',
+              'certain countries so corrupt, makes ya wonder, why some countries have disgust, what the fuck? uh, what about their country makes em seek the blood yea, why fight when you could go, only one reason, cause they seek the power n control uh,',
+              '',
+              'some seek a war, for one reason, but they need to look back, look at history, it\'s real whack, got me thinkin, what the fuck is that?',
+              'Props to the troops, who fight it, yea yea yea',
+              '',
+              'they wish to fight for the peeps in their homeland, wish to stop a country seekin all the bloodshed, wish to see they family yea, if that means they have to dead the plebs uh',
+              '',
+              'Props to the troops yea, fightin wars to stop it, uh, look at all their struggle, stead of all the violence, uh yea yea.'
+            ].join('\n'),
+            'Sirens': [
+              'Gotta., Gotta Gotta Love em yea, uh',
+              '',
+              'In the streets hear the sirens, in the hood see em runnin\' with the drugs n acts of violence got me thinkin\' oh yea it\'s a fuckin\' ruckus uh, people workin\' hard with the sirens, none of em can be called a novice, whether they pretty, whether they strong, whether they luv tech n forever more,',
+              '',
+              'They stop the bad guys, stop the crime, harness crims yeah, with some fines, they work real hard uh, they stop the cause, they do this shit in their sleep for a few bucks uh, heroes dont wear capes yeah, the zoom around givin\' the crims a plague, oh yea, yea yea, they got a backbone, they real brave, i like to see em end the tyrannic reign oh yea, yea, yea, yea',
+              '',
+              'They so brave right? They the spark, they save lives, with the risk of their spark uh, they try so hard, they see em flee, but the chase gives em peace, makes it pre pre interesting, when they chase, stop the bad guys by doin\' a race, they try to hustle to match their pace, then the bad guys fall n they jus ball uh yea yea yea yea',
+              '',
+              'They just want the world to feel free, wanna save lives so they call the ambo with peace, wanna spark a fight without a lambo, its too right seein\' hotties as the po po.... Let me hit, they so fine, got me lustin\' everytime, these women too tight uh, make me stiff, uh, yea',
+              '',
+              'They stop the bad guys, stop the crime, harness crims yeah, with some fines, they work real hard uh, they stop the cause, they do this shit in their sleep for a few bucks uh, heroes dont wear capes yeah, the zoom around givin\' the crims a plague, oh yea, yea yea, they got a backbone, they real brave, i like to see em end the tyrannic reign oh yea, yea, yea, yea',
+              '',
+              'Gotta Gotta Gotta Gotta Love em oh yea'
             ].join('\n'),
             'See her Happy': [
               'she could be my everythin, i\'d love to see her',
@@ -25262,7 +25346,15 @@ function showGenrePopup(genre) {
 
     function loadTrack(idx, autoplay = true) {
       if (!allTracks[idx] || !allTracks[idx].url) return;
-      stickyPlayer.style.display = 'flex';
+      if (window.__hzStickySelectionUnlocked === true) {
+        stickyPlayer.style.display = 'flex';
+        stickyPlayer.style.opacity = '1';
+        stickyPlayer.style.visibility = 'visible';
+      } else {
+        stickyPlayer.style.display = 'none';
+        stickyPlayer.style.opacity = '0';
+        stickyPlayer.style.visibility = 'hidden';
+      }
       playerAudio.src = allTracks[idx].url;
       playerTrackTitle.textContent = allTracks[idx].name;
       currentIndex = idx;
@@ -27928,6 +28020,26 @@ document.addEventListener('DOMContentLoaded', function() {
   let hasTrackActivation = false;
   let scrollTimeout = null;
   let lastScrollY = window.scrollY;
+  if (window.__hzStickySelectionUnlocked !== true) {
+    window.__hzStickySelectionUnlocked = false;
+  }
+  if (window.__hzStickySelectionUnlocked !== true) {
+    window.__hzStickySelectionUnlocked = false;
+  }
+
+  const markStickySelectionUnlocked = function() {
+    window.__hzStickySelectionUnlocked = true;
+  };
+
+  document.addEventListener('click', function(event) {
+    const target = event.target;
+    if (!target) return;
+
+    const selectableTrack = target.closest('.recent-track-item, .track-row, .playlist-track-item, [onclick*="playNewTrack("]');
+    if (selectableTrack) {
+      markStickySelectionUnlocked();
+    }
+  }, true);
 
   // Track scroll position and update player visibility
   function handleScroll() {
@@ -27969,11 +28081,11 @@ document.addEventListener('DOMContentLoaded', function() {
   function updatePlayerVisibility() {
     if (!stickyPlayer || !playerAudio) return;
 
-    const isTrackLoaded = !!(playerAudio.src && playerAudio.readyState >= 2);
     const isAudioActive = !playerAudio.paused ||
       (playerAudio.currentTime > 0 && playerAudio.readyState >= 2);
+    const isAudioPlaying = !playerAudio.paused && !playerAudio.ended;
     const trackHasEnded = !!playerAudio.ended;
-    const canShowPlayer = isAudioActive || (isTrackLoaded && hasTrackActivation);
+    const canShowPlayer = window.__hzStickySelectionUnlocked === true && (isAudioActive || isAudioPlaying);
 
     if (canShowPlayer) {
       if (stickyPlayer.style.display === 'none') {
@@ -27992,14 +28104,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       isPlayerVisible = true;
-    } else if (!hasTrackActivation && !isAudioActive && !isTrackLoaded && !trackHasEnded) {
-      // Hide player when there is no loaded/playing track.
+    } else if (window.__hzStickySelectionUnlocked !== true || trackHasEnded) {
+      // Hide player before any selection, or after track end.
       stickyPlayer.style.opacity = '0';
 
       setTimeout(() => {
-        const stillNotReady = !playerAudio.src || playerAudio.readyState < 2;
-        const stillInactive = playerAudio.paused && playerAudio.currentTime === 0;
-        if (stillNotReady || stillInactive) {
+        const shouldHide = window.__hzStickySelectionUnlocked !== true || playerAudio.ended;
+        if (shouldHide) {
           stickyPlayer.style.display = 'none';
           isPlayerVisible = false;
           window.removeEventListener('scroll', handleScroll);
@@ -28017,8 +28128,10 @@ document.addEventListener('DOMContentLoaded', function() {
   if (stickyPlayer && !stickyPlayer.dataset.preselectVisibilityGuard) {
     stickyPlayer.dataset.preselectVisibilityGuard = 'true';
     const preselectGuard = new MutationObserver(() => {
-      if (!hasTrackActivation && stickyPlayer.style.display !== 'none') {
+      if (window.__hzStickySelectionUnlocked !== true && stickyPlayer.style.display !== 'none') {
         stickyPlayer.style.display = 'none';
+        stickyPlayer.style.opacity = '0';
+        stickyPlayer.style.visibility = 'hidden';
       }
     });
     preselectGuard.observe(stickyPlayer, { attributes: true, attributeFilter: ['style'] });
@@ -28047,7 +28160,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     playerAudio.addEventListener('pause', updatePlayerVisibility);
     playerAudio.addEventListener('loadstart', function() {
-      hasTrackActivation = true;
       updatePlayerVisibility();
     });
     playerAudio.addEventListener('ended', updatePlayerVisibility);
@@ -28137,6 +28249,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (typeof window.playNewTrack === 'function' && !window.playNewTrack._hzStickyControlWrapped) {
     const originalPlayNewTrack = window.playNewTrack;
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      markStickySelectionUnlocked();
       const currentRef = getCurrentTrackRef();
       const nextRef = trackId || trackTitle || '';
       if (currentRef && nextRef && normalizeTrackKey(currentRef) !== normalizeTrackKey(nextRef)) {
@@ -28179,19 +28292,59 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
-      const order = getHomepageTrackOrder();
       const currentRef = getCurrentTrackRef();
       const currentKey = normalizeTrackKey(currentRef);
-      const currentIndex = order.findIndex(function(id) { return normalizeTrackKey(id) === currentKey; });
+
+      const recentOrder = (typeof window.getSectionTrackOrder === 'function')
+        ? window.getSectionTrackOrder('recent')
+        : [];
+      const popularOrder = (typeof window.getSectionTrackOrder === 'function')
+        ? window.getSectionTrackOrder('popular')
+        : [];
+
+      const findIndexByKey = function(order) {
+        return order.findIndex(function(id) {
+          return normalizeTrackKey(id) === currentKey;
+        });
+      };
+
+      const recentIndex = findIndexByKey(recentOrder);
+      const popularIndex = findIndexByKey(popularOrder);
+
+      let activeOrder = [];
+      let activeIndex = -1;
+      if (window.__hzLastSelectedSection === 'recent' && recentIndex >= 0) {
+        activeOrder = recentOrder;
+        activeIndex = recentIndex;
+      } else if (window.__hzLastSelectedSection === 'popular' && popularIndex >= 0) {
+        activeOrder = popularOrder;
+        activeIndex = popularIndex;
+      } else if (recentIndex >= 0) {
+        activeOrder = recentOrder;
+        activeIndex = recentIndex;
+      } else if (popularIndex >= 0) {
+        activeOrder = popularOrder;
+        activeIndex = popularIndex;
+      } else {
+        activeOrder = Array.isArray(window.trackOrder) && window.trackOrder.length > 0
+          ? window.trackOrder
+          : getHomepageTrackOrder();
+        activeIndex = activeOrder.findIndex(function(id) { return normalizeTrackKey(id) === currentKey; });
+      }
 
       if (currentRef) {
         playedTrackHistory.push(currentRef);
         if (playedTrackHistory.length > 200) playedTrackHistory.shift();
       }
 
-      if (order.length > 0 && currentIndex >= 0) {
-        const nextId = order[(currentIndex + 1) % order.length];
-        if (playTrackById(nextId)) return;
+      if (activeOrder.length > 0 && activeIndex >= 0) {
+        const nextIndex = (activeIndex + 1) % activeOrder.length;
+        const nextId = activeOrder[nextIndex];
+        if (playTrackById(nextId)) {
+          window.trackOrder = activeOrder;
+          window.currentTrackIndex = nextIndex;
+          return;
+        }
       }
 
       if (typeof window.playNext === 'function') {
