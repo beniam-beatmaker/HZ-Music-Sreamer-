@@ -662,7 +662,243 @@
       const trackInfo = window.findTrackInfoForLyrics(trackId, trackTitle, trackArtist);
       const resolvedTitle = trackInfo.title || trackTitle || trackId || 'Unknown Track';
       const resolvedArtist = trackInfo.artist || trackArtist || 'Unknown Artist';
-      const lyricsText = trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist);
+      const normalizedResolvedTitle = String(resolvedTitle || '').replace(/&#39;/g, "'").trim().toLowerCase();
+      const everytimeLyrics = `Where you at? Lemme find ya, if i'd known i'd straight up see ya, you a dime, make me question life, been wantin to see ya yea, everytime, uh uh
+
+Come find me, see for yaself, i really wanna luh ya, so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what ya might find uh,
+
+tried many times to see ya, wanted to find ya oh uh, never even knew ya, but i thought it might be right yea, uh, took so many shots, but i balled out, its ya turn  n find out uh
+
+really gotta take a chance oh uh, who knows what might happen yea
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what ya might  find uh,
+Come find me, find me, find me, find me, find me, find me uh
+
+ take a chance oh uh, been a bitch for me everytime, it's your turn, better make it right, imma luh you for all my life`;
+      const sickaBugsLyrics = `sicka bugs ooh Sicka Bugs ooh
+at rare times i wake up n see em in my room makes me wanna dead em soon
+steada watchin em jump from the floor too my bed ooh, shit is wild, growin up seein roaches from a mile, got me feelin like i needa change some tiles yea, uh
+
+
+seein bugs in ya rooms like seein ghosts too soon
+got me feelin like i needa new place to rest ooh, roaches on my face, feelin bugs on my back, i jus wanna lay down relaxed, dis shit makes me rageful, at times i wanna find the nest, all so i can wipe em dead, uh
+
+
+seen a lot bugs uh, roaches, midges, spiders, oh, seen a lotta
+mice too yea, had to dead one in my bath tub yea, named him frank and then i watched as he sank oh,
+sank sank sank sank
+from the floor too my bed
+ooh, shit is wild, got me sayin Fuck you you you you
+
+
+seein bugs in ya rooms like seein ghosts too soon
+got me feelin like i needa new place to rest ooh
+ roaches on my face, feelin bugs on my back i jus wanna lay down relaxed, dis shit makes me rageful
+ at times i wanna find the nest, all so i can wipe em dead, uh
+
+at rare times i wake up  n see em in my room, last night seen a cricket too, gotta terminate all these bugs real soon yea`;
+      const solidNightLyrics = `need a new fuckin bed
+at times i slip in dis depth
+
+jus to get some rest
+
+i needa fix this fuckin bed uh
+
+the frame keep talkin back
+every spring got a crack
+i lay down, then i sink
+like the floor stole my back
+
+pillow folded in half
+blanket dragged to the side
+i'm tired of fightin sleep
+with a busted-up ride
+
+need a new fuckin bed
+need a new fuckin bed
+
+
+i been draggin through days
+with a bruise in my spine
+one clean place to lay
+and i might be alright
+
+no more tossin around
+no more countin the pain
+just a solid-ass night
+and a reset in my brain
+
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+
+need a new fuckin bed
+need a new fuckin bed
+
+if i get that first good sleep
+i might come back blessed
+
+
+mattress saggin in the middle
+like it know all my weight
+every morning feel petty
+every night feel late
+
+i want sheets that sit right
+i want corners pulled tight
+i want one quiet room
+that can hold me right
+
+no more creaks in the dark
+no more sink in the seam
+just a place that don't fight me
+when i'm weak and i'm mean
+
+
+i been draggin through days
+with a bruise in my spine
+one clean place to lay
+and i might be alright
+
+no more tossin around
+no more countin the pain
+just a solid-ass night
+and a reset in my brain
+
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+
+need a new fuckin bed
+need a new fuckin bed
+if i get that first good sleep
+i might come back blessed
+
+
+take this frame away
+take this ache from my bones
+i'm tired of wakin up
+feelin broke in my home
+
+give me four good walls
+and a bed that don't cave
+let me shut it all down
+let me sleep like I'm saved
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+need a new fuckin bed
+need a new fuckin bed
+need a new fuckin bed
+if i get that first good sleep
+i might come back blessed`;
+      const findMeLyrics = `Where you at? Lemme find ya, if i'd known i'd straight up see ya, you a dime, make me question life, been wantin to see ya yea, everytime, uh uh
+
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what might happen uh,
+
+
+tried many times to see ya, wanted to find ya oh uh, never even knew ya, but i thought it might be right yea, uh, took so many shots, but i balled out, now its ya turn see what happens uh
+
+really gotta take a chance oh uh, who knows what might happen yea
+
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what might happen uh,
+Come find me, find me, find me, find me, find me, find me uh
+
+
+take a chance oh uh, been a bitch for me everytime, it's your turn, better make it right, imma luh you for all my life`;
+      const takeASwingLyrics = `If it's tennis, take a swing
+Feel the court under your feet
+If it's golf, line up clean
+Watch the ball go dancing neat
+
+If it's basketball, run that lane
+Catch that pass, don't overthink
+If it's NFL, hear the crowd
+Then you jump right in the ring
+
+
+Try it once
+Try it twice
+Might be yours
+Might feel right
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows
+
+
+Borrow shoes, borrow time
+Learn the rhythm, learn the pace
+Miss one shot, miss one beat
+Still you find your little place
+
+Maybe one spark turns to fire
+Maybe one game turns to more
+Every start begins with try
+Open up that locker door
+
+
+Try it once
+Try it twice
+Might be yours
+Might feel right
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows
+
+
+From the first bounce
+To the last drive
+You don't know till you arrive
+
+One small try
+One big grin
+Could be where your love begins
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows`;
+      const lyricsText = normalizedResolvedTitle === 'everytime'
+        ? everytimeLyrics
+        : (normalizedResolvedTitle === 'sicka bugs'
+          ? sickaBugsLyrics
+          : (normalizedResolvedTitle === 'solid night'
+            ? solidNightLyrics
+            : ((normalizedResolvedTitle === 'find me' || normalizedResolvedTitle === 'find me cover' || normalizedResolvedTitle === 'everytime - cover')
+              ? findMeLyrics
+              : (normalizedResolvedTitle === 'take a swing'
+                ? takeASwingLyrics
+                : (trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist))))));
 
       panelTitle.textContent = resolvedTitle + ' — ' + resolvedArtist;
       panelBody.textContent = lyricsText;
@@ -7930,6 +8166,51 @@
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('Everytime', 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', 'Everytime', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:repeat.svg?color=%23ffd700" alt="Everytime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Everytime</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Sicka Bugs', 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', 'Sicka Bugs', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:ladybug.svg?color=%23ffd700" alt="Sicka Bugs cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Sicka Bugs</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Solid Night', 'https://storage.googleapis.com/hertz-music-folder/Solid%20Night.mp3', 'Solid Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Solid Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Solid Night</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Take a Swing', 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', 'Take a Swing', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:baseball-bat.svg?color=%23ffd700" alt="Take a Swing cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Take a Swing</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Find Me', 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', 'Everytime - Cover', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:map-marker-question.svg?color=%23ffd700" alt="Find Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Everytime - Cover</div>
+                    <div class="recent-track-artist">B Tilla</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <!-- New Track: Paradise at top with gold effect -->
                  <div class="recent-track-item" onclick="playNewTrack('Paradise', 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', 'Paradise', 'Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:beach.svg?color=%23ffd700" alt="Paradise cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -8979,6 +9260,41 @@
             </tr>
           </thead>
           <tbody>
+                <tr class="track-row" onclick="playNewTrack('Everytime', 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', 'Everytime', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:repeat.svg?color=%23ffd700" alt="Everytime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Everytime</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Sicka Bugs', 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', 'Sicka Bugs', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:ladybug.svg?color=%23ffd700" alt="Sicka Bugs cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sicka Bugs</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Solid Night', 'https://storage.googleapis.com/hertz-music-folder/Solid%20Night.mp3', 'Solid Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Solid Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Solid Night</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Take a Swing', 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', 'Take a Swing', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:baseball-bat.svg?color=%23ffd700" alt="Take a Swing cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Take a Swing</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Find Me', 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', 'Everytime - Cover', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:map-marker-question.svg?color=%23ffd700" alt="Find Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Everytime - Cover</div><div class="track-artist">B Tilla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <!-- New Track: Paradise at top with gold border -->
                 <tr class="track-row" onclick="playNewTrack('Paradise', 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', 'Paradise', 'Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
@@ -12297,6 +12613,256 @@
             const cacheKey = normalizeValue(trackInfo.title) + '::' + normalizeValue(trackInfo.artist);
             if (window.lyricsCache[cacheKey]) {
               return window.lyricsCache[cacheKey];
+            }
+
+            if (normalizeValue(trackInfo.title) === 'everytime') {
+              const everytimeLyrics = `Where you at? Lemme find ya, if i'd known i'd straight up see ya, you a dime, make me question life, been wantin to see ya yea, everytime, uh uh
+
+Come find me, see for yaself, i really wanna luh ya, so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what ya might find uh,
+
+tried many times to see ya, wanted to find ya oh uh, never even knew ya, but i thought it might be right yea, uh, took so many shots, but i balled out, its ya turn  n find out uh
+
+really gotta take a chance oh uh, who knows what might happen yea
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what ya might  find uh,
+Come find me, find me, find me, find me, find me, find me uh
+
+ take a chance oh uh, been a bitch for me everytime, it's your turn, better make it right, imma luh you for all my life`;
+              window.lyricsCache[cacheKey] = everytimeLyrics;
+              return everytimeLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'sicka bugs') {
+              const sickaBugsLyrics = `sicka bugs ooh Sicka Bugs ooh
+at rare times i wake up n see em in my room makes me wanna dead em soon 
+steada watchin em jump from the floor too my bed ooh, shit is wild, growin up seein roaches from a mile, got me feelin like i needa change some tiles yea, uh
+
+
+seein bugs in ya rooms like seein ghosts too soon
+got me feelin like i needa new place to rest ooh, roaches on my face, feelin bugs on my back, i jus wanna lay down relaxed, dis shit makes me rageful, at times i wanna find the nest, all so i can wipe em dead, uh
+
+
+seen a lot bugs uh, roaches, midges, spiders, oh, seen a lotta
+mice too yea, had to dead one in my bath tub yea, named him frank and then i watched as he sank oh,
+sank sank sank sank
+from the floor too my bed
+ooh, shit is wild, got me sayin Fuck you you you you
+
+
+seein bugs in ya rooms like seein ghosts too soon
+got me feelin like i needa new place to rest ooh
+ roaches on my face, feelin bugs on my back i jus wanna lay down relaxed, dis shit makes me rageful
+ at times i wanna find the nest, all so i can wipe em dead, uh
+
+at rare times i wake up  n see em in my room, last night seen a cricket too, gotta terminate all these bugs real soon yea`;
+              window.lyricsCache[cacheKey] = sickaBugsLyrics;
+              return sickaBugsLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'solid night') {
+              const solidNightLyrics = `need a new fuckin bed
+at times i slip in dis depth
+
+jus to get some rest
+
+i needa fix this fuckin bed uh
+
+the frame keep talkin back
+every spring got a crack
+i lay down, then i sink
+like the floor stole my back
+
+pillow folded in half
+blanket dragged to the side
+i'm tired of fightin sleep
+with a busted-up ride
+
+need a new fuckin bed
+need a new fuckin bed
+
+
+i been draggin through days
+with a bruise in my spine
+one clean place to lay
+and i might be alright
+
+no more tossin around
+no more countin the pain
+just a solid-ass night
+and a reset in my brain
+
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+
+need a new fuckin bed
+need a new fuckin bed
+
+if i get that first good sleep
+i might come back blessed
+
+
+mattress saggin in the middle
+like it know all my weight
+every morning feel petty
+every night feel late
+
+i want sheets that sit right
+i want corners pulled tight
+i want one quiet room
+that can hold me right
+
+no more creaks in the dark
+no more sink in the seam
+just a place that don't fight me
+when i'm weak and i'm mean
+
+
+i been draggin through days
+with a bruise in my spine
+one clean place to lay
+and i might be alright
+
+no more tossin around
+no more countin the pain
+just a solid-ass night
+and a reset in my brain
+
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+
+need a new fuckin bed
+need a new fuckin bed
+if i get that first good sleep
+i might come back blessed
+
+
+take this frame away
+take this ache from my bones
+i'm tired of wakin up
+feelin broke in my home
+
+give me four good walls
+and a bed that don't cave
+let me shut it all down
+let me sleep like I'm saved
+
+need a new fuckin bed
+need a new fuckin bed
+i need some real damn rest
+need a new fuckin bed
+need a new fuckin bed
+need a new fuckin bed
+need a new fuckin bed
+if i get that first good sleep
+i might come back blessed`;
+              window.lyricsCache[cacheKey] = solidNightLyrics;
+              return solidNightLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'find me' || normalizeValue(trackInfo.title) === 'find me cover' || normalizeValue(trackInfo.title) === 'everytime - cover') {
+              const findMeLyrics = `Where you at? Lemme find ya, if i'd known i'd straight up see ya, you a dime, make me question life, been wantin to see ya yea, everytime, uh uh
+
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what might happen uh,
+
+
+tried many times to see ya, wanted to find ya oh uh, never even knew ya, but i thought it might be right yea, uh, took so many shots, but i balled out, now its ya turn see what happens uh
+
+really gotta take a chance oh uh, who knows what might happen yea
+
+
+Come find me, see for yaself, i really wanna luh ya,  so pray tell, you jus needa find me, i tried, been a bitch for me everytime, uh, really gotta take a chance, you never know what might happen uh,
+Come find me, find me, find me, find me, find me, find me uh
+
+
+take a chance oh uh, been a bitch for me everytime, it's your turn, better make it right, imma luh you for all my life`;
+              window.lyricsCache[cacheKey] = findMeLyrics;
+              return findMeLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'take a swing') {
+              const takeASwingLyrics = `If it's tennis, take a swing
+Feel the court under your feet
+If it's golf, line up clean
+Watch the ball go dancing neat
+
+If it's basketball, run that lane
+Catch that pass, don't overthink
+If it's NFL, hear the crowd
+Then you jump right in the ring
+
+
+Try it once
+Try it twice
+Might be yours
+Might feel right
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows
+
+
+Borrow shoes, borrow time
+Learn the rhythm, learn the pace
+Miss one shot, miss one beat
+Still you find your little place
+
+Maybe one spark turns to fire
+Maybe one game turns to more
+Every start begins with try
+Open up that locker door
+
+
+Try it once
+Try it twice
+Might be yours
+Might feel right
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows
+
+
+From the first bounce
+To the last drive
+You don't know till you arrive
+
+One small try
+One big grin
+Could be where your love begins
+
+
+If it's tennis, golf, basketball
+If it's NFL, give it all
+Try to play, try to play
+Might like it, might love it, who knows
+
+Try to play, try to play
+Might like it, might love it, who knows
+If it calls your name tonight
+Step up, step up, see what grows`;
+              window.lyricsCache[cacheKey] = takeASwingLyrics;
+              return takeASwingLyrics;
             }
 
             const storedLyrics = String(trackInfo.lyrics || '').trim();
