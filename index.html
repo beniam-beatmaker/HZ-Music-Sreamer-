@@ -1186,6 +1186,8 @@ Step up, step up, see what grows`;
 
       console.log('🎵 Setting audio source to:', trackUrl);
       playerAudio.src = trackUrl;
+      // Apply current loop state so new tracks respect the loop button setting
+      playerAudio.loop = (window.loopMode === 1);
 
       // Update track title display
       if (playerTrackTitle) {
@@ -1218,14 +1220,14 @@ Step up, step up, see what grows`;
         window.renderLyricsForTrack(trackId, trackTitle, trackArtist);
       }
 
-      // SPOTIFY-STYLE INSTANT PLAYBACK - SAME AS BULLETPROOF VERSION
+      // Start fetching immediately so selected tracks begin as fast as possible.
       playerAudio.autoplay = true;
+      playerAudio.preload = 'auto';
       if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
 
       let playbackStarted = false;
 
-      // Strategy 1: Immediate play
-      playerAudio.play().then(() => {
+      const onPlaybackStarted = function() {
         playbackStarted = true;
         if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
         if (typeof window.updateLikeButtonState === 'function') {
@@ -1242,57 +1244,44 @@ Step up, step up, see what grows`;
             }]
           });
         }
-      }).catch(() => {});
+      };
 
-      // Strategy 2: LoadedData
-      playerAudio.addEventListener('loadeddata', function() {
-        if (!playbackStarted) {
-          playerAudio.play().then(() => {
-            playbackStarted = true;
-            if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
-            if (typeof window.updateLikeButtonState === 'function') {
-              window.updateLikeButtonState(trackId);
-            }
-          }).catch(() => {});
-        }
-      }, { once: true });
+      const attemptImmediatePlayback = function() {
+        if (playbackStarted) return;
+        playerAudio.play().then(onPlaybackStarted).catch(() => {
+          if (playPauseBtn) {
+            playPauseBtn.innerHTML = '&#9654;';
+            playPauseBtn.onclick = function() {
+              playerAudio.play().then(() => {
+                playPauseBtn.innerHTML = '&#10073;&#10073;';
+                playPauseBtn.onclick = function() {
+                  if (playerAudio.paused) {
+                    playerAudio.play();
+                    playPauseBtn.innerHTML = '&#10073;&#10073;';
+                  } else {
+                    playerAudio.pause();
+                    playPauseBtn.innerHTML = '&#9654;';
+                  }
+                };
+              });
+            };
+          }
+        });
+      };
 
-      // Strategy 3: CanPlay
-      playerAudio.addEventListener('canplay', function() {
-        if (!playbackStarted) {
-          playerAudio.play().then(() => {
-            playbackStarted = true;
-            if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
-          }).catch(() => {
-            if (playPauseBtn) {
-              playPauseBtn.innerHTML = '&#9654;';
-              playPauseBtn.onclick = function() {
-                playerAudio.play().then(() => {
-                  playPauseBtn.innerHTML = '&#10073;&#10073;';
-                  playPauseBtn.onclick = function() {
-                    if (playerAudio.paused) {
-                      playerAudio.play();
-                      playPauseBtn.innerHTML = '&#10073;&#10073;';
-                    } else {
-                      playerAudio.pause();
-                      playPauseBtn.innerHTML = '&#9654;';
-                    }
-                  };
-                });
-              };
-            }
-          });
-        }
-      }, { once: true });
+      // Force fetch now, then try play immediately in the same selection flow.
+      playerAudio.load();
+      attemptImmediatePlayback();
+
+      // Retry quickly as media becomes ready.
+      playerAudio.addEventListener('loadeddata', attemptImmediatePlayback, { once: true });
+      playerAudio.addEventListener('canplay', attemptImmediatePlayback, { once: true });
 
       // Error handler
       playerAudio.addEventListener('error', function(e) {
         console.error('❌ ERROR:', e);
         if (playPauseBtn) playPauseBtn.innerHTML = '&#9654;';
       }, { once: true });
-
-      // Force load
-      playerAudio.load();
 
       // Ensure all control buttons are functional
       if (playPauseBtn && !playPauseBtn.onclick) {
@@ -13318,7 +13307,7 @@ Step up, step up, see what grows`;
           // Make variables globally accessible for Media Session handlers
           window.currentTrackIndex = 0;
           window.isShuffled = false;
-          window.loopMode = 0; // 0 = no loop, 1 = loop all, 2 = loop one
+          window.loopMode = 0; // 0 = no loop, 1 = loop one (song repeats)
           window.trackOrder = trackOrder;
 
           // Keep local references for backward compatibility
@@ -13363,38 +13352,33 @@ Step up, step up, see what grows`;
             playTrack(trackOrder[currentTrackIndex]);
           });
 
-          // Loop - Three-state system: normal -> loop all -> loop one -> normal
+          // Loop - Two-state toggle: off -> loop one -> off
           loopBtn.addEventListener('click', function() {
-            loopMode = (loopMode + 1) % 3;
+            var audioEl = document.getElementById('playerAudio');
+            loopMode = loopMode === 0 ? 1 : 0;
             window.loopMode = loopMode;
+
+            // Disable transition so color change is instant
+            loopBtn.style.transition = 'none';
 
             if (loopMode === 0) {
               // No loop - normal playback
-              playerAudio.loop = false;
+              if (audioEl) audioEl.loop = false;
               loopBtn.innerHTML = '🔂';
               loopBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
               loopBtn.style.color = '#FFD700';
               loopBtn.style.boxShadow = 'none';
               loopBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
               console.log('🔂 Loop OFF - Normal playback');
-            } else if (loopMode === 1) {
-              // Loop all - plays next track when current ends
-              playerAudio.loop = false;
-              loopBtn.innerHTML = '🔂';
-              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
-              loopBtn.style.color = '#fff';
-              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.4)';
-              loopBtn.style.border = '2px solid #0066ff';
-              console.log('🔂 Loop ALL - Will continue to next track');
-            } else if (loopMode === 2) {
+            } else {
               // Loop one - repeats current track
-              playerAudio.loop = true;
-              loopBtn.innerHTML = '🔂1';
+              if (audioEl) audioEl.loop = true;
+              loopBtn.innerHTML = '🔂';
               loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
               loopBtn.style.color = '#fff';
               loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
               loopBtn.style.border = '2px solid #0066ff';
-              console.log('🔂 Loop ONE - Current track will repeat');
+              console.log('🔂 Loop ON - Current track will repeat');
             }
           });
 
@@ -26009,40 +25993,25 @@ function showGenrePopup(genre) {
 
     function toggleLoop() {
       if (typeof window.loopMode === 'number') {
-        // Sync with the primary three-state loop handler.
+        // Sync with the two-state loop handler: 0 = off, 1 = loop one
         const mode = window.loopMode;
-        isLoop = mode === 2;
+        isLoop = mode === 1;
         playerAudio.loop = isLoop;
         loopBtn.classList.toggle('active', mode !== 0);
-
-        // First click (loop mode 1): follow UI section order from current track onward.
-        if (mode === 1) {
-          const orderedTrackIds = [];
-          const seen = new Set();
-          const sectionItems = document.querySelectorAll('.recently-played-list .recent-track-item, .track-table .track-row');
-
-          sectionItems.forEach((item) => {
-            const onclick = item.getAttribute('onclick') || '';
-            const match = onclick.match(/playNewTrack\('((?:\\'|[^'])+)'/);
-            if (!match) return;
-
-            const trackId = match[1].replace(/\\'/g, "'").replace(/&#39;/g, "'");
-            if (!trackId || seen.has(trackId)) return;
-
-            seen.add(trackId);
-            orderedTrackIds.push(trackId);
-          });
-
-          if (orderedTrackIds.length > 0) {
-            trackOrder = orderedTrackIds;
-            window.trackOrder = orderedTrackIds;
-
-            const activeTrackId = window.currentTrackId || window.currentTrackData?.id || window.currentTrackData?.title;
-            const activeIndex = orderedTrackIds.indexOf(activeTrackId);
-            if (activeIndex >= 0) {
-              currentTrackIndex = activeIndex;
-              window.currentTrackIndex = activeIndex;
-            }
+        // Apply blue instantly when on, gold when off - no transition
+        const lb = document.getElementById('loopBtn');
+        if (lb) {
+          lb.style.transition = 'none';
+          if (isLoop) {
+            lb.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
+            lb.style.color = '#fff';
+            lb.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
+            lb.style.border = '2px solid #0066ff';
+          } else {
+            lb.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
+            lb.style.color = '#FFD700';
+            lb.style.boxShadow = 'none';
+            lb.style.border = '1px solid rgba(255, 215, 0, 0.3)';
           }
         }
       } else {
