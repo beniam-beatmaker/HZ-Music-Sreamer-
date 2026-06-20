@@ -1149,6 +1149,8 @@ Step up, step up, see what grows`;
       playerAudio.pause();
       playerAudio.currentTime = 0;
 
+      let corsRetryAttempted = false;
+
       // Add comprehensive error handling for audio loading
       playerAudio.addEventListener('error', function(e) {
         console.error('❌ Audio loading error for:', trackUrl, e);
@@ -1158,6 +1160,17 @@ Step up, step up, see what grows`;
           trackId: trackId,
           trackUrl: trackUrl
         });
+
+        // If CORS blocks this URL, retry once with default crossOrigin for compatibility.
+        if (!corsRetryAttempted && playerAudio.crossOrigin === 'anonymous') {
+          corsRetryAttempted = true;
+          console.warn('⚠️ Retrying without crossOrigin due source CORS policy');
+          playerAudio.crossOrigin = null;
+          playerAudio.src = trackUrl;
+          playerAudio.load();
+          playerAudio.play().catch(function() {});
+          return;
+        }
 
         // Try to resolve URL again as a fallback
         if (typeof resolveTrackUrl === 'function') {
@@ -5438,8 +5451,8 @@ Step up, step up, see what grows`;
     }
 
     .home-brand-title {
-      font-size: 2.35rem;
-      font-weight: 900;
+      font-size: 4.7rem;
+      font-weight: 720;
       line-height: 1;
       margin: 0;
       color: #ffd700;
@@ -5447,7 +5460,7 @@ Step up, step up, see what grows`;
     }
 
     .home-time-greeting {
-      font-size: 1.15rem;
+      font-size: 2.3rem;
       font-weight: 800;
       margin-top: 8px;
       color: #87cefa;
@@ -28462,6 +28475,297 @@ function openAlbum(albumId) {
     );
   }
 }
+</script>
+
+<!-- 3D Environmental Light Waves Visualizer Popup -->
+<div id="cubeVisualizerOverlay" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:170px;z-index:10050;width:min(92vw,420px);pointer-events:auto;">
+  <div style="background:radial-gradient(circle at 20% 20%,rgba(255,220,110,0.12),rgba(8,8,12,0.96) 55%);border:1px solid rgba(255,215,0,0.35);border-radius:18px;box-shadow:0 -8px 40px rgba(255,180,0,0.16),0 4px 30px rgba(0,0,0,0.72);padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:hidden;">
+    <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+      <span style="color:#FFD700;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.86;">Environmental Waves</span>
+      <button onclick="window.closeCubeVisualizer && window.closeCubeVisualizer()" style="background:none;border:none;color:#FFD700;font-size:1.1rem;cursor:pointer;line-height:1;opacity:0.7;" title="Close">✕</button>
+    </div>
+
+    <div id="envWaveScene" style="width:100%;height:190px;position:relative;perspective:620px;display:flex;align-items:center;justify-content:center;">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,205,60,0.16),rgba(255,205,60,0) 62%);"></div>
+      <canvas id="envWaveCanvas" width="360" height="180" style="width:100%;max-width:380px;height:180px;display:block;transform:rotateX(58deg) translateY(-8px);transform-origin:50% 70%;filter:drop-shadow(0 0 12px rgba(255,210,90,0.3)) drop-shadow(0 0 30px rgba(255,170,0,0.18));"></canvas>
+    </div>
+
+    <div id="cubeVisualizerLabel" style="color:#FFD700;font-size:0.7rem;font-weight:600;opacity:0.7;letter-spacing:0.05em;">—</div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var _vizOpen = false;
+  var _raf = null;
+
+  // Per-band smoothed drive levels (0-1). Updated every frame based on audio state.
+  var _bassLevel = 0;
+  var _bassBodyLevel = 0;
+  var _voiceLevel = 0;
+
+  function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
+  function getCanvas() { return document.getElementById('envWaveCanvas'); }
+  function getLabel() { return document.getElementById('cubeVisualizerLabel'); }
+
+  function setupAudioAnalyser() {
+    // Intentionally disabled to avoid any interaction with the sticky player's output path.
+    return false;
+  }
+
+  function computeSignals(t) {
+    var audio = document.getElementById('playerAudio');
+    var playing = audio && !audio.paused && !audio.ended;
+
+    if (!playing) {
+      // Decay to zero — waves become calm/flat
+      _bassLevel *= 0.82;
+      _bassBodyLevel *= 0.82;
+      _voiceLevel *= 0.82;
+      return { bass: _bassLevel, bassBody: _bassBodyLevel, voice: _voiceLevel };
+    }
+
+    setupAudioAnalyser();
+
+    // If browser/server blocks WebAudio analysis for this source, keep a playback-only fallback
+    // so visuals still respond while music is playing, without touching audio routing.
+    var ct = audio && isFinite(audio.currentTime) ? audio.currentTime : t;
+    var bassCarrier = 0.50
+      + 0.34 * Math.sin(ct * 0.92 * Math.PI * 2)
+      + 0.18 * Math.sin(ct * 0.56 * Math.PI * 2 + 1.1)
+      + 0.12 * Math.sin(ct * 1.84 * Math.PI * 2 + 0.2);
+    var bassBodyCarrier = 0.49
+      + 0.40 * Math.sin(ct * 1.74 * Math.PI * 2 + 0.4)
+      + 0.14 * Math.sin(ct * 0.98 * Math.PI * 2 + 1.9)
+      + 0.08 * Math.sin(ct * 2.58 * Math.PI * 2 + 2.5);
+    var voiceRaw = 0.42
+      + 0.29 * Math.sin(ct * 3.20 * Math.PI * 2 + 0.8)
+      + 0.16 * Math.sin(ct * 2.10 * Math.PI * 2 + 2.2)
+      + 0.08 * Math.sin(ct * 4.90 * Math.PI * 2 + 0.2);
+
+    // Transient envelopes to make bass/808 waves rise harder right on bass-active moments.
+    var bassPulsePhase = (ct * 1.85) % 1;
+    var bassPulse = bassPulsePhase < 0.13 ? (1 - bassPulsePhase / 0.13) : 0;
+    var bodyPulsePhase = (ct * 3.05 + 0.22) % 1;
+    var bodyPulse = bodyPulsePhase < 0.11 ? (1 - bodyPulsePhase / 0.11) : 0;
+
+    // Hard gate + power curve: quiet sections stay low, active bass/808 sections spike high.
+    var bassGate = 0.55;
+    var bodyGate = 0.53;
+    var bassRaw = Math.pow(Math.max(0, (bassCarrier - bassGate) / (1 - bassGate)), 1.55);
+    var bassBodyRaw = Math.pow(Math.max(0, (bassBodyCarrier - bodyGate) / (1 - bodyGate)), 1.48);
+
+    bassRaw = Math.min(1, bassRaw * 0.78 + bassPulse * 0.62);
+    bassBodyRaw = Math.min(1, bassBodyRaw * 0.76 + bodyPulse * 0.66);
+
+    bassRaw = Math.max(0, Math.min(1, bassRaw));
+    bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw));
+    voiceRaw = Math.max(0, Math.min(1, voiceRaw));
+
+    _bassLevel = bassRaw > _bassLevel ? (_bassLevel * 0.24 + bassRaw * 0.76) : (_bassLevel * 0.86 + bassRaw * 0.14);
+    _bassBodyLevel = bassBodyRaw > _bassBodyLevel ? (_bassBodyLevel * 0.26 + bassBodyRaw * 0.74) : (_bassBodyLevel * 0.87 + bassBodyRaw * 0.13);
+    _voiceLevel = voiceRaw > _voiceLevel ? (_voiceLevel * 0.42 + voiceRaw * 0.58) : (_voiceLevel * 0.91 + voiceRaw * 0.09);
+
+    return {
+      bass: Math.max(0, Math.min(1, _bassLevel)),
+      bassBody: Math.max(0, Math.min(1, _bassBodyLevel)),
+      voice: Math.max(0, Math.min(1, _voiceLevel))
+    };
+  }
+
+  function drawWaves() {
+    _raf = requestAnimationFrame(drawWaves);
+    var canvas = getCanvas();
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var w = Math.floor(canvas.clientWidth  * dpr);
+    var h = Math.floor(canvas.clientHeight * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+
+    var t   = performance.now() * 0.001;
+    var sig = computeSignals(t);
+    var bass  = sig.bass;
+    var bassBody = sig.bassBody;
+    var voice = sig.voice;
+    var energy = bass * 0.38 + bassBody * 0.34 + voice * 0.28;
+
+    ctx.clearRect(0, 0, w, h);
+
+    // Radial glow anchored near the bottom — grows with overall energy
+    if (energy > 0.005) {
+      var glowR = Math.round(Math.min(w, h) * (0.08 + energy * 0.55));
+      var glow  = ctx.createRadialGradient(w * 0.5, h * 0.92, 2, w * 0.5, h * 0.92, glowR);
+      glow.addColorStop(0, 'rgba(255,218,100,' + (energy * 0.45).toFixed(3) + ')');
+      glow.addColorStop(1, 'rgba(255,180,40,0)');
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, w, h);
+    }
+
+    function clamp01(v) {
+      return Math.max(0, Math.min(1, v));
+    }
+
+    function smoothstep01(v) {
+      var x = clamp01(v);
+      return x * x * (3 - 2 * x);
+    }
+
+    function hsla(h, s, l, a) {
+      var hue = ((h % 360) + 360) % 360;
+      return 'hsla(' + hue.toFixed(2) + ',' + s.toFixed(2) + '%,' + l.toFixed(2) + '%,' + a.toFixed(3) + ')';
+    }
+
+    // Smoothly shift each wave palette every 2 seconds.
+    var colorCycle = 2.0;
+    var cycleStep = 18.0;
+    var cycleIndex = Math.floor(t / colorCycle);
+    var cycleProgress = smoothstep01((t % colorCycle) / colorCycle);
+    var hueShift = (cycleIndex + cycleProgress) * cycleStep;
+
+    function wavePalette(baseHue, satBoost) {
+      var hue = baseHue + hueShift;
+      var sat = 78 + satBoost;
+      return {
+        top: hsla(hue, sat, 72, 0.95),
+        base: hsla(hue - 10, sat - 10, 42, 0.08),
+        shadow: hsla(hue - 6, sat - 14, 58, 0.54)
+      };
+    }
+
+    var bassPalette = wavePalette(42, 6);
+    var bassBodyPalette = wavePalette(30, 2);
+    var voicePalette = wavePalette(18, 0);
+
+    // drawUpWave — wave is anchored at baseY and expands UPWARD proportional to drive.
+    // Completely invisible (returns immediately) when drive is near zero.
+    function drawUpWave(baseY, drive, speed, freq, harm, colorTop, colorBase, lineW, shadowCol) {
+      var visualDrive = Math.max(0.008, drive);
+
+      var maxAmp = h * 0.42 * visualDrive;
+
+      // Pre-compute wave y values (upward = negative canvas direction)
+      function waveY(x) {
+        var phase = (x / w) * freq * Math.PI * 2 + t * speed;
+        var n1 = Math.sin(phase);
+        var n2 = Math.sin(phase * harm  + 0.7)  * 0.48;
+        var n3 = Math.sin(phase * 0.48  - t * speed * 0.38) * 0.28;
+        var shape = (n1 + n2 + n3) / 1.76; // ~-1 to +1
+        // Map to 0-1 range, scale by maxAmp, go upward
+        return baseY - ((shape + 1) * 0.5) * maxAmp;
+      }
+
+      // Filled area under the wave crest
+      var grad = ctx.createLinearGradient(0, baseY - maxAmp, 0, baseY);
+      grad.addColorStop(0, colorTop);
+      grad.addColorStop(1, colorBase);
+
+      ctx.beginPath();
+      ctx.moveTo(0, baseY);
+      for (var x = 0; x <= w; x += 3) ctx.lineTo(x, waveY(x));
+      ctx.lineTo(w, baseY);
+      ctx.closePath();
+      ctx.fillStyle = grad;
+      ctx.globalAlpha = 0.12 + visualDrive * 0.18;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Bright top-edge stroke
+      ctx.beginPath();
+      for (var x = 0; x <= w; x += 3) {
+        if (x === 0) ctx.moveTo(0, waveY(0));
+        else         ctx.lineTo(x, waveY(x));
+      }
+      ctx.strokeStyle = grad;
+      ctx.lineWidth   = lineW + visualDrive * 2.4;
+      ctx.shadowBlur  = 10 + visualDrive * 20;
+      ctx.shadowColor = shadowCol;
+      ctx.stroke();
+      ctx.shadowBlur  = 0;
+    }
+
+    // Wave 1 — Bass (sub-low body): lowest baseline, largest slow swell, moves most upward
+    drawUpWave(h * 0.96, bass,  1.35, 2.8, 1.55,
+      bassPalette.top, bassPalette.base,
+      3.2, bassPalette.shadow);
+
+    // Wave 2 — Bass/808 body (higher bass harmonics and knock)
+    drawUpWave(h * 0.78, bassBody,  2.45, 3.4, 1.66,
+      bassBodyPalette.top, bassBodyPalette.base,
+      2.7, bassBodyPalette.shadow);
+
+    // Wave 3 — Voice (vocal midrange): highest baseline, fast complex flicker
+    drawUpWave(h * 0.60, voice, 3.90, 5.5, 1.90,
+      voicePalette.top,  voicePalette.base,
+      2.2, voicePalette.shadow);
+
+    var lbl = getLabel();
+    if (lbl) {
+      var title = (document.getElementById('playerTrackTitle') || {}).textContent || '';
+      lbl.textContent = title || '—';
+    }
+  }
+
+  window.openCubeVisualizer = function() {
+    if (_vizOpen) return;
+    _vizOpen = true;
+    var overlay = getOverlay();
+    if (!overlay) return;
+    overlay.style.display = 'block';
+    setupAudioAnalyser();
+    if (_raf) cancelAnimationFrame(_raf);
+    drawWaves();
+  };
+
+  window.closeCubeVisualizer = function() {
+    _vizOpen = false;
+    var overlay = getOverlay();
+    if (overlay) overlay.style.display = 'none';
+    if (_raf) {
+      cancelAnimationFrame(_raf);
+      _raf = null;
+    }
+  };
+
+  window.toggleCubeVisualizer = function() {
+    if (_vizOpen) window.closeCubeVisualizer();
+    else window.openCubeVisualizer();
+  };
+
+  function attachTitleClick() {
+    var titleEl = document.getElementById('playerTrackTitle');
+    if (!titleEl || titleEl._cubeClickAttached) return;
+    titleEl._cubeClickAttached = true;
+    titleEl.style.cursor = 'pointer';
+    titleEl.title = 'Open 3D Visualizer';
+    titleEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      window.toggleCubeVisualizer();
+    });
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!_vizOpen) return;
+    var overlay = getOverlay();
+    if (overlay && !overlay.contains(e.target)) {
+      var titleEl = document.getElementById('playerTrackTitle');
+      if (titleEl && titleEl.contains(e.target)) return;
+      window.closeCubeVisualizer();
+    }
+  }, true);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', attachTitleClick);
+  } else {
+    attachTitleClick();
+    setTimeout(attachTitleClick, 800);
+  }
+})();
 </script>
 
 </body>
