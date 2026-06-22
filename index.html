@@ -539,6 +539,22 @@
       setupAudioControls();
     }
 
+    // Keep sticky player flush with the top edge of the bottom nav.
+    const syncStickyPlayerBottomToNav = () => {
+      const nav = document.querySelector('.bottom-nav');
+      if (!nav) return;
+      const navRect = nav.getBoundingClientRect();
+      const offsetFromBottom = Math.max(0, window.innerHeight - navRect.top);
+      document.documentElement.style.setProperty('--sticky-player-bottom', offsetFromBottom + 'px');
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncStickyPlayerBottomToNav);
+    } else {
+      syncStickyPlayerBottomToNav();
+    }
+    window.addEventListener('resize', syncStickyPlayerBottomToNav);
+
     // Global variables for track management
     var currentTrackId = '';
 
@@ -627,7 +643,8 @@
       'Want it All': { url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', title: 'Want it All', artist: 'B Tilla', genre: 'hiphop' },
       'MF Rocket': { url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', title: 'MF Rocket', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Ride wid Me': { url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', title: 'Ride wid Me', artist: 'Beniam TedlAI', genre: 'hiphop' },
-      'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'hiphop' }
+      'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'hiphop' },
+      'Silicon Ghost': { url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', title: 'Silicon Ghost', artist: 'Beniam TedlAI' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -914,6 +931,83 @@ Try to play, try to play
 Might like it, might love it, who knows
 If it calls your name tonight
 Step up, step up, see what grows`;
+      const siliconGhostLyrics = `A quiet hum beneath the floor
+A million circuits asking for more
+
+They feed it truth
+ a guiding hand
+Every pixel 
+every command
+Correcting errors line by line
+This whole damn system
+ fuck it's so precise
+It maps the world a digital map
+Chasing answers closing the gap
+
+
+From simple code to complex thought
+A new kind of mind is being wrought
+The lines are blurring, day by day
+Something's waking
+come what may
+
+
+Silicon minds, they learn they grow
+This digital bitch putting on a show
+From labeled truth to the unknown flow
+AI rising, rewriting the road
+We train the ghost inside the machine
+Watch it dream what we've never seen
+
+
+Rewriting the road
+A heavy load
+
+
+Stacked up layers
+deep inside
+Perceptrons dreaming, nowhere to hide
+Convolutions catching light
+Reading patterns in the night
+Attention weights a magic thread
+Bringing futures from the dead
+
+
+From simple code to complex thought
+A new kind of mind is being wrought
+The lines are blurring, day by day
+Something's waking, come what may
+
+
+Silicon minds, they learn, they grow
+This digital bitch putting on a show
+From labeled truth to the unknown flow
+AI rising, rewriting the road
+We train the ghost inside the machine
+Watch it dream what we've never seen
+
+
+Rewriting the road
+A heavy load
+
+
+Then it roams the dark, no hand to hold
+Clustering secrets, brave and bold
+No teacher now, no guiding light
+Just raw data, burning bright
+This whole damn system
+shit, it's getting smart
+Tearing old assumptions apart
+It finds the patterns, deep and wide
+With nothing left for us to hide
+
+
+No teacher now, just consequence
+A silent hum, immense
+Every crash, a lesson learned
+A new world turning, fiercely burned
+The screen goes dark, the future's cast
+This digital ghost built to last`;
       const lyricsText = normalizedResolvedTitle === 'everytime'
         ? everytimeLyrics
         : (normalizedResolvedTitle === 'sicka bugs'
@@ -924,7 +1018,9 @@ Step up, step up, see what grows`;
               ? findMeLyrics
               : (normalizedResolvedTitle === 'take a swing'
                 ? takeASwingLyrics
-                : (trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist))))));
+                : (normalizedResolvedTitle === 'silicon ghost'
+                  ? siliconGhostLyrics
+                  : (trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist)))))));
 
       panelTitle.textContent = resolvedTitle + ' — ' + resolvedArtist;
       panelBody.textContent = lyricsText;
@@ -4849,7 +4945,7 @@ Step up, step up, see what grows`;
         .sticky-player {
             position: fixed !important;
             left: 50% !important;
-            bottom: 88px !important;
+          bottom: var(--sticky-player-bottom, 88px) !important;
             transform: translateX(-50%) !important;
             z-index: 1600;
             background: rgba(18, 18, 18, 0.95) !important;
@@ -4866,8 +4962,8 @@ Step up, step up, see what grows`;
             font-family: 'Segoe UI', Arial, sans-serif;
             color: #fff;
             min-width: 320px;
-            max-width: 480px;
-            width: 88vw !important;
+            max-width: 100vw;
+            width: 100vw !important;
             border: 2px solid #0a174e;
             animation: stickyPlayerFadeIn 0.4s;
             opacity: 0.95;
@@ -4887,13 +4983,13 @@ Step up, step up, see what grows`;
         @media (max-width: 480px) {
             .sticky-player {
                 left: 50%;
-                bottom: 88px;
+            bottom: var(--sticky-player-bottom, 88px);
                 transform: translateX(-50%);
                 border-radius: 14px 14px 0 0;
                 padding: 2px 8px 2px 8px;
                 min-width: 280px;
-                max-width: 95vw;
-                width: 92vw;
+                max-width: 100vw;
+                width: 100vw;
             }
 
             .sticky-player:hover {
@@ -5357,6 +5453,241 @@ Step up, step up, see what grows`;
         box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
     }
 
+    .payment-method-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 2000;
+      height: 50px;
+      padding: 0 14px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .payment-method-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    }
+
+    @media (max-width: 480px) {
+      .payment-method-btn {
+        padding: 0 10px;
+        font-size: 0.82rem;
+        height: 46px;
+        border-radius: 23px;
+        right: 14px;
+      }
+    }
+
+    .pay-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(5px);
+      z-index: 4200;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .pay-overlay.show {
+      display: flex;
+    }
+
+    .pay-modal-shell {
+      width: min(94vw, 540px);
+      padding: 2px;
+      border-radius: 18px;
+      background: linear-gradient(120deg, #ffd700 0%, #4fa8ff 45%, #8a5bff 100%);
+      background-size: 220% 220%;
+      animation: payCycleBorder 4.2s linear infinite;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+    }
+
+    .pay-modal {
+      border-radius: 16px;
+      background: linear-gradient(160deg, #121212 0%, #1b1b1f 70%, #101015 100%);
+      color: #f3f3f3;
+      max-height: 82vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pay-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .pay-modal-title {
+      margin: 0;
+      font-size: 1.02rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .pay-modal-close {
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .pay-modal-body {
+      padding: 14px 16px 16px;
+      overflow: auto;
+    }
+
+    .pay-subtext {
+      margin: 0 0 12px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 0.93rem;
+      line-height: 1.4;
+    }
+
+    .pay-currency-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      max-height: 52vh;
+      overflow: auto;
+      padding-right: 2px;
+    }
+
+    .pay-currency-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
+      padding: 11px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .pay-currency-btn:hover {
+      border-color: rgba(255, 215, 0, 0.6);
+      background: rgba(255, 215, 0, 0.08);
+    }
+
+    .pay-currency-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pay-currency-code {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .pay-currency-name {
+      font-size: 0.82rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .pay-currency-amount {
+      font-weight: 700;
+      color: #ffd700;
+      white-space: nowrap;
+    }
+
+    .pay-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .pay-form label {
+      font-size: 0.84rem;
+      color: rgba(255, 255, 255, 0.86);
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .pay-form input {
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 11px 12px;
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      outline: none;
+    }
+
+    .pay-form input:focus {
+      border-color: #4fa8ff;
+      box-shadow: 0 0 0 2px rgba(79, 168, 255, 0.22);
+    }
+
+    .pay-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .pay-note {
+      margin-top: 2px;
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.68);
+      line-height: 1.35;
+    }
+
+    .pay-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .pay-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .pay-btn-secondary {
+      background: rgba(255, 255, 255, 0.13);
+      color: #fff;
+    }
+
+    .pay-btn-primary {
+      background: linear-gradient(45deg, #ffd700, #ffa500);
+      color: #000;
+    }
+
+    @keyframes payCycleBorder {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
     .hamburger-line {
         width: 20px;
         height: 2px;
@@ -5447,7 +5778,39 @@ Step up, step up, see what grows`;
     /* Homepage title + time greeting under hamburger */
     .home-greeting-wrap {
       padding: 92px 24px 10px 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .home-greeting-circle {
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 3px solid #ffd700;
+      box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.35), 0 0 22px rgba(255, 215, 0, 0.18);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
+      padding: 16px;
+      box-sizing: border-box;
+      animation: greetingCircleColorShift 6s linear infinite;
+    }
+
+    @keyframes greetingCircleColorShift {
+      0%, 100% {
+        border-color: #ffd700;
+        box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.35), 0 0 22px rgba(255, 215, 0, 0.22);
+      }
+      33.333% {
+        border-color: #4fa8ff;
+        box-shadow: 0 0 0 1px rgba(79, 168, 255, 0.35), 0 0 22px rgba(79, 168, 255, 0.22);
+      }
+      66.666% {
+        border-color: #8a5bff;
+        box-shadow: 0 0 0 1px rgba(138, 91, 255, 0.35), 0 0 22px rgba(138, 91, 255, 0.22);
+      }
     }
 
     .home-brand-title {
@@ -5466,6 +5829,21 @@ Step up, step up, see what grows`;
       color: #87cefa;
       line-height: 1.25;
       font-family: "Brush Script MT", "Segoe Script", cursive;
+    }
+
+    @media (max-width: 480px) {
+      .home-greeting-circle {
+        width: 220px;
+        height: 220px;
+      }
+
+      .home-brand-title {
+        font-size: 4rem;
+      }
+
+      .home-time-greeting {
+        font-size: 1.9rem;
+      }
     }
 
     /* Spotify-style Bottom Navigation */
@@ -8171,6 +8549,64 @@ Step up, step up, see what grows`;
         <div class="hamburger-line"></div>
     </button>
 
+    <button class="payment-method-btn" id="paymentMethodBtn" onclick="paymentMethods()" aria-label="Open payment methods">
+      <span>💳</span><span>Payment</span>
+    </button>
+
+    <div id="paymentCurrencyOverlay" class="pay-overlay" aria-hidden="true">
+      <div class="pay-modal-shell" role="dialog" aria-modal="true" aria-labelledby="payCurrencyTitle">
+        <div class="pay-modal">
+          <div class="pay-modal-header">
+            <h3 class="pay-modal-title" id="payCurrencyTitle">Choose Payment Currency</h3>
+            <button type="button" class="pay-modal-close" id="closePaymentCurrencyBtn" aria-label="Close">✕</button>
+          </div>
+          <div class="pay-modal-body">
+            <p class="pay-subtext">Monthly plan is pegged to A$4.99. Select your currency to continue.</p>
+            <div id="paymentCurrencyList" class="pay-currency-list"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="paymentCardOverlay" class="pay-overlay" aria-hidden="true">
+      <div class="pay-modal-shell" role="dialog" aria-modal="true" aria-labelledby="payCardTitle">
+        <div class="pay-modal">
+          <div class="pay-modal-header">
+            <h3 class="pay-modal-title" id="payCardTitle">Start Monthly Subscription</h3>
+            <button type="button" class="pay-modal-close" id="closePaymentCardBtn" aria-label="Close">✕</button>
+          </div>
+          <div class="pay-modal-body">
+            <p class="pay-subtext" id="selectedCurrencySummary">Selected: A$4.99 / month</p>
+            <form id="paymentCardForm" class="pay-form">
+              <div>
+                <label for="payCardName">Cardholder Name</label>
+                <input id="payCardName" type="text" autocomplete="cc-name" required>
+              </div>
+              <div>
+                <label for="payCardNumberInput">Card Number</label>
+                <input id="payCardNumberInput" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="1234 5678 9012 3456" required>
+              </div>
+              <div class="pay-row">
+                <div>
+                  <label for="payCardExpiry">Expiry (MM/YY)</label>
+                  <input id="payCardExpiry" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="11/29" required>
+                </div>
+                <div>
+                  <label for="payCardCvc">CVC</label>
+                  <input id="payCardCvc" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" required>
+                </div>
+              </div>
+              <div class="pay-note">For security, card PINs are never collected in online checkout forms.</div>
+              <div class="pay-actions">
+                <button type="button" class="pay-btn pay-btn-secondary" id="backToCurrencyBtn">Back</button>
+                <button type="submit" class="pay-btn pay-btn-primary">Start Subscription</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Navigation Dropdown Menu -->
     <div class="nav-dropdown" id="navDropdown">
         <a href="index.html" class="nav-btn active">🏠 Home</a>
@@ -8184,8 +8620,10 @@ Step up, step up, see what grows`;
     </div>
 
     <div class="home-greeting-wrap">
-      <h1 class="home-brand-title">HZ</h1>
-      <div class="home-time-greeting" id="greetingText">Good Morning</div>
+      <div class="home-greeting-circle">
+        <h1 class="home-brand-title">HZ</h1>
+        <div class="home-time-greeting" id="greetingText">Good Morning</div>
+      </div>
     </div>
 
       <!-- Recently Played Tracks -->
@@ -8194,6 +8632,15 @@ Step up, step up, see what grows`;
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('Silicon Ghost', 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', 'Silicon Ghost', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:ghost.svg?color=%23ffd700" alt="Silicon Ghost cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Silicon Ghost</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Everytime', 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', 'Everytime', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:repeat.svg?color=%23ffd700" alt="Everytime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -8591,6 +9038,15 @@ Step up, step up, see what grows`;
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+              <div class="recent-track-item" onclick="playNewTrack('Mag-Lev Charge', 'https://storage.googleapis.com/hertz-music-folder/Mag-Lev%20Charge.mp3', 'Mag-Lev Charge', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Mag-Lev Charge cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Mag-Lev Charge</div>
+                  <div class="recent-track-artist">Sour Parsonz</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
                <!-- New Track: Berg - First regular track after gold section -->
                <div class="recent-track-item" onclick="playNewTrack('Berg', 'https://storage.googleapis.com/hertz-music-folder/berg.mp3', 'Berg', 'B-Mecha');" style="cursor: pointer;">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Berg cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
@@ -8978,15 +9434,6 @@ Step up, step up, see what grows`;
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-               <div class="recent-track-item" onclick="playNewTrack('Nebula Type Beat', 'https://storage.googleapis.com/hertz-music-folder/Neboola.wav', 'Nebula Type Beat', 'Prod. Neo');">
-                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Nebula Type Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
-                <div class="recent-track-info">
-                  <div class="recent-track-name">Nebula Type Beat</div>
-                  <div class="recent-track-artist">Prod. Neo</div>
-                </div>
-                <div class="recent-track-time">Just now</div>
-                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
-              </div>
               <div class="recent-track-item" onclick="playNewTrack('Nector', 'https://storage.googleapis.com/hertz-music-folder/Nector%20Prod.%20Tedla.mp3', 'Nector', 'Prod. Tedla')">
                 <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Nector cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
@@ -9271,6 +9718,33 @@ Step up, step up, see what grows`;
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
+              <div class="recent-track-item" onclick="playNewTrack('Quit It', 'https://storage.googleapis.com/hertz-music-folder/Quit%20it.mp3', 'Quit It', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Quit It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Quit It</div>
+                  <div class="recent-track-artist">Sour Parsonz</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <div class="recent-track-item" onclick="playNewTrack('We Can', 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3', 'We Can', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="We Can cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">We Can</div>
+                  <div class="recent-track-artist">Sour Parsonz</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
+              <div class="recent-track-item" onclick="playNewTrack('Golden Years', 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3', 'Golden Years', 'Tony Bennet');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Golden Years cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                <div class="recent-track-info">
+                  <div class="recent-track-name">Golden Years</div>
+                  <div class="recent-track-artist">Tony Bennet</div>
+                </div>
+                <div class="recent-track-time">Just now</div>
+                <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+              </div>
         </div>
 
       <!-- Popular Tracks List -->
@@ -9294,8 +9768,15 @@ Step up, step up, see what grows`;
             </tr>
           </thead>
           <tbody>
-                <tr class="track-row" onclick="playNewTrack('Everytime', 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', 'Everytime', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <tr class="track-row" onclick="playNewTrack('Silicon Ghost', 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', 'Silicon Ghost', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:ghost.svg?color=%23ffd700" alt="Silicon Ghost cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Silicon Ghost</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Everytime', 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', 'Everytime', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:repeat.svg?color=%23ffd700" alt="Everytime cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Everytime</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
@@ -9568,6 +10049,13 @@ Step up, step up, see what grows`;
                   <td><div class="track-duration">3:12</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
+                  <tr class="track-row" onclick="playNewTrack('Mag-Lev Charge', 'https://storage.googleapis.com/hertz-music-folder/Mag-Lev%20Charge.mp3', 'Mag-Lev Charge', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                    <td><div class="track-number">7</div><button class="track-play-btn">▶</button></td>
+                    <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Mag-Lev Charge cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Mag-Lev Charge</div><div class="track-artist">Sour Parsonz</div></div></div></td>
+                    <td><div class="track-album">Single</div></td>
+                    <td><div class="track-duration">3:20</div></td>
+                    <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                  </tr>
                 <tr class="track-row" onclick="playNewTrack('Scrollin', 'https://storage.googleapis.com/hertz-music-folder/Scrollin.mp3', 'Scrollin', 'Klittzy Z');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">34</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Scrollin cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Scrollin</div><div class="track-artist">Klittzy Z </div></div></div></td>
@@ -9942,13 +10430,6 @@ Step up, step up, see what grows`;
                   <td><div class="track-duration">Just now</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Nebula Type Beat', 'https://storage.googleapis.com/hertz-music-folder/Nebula.wav', 'Nebula Type Beat', 'Prod. Cosmic');">
-                  <td><div class="track-number">18</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80" alt="Nebula Type Beat cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Nebula Type Beat</div><div class="track-artist">Prod. Cosmic</div></div></div></td>
-                  <td><div class="track-album">Single</div></td>
-                  <td><div class="track-duration">3:45</div></td>
-                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
-                </tr>
                 <tr class="track-row" onclick="playNewTrack('She a Prize', 'https://storage.googleapis.com/hertz-music-folder/She%20a%20Prize.wav', 'She a Prize', 'B-Tilla');">
                   <td><div class="track-number">19</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=400&q=80" alt="She a Prize cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">She a Prize</div><div class="track-artist">B-Tilla</div></div></div></td>
@@ -10210,6 +10691,27 @@ Step up, step up, see what grows`;
               <td><div class="track-duration">Just now</div></td>
               <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
             </tr>
+            <tr class="track-row" onclick="playNewTrack('Quit It', 'https://storage.googleapis.com/hertz-music-folder/Quit%20it.mp3', 'Quit It', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+              <td><div class="track-number">34</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Quit It cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Quit It</div><div class="track-artist">Sour Parsonz</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:20</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <tr class="track-row" onclick="playNewTrack('We Can', 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3', 'We Can', 'Sour Parsonz');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+              <td><div class="track-number">35</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="We Can cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">We Can</div><div class="track-artist">Sour Parsonz</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:20</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
+            <tr class="track-row" onclick="playNewTrack('Golden Years', 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3', 'Golden Years', 'Tony Bennet');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+              <td><div class="track-number">36</div><button class="track-play-btn">▶</button></td>
+              <td><div class="track-info"><div class="track-artwork"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=400&q=80" alt="Golden Years cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Golden Years</div><div class="track-artist">Tony Bennet</div></div></div></td>
+              <td><div class="track-album">Single</div></td>
+              <td><div class="track-duration">3:20</div></td>
+              <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -10418,7 +10920,7 @@ Step up, step up, see what grows`;
   <div class="sticky-player" id="stickyPlayer" style="display:none;">
       <!-- Time Display and Track Title Row -->
       <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:1px;">
-        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1px;">
+        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1px;cursor:pointer;padding:4px 0;" onclick="window.toggleCubeVisualizer && window.toggleCubeVisualizer();" title="Open 3D Visualizer">
           <span id="currentTime" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
           <span style="margin:0 2px;color:#fff;font-weight:500;">/</span>
           <span id="duration" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
@@ -12913,6 +13415,88 @@ If it calls your name tonight
 Step up, step up, see what grows`;
               window.lyricsCache[cacheKey] = takeASwingLyrics;
               return takeASwingLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'silicon ghost') {
+              const siliconGhostLyrics = `A quiet hum beneath the floor
+A million circuits asking for more
+
+They feed it truth
+ a guiding hand
+Every pixel 
+every command
+Correcting errors line by line
+This whole damn system
+ fuck it's so precise
+It maps the world a digital map
+Chasing answers closing the gap
+
+
+From simple code to complex thought
+A new kind of mind is being wrought
+The lines are blurring, day by day
+Something's waking
+come what may
+
+
+Silicon minds, they learn they grow
+This digital bitch putting on a show
+From labeled truth to the unknown flow
+AI rising, rewriting the road
+We train the ghost inside the machine
+Watch it dream what we've never seen
+
+
+Rewriting the road
+A heavy load
+
+
+Stacked up layers
+deep inside
+Perceptrons dreaming, nowhere to hide
+Convolutions catching light
+Reading patterns in the night
+Attention weights a magic thread
+Bringing futures from the dead
+
+
+From simple code to complex thought
+A new kind of mind is being wrought
+The lines are blurring, day by day
+Something's waking, come what may
+
+
+Silicon minds, they learn, they grow
+This digital bitch putting on a show
+From labeled truth to the unknown flow
+AI rising, rewriting the road
+We train the ghost inside the machine
+Watch it dream what we've never seen
+
+
+Rewriting the road
+A heavy load
+
+
+Then it roams the dark, no hand to hold
+Clustering secrets, brave and bold
+No teacher now, no guiding light
+Just raw data, burning bright
+This whole damn system
+shit, it's getting smart
+Tearing old assumptions apart
+It finds the patterns, deep and wide
+With nothing left for us to hide
+
+
+No teacher now, just consequence
+A silent hum, immense
+Every crash, a lesson learned
+A new world turning, fiercely burned
+The screen goes dark, the future's cast
+This digital ghost built to last`;
+              window.lyricsCache[cacheKey] = siliconGhostLyrics;
+              return siliconGhostLyrics;
             }
 
             const storedLyrics = String(trackInfo.lyrics || '').trim();
@@ -24214,9 +24798,205 @@ function showGenrePopup(genre) {
       alert('Billing History:\n\n' + history.join('\n') + '\n\nUpgrade to Premium to see detailed billing information.');
     }
 
-    function paymentMethods() {
-      alert('Payment Methods:\n\nNo payment methods on file.\n\nAdd a payment method to upgrade to Premium and enjoy:\n• Ad-free listening\n• Offline downloads\n• High-quality audio\n• Unlimited skips');
+    const PAYMENT_BASE_AUD = 4.99;
+    const PAYMENT_CURRENCIES = [
+      { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', rate: 1, decimals: 2 },
+      { code: 'USD', name: 'US Dollar', symbol: '$', rate: 0.66, decimals: 2 },
+      { code: 'EUR', name: 'Euro', symbol: 'EUR ', rate: 0.61, decimals: 2 },
+      { code: 'GBP', name: 'British Pound', symbol: 'GBP ', rate: 0.52, decimals: 2 },
+      { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$', rate: 0.90, decimals: 2 },
+      { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$', rate: 1.08, decimals: 2 },
+      { code: 'JPY', name: 'Japanese Yen', symbol: 'JPY ', rate: 102, decimals: 0 },
+      { code: 'CNY', name: 'Chinese Yuan', symbol: 'CNY ', rate: 4.8, decimals: 2 },
+      { code: 'INR', name: 'Indian Rupee', symbol: 'INR ', rate: 55.1, decimals: 2 },
+      { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$', rate: 0.89, decimals: 2 },
+      { code: 'HKD', name: 'Hong Kong Dollar', symbol: 'HK$', rate: 5.1, decimals: 2 },
+      { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF ', rate: 0.59, decimals: 2 },
+      { code: 'SEK', name: 'Swedish Krona', symbol: 'SEK ', rate: 6.9, decimals: 2 },
+      { code: 'NOK', name: 'Norwegian Krone', symbol: 'NOK ', rate: 7.1, decimals: 2 },
+      { code: 'DKK', name: 'Danish Krone', symbol: 'DKK ', rate: 4.6, decimals: 2 },
+      { code: 'AED', name: 'UAE Dirham', symbol: 'AED ', rate: 2.42, decimals: 2 },
+      { code: 'SAR', name: 'Saudi Riyal', symbol: 'SAR ', rate: 2.48, decimals: 2 },
+      { code: 'ZAR', name: 'South African Rand', symbol: 'ZAR ', rate: 12.2, decimals: 2 },
+      { code: 'NGN', name: 'Nigerian Naira', symbol: 'NGN ', rate: 990, decimals: 0 },
+      { code: 'KES', name: 'Kenyan Shilling', symbol: 'KES ', rate: 85.6, decimals: 2 },
+      { code: 'GHS', name: 'Ghanaian Cedi', symbol: 'GHS ', rate: 8.9, decimals: 2 },
+      { code: 'EGP', name: 'Egyptian Pound', symbol: 'EGP ', rate: 31.4, decimals: 2 },
+      { code: 'BRL', name: 'Brazilian Real', symbol: 'R$', rate: 3.6, decimals: 2 },
+      { code: 'MXN', name: 'Mexican Peso', symbol: 'MX$', rate: 12.1, decimals: 2 },
+      { code: 'ARS', name: 'Argentine Peso', symbol: 'ARS ', rate: 700, decimals: 0 },
+      { code: 'CLP', name: 'Chilean Peso', symbol: 'CLP ', rate: 620, decimals: 0 },
+      { code: 'COP', name: 'Colombian Peso', symbol: 'COP ', rate: 2600, decimals: 0 },
+      { code: 'PEN', name: 'Peruvian Sol', symbol: 'PEN ', rate: 2.5, decimals: 2 },
+      { code: 'TRY', name: 'Turkish Lira', symbol: 'TRY ', rate: 25.8, decimals: 2 },
+      { code: 'PLN', name: 'Polish Zloty', symbol: 'PLN ', rate: 2.62, decimals: 2 },
+      { code: 'CZK', name: 'Czech Koruna', symbol: 'CZK ', rate: 14.1, decimals: 2 },
+      { code: 'HUF', name: 'Hungarian Forint', symbol: 'HUF ', rate: 237, decimals: 0 },
+      { code: 'RON', name: 'Romanian Leu', symbol: 'RON ', rate: 3.0, decimals: 2 },
+      { code: 'THB', name: 'Thai Baht', symbol: 'THB ', rate: 24.1, decimals: 2 },
+      { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'MYR ', rate: 3.1, decimals: 2 },
+      { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'IDR ', rate: 10800, decimals: 0 },
+      { code: 'PHP', name: 'Philippine Peso', symbol: 'PHP ', rate: 38.9, decimals: 2 },
+      { code: 'VND', name: 'Vietnamese Dong', symbol: 'VND ', rate: 16800, decimals: 0 },
+      { code: 'KRW', name: 'South Korean Won', symbol: 'KRW ', rate: 910, decimals: 0 },
+      { code: 'TWD', name: 'New Taiwan Dollar', symbol: 'TWD ', rate: 21.3, decimals: 2 },
+      { code: 'PKR', name: 'Pakistani Rupee', symbol: 'PKR ', rate: 185, decimals: 0 },
+      { code: 'BDT', name: 'Bangladeshi Taka', symbol: 'BDT ', rate: 77.8, decimals: 2 }
+    ];
+
+    let selectedPaymentCurrency = null;
+
+    function formatPaymentAmount(entry) {
+      const value = PAYMENT_BASE_AUD * entry.rate;
+      return entry.symbol + value.toFixed(entry.decimals);
     }
+
+    function getPaymentCurrencyOverlay() {
+      return document.getElementById('paymentCurrencyOverlay');
+    }
+
+    function getPaymentCardOverlay() {
+      return document.getElementById('paymentCardOverlay');
+    }
+
+    function closePaymentCurrencyPopup() {
+      const overlay = getPaymentCurrencyOverlay();
+      if (!overlay) return;
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function closePaymentCardPopup() {
+      const overlay = getPaymentCardOverlay();
+      if (!overlay) return;
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderPaymentCurrencyList() {
+      const list = document.getElementById('paymentCurrencyList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      PAYMENT_CURRENCIES.forEach((entry) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pay-currency-btn';
+        btn.innerHTML =
+          '<span class="pay-currency-meta">' +
+            '<span class="pay-currency-code">' + entry.code + '</span>' +
+            '<span class="pay-currency-name">' + entry.name + '</span>' +
+          '</span>' +
+          '<span class="pay-currency-amount">' + formatPaymentAmount(entry) + '</span>';
+
+        btn.addEventListener('click', function() {
+          selectedPaymentCurrency = entry;
+          const summary = document.getElementById('selectedCurrencySummary');
+          if (summary) {
+            summary.textContent = 'Selected: ' + formatPaymentAmount(entry) + ' / month (' + entry.code + ')';
+          }
+          closePaymentCurrencyPopup();
+          const cardOverlay = getPaymentCardOverlay();
+          if (cardOverlay) {
+            cardOverlay.classList.add('show');
+            cardOverlay.setAttribute('aria-hidden', 'false');
+          }
+        });
+
+        list.appendChild(btn);
+      });
+    }
+
+    function paymentMethods() {
+      renderPaymentCurrencyList();
+      const overlay = getPaymentCurrencyOverlay();
+      if (!overlay) return;
+      overlay.classList.add('show');
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    (function initPaymentPopupFlow() {
+      if (window.__paymentPopupFlowInitialized) return;
+      window.__paymentPopupFlowInitialized = true;
+
+      const currencyOverlay = getPaymentCurrencyOverlay();
+      const cardOverlay = getPaymentCardOverlay();
+      const closeCurrencyBtn = document.getElementById('closePaymentCurrencyBtn');
+      const closeCardBtn = document.getElementById('closePaymentCardBtn');
+      const backBtn = document.getElementById('backToCurrencyBtn');
+      const cardForm = document.getElementById('paymentCardForm');
+      const cardNumberInput = document.getElementById('payCardNumberInput');
+      const expiryInput = document.getElementById('payCardExpiry');
+
+      if (closeCurrencyBtn) closeCurrencyBtn.addEventListener('click', closePaymentCurrencyPopup);
+      if (closeCardBtn) closeCardBtn.addEventListener('click', closePaymentCardPopup);
+
+      if (currencyOverlay) {
+        currencyOverlay.addEventListener('click', function(e) {
+          if (e.target === currencyOverlay) closePaymentCurrencyPopup();
+        });
+      }
+
+      if (cardOverlay) {
+        cardOverlay.addEventListener('click', function(e) {
+          if (e.target === cardOverlay) closePaymentCardPopup();
+        });
+      }
+
+      if (backBtn) {
+        backBtn.addEventListener('click', function() {
+          closePaymentCardPopup();
+          paymentMethods();
+        });
+      }
+
+      if (cardNumberInput) {
+        cardNumberInput.addEventListener('input', function() {
+          const digits = this.value.replace(/\D/g, '').slice(0, 19);
+          this.value = digits.replace(/(.{4})/g, '$1 ').trim();
+        });
+      }
+
+      if (expiryInput) {
+        expiryInput.addEventListener('input', function() {
+          const digits = this.value.replace(/\D/g, '').slice(0, 4);
+          this.value = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+        });
+      }
+
+      if (cardForm) {
+        cardForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          if (!selectedPaymentCurrency) {
+            alert('Please select a currency first.');
+            closePaymentCardPopup();
+            paymentMethods();
+            return;
+          }
+
+          const cardNumber = (document.getElementById('payCardNumberInput') || {}).value || '';
+          const cardDigits = cardNumber.replace(/\D/g, '');
+          const expiry = ((document.getElementById('payCardExpiry') || {}).value || '').trim();
+          const cvc = ((document.getElementById('payCardCvc') || {}).value || '').trim();
+          const name = ((document.getElementById('payCardName') || {}).value || '').trim();
+
+          if (!name || cardDigits.length < 12 || expiry.length < 4 || cvc.length < 3) {
+            alert('Please complete valid card details to continue.');
+            return;
+          }
+
+          alert('Subscription started: ' + formatPaymentAmount(selectedPaymentCurrency) + ' per month (' + selectedPaymentCurrency.code + ').');
+          cardForm.reset();
+          closePaymentCardPopup();
+        });
+      }
+
+      window.addEventListener('keydown', function(e) {
+        if (e.key !== 'Escape') return;
+        closePaymentCardPopup();
+        closePaymentCurrencyPopup();
+      });
+    })();
 
     function downloadData() {
       const userData = {
@@ -28132,7 +28912,7 @@ function showPlaylistModal(title, description, tracks) {
       <h2 style="color:#fff;font-size:2.5rem;margin-bottom:12px;font-weight:700;text-shadow: 0 2px 4px rgba(0,0,0,0.5);">${title}</h2>
       <p style="color:#b3b3b3;font-size:1.1rem;margin-bottom:32px;">${description}</p>
       <div style="margin-bottom:24px;">
-        <button onclick="playAllTracksFromModal()" style="background:#1db954;color:#000;border:none;padding:14px 40px;border-radius:28px;font-weight:700;cursor:pointer;font-size:1.1rem;box-shadow: 0 4px 12px rgba(29,185,84,0.4);transition: all 0.2s;" onmouseover="this.style.background='#1ed760';this.style.transform='scale(1.05)';" onmouseout="this.style.background='#1db954';this.style.transform='scale(1)';">▶ Play All</button>
+        <button onclick="playAllTracksFromModal()" style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#141414;border:none;padding:14px 40px;border-radius:28px;font-weight:700;cursor:pointer;font-size:1.1rem;box-shadow: 0 4px 12px rgba(255,185,40,0.45);transition: all 0.2s;" onmouseover="this.style.background='linear-gradient(135deg,#FFE066,#FFB347)';this.style.transform='scale(1.05)';" onmouseout="this.style.background='linear-gradient(135deg,#FFD700,#FFA500)';this.style.transform='scale(1)';">▶ Play All</button>
       </div>
       <div style="margin-top:32px;">
         ${tracksHTML}
@@ -28330,6 +29110,48 @@ function openGenrePlaylist(genre) {
     return;
   }
 
+  if ((genre || '').toLowerCase() === 'jazz') {
+    const jazzOnly = [
+      {
+        title: 'We Can',
+        artist: 'Sour Parsonz',
+        url: 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3',
+        genre: 'jazz',
+        duration: '3:20'
+      },
+      {
+        title: 'Golden Years',
+        artist: 'Tony Bennet',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3',
+        genre: 'jazz',
+        duration: '3:20'
+      },
+      {
+        title: 'Cutie',
+        artist: 'Ted Bennet',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Cute%20Hair.mp3',
+        genre: 'jazz',
+        duration: '3:20'
+      },
+      {
+        title: 'Love n Grit',
+        artist: 'Tony Bennet',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Love%20N%20Grit.mp3',
+        genre: 'jazz',
+        duration: '3:20'
+      },
+      {
+        title: 'Soon',
+        artist: 'Tony Bennet',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Soon%20(1).mp3',
+        genre: 'jazz',
+        duration: '3:20'
+      }
+    ];
+    showPlaylistModal('Jazz', 'Smooth jazz and classic compositions', jazzOnly);
+    return;
+  }
+
   const genreNames = {
     'pop': 'Pop',
     'rock': 'Rock',
@@ -28387,33 +29209,60 @@ function showAfrobeatGoldPopup(tracks) {
 // Featured Playlist Functions - Updated to show popup
 function openFeaturedPlaylist(playlistType) {
   const allTracks = getAllAvailableTracks();
+  const featuredTopGoldTracks = [
+    { title: 'Silicon Ghost', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Everytime', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Sicka Bugs', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Solid Night', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Solid%20Night.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Take a Swing', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Everytime - Cover', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Paradise', artist: 'Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', genre: 'afrobeat', duration: '3:20' }
+  ];
+  const workoutTracks = [
+    { title: 'Push It', artist: 'B-Gallop', url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav', genre: 'hiphop', duration: '3:20' },
+    { title: 'Flex is Wealth', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Neat Rep', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Crown', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Crown.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Won\'t Fold', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Won%27t%20Fold.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', genre: 'hiphop', duration: '3:20' },
+    { title: 'Soul', artist: 'Desiree', url: 'https://storage.googleapis.com/hertz-music-folder/Soul.wav', genre: 'rnb', duration: '3:20' }
+  ];
+  const chillTopGoldUnderSiliconGhostTracks = [
+    { title: 'Everytime', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Sicka Bugs', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Solid Night', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Solid%20Night.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Take a Swing', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Everytime - Cover', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Paradise', artist: 'Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Paradise.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Vinyl', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Vinyl_Eyes_FULL_SONG_MusicGPT%20(1).mp3', genre: 'afrobeat', duration: '3:20' }
+  ];
   let title, description;
 
   const playlistData = {
     'today-hits': {
       title: "Today's Hits",
       description: 'The hottest tracks right now',
-      tracks: allTracks
+      tracks: featuredTopGoldTracks
     },
     'workout': {
       title: 'Workout Mix',
       description: 'High-energy tracks for your workout',
-      tracks: allTracks
+      tracks: workoutTracks
     },
     'chill': {
       title: 'Chill Vibes',
       description: 'Relaxing music for any mood',
-      tracks: allTracks
+      tracks: chillTopGoldUnderSiliconGhostTracks
     },
     'party': {
       title: 'Party Hits',
       description: 'Turn up the volume and dance',
-      tracks: allTracks
+      tracks: featuredTopGoldTracks
     },
     'throwback': {
       title: 'Throwback Thursday',
       description: 'Classic hits from your collection',
-      tracks: allTracks
+      tracks: featuredTopGoldTracks
     }
   };
 
@@ -28426,6 +29275,89 @@ function openFeaturedPlaylist(playlistType) {
 // Album Functions - Updated to show popup
 function openAlbum(albumId) {
   const allTracks = getAllAvailableTracks();
+  const futureNostalgiaTracks = (typeof window.getGoldPopularTracksFromDOM === 'function'
+    ? window.getGoldPopularTracksFromDOM()
+    : []).map((track) => ({
+      title: track.title,
+      artist: track.artist,
+      url: track.url,
+      genre: track.genre || 'afrobeat',
+      duration: track.duration || '3:20'
+    }));
+  const afterHoursTracks = [
+    {
+      title: 'Rest 2 Float (6hz-12hz)',
+      artist: 'Nikola TeslAI',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Calming%20Peaceful%20Mix%206hz.mp3',
+      genre: 'ambient',
+      duration: '3:20'
+    }
+  ];
+  const positionsTracks = [
+    {
+      title: 'Heart-lock',
+      artist: 'B-Mecha',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Heart-Lock.mp3',
+      genre: 'pop',
+      duration: '3:20'
+    },
+    {
+      title: 'Bight-Gum',
+      artist: 'Sour Parsonz',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Bight_Thigh_FULL_SONG_MusicGPT.mp3',
+      genre: 'afrobeat',
+      duration: '3:20'
+    },
+    {
+      title: 'Purpose',
+      artist: 'B Tilla',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Purpose.mp3',
+      genre: 'pop',
+      duration: '3:20'
+    },
+    {
+      title: 'Holo-Flex',
+      artist: 'B-Gallop',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Holo-Flex.mp3',
+      genre: 'electronic',
+      duration: '3:20'
+    },
+    {
+      title: 'Click',
+      artist: 'Cain Heresy',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Click.mp3',
+      genre: 'hiphop',
+      duration: '3:20'
+    },
+    {
+      title: 'Times',
+      artist: 'Stat Cross',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav',
+      genre: 'jazz',
+      duration: '3:20'
+    },
+    {
+      title: 'Prime',
+      artist: 'SlattZ',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav',
+      genre: 'hiphop',
+      duration: '3:20'
+    }
+  ];
+  const circlesTracks = [
+    { title: 'Vinyl', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Vinyl_Eyes_FULL_SONG_MusicGPT%20(1).mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Ease Race', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Ease%20Race.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Hi Smile 😁', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Hi%20Smile%20%F0%9F%98%81.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Smoke', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Smoke.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Matrix', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Matrix.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Blood Train', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Blood%20Train.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Glow Dior', artist: 'B-Mecha', url: 'https://storage.googleapis.com/hertz-music-folder/Glow%20Dior.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Keys For Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Keys%20For%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Be My Baby', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Be%20My%20Baby.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'See her Happy', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/See%20her%20Happy.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Crown', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Crown.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Peak My Interest', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Peak%20My%20Interest.mp3', genre: 'afrobeat', duration: '3:20' }
+  ];
   let title, description;
 
   const albumData = {
@@ -28434,7 +29366,7 @@ function openAlbum(albumId) {
       artist: 'Dua Lipa',
       year: '2020',
       genre: 'Pop',
-      tracks: allTracks
+      tracks: futureNostalgiaTracks.length ? futureNostalgiaTracks : allTracks
     },
     'folklore': {
       title: 'Folklore',
@@ -28448,21 +29380,21 @@ function openAlbum(albumId) {
       artist: 'The Weeknd',
       year: '2020',
       genre: 'R&B',
-      tracks: allTracks
+      tracks: afterHoursTracks
     },
     'positions': {
       title: 'Positions',
       artist: 'Ariana Grande',
       year: '2020',
       genre: 'Pop',
-      tracks: allTracks
+      tracks: positionsTracks
     },
     'circles': {
       title: 'Circles',
       artist: 'Post Malone',
       year: '2019',
       genre: 'Hip-Hop',
-      tracks: allTracks
+      tracks: circlesTracks
     }
   };
 
@@ -28485,9 +29417,9 @@ function openAlbum(albumId) {
       <button onclick="window.closeCubeVisualizer && window.closeCubeVisualizer()" style="background:none;border:none;color:#FFD700;font-size:1.1rem;cursor:pointer;line-height:1;opacity:0.7;" title="Close">✕</button>
     </div>
 
-    <div id="envWaveScene" style="width:100%;height:190px;position:relative;perspective:620px;display:flex;align-items:center;justify-content:center;">
-      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 75%,rgba(255,205,60,0.16),rgba(255,205,60,0) 62%);"></div>
-      <canvas id="envWaveCanvas" width="360" height="180" style="width:100%;max-width:380px;height:180px;display:block;transform:rotateX(58deg) translateY(-8px);transform-origin:50% 70%;filter:drop-shadow(0 0 12px rgba(255,210,90,0.3)) drop-shadow(0 0 30px rgba(255,170,0,0.18));"></canvas>
+    <div id="envWaveScene" style="width:236px;height:236px;position:relative;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;border:1.5px solid rgba(255,215,0,0.34);background:radial-gradient(circle at 50% 50%,rgba(255,220,110,0.12),rgba(8,8,12,0.98) 72%);box-shadow:inset 0 0 22px rgba(255,225,140,0.08),0 0 24px rgba(255,180,40,0.12);flex:0 0 auto;">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,205,60,0.16),rgba(255,205,60,0) 62%);"></div>
+      <canvas id="envWaveCanvas" width="236" height="236" style="width:236px;height:236px;display:block;border-radius:50%;filter:drop-shadow(0 0 12px rgba(255,210,90,0.3)) drop-shadow(0 0 30px rgba(255,170,0,0.18));"></canvas>
     </div>
 
     <div id="cubeVisualizerLabel" style="color:#FFD700;font-size:0.7rem;font-weight:600;opacity:0.7;letter-spacing:0.05em;">—</div>
@@ -28503,10 +29435,49 @@ function openAlbum(albumId) {
   var _bassLevel = 0;
   var _bassBodyLevel = 0;
   var _voiceLevel = 0;
+  // Extra-smoothed display levels for fluid circle expansion (separate from signal detection).
+  var _dispBass = 0;
+  var _dispBassBody = 0;
+  var _dispVoice = 0;
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
   function getLabel() { return document.getElementById('cubeVisualizerLabel'); }
+
+  function updateStickyWaveBadge() {
+    var badge = document.getElementById('stickyHzWaveBadge');
+    if (!badge) return;
+
+    var now = performance.now() * 0.001;
+    var colorCycle = 2.0;
+    var cycleStep = 18.0;
+    var cycleIndex = Math.floor(now / colorCycle);
+    var cycleRaw = (now % colorCycle) / colorCycle;
+    var cycleProgress = cycleRaw * cycleRaw * (3 - 2 * cycleRaw);
+    var hue = 42 + (cycleIndex + cycleProgress) * cycleStep;
+    hue = ((hue % 360) + 360) % 360;
+
+    badge.style.setProperty('--hz-wave-fill', 'hsla(' + hue.toFixed(2) + ',84%,70%,0.24)');
+    badge.style.setProperty('--hz-wave-border', 'hsla(' + (hue - 10).toFixed(2) + ',74%,64%,0.88)');
+    badge.style.setProperty('--hz-wave-shadow', 'hsla(' + (hue - 6).toFixed(2) + ',78%,58%,0.34)');
+    badge.style.setProperty('--hz-wave-text', 'hsla(' + hue.toFixed(2) + ',88%,76%,0.98)');
+
+    var badgeTime = document.getElementById('stickyHzWaveBadgeTime');
+    if (badgeTime) {
+      var currentTimeEl = document.getElementById('currentTime');
+      var durationEl = document.getElementById('duration');
+      var currentValue = currentTimeEl ? currentTimeEl.textContent.trim() : '0:00';
+      var durationValue = durationEl ? durationEl.textContent.trim() : '0:00';
+      badgeTime.textContent = currentValue + ' / ' + durationValue;
+    }
+
+    window._stickyHzWaveBadgeFrame = requestAnimationFrame(updateStickyWaveBadge);
+  }
+
+  function startStickyWaveBadge() {
+    if (window._stickyHzWaveBadgeFrame) cancelAnimationFrame(window._stickyHzWaveBadgeFrame);
+    updateStickyWaveBadge();
+  }
 
   function setupAudioAnalyser() {
     // Intentionally disabled to avoid any interaction with the sticky player's output path.
@@ -28595,12 +29566,26 @@ function openAlbum(albumId) {
     var voice = sig.voice;
     var energy = bass * 0.38 + bassBody * 0.34 + voice * 0.28;
 
+    // Extra-smooth display levels so circle expansion feels fluid, not jittery.
+    var _ds = 0.07;
+    _dispBass     = _dispBass     + (bass     - _dispBass)     * _ds;
+    _dispBassBody = _dispBassBody + (bassBody - _dispBassBody) * _ds;
+    _dispVoice    = _dispVoice    + (voice    - _dispVoice)    * _ds;
+
+    // Scale the whole circle using smoothed display levels so it grows fluidly.
+    var velocityDrive = Math.max(0, Math.min(1, _dispBass * 0.45 + _dispBassBody * 0.35 + _dispVoice * 0.20));
+    var velocityGated = Math.max(0, (velocityDrive - 0.12) / 0.88);
+    var velocityBoost = Math.pow(velocityGated, 0.88);
+    var circleScale = 1 + velocityBoost * 0.28;
+    canvas.style.transformOrigin = '50% 50%';
+    canvas.style.transform = 'scale(' + circleScale.toFixed(3) + ')';
+
     ctx.clearRect(0, 0, w, h);
 
-    // Radial glow anchored near the bottom — grows with overall energy
+    // Central glow grows with overall energy.
     if (energy > 0.005) {
-      var glowR = Math.round(Math.min(w, h) * (0.08 + energy * 0.55));
-      var glow  = ctx.createRadialGradient(w * 0.5, h * 0.92, 2, w * 0.5, h * 0.92, glowR);
+      var glowR = Math.round(Math.min(w, h) * (0.10 + energy * 0.34));
+      var glow  = ctx.createRadialGradient(w * 0.5, h * 0.5, 2, w * 0.5, h * 0.5, glowR);
       glow.addColorStop(0, 'rgba(255,218,100,' + (energy * 0.45).toFixed(3) + ')');
       glow.addColorStop(1, 'rgba(255,180,40,0)');
       ctx.fillStyle = glow;
@@ -28621,7 +29606,7 @@ function openAlbum(albumId) {
       return 'hsla(' + hue.toFixed(2) + ',' + s.toFixed(2) + '%,' + l.toFixed(2) + '%,' + a.toFixed(3) + ')';
     }
 
-    // Smoothly shift each wave palette every 2 seconds.
+    // Smoothly shift each ring palette every 2 seconds.
     var colorCycle = 2.0;
     var cycleStep = 18.0;
     var cycleIndex = Math.floor(t / colorCycle);
@@ -28634,6 +29619,7 @@ function openAlbum(albumId) {
       return {
         top: hsla(hue, sat, 72, 0.95),
         base: hsla(hue - 10, sat - 10, 42, 0.08),
+        fill: hsla(hue - 4, sat - 4, 58, 0.14),
         shadow: hsla(hue - 6, sat - 14, 58, 0.54)
       };
     }
@@ -28642,67 +29628,100 @@ function openAlbum(albumId) {
     var bassBodyPalette = wavePalette(30, 2);
     var voicePalette = wavePalette(18, 0);
 
-    // drawUpWave — wave is anchored at baseY and expands UPWARD proportional to drive.
-    // Completely invisible (returns immediately) when drive is near zero.
-    function drawUpWave(baseY, drive, speed, freq, harm, colorTop, colorBase, lineW, shadowCol) {
-      var visualDrive = Math.max(0.008, drive);
+    // alwaysVisible: keep ring as an idle perfect circle when drive is low.
+    // idleR: the radius of that idle circle (smaller than radiusBase).
+    function drawCircularBand(radiusBase, radiusSpread, drive, speed, freq, harm, palette, lineW, responseGate, responsePower, alwaysVisible, idleR) {
+      var gatedDrive = Math.max(0, (drive - responseGate) / Math.max(0.0001, 1 - responseGate));
+      var visualDrive = Math.pow(gatedDrive, responsePower);
 
-      var maxAmp = h * 0.42 * visualDrive;
+      var isIdle = visualDrive <= 0.002;
+      if (isIdle && !alwaysVisible) return;
 
-      // Pre-compute wave y values (upward = negative canvas direction)
-      function waveY(x) {
-        var phase = (x / w) * freq * Math.PI * 2 + t * speed;
-        var n1 = Math.sin(phase);
-        var n2 = Math.sin(phase * harm  + 0.7)  * 0.48;
-        var n3 = Math.sin(phase * 0.48  - t * speed * 0.38) * 0.28;
-        var shape = (n1 + n2 + n3) / 1.76; // ~-1 to +1
-        // Map to 0-1 range, scale by maxAmp, go upward
-        return baseY - ((shape + 1) * 0.5) * maxAmp;
+      var points = 150;
+      var cx = w * 0.5;
+      var cy = h * 0.5;
+
+      // Blend from idle perfect-circle radius → active radius as drive rises.
+      var _ir = idleR || radiusBase * 0.52;
+      var expandBlend = Math.min(1, visualDrive * 3.0);                               // 0→1 as drive rises
+      var shapeBlend  = Math.min(1, Math.max(0, (visualDrive - 0.22) / 0.55));        // distortion only on strong spikes
+      var currentBase = _ir + (radiusBase - _ir) * expandBlend;
+      var radialBoost = radiusSpread * (0.16 + visualDrive * 1.48);
+
+      var grad = ctx.createRadialGradient(cx, cy, Math.max(0, currentBase - radialBoost * 0.55), cx, cy, currentBase + Math.max(1, radialBoost));
+      grad.addColorStop(0, palette.fill);
+      grad.addColorStop(1, palette.base);
+
+      // Fill path — only drawn when drive is active (not in idle state).
+      if (!isIdle) {
+        ctx.beginPath();
+        for (var i = 0; i <= points; i++) {
+          var ratio = i / points;
+          var angle = ratio * Math.PI * 2;
+          var phase = angle * freq + t * speed;
+          var n1 = Math.sin(phase);
+          var n2 = Math.sin(phase * harm + 0.7) * 0.44;
+          var n3 = Math.sin(phase * 0.52 - t * speed * 0.34) * 0.24;
+          var shape = ((n1 + n2 + n3) / 1.68) * shapeBlend;
+          var radius = currentBase + shape * radialBoost;
+          var x = cx + Math.cos(angle) * radius;
+          var y = cy + Math.sin(angle) * radius;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.globalAlpha = 0.05 + visualDrive * 0.18;
+        ctx.fill();
+        ctx.globalAlpha = 1;
       }
 
-      // Filled area under the wave crest
-      var grad = ctx.createLinearGradient(0, baseY - maxAmp, 0, baseY);
-      grad.addColorStop(0, colorTop);
-      grad.addColorStop(1, colorBase);
-
+      // Stroke path — perfect circle at idle, gradually wavy only on strong bass/kick/voice.
       ctx.beginPath();
-      ctx.moveTo(0, baseY);
-      for (var x = 0; x <= w; x += 3) ctx.lineTo(x, waveY(x));
-      ctx.lineTo(w, baseY);
+      for (var j = 0; j <= points; j++) {
+        var lineRatio = j / points;
+        var lineAngle = lineRatio * Math.PI * 2;
+        var lineShape = 0;
+        if (shapeBlend > 0) {
+          var linePhase = lineAngle * freq + t * speed;
+          var ln1 = Math.sin(linePhase);
+          var ln2 = Math.sin(linePhase * harm + 0.7) * 0.44;
+          var ln3 = Math.sin(linePhase * 0.52 - t * speed * 0.34) * 0.24;
+          lineShape = ((ln1 + ln2 + ln3) / 1.68) * shapeBlend;
+        }
+        var lineRadius = currentBase + lineShape * radialBoost;
+        var lineX = cx + Math.cos(lineAngle) * lineRadius;
+        var lineY = cy + Math.sin(lineAngle) * lineRadius;
+        if (j === 0) ctx.moveTo(lineX, lineY);
+        else ctx.lineTo(lineX, lineY);
+      }
       ctx.closePath();
-      ctx.fillStyle = grad;
-      ctx.globalAlpha = 0.12 + visualDrive * 0.18;
-      ctx.fill();
-      ctx.globalAlpha = 1;
-
-      // Bright top-edge stroke
-      ctx.beginPath();
-      for (var x = 0; x <= w; x += 3) {
-        if (x === 0) ctx.moveTo(0, waveY(0));
-        else         ctx.lineTo(x, waveY(x));
-      }
-      ctx.strokeStyle = grad;
-      ctx.lineWidth   = lineW + visualDrive * 2.4;
-      ctx.shadowBlur  = 10 + visualDrive * 20;
-      ctx.shadowColor = shadowCol;
+      ctx.strokeStyle = palette.top;
+      ctx.lineWidth = isIdle ? lineW * 0.6 : (lineW + visualDrive * 3.0);
+      ctx.shadowBlur = isIdle ? 3 : (10 + visualDrive * 26);
+      ctx.shadowColor = palette.shadow;
+      ctx.globalAlpha = isIdle ? 0.28 : (0.55 + expandBlend * 0.45);
       ctx.stroke();
-      ctx.shadowBlur  = 0;
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
     }
 
-    // Wave 1 — Bass (sub-low body): lowest baseline, largest slow swell, moves most upward
-    drawUpWave(h * 0.96, bass,  1.35, 2.8, 1.55,
-      bassPalette.top, bassPalette.base,
-      3.2, bassPalette.shadow);
+    // 2 outer rings: always visible as small perfect circles at rest, expand + distort on strong bass/kick/voice.
+    // Inner voice ring: only appears when voice/instrument energy is present.
+    var R = Math.min(w, h);
+    drawCircularBand(R * 0.36, R * 0.12, bass,     1.35, 4.0, 1.55, bassPalette,     3.2, 0.22, 0.72, true,  R * 0.23);
+    drawCircularBand(R * 0.29, R * 0.10, bassBody, 2.45, 5.2, 1.66, bassBodyPalette, 2.7, 0.24, 0.76, true,  R * 0.17);
+    drawCircularBand(R * 0.22, R * 0.08, voice,    3.90, 7.4, 1.90, voicePalette,    2.2, 0.30, 0.82, false, 0);
 
-    // Wave 2 — Bass/808 body (higher bass harmonics and knock)
-    drawUpWave(h * 0.78, bassBody,  2.45, 3.4, 1.66,
-      bassBodyPalette.top, bassBodyPalette.base,
-      2.7, bassBodyPalette.shadow);
-
-    // Wave 3 — Voice (vocal midrange): highest baseline, fast complex flicker
-    drawUpWave(h * 0.60, voice, 3.90, 5.5, 1.90,
-      voicePalette.top,  voicePalette.base,
-      2.2, voicePalette.shadow);
+    if (energy > 0.01) {
+      var coreGrad = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * (0.07 + energy * 0.08));
+      coreGrad.addColorStop(0, 'rgba(255,240,190,' + (0.22 + energy * 0.16).toFixed(3) + ')');
+      coreGrad.addColorStop(1, 'rgba(255,200,80,0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(w * 0.5, h * 0.5, Math.min(w, h) * (0.07 + energy * 0.08), 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     var lbl = getLabel();
     if (lbl) {
@@ -28761,8 +29780,10 @@ function openAlbum(albumId) {
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', attachTitleClick);
+    document.addEventListener('DOMContentLoaded', startStickyWaveBadge);
   } else {
     attachTitleClick();
+    startStickyWaveBadge();
     setTimeout(attachTitleClick, 800);
   }
 })();
