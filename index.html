@@ -10719,7 +10719,6 @@ This digital ghost built to last`;
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Made for you</h2>
-          <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
           <!-- Most Popular Card - Second Option -->
@@ -10750,7 +10749,6 @@ This digital ghost built to last`;
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Genres</h2>
-          <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
           <div class="content-card content-card-small" onclick="openGenrePlaylist('pop')" style="cursor: pointer;">
@@ -10806,7 +10804,6 @@ This digital ghost built to last`;
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Featured Playlists</h2>
-          <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
           <div class="content-card content-card-small" onclick="openFeaturedPlaylist('today-hits')" style="cursor: pointer;">
@@ -10855,7 +10852,6 @@ This digital ghost built to last`;
       <div class="content-section">
         <div class="section-header">
           <h2 class="section-title">Albums for You</h2>
-          <a href="#" class="see-all-link">See all</a>
         </div>
         <div class="content-cards">
           <div class="content-card content-card-small" onclick="openAlbum('future-nostalgia')" style="cursor: pointer;">
@@ -22548,14 +22544,32 @@ function showGenrePopup(genre) {
     // Most Popular Functions
     function openMostPopular() {
       console.log('🔥 Opening Most Popular');
+      const requestedTracks = [
+        { title: 'Silicon Ghost', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', genre: 'afrobeat', duration: '3:20' },
+        { title: 'Everytime', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', genre: 'afrobeat', duration: '3:20' },
+        { title: 'Glow Dior', artist: 'B-Mecha', url: 'https://storage.googleapis.com/hertz-music-folder/Glow%20Dior.mp3', genre: 'afrobeat', duration: '3:20' },
+        { title: 'Talk to Me', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Talk%20to%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+        { title: 'Blicky Slap', artist: 'VAI-PE', url: 'https://storage.googleapis.com/hertz-music-folder/Blicky%20Slap.mp3', genre: 'hiphop', duration: '3:20' },
+        { title: 'Course Correct', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Course%20Correct.mp3', genre: 'hiphop', duration: '3:20' },
+        { title: 'Sicca bugs', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', genre: 'afrobeat', duration: '3:20' },
+        { title: 'Neat Rep', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' }
+      ];
       const goldTracks = (typeof window.getGoldPopularTracksFromDOM === 'function')
         ? window.getGoldPopularTracksFromDOM()
         : [];
+      const requestedKeys = new Set(requestedTracks.map(function(track) {
+        return (track.title || '').trim().toLowerCase();
+      }));
+      const mostPopularTracks = requestedTracks.concat(
+        goldTracks.filter(function(track) {
+          return !requestedKeys.has(((track && track.title) || '').trim().toLowerCase());
+        })
+      );
 
       showPlaylistModal(
         'Most Popular',
         'Gold-tier popular tracks from your catalog',
-        goldTracks
+        mostPopularTracks
       );
     }
 
@@ -29041,16 +29055,32 @@ function getAllAvailableTracks() {
 // Made For You Functions
 function openMadeForYouPlaylist(playlistId) {
   const allTracks = getAllAvailableTracks();
+  const requestedTracks = [
+    { title: 'Silicon Ghost', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Everytime', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Everytime.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Glow Dior', artist: 'B-Mecha', url: 'https://storage.googleapis.com/hertz-music-folder/Glow%20Dior.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Talk to Me', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Talk%20to%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Blicky Slap', artist: 'VAI-PE', url: 'https://storage.googleapis.com/hertz-music-folder/Blicky%20Slap.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Course Correct', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Course%20Correct.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Sicca bugs', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Neat Rep', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' }
+  ];
   let title, description, tracks;
 
   if (playlistId === 'lovely-mix') {
     title = 'Lovely Mix';
     description = 'A curated gold-track blend from Popular Tracks';
-    tracks = allTracks;
+    const requestedKeys = new Set(requestedTracks.map(function(track) {
+      return (track.title || '').trim().toLowerCase();
+    }));
+    const existingLovelyTracks = allTracks.filter(function(track) {
+      return !requestedKeys.has(((track && track.title) || '').trim().toLowerCase());
+    });
+    tracks = requestedTracks.concat(existingLovelyTracks);
   } else if (playlistId === 'tunes') {
     title = 'Tunes';
     description = 'Your full gold-track catalog mix';
-    tracks = allTracks;
+    tracks = requestedTracks;
   }
 
   showPlaylistModal(title, description, tracks);
@@ -29090,12 +29120,17 @@ function openGenrePlaylist(genre) {
       'Keys For Me', 'Waitin To See', '3 AM', 'Be My Baby', 'Clip It',
       'Physics Flex', 'Anti-Grav', 'Course Correct', 'Flex is Wealth',
       'Neat Rep', 'Blast Off', 'Feel Right', 'Love It', 'Want it All',
-      'Ride wid Me', 'Prime'
+      'Ride wid Me', 'Prime',
+      'Blicky Slap', 'Ease Race', 'Sirens', 'Watch', 'Purpose'
     ];
     
     const hiphopOnly = [];
+    const seenHiphop = new Set();
     hiphopTrackNames.forEach((name) => {
       if (window.trackData && window.trackData[name]) {
+        const key = (window.trackData[name].title || name || '').trim().toLowerCase();
+        if (seenHiphop.has(key)) return;
+        seenHiphop.add(key);
         hiphopOnly.push({
           title: window.trackData[name].title || name,
           artist: window.trackData[name].artist || '',
@@ -29106,7 +29141,7 @@ function openGenrePlaylist(genre) {
       }
     });
     
-    showHipHopGoldPopup(hiphopOnly);
+    showPlaylistModal('Hip-Hop', 'Latest rap and hip-hop beats from your collection', hiphopOnly);
     return;
   }
 
@@ -29275,21 +29310,59 @@ function openFeaturedPlaylist(playlistType) {
 // Album Functions - Updated to show popup
 function openAlbum(albumId) {
   const allTracks = getAllAvailableTracks();
-  const futureNostalgiaTracks = (typeof window.getGoldPopularTracksFromDOM === 'function'
-    ? window.getGoldPopularTracksFromDOM()
-    : []).map((track) => ({
-      title: track.title,
-      artist: track.artist,
-      url: track.url,
-      genre: track.genre || 'afrobeat',
-      duration: track.duration || '3:20'
-    }));
+  const futureNostalgiaTracks = [
+    { title: 'MF Rocket', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Mag-Lev Charge', artist: 'Sour Parsonz', url: 'https://storage.googleapis.com/hertz-music-folder/Mag-Lev%20Charge.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Want it All', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Course Correct', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Course%20Correct.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Crown', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Crown.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Neat Rep', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' },
+    { title: 'Everytime - Cover', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', genre: 'afrobeat', duration: '3:20' },
+    { title: 'Blast Off', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', genre: 'hiphop', duration: '3:20' }
+  ];
   const afterHoursTracks = [
     {
       title: 'Rest 2 Float (6hz-12hz)',
       artist: 'Nikola TeslAI',
       url: 'https://storage.googleapis.com/hertz-music-folder/Calming%20Peaceful%20Mix%206hz.mp3',
       genre: 'ambient',
+      duration: '3:20'
+    }
+  ];
+  const folkloreTracks = [
+    {
+      title: 'We Can',
+      artist: 'Sour Parsonz',
+      url: 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3',
+      genre: 'jazz',
+      duration: '3:20'
+    },
+    {
+      title: 'Golden Years',
+      artist: 'Tony Bennet',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3',
+      genre: 'jazz',
+      duration: '3:20'
+    },
+    {
+      title: 'Cutie',
+      artist: 'Ted Bennet',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Cute%20Hair.mp3',
+      genre: 'jazz',
+      duration: '3:20'
+    },
+    {
+      title: 'Love n Grit',
+      artist: 'Tony Bennet',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Love%20N%20Grit.mp3',
+      genre: 'jazz',
+      duration: '3:20'
+    },
+    {
+      title: 'Soon',
+      artist: 'Tony Bennet',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Soon%20(1).mp3',
+      genre: 'jazz',
       duration: '3:20'
     }
   ];
@@ -29366,14 +29439,14 @@ function openAlbum(albumId) {
       artist: 'Dua Lipa',
       year: '2020',
       genre: 'Pop',
-      tracks: futureNostalgiaTracks.length ? futureNostalgiaTracks : allTracks
+      tracks: futureNostalgiaTracks
     },
     'folklore': {
       title: 'Folklore',
       artist: 'Taylor Swift',
       year: '2020',
       genre: 'Alternative',
-      tracks: allTracks
+      tracks: folkloreTracks
     },
     'after-hours': {
       title: 'After Hours',
@@ -29706,12 +29779,32 @@ function openAlbum(albumId) {
       ctx.shadowBlur = 0;
     }
 
-    // 2 outer rings: always visible as small perfect circles at rest, expand + distort on strong bass/kick/voice.
-    // Inner voice ring: only appears when voice/instrument energy is present.
-    var R = Math.min(w, h);
-    drawCircularBand(R * 0.36, R * 0.12, bass,     1.35, 4.0, 1.55, bassPalette,     3.2, 0.22, 0.72, true,  R * 0.23);
-    drawCircularBand(R * 0.29, R * 0.10, bassBody, 2.45, 5.2, 1.66, bassBodyPalette, 2.7, 0.24, 0.76, true,  R * 0.17);
-    drawCircularBand(R * 0.22, R * 0.08, voice,    3.90, 7.4, 1.90, voicePalette,    2.2, 0.30, 0.82, false, 0);
+    // Five thin grey velocity-reactive perfect-circle layers.
+    var minDim = Math.min(w, h);
+    var centerX = w * 0.5;
+    var centerY = h * 0.5;
+    var ringCount = 5;
+    var baseStart = minDim * 0.15;
+    var baseStep = minDim * 0.038;
+    var velocityForRings = Math.max(0, Math.min(1, velocityDrive));
+
+    for (var ringIndex = 0; ringIndex < ringCount; ringIndex++) {
+      var phase = t * (1.15 + ringIndex * 0.16) + ringIndex * 0.9;
+      var pulse = 0.5 + 0.5 * Math.sin(phase);
+      var pulseSigned = (pulse * 2 - 1);
+      var ringVelocityAmp = (minDim * 0.006) + velocityForRings * (minDim * 0.018);
+      var ringRadius = baseStart + ringIndex * baseStep + pulseSigned * ringVelocityAmp;
+      var ringAlpha = 0.22 + velocityForRings * 0.34 + ringIndex * 0.03;
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, ringRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(170,170,170,' + Math.min(0.82, ringAlpha).toFixed(3) + ')';
+      ctx.lineWidth = Math.max(1, dpr * 0.8);
+      ctx.shadowBlur = 2 + velocityForRings * 8;
+      ctx.shadowColor = 'rgba(165,165,165,' + (0.20 + velocityForRings * 0.28).toFixed(3) + ')';
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
 
     if (energy > 0.01) {
       var coreGrad = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * (0.07 + energy * 0.08));
@@ -30322,10 +30415,132 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       hasTrackActivation = true;
+
+      // Instant sticky-player playback fast-path.
+      // Keeps existing logic below, but starts playback immediately with no intentional delay.
+      const stickyPlayerEl = document.getElementById('stickyPlayer');
+      const playerAudioEl = document.getElementById('playerAudio');
+      const playerTitleEl = document.getElementById('playerTrackTitle');
+      const playerArtistEl = document.getElementById('playerArtist');
+      let instantUrl = trackUrl;
+
+      if (!instantUrl || !/^https?:\/\//i.test(instantUrl)) {
+        if (window.trackData && window.trackData[trackId] && window.trackData[trackId].url) {
+          instantUrl = window.trackData[trackId].url;
+        } else if (typeof resolveTrackUrl === 'function') {
+          instantUrl = resolveTrackUrl(trackId, instantUrl);
+        }
+      }
+
+      if (stickyPlayerEl) {
+        stickyPlayerEl.style.display = 'flex';
+        stickyPlayerEl.style.opacity = '1';
+        stickyPlayerEl.style.visibility = 'visible';
+        stickyPlayerEl.classList.remove('hidden');
+      }
+
+      if (playerTitleEl) {
+        const labelTitle = trackTitle || trackId || '';
+        playerTitleEl.textContent = labelTitle;
+      }
+
+      if (playerArtistEl) {
+        playerArtistEl.textContent = trackArtist || '';
+      }
+
+      if (typeof window.syncAutoplayOrderForTrack === 'function' && trackId) {
+        window.syncAutoplayOrderForTrack(trackId);
+      }
+
+      window.currentTrackId = trackId || trackTitle || '';
+      window.currentTrackData = {
+        id: trackId || trackTitle || '',
+        url: instantUrl || trackUrl || '',
+        title: trackTitle || trackId || '',
+        artist: trackArtist || ''
+      };
+
+      let instantPlaybackStarted = false;
+      if (playerAudioEl && instantUrl && /^https?:\/\//i.test(instantUrl)) {
+        try {
+          playerAudioEl.pause();
+        } catch (e) {}
+
+        if (playerAudioEl.src !== instantUrl) {
+          playerAudioEl.src = instantUrl;
+        }
+
+        try {
+          playerAudioEl.currentTime = 0;
+        } catch (e) {
+          // If metadata isn't ready yet, reset as soon as it's available.
+          playerAudioEl.addEventListener('loadedmetadata', function onMeta() {
+            playerAudioEl.removeEventListener('loadedmetadata', onMeta);
+            try { playerAudioEl.currentTime = 0; } catch (err) {}
+          }, { once: true });
+        }
+
+        playerAudioEl.autoplay = true;
+        const instantPlay = playerAudioEl.play();
+        if (instantPlay && typeof instantPlay.catch === 'function') {
+          instantPlay.catch(function() {});
+        }
+        instantPlaybackStarted = true;
+      }
+
+      if (instantPlaybackStarted) {
+        syncPlayPauseIcon();
+        updatePlayerVisibility();
+        return true;
+      }
+
       return originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
     };
     window.playNewTrack._hzStickyControlWrapped = true;
     window.playNewTrack._hzOriginalPlayNewTrack = originalPlayNewTrack;
+  }
+
+  if (!window.__hzInstantSelectionHandlerBound) {
+    window.__hzInstantSelectionHandlerBound = true;
+
+    const parsePlayNewTrackArgs = function(onclickAttr) {
+      if (!onclickAttr) return null;
+      const match = onclickAttr.match(/playNewTrack\('((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)'\)/);
+      if (!match) return null;
+      const decodeArg = function(v) {
+        return (v || '').replace(/\\'/g, "'").replace(/&#39;/g, "'");
+      };
+      return {
+        trackId: decodeArg(match[1]),
+        trackUrl: decodeArg(match[2]),
+        trackTitle: decodeArg(match[3]),
+        trackArtist: decodeArg(match[4])
+      };
+    };
+
+    document.addEventListener('click', function(e) {
+      const blocked = e.target.closest('.track-like-btn, .track-menu-btn');
+      if (blocked) return;
+
+      const selected = e.target.closest('.recently-played-list .recent-track-item, .track-table .track-row, #playlistModalContent [onclick*="playNewTrack"]');
+      if (!selected) return;
+
+      const onclickAttr = selected.getAttribute('onclick') || '';
+      if (!onclickAttr || onclickAttr.indexOf('playNewTrack(') === -1) return;
+
+      const parsed = parsePlayNewTrackArgs(onclickAttr);
+      if (!parsed || typeof window.playNewTrack !== 'function') return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+
+      window.playNewTrack(parsed.trackId, parsed.trackUrl, parsed.trackTitle, parsed.trackArtist);
+
+      if (selected.closest('#playlistModalContent') && typeof window.closePlaylistModal === 'function') {
+        window.closePlaylistModal();
+      }
+    }, true);
   }
 
   if (playPauseBtnEl && !playPauseBtnEl.dataset.stickyControlsBound) {
