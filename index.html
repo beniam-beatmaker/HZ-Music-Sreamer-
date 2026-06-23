@@ -10940,7 +10940,7 @@ last i checked this is best, specially since it could be real safe`;
   <div class="sticky-player" id="stickyPlayer" style="display:none;">
       <!-- Time Display and Track Title Row -->
       <div style="width:100%;display:flex;flex-direction:column;align-items:center;margin-bottom:1px;">
-        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1px;cursor:pointer;padding:4px 0;" onclick="window.toggleCubeVisualizer && window.toggleCubeVisualizer();" title="Open 3D Visualizer">
+        <div style="display:flex;justify-content:center;align-items:center;margin-bottom:1px;cursor:pointer;padding:4px 8px;border:1px solid rgba(255,215,0,0.38);border-radius:10px;" onclick="window.toggleCubeVisualizer && window.toggleCubeVisualizer();" title="Open 3D Visualizer">
           <span id="currentTime" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
           <span style="margin:0 2px;color:#fff;font-weight:500;">/</span>
           <span id="duration" style="font-size:0.7rem;color:#FFD700;font-weight:700;text-align:center;letter-spacing:0.04em;">0:00</span>
@@ -13593,6 +13593,31 @@ they could see it all, last i checked this is best, specially since it could be 
 last i checked this is best, specially since it could be real safe`;
               window.lyricsCache[cacheKey] = mailYaLyrics;
               return mailYaLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'power') {
+              const powerLyrics = `Livin in perth since i was 3, never knew i was the, the ironman in the dark, waitin for my time at the top, finna bust it out real tough i, never in the past did i think i could be, yet as time jus passed it was all i could see, 
+
+
+really got me fuckin thinkin, got me hopin, to make all i want, to grace the world uh, 
+
+
+if i had the power i would shine, i would think bout all i can so the human race shines, time after time uh, thoughta many things that could help jus need the power steada feelin like a turtle in a shell, wanna break out wanna fly round i, really wanna make the world fine, not jus for myself but for all alright uh
+
+
+for some time i thought bout ways to stop war, to stop crime, how to make people fly without gettin in a plane to boost all night, thought bout what could help, what can save the lives of the help uh, really wanna make it to see, wanna build some whips to oh please, thinkina how opti could be, think bout the other things now i wanna make it so all could see yea
+
+so all could see yea. This shit might change they lives for the better uh
+
+if i had the power i would shine, i would think bout all i can so the human race shines, time after time uh, thoughta many things that could help jus need the power steada feelin like a turle in a shell, wanna break out wanna fly round i, really wanna make the world fine, not jus for myself but for all alright uh
+
+
+finna make mars easy uh, 
+amount of fuel needed is way less uh, thinkin bout magnets to pull, attract each other then removed, blast to mars as quick as a bullet uh
+
+p.s I'm Beniam Endale Tedla`;
+              window.lyricsCache[cacheKey] = powerLyrics;
+              return powerLyrics;
             }
 
             const storedLyrics = String(trackInfo.lyrics || '').trim();
@@ -17970,6 +17995,24 @@ function showGenrePopup(genre) {
         return;
       }
 
+      // Route uploaded offline audio through the main sticky player path so
+      // all shared controls (play/pause, next/prev, progress, shuffle, loop) stay in sync.
+      try {
+        const offlineMedia = getOfflineMedia();
+        const canonicalTrack = (offlineMedia.audio || []).find(f => f.id === trackId);
+        if (canonicalTrack && typeof playOfflineTrack === 'function') {
+          if (!offlineTracks.some(t => t.id === trackId)) {
+            offlineTracks.push(canonicalTrack);
+            queue = [...offlineTracks];
+          }
+          window.offlineStickyTrackSelected = true;
+          playOfflineTrack(trackId);
+          return;
+        }
+      } catch (error) {
+        console.warn('⚠️ Canonical offline playback route failed, using legacy instant path:', error);
+      }
+
       // STEP 0: Ensure trackData exists and file is ready
       if (!window.trackData) {
         console.warn('⚠️ trackData not found, initializing...');
@@ -18049,8 +18092,9 @@ function showGenrePopup(genre) {
         console.log('🔄 Using main sticky player for instant playback');
 
         const mainPlayer = document.getElementById('stickyPlayer');
-        const mainAudio = document.getElementById('audioPlayer');
-        const mainTitle = document.getElementById('trackTitle');
+        const mainAudio = document.getElementById('playerAudio') || document.getElementById('audioPlayer');
+        const mainTitle = document.getElementById('playerTrackTitle') || document.getElementById('trackTitle');
+        const mainTrackInfo = document.getElementById('stickyTrackInfo');
         const mainPlayBtn = document.getElementById('playPauseBtn');
 
         if (mainPlayer && mainAudio && trackInfo.url && trackInfo.url !== '#') {
@@ -18058,6 +18102,8 @@ function showGenrePopup(genre) {
 
           // Set track info
           if (mainTitle) mainTitle.textContent = trackInfo.title;
+          if (mainTrackInfo) mainTrackInfo.textContent = trackInfo.artist || '';
+          window.offlineStickyTrackSelected = true;
 
           // Set audio source and start playback
           mainAudio.src = trackInfo.url;
@@ -21668,8 +21714,26 @@ function showGenrePopup(genre) {
         if (stickyTrackInfo) stickyTrackInfo.textContent = track.artist || '';
 
         // Set audio source and play
-        playerAudio.src = track.base64 || track.audioUrl;
+        const playbackUrl = track.blobUrl || track.playbackUrl || (typeof createBlobUrl === 'function' ? createBlobUrl(track) : null) || track.audioUrl || track.base64;
+        if (playbackUrl && playbackUrl.startsWith('blob:')) {
+          track.blobUrl = playbackUrl;
+          track.playbackUrl = playbackUrl;
+        }
+        playerAudio.src = playbackUrl;
         playerAudio.loop = false;
+
+        // Force single-play behavior for offline popup track selections.
+        window.loopMode = 0;
+        if (typeof toggleOfflineLoop === 'function') {
+          toggleOfflineLoop();
+        }
+
+        playerAudio.onended = function() {
+          isPlaying = false;
+          if (playPauseBtn) {
+            playPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
+          }
+        };
 
         // Save state immediately for cross-navigation persistence
         globalPlayerState.isPlaying = true;
@@ -29800,7 +29864,7 @@ function openAlbum(albumId) {
     var velocityDrive = Math.max(0, Math.min(1, _dispBass * 0.45 + _dispBassBody * 0.35 + _dispVoice * 0.20));
     var velocityGated = Math.max(0, (velocityDrive - 0.12) / 0.88);
     var velocityBoost = Math.pow(velocityGated, 0.88);
-    var circleScale = 1 + velocityBoost * 0.28;
+    var circleScale = 1 + velocityBoost * 0.40;
     canvas.style.transformOrigin = '50% 50%';
     canvas.style.transform = 'scale(' + circleScale.toFixed(3) + ')';
 
@@ -29870,7 +29934,7 @@ function openAlbum(albumId) {
       var expandBlend = Math.min(1, visualDrive * 3.0);                               // 0→1 as drive rises
       var shapeBlend  = Math.min(1, Math.max(0, (visualDrive - 0.22) / 0.55));        // distortion only on strong spikes
       var currentBase = _ir + (radiusBase - _ir) * expandBlend;
-      var radialBoost = radiusSpread * (0.16 + visualDrive * 1.48);
+      var radialBoost = radiusSpread * (0.20 + visualDrive * 1.86);
 
       var grad = ctx.createRadialGradient(cx, cy, Math.max(0, currentBase - radialBoost * 0.55), cx, cy, currentBase + Math.max(1, radialBoost));
       grad.addColorStop(0, palette.fill);
@@ -29943,7 +30007,7 @@ function openAlbum(albumId) {
       var phase = t * (1.15 + ringIndex * 0.16) + ringIndex * 0.9;
       var pulse = 0.5 + 0.5 * Math.sin(phase);
       var pulseSigned = (pulse * 2 - 1);
-      var ringVelocityAmp = (minDim * 0.006) + velocityForRings * (minDim * 0.018);
+      var ringVelocityAmp = (minDim * 0.010) + velocityForRings * (minDim * 0.038);
       var ringRadius = baseStart + ringIndex * baseStep + pulseSigned * ringVelocityAmp;
       var ringAlpha = 0.22 + velocityForRings * 0.34 + ringIndex * 0.03;
 
