@@ -642,7 +642,8 @@
       'MF Rocket': { url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', title: 'MF Rocket', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Ride wid Me': { url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', title: 'Ride wid Me', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'hiphop' },
-      'Silicon Ghost': { url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', title: 'Silicon Ghost', artist: 'Beniam TedlAI' }
+      'Silicon Ghost': { url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', title: 'Silicon Ghost', artist: 'Beniam TedlAI' },
+      'Cha-Ching': { url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI', genre: 'hiphop' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -1006,7 +1007,36 @@ Every crash, a lesson learned
 A new world turning, fiercely burned
 The screen goes dark, the future's cast
 This digital ghost built to last`;
-      const lyricsText = normalizedResolvedTitle === 'everytime'
+      const chaChingLyrics = `Blowin Smoke in deez streets, lookin at the honeys wid ease,
+yea that shit gives me peace, used to grow up wid all the pot i could need, 
+useda see some fiends in the streets, made me wanna hand em peace for deez,
+cha-ching made me go dark, made me wanna kill em on the spot uh, useda thinka my teachers in the class, 
+useda tell me i gotta get the bag, some useda say i need a job but, i was workin the whole time uh
+
+
+now they see, all the things some drive n dreams can be, shit led to a key 
+Led to money that made me free, steada hurtin at home wid ma, 
+got a mansion wid a honey i luh uh yea
+
+
+steada dealin drugs build somethin ya like, beats gettin wrapped up in prison for a dime, needa think big, big drugs aint shit, look to be a good person
+steada drug dealin bad ass uh, shit could getya locked up for time, fuck dat shit, chase somethin sublime, make something 4 yaself, steada clonin someone else, be different, look to be yaself, jus make yaself better than ya past uh
+
+
+yea my ma's crasy, but, i aint let dat shit stop me, useda tell me things like don't go out, day by day i'd yell sayin im grown bitch, never did she listen so, i just legged it out anyway, 
+ever since i went to the gym, she been sayin, stop it, don't go, shut the fuck up, fosho uh, deez people say go n ya go, bitch ya crazy noone out dere tellin me shit uh, then she says some shit like when ya go, walk in the middle of the road at night i, jus look at her like she's got no mind uh, fuck's sake, drug dis bitch to stop her from stayin mad uh
+
+be better than ya past, uh, be a good person, might stop ya, from goin bad yea
+
+
+steada dealin drugs build somethin ya like, beats gettin wrapped up in prison for a dime, needa think big, big drugs aint shit, look to be a good person, steada drug dealin bad ass uh, 
+shit could getya locked up for time, fuck dat shit, chase somethin sublime, make something 4 yaself, steada clonin someone else, be different, look to be yaself, jus make yaself better than ya past uh
+
+steada hurtin at home wid ma, 
+got a mansion wid a honey i luh uh yea yea, uh`;
+      const lyricsText = normalizedResolvedTitle === 'cha-ching'
+        ? chaChingLyrics
+        : (normalizedResolvedTitle === 'everytime'
         ? everytimeLyrics
         : (normalizedResolvedTitle === 'sicka bugs'
           ? sickaBugsLyrics
@@ -1037,7 +1067,7 @@ This digital ghost built to last`;
 
       const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
       if (shouldOpen) {
-        const activeTrack = window.currentTrack || window.currentTrackData || {};
+        const activeTrack = window.currentTrackData || window.currentTrack || {};
         window.renderLyricsForTrack(
           activeTrack.trackId || activeTrack.id || window.currentTrackId,
           activeTrack.trackTitle || activeTrack.title,
@@ -1503,7 +1533,8 @@ This digital ghost built to last`;
       { id: 'Standin Tall', url: 'https://storage.googleapis.com/hertz-music-folder/Standin%20Tall.wav', title: 'Standin Tall', artist: 'Lil Merk' },
       { id: 'Tedla Love You', url: 'https://storage.googleapis.com/hertz-music-folder/Tedla%20Love%20You.wav', title: 'Tedla Love You', artist: 'Becky' },
       { id: 'Won\'t Fade', url: 'https://storage.googleapis.com/hertz-music-folder/Won\'t%20Fade.wav', title: 'Won\'t Fade', artist: 'Eternal Sounds' },
-      { id: 'You a Diamond', url: 'https://storage.googleapis.com/hertz-music-folder/You%20a%20Diamond.wav', title: 'You a Diamond', artist: 'B-Tilla' }
+      { id: 'You a Diamond', url: 'https://storage.googleapis.com/hertz-music-folder/You%20a%20Diamond.wav', title: 'You a Diamond', artist: 'B-Tilla' },
+      { id: 'Cha-Ching', url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI' }
     ];
 
     // Function to get a random track that hasn't been played recently
@@ -8665,6 +8696,15 @@ This digital ghost built to last`;
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
                 </div>
+                <div class="recent-track-item" onclick="playNewTrack('Cha-Ching', 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', 'Cha-Ching', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Cha-Ching cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Cha-Ching</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Take a Swing', 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', 'Take a Swing', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:baseball-bat.svg?color=%23ffd700" alt="Take a Swing cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -9826,15 +9866,22 @@ This digital ghost built to last`;
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Take a Swing', 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', 'Take a Swing', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <tr class="track-row" onclick="playNewTrack('Cha-Ching', 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', 'Cha-Ching', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Cha-Ching cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Cha-Ching</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Take a Swing', 'https://storage.googleapis.com/hertz-music-folder/Try%20To%20Play.mp3', 'Take a Swing', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:baseball-bat.svg?color=%23ffd700" alt="Take a Swing cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Take a Swing</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
                 <tr class="track-row" onclick="playNewTrack('Find Me', 'https://storage.googleapis.com/hertz-music-folder/Find%20Me.mp3', 'Everytime - Cover', 'B Tilla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
-                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-number">6</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:map-marker-question.svg?color=%23ffd700" alt="Find Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Everytime - Cover</div><div class="track-artist">B Tilla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
@@ -12937,7 +12984,7 @@ This digital ghost built to last`;
             const trackDatabase = window.trackData || {};
             const manualLyricsDatabase = window.trackLyricsData || {};
             const fromPlayer = splitPlayerTrackText();
-            const activeTrack = window.currentTrack || window.currentTrackData || {};
+            const activeTrack = window.currentTrackData || window.currentTrack || {};
             const findManualLyricsByCandidates = function(lookupCandidates) {
               const normalizedCandidates = lookupCandidates
                 .filter(Boolean)
@@ -13271,6 +13318,38 @@ take a chance oh uh, been a bitch for me everytime, it's your turn, better make 
               return findMeLyrics;
             }
 
+            if (normalizeValue(trackInfo.title) === 'cha-ching') {
+              const chaChingLyrics = `Blowin Smoke in deez streets, lookin at the honeys wid ease,
+yea that shit gives me peace, used to grow up wid all the pot i could need, 
+useda see some fiends in the streets, made me wanna hand em peace for deez,
+cha-ching made me go dark, made me wanna kill em on the spot uh, useda thinka my teachers in the class, 
+useda tell me i gotta get the bag, some useda say i need a job but, i was workin the whole time uh
+
+
+now they see, all the things some drive n dreams can be, shit led to a key 
+Led to money that made me free, steada hurtin at home wid ma, 
+got a mansion wid a honey i luh uh yea
+
+
+steada dealin drugs build somethin ya like, beats gettin wrapped up in prison for a dime, needa think big, big drugs aint shit, look to be a good person
+steada drug dealin bad ass uh, shit could getya locked up for time, fuck dat shit, chase somethin sublime, make something 4 yaself, steada clonin someone else, be different, look to be yaself, jus make yaself better than ya past uh
+
+
+yea my ma's crasy, but, i aint let dat shit stop me, useda tell me things like don't go out, day by day i'd yell sayin im grown bitch, never did she listen so, i just legged it out anyway, 
+ever since i went to the gym, she been sayin, stop it, don't go, shut the fuck up, fosho uh, deez people say go n ya go, bitch ya crazy noone out dere tellin me shit uh, then she says some shit like when ya go, walk in the middle of the road at night i, jus look at her like she's got no mind uh, fuck's sake, drug dis bitch to stop her from stayin mad uh
+
+be better than ya past, uh, be a good person, might stop ya, from goin bad yea
+
+
+steada dealin drugs build somethin ya like, beats gettin wrapped up in prison for a dime, needa think big, big drugs aint shit, look to be a good person, steada drug dealin bad ass uh, 
+shit could getya locked up for time, fuck dat shit, chase somethin sublime, make something 4 yaself, steada clonin someone else, be different, look to be yaself, jus make yaself better than ya past uh
+
+steada hurtin at home wid ma, 
+got a mansion wid a honey i luh uh yea yea, uh`;
+              window.lyricsCache[cacheKey] = chaChingLyrics;
+              return chaChingLyrics;
+            }
+
             if (normalizeValue(trackInfo.title) === 'take a swing') {
               const takeASwingLyrics = `If it's tennis, take a swing
 Feel the court under your feet
@@ -13465,9 +13544,9 @@ This digital ghost built to last`;
 
             const fromPlayer = splitPlayerTrackText();
             const resolvedTrack = window.findTrackInfoForLyrics(
-              trackId || window.currentTrack?.trackId || window.currentTrackData?.id || window.currentTrackId,
-              trackTitle || window.currentTrack?.trackTitle || window.currentTrackData?.title || fromPlayer.title,
-              trackArtist || window.currentTrack?.trackArtist || window.currentTrackData?.artist || fromPlayer.artist
+              trackId || window.currentTrackData?.id || window.currentTrack?.trackId || window.currentTrackId,
+              trackTitle || window.currentTrackData?.title || window.currentTrack?.trackTitle || fromPlayer.title,
+              trackArtist || window.currentTrackData?.artist || window.currentTrack?.trackArtist || fromPlayer.artist
             );
 
             if (!resolvedTrack.title && !fromPlayer.title) {
@@ -13645,7 +13724,7 @@ This digital ghost built to last`;
             const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
 
             if (shouldOpen) {
-              const activeTrack = window.currentTrack || window.currentTrackData || {};
+              const activeTrack = window.currentTrackData || window.currentTrack || {};
               window.renderLyricsForTrack(
                 activeTrack.trackId || activeTrack.id || window.currentTrackId,
                 activeTrack.trackTitle || activeTrack.title,
@@ -29044,6 +29123,7 @@ function openGenrePlaylist(genre) {
   if ((genre || '').toLowerCase() === 'hiphop') {
     // Hardcoded Hip-Hop tracks list
     const hiphopTrackNames = [
+      'Cha-Ching',
       'Keys For Me', 'Waitin To See', '3 AM', 'Be My Baby', 'Clip It',
       'Physics Flex', 'Anti-Grav', 'Course Correct', 'Flex is Wealth',
       'Neat Rep', 'Blast Off', 'Feel Right', 'Love It', 'Want it All',
@@ -29289,21 +29369,28 @@ function openAlbum(albumId) {
       artist: 'Nikola TeslAI',
       url: 'https://storage.googleapis.com/hertz-music-folder/Calming%20Peaceful%20Mix%206hz.mp3',
       genre: 'ambient',
-      duration: '3:20'
+      duration: '11:41'
+    },
+    {
+      title: 'Deep Sleep (6-8hz)',
+      artist: 'HZ',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Deep%20Sleep%20(6-8hz).mp3',
+      genre: 'ambient',
+      duration: '53:27'
     },
     {
       title: 'Knimble (8hz)',
       artist: 'Nikola TeslAI',
       url: 'https://storage.googleapis.com/hertz-music-folder/KNimble.mp3',
       genre: 'ambient',
-      duration: '3:20'
+      duration: '17:31'
     },
     {
       title: 'Peaceful (6hz)',
       artist: 'Nikola TeslAI',
       url: 'https://storage.googleapis.com/hertz-music-folder/Peaceful.mp3',
       genre: 'ambient',
-      duration: '3:20'
+      duration: '16:23'
     }
   ];
   const folkloreTracks = [
