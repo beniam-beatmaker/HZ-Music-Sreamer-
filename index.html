@@ -643,7 +643,10 @@
       'Ride wid Me': { url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', title: 'Ride wid Me', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'hiphop' },
       'Silicon Ghost': { url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', title: 'Silicon Ghost', artist: 'Beniam TedlAI' },
-      'Cha-Ching': { url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI', genre: 'hiphop' }
+      'Cha-Ching': { url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Power': { url: 'https://storage.googleapis.com/hertz-music-folder/Power.mp3', title: 'Power', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Seek a Smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Seek%20a%20Smile.mp3', title: 'Seek a Smile', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Mail Ya': { url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', title: 'Mail Ya', artist: 'Beniam TedlAI', genre: 'hiphop' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -1034,6 +1037,40 @@ shit could getya locked up for time, fuck dat shit, chase somethin sublime, make
 
 steada hurtin at home wid ma, 
 got a mansion wid a honey i luh uh yea yea, uh`;
+      const seekASmileLyrics = `For the best, ease from stress, no matter what, how can stress keep you safe, if ya hurtin inside n the stress gets you so mad that it causes stress, it aint the best for ya, don't let the pain cause lotsa pain, that's all da stress brings, stead it's best to seek a smile, imma jus jus jus jus jus
+
+
+say, try to give yaself a lil break, if ya wanna solve a problem, a lil break could be what fuckin helps
+
+
+if ya feel real stressed, take a fuckin break, find a way to ease ya mind, steada thinkin of the problem erryday, aye, if ya make yaself relax, ya can ease the mind and let the pain fuckin dissipate uh, trust yaself to have fun without a problem 
+
+
+if ya in pain erryday, that could cause lotsa pain, fuck that shit, stead ya needa focus on lookin for peace, ease ya mind by enjoyin yaself, ya world aint broken, 
+trust ya self, Adore yaself, Love yaself yea
+
+trust ya self, Adore yaself, Love yaself yea
+
+
+if ya feel real stressed, take a fuckin break, find a way to ease ya mind, steada thinkin of the problem erryday, aye, if ya make yaself relax, ya can ease the mind and let the pain fuckin dissipate uh, trust yaself to have fun without a problem 
+
+have a break to sole ya problems, it'll help ya, keep ya smile as ya make the fix, 
+adore, trust, love, yaself uh`;
+      const mailYaLyrics = `Been thinkin bout letters yea, steada letters what if, theres a hologram message yea, one that tells the people all the things required, all the things it notifies yuh, based off the finger print as well as a retinal scan i
+
+ I could see it clear, this could really help, any person gettin mail don't know til they pick it up but, if they get the holo mail sent, all the deets bout their mail they'll know, n then oh
+
+
+They could know it all, they could see it all, last i checked this is best, specially since it could be real safe, if they got a mailbox uh, any person could pick it up uh, they can stop a person seein their mail, this is safe instead uh
+
+Holo-mail's best uh, with dis shit, ya safe uh, any person can always keep it saved, if they really fuckin need it they can scan away, steada waitin for some time to hear about it okay
+
+ It would be best, if all mail's holographic, yea yea yea, it can help boom it safe, convenient aye, it could really help in all things, reduce the estimated time for ya shit uh
+
+They could know it all 
+they could see it all, last i checked this is best, specially since it could be as safe, if they got a mailbox uh, any person could pick it up uh, they can stop a person seein their mail, this is fuckin safe instead uh
+
+last i checked this is best, specially since it could be real safe`;
       const lyricsText = normalizedResolvedTitle === 'cha-ching'
         ? chaChingLyrics
         : (normalizedResolvedTitle === 'everytime'
@@ -1042,14 +1079,17 @@ got a mansion wid a honey i luh uh yea yea, uh`;
           ? sickaBugsLyrics
           : (normalizedResolvedTitle === 'solid night'
             ? solidNightLyrics
-            : ((normalizedResolvedTitle === 'find me' || normalizedResolvedTitle === 'find me cover' || normalizedResolvedTitle === 'everytime - cover')
-              ? findMeLyrics
-              : (normalizedResolvedTitle === 'take a swing'
-                ? takeASwingLyrics
-                : (normalizedResolvedTitle === 'silicon ghost'
-                  ? siliconGhostLyrics
-                  : (trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist)))))));
-
+            : (normalizedResolvedTitle === 'seek a smile'
+              ? seekASmileLyrics
+              : (normalizedResolvedTitle === 'mail ya'
+                ? mailYaLyrics
+                : ((normalizedResolvedTitle === 'find me' || normalizedResolvedTitle === 'find me cover' || normalizedResolvedTitle === 'everytime - cover')
+                  ? findMeLyrics
+                  : (normalizedResolvedTitle === 'take a swing'
+                    ? takeASwingLyrics
+                    : (normalizedResolvedTitle === 'silicon ghost'
+                      ? siliconGhostLyrics
+                      : (trackInfo.lyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist))))))))));
       panelTitle.textContent = resolvedTitle + ' — ' + resolvedArtist;
       panelBody.textContent = lyricsText;
       panelBody.scrollTop = 0;
@@ -13509,6 +13549,50 @@ The screen goes dark, the future's cast
 This digital ghost built to last`;
               window.lyricsCache[cacheKey] = siliconGhostLyrics;
               return siliconGhostLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'seek a smile') {
+              const seekASmileLyrics = `For the best, ease from stress, no matter what, how can stress keep you safe, if ya hurtin inside n the stress gets you so mad that it causes stress, it aint the best for ya, don't let the pain cause lotsa pain, that's all da stress brings, stead it's best to seek a smile, imma jus jus jus jus jus
+
+
+say, try to give yaself a lil break, if ya wanna solve a problem, a lil break could be what fuckin helps
+
+
+if ya feel real stressed, take a fuckin break, find a way to ease ya mind, steada thinkin of the problem erryday, aye, if ya make yaself relax, ya can ease the mind and let the pain fuckin dissipate uh, trust yaself to have fun without a problem 
+
+
+if ya in pain erryday, that could cause lotsa pain, fuck that shit, stead ya needa focus on lookin for peace, ease ya mind by enjoyin yaself, ya world aint broken, 
+trust ya self, Adore yaself, Love yaself yea
+
+trust ya self, Adore yaself, Love yaself yea
+
+
+if ya feel real stressed, take a fuckin break, find a way to ease ya mind, steada thinkin of the problem erryday, aye, if ya make yaself relax, ya can ease the mind and let the pain fuckin dissipate uh, trust yaself to have fun without a problem 
+
+have a break to sole ya problems, it'll help ya, keep ya smile as ya make the fix, 
+adore, trust, love, yaself uh`;
+              window.lyricsCache[cacheKey] = seekASmileLyrics;
+              return seekASmileLyrics;
+            }
+
+            if (normalizeValue(trackInfo.title) === 'mail ya') {
+              const mailYaLyrics = `Been thinkin bout letters yea, steada letters what if, theres a hologram message yea, one that tells the people all the things required, all the things it notifies yuh, based off the finger print as well as a retinal scan i
+
+ I could see it clear, this could really help, any person gettin mail don't know til they pick it up but, if they get the holo mail sent, all the deets bout their mail they'll know, n then oh
+
+
+They could know it all, they could see it all, last i checked this is best, specially since it could be real safe, if they got a mailbox uh, any person could pick it up uh, they can stop a person seein their mail, this is safe instead uh
+
+Holo-mail's best uh, with dis shit, ya safe uh, any person can always keep it saved, if they really fuckin need it they can scan away, steada waitin for some time to hear about it okay
+
+ It would be best, if all mail's holographic, yea yea yea, it can help boom it safe, convenient aye, it could really help in all things, reduce the estimated time for ya shit uh
+
+They could know it all 
+they could see it all, last i checked this is best, specially since it could be as safe, if they got a mailbox uh, any person could pick it up uh, they can stop a person seein their mail, this is fuckin safe instead uh
+
+last i checked this is best, specially since it could be real safe`;
+              window.lyricsCache[cacheKey] = mailYaLyrics;
+              return mailYaLyrics;
             }
 
             const storedLyrics = String(trackInfo.lyrics || '').trim();
@@ -29121,32 +29205,34 @@ function openGenrePlaylist(genre) {
   }
   
   if ((genre || '').toLowerCase() === 'hiphop') {
-    // Hardcoded Hip-Hop tracks list
-    const hiphopTrackNames = [
-      'Cha-Ching',
-      'Keys For Me', 'Waitin To See', '3 AM', 'Be My Baby', 'Clip It',
-      'Physics Flex', 'Anti-Grav', 'Course Correct', 'Flex is Wealth',
-      'Neat Rep', 'Blast Off', 'Feel Right', 'Love It', 'Want it All',
-      'Ride wid Me', 'Prime',
-      'Blicky Slap', 'Ease Race', 'Sirens', 'Watch', 'Purpose'
+    const hiphopOnly = [
+      { title: 'Cha-Ching', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Keys For Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Keys%20For%20Me.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Waitin To See', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20to%20See.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: '3 AM', artist: 'AI-ght', url: 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Be My Baby', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Be%20My%20Baby.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Clip It', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Clip%20It.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Physics Flex', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Physics%20Flex.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Anti-Grav', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Anti-Grav.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Course Correct', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Course%20Correct.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Flex is Wealth', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Neat Rep', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Blast Off', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Love It', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Want it All', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'MF Rocket', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Ride wid Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Prime', artist: 'SlattZ', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', genre: 'hiphop', duration: '3:20' },
+      { title: 'Blicky Slap', artist: 'VAI-PE', url: 'https://storage.googleapis.com/hertz-music-folder/Blicky%20Slap.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Ease Race', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Ease%20Race.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Sirens', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Sirens__Spark_FULL_SONG_MusicGPT.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Watch', artist: 'Slattz', url: 'https://storage.googleapis.com/hertz-music-folder/watch.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Purpose', artist: 'Unknown', url: 'https://storage.googleapis.com/hertz-music-folder/Purpose.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Power', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Power.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Seek a Smile', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Seek%20a%20Smile.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Mail Ya', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', genre: 'hiphop', duration: '3:20' }
     ];
-    
-    const hiphopOnly = [];
-    const seenHiphop = new Set();
-    hiphopTrackNames.forEach((name) => {
-      if (window.trackData && window.trackData[name]) {
-        const key = (window.trackData[name].title || name || '').trim().toLowerCase();
-        if (seenHiphop.has(key)) return;
-        seenHiphop.add(key);
-        hiphopOnly.push({
-          title: window.trackData[name].title || name,
-          artist: window.trackData[name].artist || '',
-          url: window.trackData[name].url || '',
-          genre: 'hiphop',
-          duration: '3:20'
-        });
-      }
-    });
     
     showPlaylistModal('Hip-Hop', 'Latest rap and hip-hop beats from your collection', hiphopOnly, { hidePlayAll: true });
     return;
