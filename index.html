@@ -21913,6 +21913,24 @@ function showGenrePopup(genre) {
     function toggleOfflinePlayPause() {
       const playerAudio = document.getElementById('offlinePlayerAudio');
       const playPauseBtn = document.getElementById('offlinePlayPauseBtn');
+      const mainAudio = document.getElementById('playerAudio');
+      const mainPlayPauseBtn = document.getElementById('playPauseBtn');
+
+      // Prefer main sticky player controls when offline tracks are routed there.
+      if (mainAudio && mainAudio.src && (!playerAudio || !playerAudio.src)) {
+        if (mainAudio.paused) {
+          mainAudio.play().catch(console.error);
+          if (mainPlayPauseBtn) {
+            mainPlayPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 3.5A1.5 1.5 0 0 1 7 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5zm5 0A1.5 1.5 0 0 1 12 5v6a1.5 1.5 0 0 1-3 0V5a1.5 1.5 0 0 1 1.5-1.5z"/></svg>';
+          }
+        } else {
+          mainAudio.pause();
+          if (mainPlayPauseBtn) {
+            mainPlayPauseBtn.innerHTML = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"/></svg>';
+          }
+        }
+        return;
+      }
 
       if (!playerAudio) return;
 
@@ -21926,15 +21944,41 @@ function showGenrePopup(genre) {
     }
 
     function previousOfflineTrack() {
-      // Implementation for previous track functionality
-      console.log('⏮️ Previous offline track');
-      // TODO: Add playlist navigation logic
+      if (!queue.length) {
+        const offlineMedia = getOfflineMedia();
+        queue = [...(offlineMedia.audio || [])];
+      }
+      if (!queue.length) return;
+
+      const activeTrackId = (currentTrack && currentTrack.id) || window.currentOfflineTrack || null;
+      const activeIndex = activeTrackId ? queue.findIndex(track => track.id === activeTrackId) : -1;
+      currentIndex = activeIndex >= 0
+        ? (activeIndex <= 0 ? queue.length - 1 : activeIndex - 1)
+        : (currentIndex <= 0 ? queue.length - 1 : currentIndex - 1);
+
+      const prevTrack = queue[currentIndex];
+      if (prevTrack && typeof playOfflineTrack === 'function') {
+        playOfflineTrack(prevTrack.id);
+      }
     }
 
     function nextOfflineTrack() {
-      // Implementation for next track functionality
-      console.log('⏭️ Next offline track');
-      // TODO: Add playlist navigation logic
+      if (!queue.length) {
+        const offlineMedia = getOfflineMedia();
+        queue = [...(offlineMedia.audio || [])];
+      }
+      if (!queue.length) return;
+
+      const activeTrackId = (currentTrack && currentTrack.id) || window.currentOfflineTrack || null;
+      const activeIndex = activeTrackId ? queue.findIndex(track => track.id === activeTrackId) : -1;
+      currentIndex = activeIndex >= 0
+        ? (activeIndex + 1) % queue.length
+        : (currentIndex + 1) % queue.length;
+
+      const nextTrack = queue[currentIndex];
+      if (nextTrack && typeof playOfflineTrack === 'function') {
+        playOfflineTrack(nextTrack.id);
+      }
     }
 
     function toggleOfflineLoop() {
@@ -21968,21 +22012,27 @@ function showGenrePopup(genre) {
       switchMediaTab('tracks');
       updateMediaCounts();
 
+      if (window.__hzOfflineEnhancedInitialized) {
+        console.log('✅ Enhanced offline listeners already initialized');
+        return;
+      }
+      window.__hzOfflineEnhancedInitialized = true;
+
       // Set up offline sticky player button event listeners
       const playPauseBtn = document.getElementById('offlinePlayPauseBtn');
       const nextBtn = document.getElementById('offlineNextBtn');
       const prevBtn = document.getElementById('offlinePrevBtn');
 
       if (playPauseBtn) {
-        playPauseBtn.addEventListener('click', toggleOfflinePlayPause);
+        playPauseBtn.onclick = toggleOfflinePlayPause;
         console.log('✅ Play/pause button listener added');
       }
       if (nextBtn) {
-        nextBtn.addEventListener('click', nextOfflineTrack);
+        nextBtn.onclick = nextOfflineTrack;
         console.log('✅ Next button listener added');
       }
       if (prevBtn) {
-        prevBtn.addEventListener('click', previousOfflineTrack);
+        prevBtn.onclick = previousOfflineTrack;
         console.log('✅ Previous button listener added');
       }
 
