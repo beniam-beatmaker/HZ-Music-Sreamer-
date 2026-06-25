@@ -17735,6 +17735,7 @@ function showGenrePopup(genre) {
             offlineTracks.push(canonicalTrack);
             queue = [...offlineTracks];
           }
+          window.__hzStickySelectionUnlocked = true;
           window.offlineStickyTrackSelected = true;
           playOfflineTrack(trackId);
           return;
@@ -17833,6 +17834,7 @@ function showGenrePopup(genre) {
           // Set track info
           if (mainTitle) mainTitle.textContent = trackInfo.title;
           if (mainTrackInfo) mainTrackInfo.textContent = trackInfo.artist || '';
+          window.__hzStickySelectionUnlocked = true;
           window.offlineStickyTrackSelected = true;
 
           // Set audio source and start playback
@@ -21027,8 +21029,8 @@ function showGenrePopup(genre) {
               console.log('No audio files processed via direct insertion, using render function');
               renderEnhancedOfflineLibrary();
             }
-            if (videoCount === 0) {
-              console.log('No video files processed, using render function');
+            if (videoCount > 0) {
+              console.log('Video files processed, refreshing video library');
               renderEnhancedOfflineVideoLibrary();
             }
             showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully${skippedCount > 0 ? ` (${skippedCount} duplicate file(s) skipped)` : ''}!`);
@@ -21425,6 +21427,7 @@ function showGenrePopup(genre) {
       track.isOfflineTrack = true;
       globalPlayerState.currentTrack = track;
       currentTrack = track;
+      window.__hzStickySelectionUnlocked = true;
       window.offlineStickyTrackSelected = true;
 
       // USE MAIN STICKY PLAYER (same as homepage)
