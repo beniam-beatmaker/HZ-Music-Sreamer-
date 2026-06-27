@@ -5272,8 +5272,8 @@ last i checked this is best, specially since it could be real safe`;
           left: 50%;
           bottom: 170px;
           transform: translateX(-50%) translateY(12px);
-          width: min(420px, 92vw);
-          max-height: min(44vh, 320px);
+          width: min(560px, 95vw);
+          max-height: min(64vh, 460px);
           background: rgba(12, 12, 12, 0.97);
           border: 1px solid rgba(255, 215, 0, 0.28);
           border-radius: 16px;
@@ -5304,8 +5304,8 @@ last i checked this is best, specially since it could be real safe`;
         }
 
         .lyrics-panel-label {
-          font-size: 0.68rem;
-          font-weight: 700;
+          font-size: 0.82rem;
+          font-weight: 800;
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: #FFD700;
@@ -5313,8 +5313,8 @@ last i checked this is best, specially since it could be real safe`;
         }
 
         .lyrics-panel-title {
-          font-size: 0.95rem;
-          font-weight: 700;
+          font-size: 1.18rem;
+          font-weight: 800;
           color: #fff;
           line-height: 1.35;
         }
@@ -5329,18 +5329,20 @@ last i checked this is best, specially since it could be real safe`;
         }
 
         .lyrics-panel-body {
-          padding: 12px 14px 16px;
+          padding: 14px 16px 18px;
           overflow-y: auto;
-          max-height: min(32vh, 220px);
+          max-height: min(48vh, 340px);
           white-space: normal;
-          line-height: 1.6;
+          line-height: 1.72;
           color: rgba(255,255,255,0.92);
-          font-size: 0.9rem;
+          font-size: 1.08rem;
+          font-weight: 700;
           scroll-behavior: smooth;
         }
 
         .lyrics-line {
           white-space: pre-wrap;
+          font-weight: 700;
           padding: 0 0 2px;
         }
 
@@ -12821,6 +12823,26 @@ last i checked this is best, specially since it could be real safe`;
               return window.lyricsCache[cacheKey];
             }
 
+            if (normalizeValue(trackInfo.title) === 'props') {
+              const propsLyrics = `If ya loo ackin up, needa call a plumber yea, what they do's fuckin wild, fixin pipes uh, if ya wanna do some hard work, look to be an apprentice for the work uh, yea
+
+they try try try, to fix it all, prepare for the shit to take a mean shit uh
+
+
+they got props, don't got opps, jus work hard, seek to fix the pipes yea, Drain drain drain uh, workin hard for ya, not all heroes wear capes y
+
+
+i really thought bout it when i was young, but i never sought to be an apprentice uh uh, even now i think to myself, fucks the point of puttin up wid shit uh, when all my life i been puttin up with it uh, as an african, shit really taxin 4 me, mother so delu lu got me thinkin it can't be, just gotta give them props for all they fix uh yea yea
+
+
+knew a guy i used to go to school wid, he was a year older, but he wanted to do it, harry quit n never looked back uh, least he seeks to do somethin else uh
+
+
+they got props, don't got opps, jus work hard, seek to fix the pipes yea, uh`;
+              window.lyricsCache[cacheKey] = propsLyrics;
+              return propsLyrics;
+            }
+
             if (normalizeValue(trackInfo.title) === 'everytime') {
               const everytimeLyrics = `Where you at? Lemme find ya, if i'd known i'd straight up see ya, you a dime, make me question life, been wantin to see ya yea, everytime, uh uh
 
@@ -15342,6 +15364,7 @@ p.s I'm Beniam Endale Tedla`;
       'Turn on': { id: 'Turn on', title: 'Turn on', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Wanna%20See%20Ya%20Naked.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
       'Think Ya': { id: 'Think Ya', title: 'Think Ya', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Thinka%20Ya.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
       'Giggle': { id: 'Giggle', title: 'Giggle', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Giggle.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+      'Props': { id: 'Props', title: 'Props', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Plum%20Props.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
       // Jazz popup tracks
       'We Can': { id: 'We Can', title: 'We Can', artist: 'Sour Parsonz', url: 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3', cover: 'https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=400&q=80', genre: 'Jazz' },
       'Golden Years': { id: 'Golden Years', title: 'Golden Years', artist: 'Tony Bennet', url: 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3', cover: 'https://images.unsplash.com/photo-1511735111819-9a3f7709049c?auto=format&fit=crop&w=400&q=80', genre: 'Jazz' },
@@ -15384,6 +15407,7 @@ p.s I'm Beniam Endale Tedla`;
         { id: 'Turn on', title: 'Turn on', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Wanna%20See%20Ya%20Naked.mp3' },
         { id: 'Think Ya', title: 'Think Ya', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Thinka%20Ya.mp3' },
         { id: 'Giggle', title: 'Giggle', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Giggle.mp3' },
+        { id: 'Props', title: 'Props', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Plum%20Props.mp3' },
         { id: 'We Can', title: 'We Can', artist: 'Sour Parsonz', url: 'https://storage.googleapis.com/hertz-music-folder/We%20Can%20Uh.mp3' },
         { id: 'Golden Years', title: 'Golden Years', artist: 'Tony Bennet', url: 'https://storage.googleapis.com/hertz-music-folder/Golden%20Years.mp3' },
         { id: 'Cutie', title: 'Cutie', artist: 'Ted Bennet', url: 'https://storage.googleapis.com/hertz-music-folder/Cute%20Hair.mp3' },
@@ -15755,7 +15779,8 @@ function showGenrePopup(genre) {
     'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
     'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
     'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' }
+    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+    'Props': { id: 'Props', title: 'Props', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Props.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' }
   };
 
   // Filter tracks by genre and append all gold tracks from Popular Tracks
@@ -29273,6 +29298,13 @@ function openGenrePlaylist(genre) {
         title: 'Chemical Peaks',
         artist: 'Beniam TedlAI',
         url: 'https://storage.googleapis.com/hertz-music-folder/Chemical%20Elements.mp3',
+        genre: 'electronic',
+        duration: '3:20'
+      },
+      {
+        title: 'Props',
+        artist: 'Beniam TedlAI',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Plum%20Props.mp3',
         genre: 'electronic',
         duration: '3:20'
       }
