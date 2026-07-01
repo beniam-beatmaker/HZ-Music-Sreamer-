@@ -8640,6 +8640,10 @@ last i checked this is best, specially since it could be real safe`;
           <div class="pay-modal-body">
             <p class="pay-subtext">Monthly plan is pegged to US$4.99. Select your currency to continue.</p>
             <div id="paymentCurrencyList" class="pay-currency-list"></div>
+            <div id="activeSubscriptionActions" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);text-align:center;">
+              <button type="button" class="pay-btn pay-btn-secondary" id="cancelSubscriptionBtn" style="width:100%;">Cancel Subscription</button>
+              <div id="cancelSubscriptionMessage" style="display:none;margin-top:10px;font-size:1.1rem;font-weight:900;color:#ffd4d4;letter-spacing:0.01em;">It hurts to see you go! 😭</div>
+            </div>
           </div>
         </div>
       </div>
@@ -16069,6 +16073,78 @@ function showGenrePopup(genre) {
       overlay.style.visibility = 'visible';
       return true;
     }
+    // Preserve sticky-player audio continuity when popups open.
+    // This only restores state if popup-opening changed it unexpectedly.
+    const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, #queuePopup, #cubeVisualizerOverlay';
+    let popupAudioGuardPrevVisible = false;
+    let popupAudioGuardSnapshot = null;
+
+    function isElementPopupVisible(el) {
+      if (!el) return false;
+      const style = window.getComputedStyle(el);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || '1') === 0) {
+        return false;
+      }
+      if (el.getAttribute && el.getAttribute('aria-hidden') === 'true') {
+        return false;
+      }
+      return true;
+    }
+
+    function isAnyPopupVisible() {
+      const popups = document.querySelectorAll(POPUP_AUDIO_GUARD_SELECTOR);
+      for (let i = 0; i < popups.length; i++) {
+        if (isElementPopupVisible(popups[i])) return true;
+      }
+      return false;
+    }
+
+    function armPopupAudioGuardSnapshot() {
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      popupAudioGuardSnapshot = {
+        wasPlaying: !audio.paused && !audio.ended,
+        wasMuted: !!audio.muted,
+        volume: Number(audio.volume || 0),
+        at: Date.now()
+      };
+    }
+
+    function restorePopupAudioGuardIfNeeded() {
+      if (!popupAudioGuardSnapshot || !isAnyPopupVisible()) return;
+
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      // Never override intentional mute/zero-volume states from before popup open.
+      if (!popupAudioGuardSnapshot.wasMuted && audio.muted) {
+        audio.muted = false;
+      }
+      if (popupAudioGuardSnapshot.volume > 0.01 && Number(audio.volume || 0) <= 0.0001) {
+        audio.volume = popupAudioGuardSnapshot.volume;
+      }
+
+      // If popup-open side effects paused active playback, resume silently.
+      if (popupAudioGuardSnapshot.wasPlaying && audio.paused) {
+        audio.play().catch(function() {});
+      }
+    }
+
+    function monitorPopupAudioGuard() {
+      const currentlyVisible = isAnyPopupVisible();
+      if (currentlyVisible && !popupAudioGuardPrevVisible) {
+        armPopupAudioGuardSnapshot();
+        setTimeout(restorePopupAudioGuardIfNeeded, 80);
+        setTimeout(restorePopupAudioGuardIfNeeded, 260);
+      }
+      popupAudioGuardPrevVisible = currentlyVisible;
+    }
+
+    if (!window.__hzPopupAudioGuardInterval) {
+      window.__hzPopupAudioGuardInterval = setInterval(monitorPopupAudioGuard, 180);
+      monitorPopupAudioGuard();
+    }
 
     function openLikedPage() {
       console.log('❤️ Opening liked page');
@@ -16094,13 +16170,77 @@ function showGenrePopup(genre) {
       }
     }
 
+    function isSettingsOverlayVisible() {
+      const overlay = document.getElementById('settingsPageOverlay');
+      if (!overlay) return false;
+      const style = window.getComputedStyle(overlay);
+      if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || '1') === 0) {
+        return false;
+      }
+      return true;
+    }
+
+    function enforceSettingsAudioUnmuted() {
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      // While settings popup is visible, keep sticky-player audio unmuted.
+      audio.muted = false;
+      audio.defaultMuted = false;
+      audio.removeAttribute('muted');
+
+      if (Number(audio.volume || 0) <= 0.0001) {
+        const savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
+        const safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
+        audio.volume = Math.max(0.05, Math.min(1, safePercent / 100));
+      }
+
+      if (window.__hzEqualizerEngine && window.__hzEqualizerEngine.context && window.__hzEqualizerEngine.context.state === 'suspended' && !audio.paused) {
+        window.__hzEqualizerEngine.context.resume().catch(function() {});
+      }
+    }
+
+    function bindSettingsAudioGuardListeners() {
+      if (window.__hzSettingsAudioGuardListenersBound) return;
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      const guardHandler = function() {
+        if (!isSettingsOverlayVisible()) return;
+        enforceSettingsAudioUnmuted();
+      };
+
+      audio.addEventListener('volumechange', guardHandler);
+      audio.addEventListener('play', guardHandler);
+      audio.addEventListener('canplay', guardHandler);
+      audio.addEventListener('loadedmetadata', guardHandler);
+
+      window.__hzSettingsAudioGuardListenersBound = true;
+      window.__hzSettingsAudioGuardHandler = guardHandler;
+    }
+
+    function startSettingsAudioGuard() {
+      if (window.__hzSettingsAudioGuardInterval) return;
+      bindSettingsAudioGuardListeners();
+      window.__hzSettingsAudioGuardInterval = setInterval(function() {
+        if (!isSettingsOverlayVisible()) {
+          return;
+        }
+        enforceSettingsAudioUnmuted();
+      }, 120);
+    }
+
     function openSettingsPage() {
       console.log('⚙️ Opening settings page');
       updateBottomNavActive('settings');
 
       const overlay = getFirstExistingOverlay(['settingsPageOverlay']);
       if (showOverlayElement(overlay, 'block')) {
+        startSettingsAudioGuard();
+        enforceSettingsAudioUnmuted();
         loadSettingsInfo();
+        setTimeout(enforceSettingsAudioUnmuted, 140);
+        setTimeout(enforceSettingsAudioUnmuted, 320);
       }
     }
 
@@ -25425,8 +25565,117 @@ function showGenrePopup(genre) {
     const PAYMENT_USD_REFERENCE_RATE = ((PAYMENT_CURRENCIES.find(function(entry) {
       return entry.code === 'USD';
     }) || {}).rate) || 1;
+    const SUBSCRIPTION_REMINDER_INTERVAL_MS = 14 * 24 * 60 * 60 * 1000;
+    let subscriptionReminderIntervalId = null;
 
     let selectedPaymentCurrency = null;
+
+    function hasActiveMonthlySubscription() {
+      const plan = localStorage.getItem('hertzSubscriptionPlan');
+      const canceledAt = localStorage.getItem('hertzSubscriptionCanceledAt');
+      return plan === 'monthly' && !canceledAt;
+    }
+
+    function getMonthlyChargeDate(startedAtIso, fromDate) {
+      const startDate = new Date(startedAtIso || Date.now());
+      const baseDate = fromDate instanceof Date ? fromDate : new Date();
+      const startDay = Math.max(1, Math.min(31, startDate.getDate() || 1));
+
+      function buildChargeDate(year, month) {
+        const lastDay = new Date(year, month + 1, 0).getDate();
+        const day = Math.min(startDay, lastDay);
+        return new Date(year, month, day, 9, 0, 0, 0);
+      }
+
+      let chargeDate = buildChargeDate(baseDate.getFullYear(), baseDate.getMonth());
+      if (chargeDate.getTime() <= baseDate.getTime()) {
+        chargeDate = buildChargeDate(baseDate.getFullYear(), baseDate.getMonth() + 1);
+      }
+      return chargeDate;
+    }
+
+    function formatChargeDateLabel(date) {
+      try {
+        return date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      } catch (err) {
+        return date.toDateString();
+      }
+    }
+
+    function maybeShowFortnightSubscriptionReminder() {
+      if (!hasActiveMonthlySubscription()) return;
+
+      const now = Date.now();
+      const startedAt = localStorage.getItem('hertzSubscriptionStartedAt') || new Date().toISOString();
+      const lastReminderAt = Number(localStorage.getItem('hertzSubscriptionReminderLastShownAt') || '0');
+
+      if (!lastReminderAt) {
+        localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(now));
+        return;
+      }
+
+      if (now - lastReminderAt < SUBSCRIPTION_REMINDER_INTERVAL_MS) return;
+
+      const chargeDate = getMonthlyChargeDate(startedAt, new Date(now));
+      alert('Subscription Reminder: Your monthly subscription is on ' + formatChargeDateLabel(chargeDate) + '.');
+      localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(now));
+    }
+
+    function startSubscriptionReminderScheduler() {
+      if (subscriptionReminderIntervalId) {
+        clearInterval(subscriptionReminderIntervalId);
+        subscriptionReminderIntervalId = null;
+      }
+
+      maybeShowFortnightSubscriptionReminder();
+
+      subscriptionReminderIntervalId = setInterval(function() {
+        maybeShowFortnightSubscriptionReminder();
+      }, 60 * 60 * 1000);
+    }
+
+    function refreshSubscriptionActionState() {
+      const actionsWrap = document.getElementById('activeSubscriptionActions');
+      const cancelButton = document.getElementById('cancelSubscriptionBtn');
+      const cancelMessage = document.getElementById('cancelSubscriptionMessage');
+      if (!actionsWrap) return;
+
+      const active = hasActiveMonthlySubscription();
+      actionsWrap.style.display = active ? 'block' : 'none';
+      if (cancelButton) {
+        cancelButton.style.display = '';
+      }
+      if (!active && cancelMessage) {
+        cancelMessage.style.display = 'none';
+      }
+      if (active && cancelMessage) {
+        cancelMessage.style.display = 'none';
+      }
+    }
+
+    function cancelMonthlySubscription() {
+      if (!hasActiveMonthlySubscription()) return;
+
+      localStorage.setItem('hertzSubscriptionCanceledAt', new Date().toISOString());
+      localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
+      localStorage.removeItem('hertzSubscriptionId');
+
+      const actionsWrap = document.getElementById('activeSubscriptionActions');
+      const cancelButton = document.getElementById('cancelSubscriptionBtn');
+      const cancelMessage = document.getElementById('cancelSubscriptionMessage');
+      if (actionsWrap) {
+        actionsWrap.style.display = 'block';
+      }
+      if (cancelButton) {
+        cancelButton.style.display = 'none';
+      }
+      if (cancelMessage) {
+        cancelMessage.innerHTML = '<strong>It hurts to see you go! 😭</strong>';
+        cancelMessage.style.display = 'block';
+      }
+
+      startSubscriptionReminderScheduler();
+    }
 
     function formatPaymentAmount(entry) {
       const conversionFromUsd = entry.rate / PAYMENT_USD_REFERENCE_RATE;
@@ -25517,6 +25766,7 @@ function showGenrePopup(genre) {
 
     function paymentMethods() {
       renderPaymentCurrencyList();
+      refreshSubscriptionActionState();
       const overlay = getPaymentCurrencyOverlay();
       if (!overlay) return;
       overlay.classList.add('show');
@@ -25567,9 +25817,15 @@ function showGenrePopup(genre) {
       const cardForm = document.getElementById('paymentCardForm');
       const cardNumberInput = document.getElementById('payCardNumberInput');
       const expiryInput = document.getElementById('payCardExpiry');
+      const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
 
       if (closeCurrencyBtn) closeCurrencyBtn.addEventListener('click', closePaymentCurrencyPopup);
       if (closeCardBtn) closeCardBtn.addEventListener('click', closePaymentCardPopup);
+      if (cancelSubscriptionBtn) {
+        cancelSubscriptionBtn.addEventListener('click', function() {
+          cancelMonthlySubscription();
+        });
+      }
 
       if (currencyOverlay) {
         currencyOverlay.addEventListener('click', function(e) {
@@ -25647,12 +25903,16 @@ function showGenrePopup(genre) {
           localStorage.setItem('hertzSubscriptionCurrency', selectedPaymentCurrency.code);
           localStorage.setItem('hertzSubscriptionAmountUsd', String(PAYMENT_BASE_USD));
           localStorage.setItem('hertzSubscriptionStartedAt', new Date().toISOString());
+          localStorage.removeItem('hertzSubscriptionCanceledAt');
+          localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
           localStorage.setItem('hertzSubscriptionBackendState', 'pending');
 
           // Complete the user-visible start immediately (within one second).
           showSubscriptionStartedPopup();
           cardForm.reset();
           closePaymentCardPopup();
+          refreshSubscriptionActionState();
+          startSubscriptionReminderScheduler();
 
           // Finish backend activation asynchronously so UI flow remains instant.
           startMonthlySubscriptionInBackend(subscriptionPayload)
@@ -25674,6 +25934,9 @@ function showGenrePopup(genre) {
         closePaymentCardPopup();
         closePaymentCurrencyPopup();
       });
+
+      refreshSubscriptionActionState();
+      startSubscriptionReminderScheduler();
     })();
 
     function downloadData() {
