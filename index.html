@@ -646,7 +646,14 @@
       'Cha-Ching': { url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Power': { url: 'https://storage.googleapis.com/hertz-music-folder/Power.mp3', title: 'Power', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Seek a Smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Seek%20a%20Smile.mp3', title: 'Seek a Smile', artist: 'Beniam TedlAI', genre: 'hiphop' },
-      'Mail Ya': { url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', title: 'Mail Ya', artist: 'Beniam TedlAI', genre: 'hiphop' }
+      'Mail Ya': { url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', title: 'Mail Ya', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Icarus': { url: 'https://storage.googleapis.com/hertz-music-folder/Icarus.mp3', title: 'Icarus', artist: 'Beniam TedlAI', genre: 'pop' },
+      'Got me Guessin': { url: 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', title: 'Got me Guessin', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Opti': { url: 'https://storage.googleapis.com/hertz-music-folder/Optimus%20(1).mp3', title: 'Opti', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Robo-Taxi': { url: 'https://storage.googleapis.com/hertz-music-folder/Robo-taxi%20(1).mp3', title: 'Robo-Taxi', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Promise_Electronic': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise%20_.mp3', title: 'Promise', artist: 'Beniam TedlAI', genre: 'electronic' },
+      'Bedside': { url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3', title: 'Bedside', artist: 'Beniam TedlAI', genre: 'electronic' },
+      'Props': { url: 'https://storage.googleapis.com/hertz-music-folder/Props.mp3', title: 'Props', artist: 'Beniam TedlAI', genre: 'electronic' }
     };
     console.log('✅ Global window.trackData initialized with', Object.keys(window.trackData).length, 'tracks');
 
@@ -8619,8 +8626,8 @@ last i checked this is best, specially since it could be real safe`;
         <div class="hamburger-line"></div>
     </button>
 
-    <button class="payment-method-btn" id="paymentMethodBtn" onclick="paymentMethods()" aria-label="Open payment methods">
-      <span>💳</span><span>Payment</span>
+    <button class="payment-method-btn" id="paymentMethodBtn" onclick="paymentMethods()" aria-label="Open subscription methods">
+      <span>💳</span><span>Subscription</span>
     </button>
 
     <div id="paymentCurrencyOverlay" class="pay-overlay" aria-hidden="true">
@@ -9894,6 +9901,13 @@ last i checked this is best, specially since it could be real safe`;
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
+                <tr class="track-row" onclick="playNewTrack('What\'s Her Name?', 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', 'What\'s Her Name?', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:help-circle-outline.svg?color=%23ffd700" alt="What's Her Name cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">What's Her Name?</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <tr class="track-row" onclick="playNewTrack('Sicka Bugs', 'https://storage.googleapis.com/hertz-music-folder/Sicka%20Bugs.mp3', 'Sicka Bugs', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:ladybug.svg?color=%23ffd700" alt="Sicka Bugs cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sicka Bugs</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
@@ -10519,7 +10533,7 @@ last i checked this is best, specially since it could be real safe`;
               <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80" alt="Future Nostalgia" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
             </div>
             <h3 class="card-title card-title-small">Future Nostalgia</h3>
-            <p class="card-description card-description-small">Dua Lipa • 2020 • Pop</p>
+            <p class="card-description card-description-small">2020 • Pop</p>
           </div>
 
           <div class="content-card content-card-small" onclick="openAlbum('folklore')" style="cursor: pointer;">
@@ -10527,7 +10541,7 @@ last i checked this is best, specially since it could be real safe`;
               <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=400&q=80" alt="Folklore" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
             </div>
             <h3 class="card-title card-title-small">Folklore</h3>
-            <p class="card-description card-description-small">Taylor Swift • 2020 • Alternative</p>
+            <p class="card-description card-description-small">2020 • Alternative</p>
           </div>
 
           <div class="content-card content-card-small" onclick="openAlbum('after-hours')" style="cursor: pointer;">
@@ -10535,7 +10549,7 @@ last i checked this is best, specially since it could be real safe`;
               <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=400&q=80" alt="After Hours" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
             </div>
             <h3 class="card-title card-title-small">After Hours</h3>
-            <p class="card-description card-description-small">The Weeknd • 2020 • R&B</p>
+            <p class="card-description card-description-small">2020 • R&B</p>
           </div>
 
           <div class="content-card content-card-small" onclick="openAlbum('positions')" style="cursor: pointer;">
@@ -10543,7 +10557,7 @@ last i checked this is best, specially since it could be real safe`;
               <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80" alt="Positions" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
             </div>
             <h3 class="card-title card-title-small">Positions</h3>
-            <p class="card-description card-description-small">Ariana Grande • 2020 • Pop</p>
+            <p class="card-description card-description-small">2020 • Pop</p>
           </div>
 
           <div class="content-card content-card-small" onclick="openAlbum('circles')" style="cursor: pointer;">
@@ -10551,7 +10565,7 @@ last i checked this is best, specially since it could be real safe`;
               <img src="https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80" alt="Circles" style="width:100%;height:100%;border-radius:8px;object-fit:cover;">
             </div>
             <h3 class="card-title card-title-small">Circles</h3>
-            <p class="card-description card-description-small">Post Malone • 2019 • Hip-Hop</p>
+            <p class="card-description card-description-small">2019 • Hip-Hop</p>
           </div>
         </div>
       </div>
@@ -14133,7 +14147,7 @@ p.s I'm Beniam Endale Tedla`;
             <div id="userName" style="font-weight:600;"></div>
           </div>
           <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
-            <div style="font-size:0.8rem;color:#a7a7a7;">DOB</div>
+            <div style="font-size:0.8rem;color:#a7a7a7;">DOB <span style="color:#ffd700;">Enjoy!!!</span></div>
             <div id="userDob" style="font-weight:600;"></div>
           </div>
           <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
@@ -14142,7 +14156,21 @@ p.s I'm Beniam Endale Tedla`;
           </div>
         </div>
 
+        <div id="accountEditForm" style="display:none;margin-top:0.9rem;padding:0.9rem;border-radius:10px;background:rgba(255,255,255,0.02);border:1px solid var(--border-color);">
+          <div style="display:flex;flex-direction:column;gap:0.6rem;">
+            <input id="accountEditName" type="text" placeholder="Name" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
+            <input id="accountEditUsername" type="text" placeholder="Username" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
+            <input id="accountEditEmail" type="email" placeholder="Email" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
+            <input id="accountEditDob" type="date" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
+          </div>
+          <div style="display:flex;justify-content:flex-end;gap:0.5rem;margin-top:0.8rem;">
+            <button class="upload-btn" type="button" onclick="toggleAccountEditMode(false)" style="background:linear-gradient(45deg,#2b2b2b,#1f1f1f);">Cancel</button>
+            <button class="upload-btn" type="button" onclick="saveAccountProfileEdits()" style="background:linear-gradient(45deg,#1db954,#17a244);">Save</button>
+          </div>
+        </div>
+
         <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:0.6rem;align-items:flex-end;">
+          <button class="upload-btn" id="editAccountBtn" onclick="toggleAccountEditMode(true)" style="background:linear-gradient(45deg,#3b82f6,#2563eb);">Edit Info</button>
           <button class="upload-btn" onclick="openQuickSignupPopup()" style="background:linear-gradient(45deg,#2c3e50,#1f2a36);">Sign Up</button>
           <button class="upload-btn" onclick="signOutUser()" style="background:linear-gradient(45deg,#e74c3c,#c0392b);">Sign Out</button>
         </div>
@@ -14343,7 +14371,7 @@ p.s I'm Beniam Endale Tedla`;
               style="position:absolute;top:0;left:0;width:100%;height:100%;"
               frameborder="0"
               referrerpolicy="origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
               allowfullscreen></iframe>
           </div>
           <div style="padding:0.7rem 1.2rem;background:#1a1a1a;border-bottom:1px solid #2a2a2a;display:flex;align-items:flex-start;justify-content:space-between;">
@@ -14505,7 +14533,13 @@ p.s I'm Beniam Endale Tedla`;
             'Shootin Starz': { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz', artist: 'Prod. Simz' },
             'Mars': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars.mp3', title: 'Mars', artist: 'Prod. Tedla' },
             'Aint Shit': { url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20shit.mp3', title: 'Aint Shit', artist: 'Texx' },
-            'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' }
+            'Dream': { url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
+            'Icarus': { url: 'https://storage.googleapis.com/hertz-music-folder/Icarus.mp3', title: 'Icarus', artist: 'Beniam TedlAI' },
+            'Got me Guessin': { url: 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', title: 'Got me Guessin', artist: 'Beniam TedlAI' },
+            'Opti': { url: 'https://storage.googleapis.com/hertz-music-folder/Optimus%20(1).mp3', title: 'Opti', artist: 'Beniam TedlAI' },
+            'Robo-Taxi': { url: 'https://storage.googleapis.com/hertz-music-folder/Robo-taxi%20(1).mp3', title: 'Robo-Taxi', artist: 'Beniam TedlAI' },
+            'Promise (Electronic)': { url: 'https://storage.googleapis.com/hertz-music-folder/Promise%20_.mp3', title: 'Promise', artist: 'Beniam TedlAI' },
+            'Bedside': { url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3', title: 'Bedside', artist: 'Beniam TedlAI' }
           };
 
           // Get track info from database or use provided parameters
@@ -14897,6 +14931,34 @@ p.s I'm Beniam Endale Tedla`;
                 <option value="ocean-blue">💙 Ocean Blue</option>
                 <option value="purple-vibes">💜 Purple Vibes</option>
               </select>
+            </div>
+
+            <div id="themeAdjusterControls" style="display:none; margin-bottom: 1.5rem; padding: 0.9rem; background: var(--bg-quaternary); border-radius: 10px; border: 1px solid var(--border-color);">
+              <div style="color: var(--accent-color); font-weight: 700; margin-bottom: 0.8rem;">Theme Hue Adjuster (Non-Dark)</div>
+
+              <div style="margin-bottom: 0.8rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; color: var(--text-secondary);">
+                  <span>Hue</span>
+                  <span id="themeHueAdjustValue">0deg</span>
+                </div>
+                <input type="range" id="themeHueAdjust" min="-180" max="180" value="0" step="1" style="width:100%; height: 6px; background: var(--bg-tertiary); border-radius: 3px;">
+              </div>
+
+              <div style="margin-bottom: 0.8rem;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; color: var(--text-secondary);">
+                  <span>Saturation</span>
+                  <span id="themeSaturationAdjustValue">100%</span>
+                </div>
+                <input type="range" id="themeSaturationAdjust" min="50" max="150" value="100" step="1" style="width:100%; height: 6px; background: var(--bg-tertiary); border-radius: 3px;">
+              </div>
+
+              <div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:0.35rem; color: var(--text-secondary);">
+                  <span>Lightness</span>
+                  <span id="themeLightnessAdjustValue">100%</span>
+                </div>
+                <input type="range" id="themeLightnessAdjust" min="50" max="150" value="100" step="1" style="width:100%; height: 6px; background: var(--bg-tertiary); border-radius: 3px;">
+              </div>
             </div>
 
             <label style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease;">
@@ -15744,47 +15806,79 @@ function showGenrePopup(genre) {
 
   // Get local tracks from showSearchSuggestions (same as used for suggestions)
   const localTracks = {
-    'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
-    'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
-    'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
-    'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz' },
-    'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Alternative' },
-    'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi' },
-    'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap' },
-    'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance' },
-    'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
-    'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational' },
-    '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
-    'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
-    'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-    'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
-    'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
-    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
-    'Props': { id: 'Props', title: 'Props', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Props.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' }
+    'Where Dey At': { id: 'Where Dey At', title: 'Where Dey At', artist: 'Texx', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Where%20Dey%20At.wav' },
+    'Times': { id: 'Times', title: 'Times', artist: 'Stat Cross', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Times.wav' },
+    'Prime': { id: 'Prime', title: 'Prime', artist: 'SlattZ', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Trap', url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav' },
+    'Aint Nough Dreamzz': { id: 'Aint Nough Dreamzz', title: 'Aint Nough Dreamzz', artist: 'Stage Rolla', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Aint%20Nough%20Dreamzz.wav' },
+    'Blossom': { id: 'Blossom', title: 'Blossom', artist: 'Prod. Nexus', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill', url: 'https://storage.googleapis.com/hertz-music-folder/Nexus.wav' },
+    'Mach 1': { id: 'Mach 1', title: 'Mach 1', artist: 'Prod. Phantom', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/Mach%201.mp3' },
+    'Echo': { id: 'Echo', title: 'Echo', artist: 'Neon Gloww', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient', url: 'https://storage.googleapis.com/hertz-music-folder/Echo.mp3' },
+    'Lights': { id: 'Lights', title: 'Lights', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Lights.mp3' },
+    'Icarus': { id: 'Icarus', title: 'Icarus', artist: 'Claire Rin', url: 'https://storage.googleapis.com/hertz-music-folder/Icarus.mp3', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+    'Smilin': { id: 'Smilin', title: 'Smilin', artist: 'Melody-Soull', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Soul', url: 'https://storage.googleapis.com/hertz-music-folder/Smilin.mp3' },
+    'Made It': { id: 'Made It', title: 'Made It', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Made%20It.mp3' },
+    'Got me Guessin': { id: 'Got me Guessin', title: 'Got me Guessin', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Opti': { id: 'Opti', title: 'Opti', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Optimus%20(1).mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Robo-Taxi': { id: 'Robo-Taxi', title: 'Robo-Taxi', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Robo-taxi%20(1).mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Nector': { id: 'Nector', title: 'Nector', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Trap', url: 'https://storage.googleapis.com/hertz-music-folder/Nector.mp3' },
+    'Buckets': { id: 'Buckets', title: 'Buckets', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Buckets.mp3' },
+    'Sweet': { id: 'Sweet', title: 'Sweet', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Sweet.mp3' },
+    'Persistence': { id: 'Persistence', title: 'Persistence', artist: 'Neo', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Motivational', url: 'https://storage.googleapis.com/hertz-music-folder/Persistence.mp3' },
+    'Focus': { id: 'Focus', title: 'Focus', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi', url: 'https://storage.googleapis.com/hertz-music-folder/Focus.mp3' },
+    'Smooth': { id: 'Smooth', title: 'Smooth', artist: 'Prod. 4EV', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Jazz', url: 'https://storage.googleapis.com/hertz-music-folder/Smooth.wav' },
+    'Different': { id: 'Different', title: 'Different', artist: 'Prod. Cool-Rhythms', cover: 'https://wallpapercave.com/wp/wp3198562.jpg', genre: 'Alternative', url: 'https://storage.googleapis.com/hertz-music-folder/Different.mp3' },
+    'Wop!!!': { id: 'Wop!!!', title: 'Wop!!!', artist: 'Klevv', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Wop!!!.mp3' },
+    'Mind': { id: 'Mind', title: 'Mind', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Lo-Fi', url: 'https://storage.googleapis.com/hertz-music-folder/Mind.mp3' },
+    'Huh': { id: 'Huh', title: 'Huh', artist: 'Prod. Legacy', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Trap', url: 'https://storage.googleapis.com/hertz-music-folder/Huh.mp3' },
+    'Soul': { id: 'Soul', title: 'Soul', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Soul', url: 'https://storage.googleapis.com/hertz-music-folder/Soul.mp3' },
+    'Step': { id: 'Step', title: 'Step', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Dance', url: 'https://storage.googleapis.com/hertz-music-folder/Step.mp3' },
+    'Vibes': { id: 'Vibes', title: 'Vibes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Chill', url: 'https://storage.googleapis.com/hertz-music-folder/Vibes.mp3' },
+    'Future': { id: 'Future', title: 'Future', artist: 'Pegasus', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/Future.mp3' },
+    'Promise': { id: 'Promise', title: 'Promise', artist: 'Desiree', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Promise.wav' },
+    'Bliss': { id: 'Bliss', title: 'Bliss', artist: 'Echo', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Ambient', url: 'https://storage.googleapis.com/hertz-music-folder/Bliss.mp3' },
+    'Hustle': { id: 'Hustle', title: 'Hustle', artist: 'NeoXX', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Motivational', url: 'https://storage.googleapis.com/hertz-music-folder/Hustle.mp3' },
+    '808-Symph': { id: '808-Symph', title: '808-Symph', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/808-Symph.mp3' },
+    'shine': { id: 'shine', title: 'Shine', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Shine.mp3' },
+    'heart': { id: 'heart', title: 'Heart', artist: 'T-Glow', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Heart.mp3' },
+    'nova': { id: 'nova', title: 'Nova', artist: 'Prod. Boltz', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic', url: 'https://storage.googleapis.com/hertz-music-folder/Nova.wav' },
+    'pushit': { id: 'pushit', title: 'Push It', artist: 'B-Gallop', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Push%20It.wav' },
+    'bright': { id: 'bright', title: 'Bright', artist: 'Soul-Ful', cover: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav' },
+    'whisper': { id: 'whisper', title: 'Whisper', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Ambient', url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav' },
+    'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul', url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav' },
+    'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop', url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav' },
+    'Props': { id: 'Props', title: 'Props', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Props.mp3', cover: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Promise_Electronic': { id: 'Promise_Electronic', title: 'Promise', artist: 'Chris Wallace', url: 'https://storage.googleapis.com/hertz-music-folder/Promise%20_.mp3', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Rhytm': { id: 'Rhytm', title: 'Rhytm', artist: 'Stan Clove', url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Elements': { id: 'Elements', title: 'Elements', artist: 'Chris Wallace', url: 'https://storage.googleapis.com/hertz-music-folder/Elements.mp3', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
+    'Ragz 2 Richez': { id: 'Ragz 2 Richez', title: 'Ragz 2 Richez', artist: 'Dalton Levi', url: 'https://storage.googleapis.com/hertz-music-folder/Rags%20to%20Riches%20(2).mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Primate': { id: 'Primate', title: 'Primate', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Primate.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'Brandy': { id: 'Brandy', title: 'Brandy', artist: 'TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Brandy%20(4).mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+    'OZ Perf': { id: 'OZ Perf', title: 'OZ Perf', artist: 'Blake Adams', url: 'https://storage.googleapis.com/hertz-music-folder/Aussie%20Nice%20(1).mp3', cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80', genre: 'Rock' },
+    'Come in Peace': { id: 'Come in Peace', title: 'Come in Peace', artist: 'Zander Sphere', url: 'https://storage.googleapis.com/hertz-music-folder/Alien%20Life.mp3', cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80', genre: 'Rock' },
+    'Kill Ya Demons': { id: 'Kill Ya Demons', title: 'Kill Ya Demons', artist: 'Brad Stevens', url: 'https://storage.googleapis.com/hertz-music-folder/Kill%20Ya%20Demons.mp3', cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80', genre: 'Rock' },
+    'Blues': { id: 'Blues', title: 'Blues', artist: 'SPSW', url: 'https://storage.googleapis.com/hertz-music-folder/Budgeting%20Blues%20(1)_instrumental.mp3', cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80', genre: 'Rock' },
+    'Bedside': { id: 'Bedside', title: 'Bedside', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3', cover: 'https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' }
   };
 
   // Filter tracks by genre and append all gold tracks from Popular Tracks
-  const tracks = Object.values(localTracks).filter(track => track.genre && track.genre.toLowerCase() === genre.toLowerCase());
+  const normalizeGenre = (value) => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const catalogTracks = Object.entries(localTracks).map(([key, track]) => ({
+    ...track,
+    id: track?.id || key,
+    title: track?.title || key,
+    artist: track?.artist || 'Unknown',
+    cover: track?.cover || 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=400&q=80',
+    genre: track?.genre || ''
+  }));
+  const targetGenreKey = normalizeGenre(genre);
+  const tracks = catalogTracks.filter(track => {
+    if (!track || typeof track !== 'object') return false;
+    const trackGenreKey = normalizeGenre(track.genre);
+    if (trackGenreKey === targetGenreKey) return true;
+    if (targetGenreKey === 'hiphop' && trackGenreKey === 'hiphop') return true;
+    if (targetGenreKey === 'hiphop' && trackGenreKey === 'hiphop') return true;
+    return false;
+  });
   const isAfrobeat = (genre || '').toLowerCase() === 'afrobeat';
   const sourceGoldTracks = isAfrobeat
     ? (typeof window.getAfrobeatGoldTracksFromDOM === 'function' ? window.getAfrobeatGoldTracksFromDOM() : [])
@@ -16109,10 +16203,19 @@ function showGenrePopup(genre) {
 
     function buildYouTubeEmbedUrl(videoId) {
       const safeVideoId = String(videoId || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+      const lang = String((navigator.language || 'en')).slice(0, 2).toLowerCase() || 'en';
       const params = new URLSearchParams({
         autoplay: '1',
+        controls: '1',
+        fs: '1',
+        disablekb: '0',
+        cc_load_policy: '1',
+        iv_load_policy: '1',
+        color: 'red',
+        enablejsapi: '1',
+        hl: lang,
         rel: '0',
-        modestbranding: '1',
+        modestbranding: '0',
         playsinline: '1'
       });
       return safeVideoId ? `https://www.youtube.com/embed/${safeVideoId}?${params.toString()}` : '';
@@ -22353,6 +22456,7 @@ function showGenrePopup(genre) {
                 <div class="track-duration">${song.duration || '3:45'}</div>
                 <div class="track-actions">
                   <button class="track-like-btn active" onclick="event.stopPropagation(); toggleLike(this, event, '${song.id}')">♥</button>
+                  <button class="track-menu-btn" type="button" aria-label="Track options" onclick="showTrackMenu(event, '${(song.title || '').replace(/'/g, "\\'")}', '${(song.artist || '').replace(/'/g, "\\'")}', '${(song.id || '').replace(/'/g, "\\'")}', '${(song.url || '').replace(/'/g, "\\'")}')">⋯</button>
                 </div>
               </div>
             `;
@@ -22422,6 +22526,7 @@ function showGenrePopup(genre) {
               <div class="track-duration">${track.duration}</div>
               <div class="track-actions">
                 <button class="track-like-btn" onclick="event.stopPropagation(); toggleLike(this, event, '${track.id}')">♡</button>
+                <button class="track-menu-btn" type="button" aria-label="Track options" onclick="showTrackMenu(event, '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${track.id.replace(/'/g, "\\'")}', '${(track.url || '').replace(/'/g, "\\'")}')">⋯</button>
               </div>
             </div>
           `;
@@ -22500,6 +22605,7 @@ function showGenrePopup(genre) {
                 <div class="track-duration">${song.duration || '3:45'}</div>
                 <div class="track-actions">
                   <button class="track-like-btn active" onclick="event.stopPropagation(); toggleLike(this, event, '${song.id}')">♥</button>
+                  <button class="track-menu-btn" type="button" aria-label="Track options" onclick="showTrackMenu(event, '${(song.title || '').replace(/'/g, "\\'")}', '${(song.artist || '').replace(/'/g, "\\'")}', '${(song.id || '').replace(/'/g, "\\'")}', '${(song.url || '').replace(/'/g, "\\'")}')">⋯</button>
                 </div>
               </div>
             `;
@@ -22588,6 +22694,7 @@ function showGenrePopup(genre) {
               <div class="track-duration">${track.duration}</div>
               <div class="track-actions">
                 <button class="track-like-btn" onclick="event.stopPropagation(); toggleLike(this, event, '${track.id}')">♡</button>
+                <button class="track-menu-btn" type="button" aria-label="Track options" onclick="showTrackMenu(event, '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${track.id.replace(/'/g, "\\'")}', '${(track.url || '').replace(/'/g, "\\'")}')">⋯</button>
               </div>
             </div>
           `;
@@ -22681,7 +22788,7 @@ function showGenrePopup(genre) {
               <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7)); pointer-events: none;"></div>
             </div>
             <div style="padding: 0.7rem 0.6rem 0.4rem 0.6rem; color: #fff; font-weight: 700; font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; letter-spacing: 0.3px;">${album.title}</div>
-            <div style="padding: 0 0.6rem 0.7rem 0.6rem; color: #ffd700; font-size: 0.8rem; font-weight: 600;">${album.artist} • ${album.year} • ${album.genre}</div>
+            <div style="padding: 0 0.6rem 0.7rem 0.6rem; color: #ffd700; font-size: 0.8rem; font-weight: 600;">${album.year} • ${album.genre}</div>
           </div>
         `;
       });
@@ -22727,6 +22834,7 @@ function showGenrePopup(genre) {
               <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${displayTitle}</div>
               <div style="color: #b3b3b3; font-size: 0.85rem;">${displayArtist}</div>
             </div>
+            <button class="track-menu-btn" type="button" onclick="showTrackMenu(event, '${displayTitle.replace(/'/g, "\\'")}', '${displayArtist.replace(/'/g, "\\'")}', '${trackId.replace(/'/g, "\\'")}', '${(track.url || '').replace(/'/g, "\\'")}')" aria-label="Track options">⋯</button>
           </div>
         `;
       });
@@ -22779,6 +22887,7 @@ function showGenrePopup(genre) {
               <div style="color: #fff; font-weight: 600; margin-bottom: 0.25rem; font-size: 0.95rem;">${track.title}</div>
               <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist}</div>
             </div>
+            <button class="track-menu-btn" type="button" onclick="showTrackMenu(event, '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${trackId.replace(/'/g, "\\'")}', '${(track.url || '').replace(/'/g, "\\'")}')" aria-label="Track options">⋯</button>
           </div>
         `;
       });
@@ -23892,6 +24001,7 @@ function showGenrePopup(genre) {
                 <div class="track-title" style="color: #fff; font-weight: 600; margin-bottom: 4px;">${displayTitle}</div>
                 <div class="track-artist" style="color: #b3b3b3; font-size: 0.9rem;">${displayArtist} • Liked on ${likedDate}</div>
               </div>
+              <button class="track-menu-btn" type="button" aria-label="Track options" onclick="showTrackMenu(event, '${trackTitle.replace(/'/g, "\\'")}', '${trackArtist.replace(/'/g, "\\'")}', '${(song.id || '').replace(/'/g, "\\'")}', '${(song.url || '').replace(/'/g, "\\'")}')" style="margin-right: 8px;">⋯</button>
               <div class="track-actions" style="display: flex; gap: 8px; align-items: center;">
                 <button class="play-btn" onclick="event.stopPropagation(); window.playLikedTrackByIndex(${index})" style="background: linear-gradient(135deg, #1db954 0%, #1ed760 100%); color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: 600;">▶ Play</button>
               </div>
@@ -24208,9 +24318,19 @@ function showGenrePopup(genre) {
         userEmailElement.textContent = `📧 ${email}`;
       }
 
+      const formatDobForDisplay = (dobValue) => {
+        const value = String(dobValue || '').trim();
+        const ymdMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!ymdMatch) return value || 'Not set';
+        const year = ymdMatch[1];
+        const month = ymdMatch[2];
+        const day = ymdMatch[3];
+        return `${day}/${month}/${year}`;
+      };
+
       if (userDobElement) {
         const dob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || 'Not set';
-        userDobElement.textContent = dob;
+        userDobElement.textContent = formatDobForDisplay(dob);
       }
 
       if (userCountryElement) {
@@ -24301,6 +24421,21 @@ function showGenrePopup(genre) {
         const notificationsEnabled = savedUserData.emailNotifications === true;
         notificationElement.textContent = notificationsEnabled ? 'Enabled ✓' : 'Disabled';
         notificationElement.style.color = notificationsEnabled ? '#1db954' : '#b3b3b3';
+      }
+
+      const editNameInput = document.getElementById('accountEditName');
+      const editUsernameInput = document.getElementById('accountEditUsername');
+      const editEmailInput = document.getElementById('accountEditEmail');
+      const editDobInput = document.getElementById('accountEditDob');
+      if (editNameInput) editNameInput.value = username === 'Music Lover' ? '' : username;
+      if (editUsernameInput) editUsernameInput.value = savedUserData.username || username.toLowerCase().replace(/\s+/g, '');
+      if (editEmailInput) {
+        const editEmail = userEmail.includes('@') ? userEmail : `${username.toLowerCase().replace(/\s+/g, '')}@hertz.music`;
+        editEmailInput.value = editEmail;
+      }
+      if (editDobInput) {
+        const editDob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || '';
+        editDobInput.value = /^\d{4}-\d{2}-\d{2}$/.test(editDob) ? editDob : '';
       }
 
       // Store calculated stats for future use
@@ -24478,6 +24613,8 @@ function showGenrePopup(genre) {
         }
       });
 
+      initializeThemeAdjusterControls(theme);
+
       // Apply saved theme on load
       applyTheme(theme);
 
@@ -24485,6 +24622,224 @@ function showGenrePopup(genre) {
       applyEqualizerPreset(equalizerPreset);
 
       console.log('✅ Settings loaded and fully functional');
+    }
+
+    const THEME_ADJUST_TARGET_VARS = ['--bg-main', '--bg-secondary', '--bg-tertiary', '--text-primary', '--accent-color'];
+    const THEME_ADJUST_STORAGE_KEYS = {
+      hue: 'hertzThemeHueAdjust',
+      saturation: 'hertzThemeSaturationAdjust',
+      lightness: 'hertzThemeLightnessAdjust'
+    };
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function hexToRgb(hex) {
+      const clean = String(hex || '').replace('#', '').trim();
+      if (!/^[0-9a-fA-F]{3}([0-9a-fA-F]{3})?$/.test(clean)) return null;
+      const full = clean.length === 3
+        ? clean.split('').map(ch => ch + ch).join('')
+        : clean;
+      const intVal = parseInt(full, 16);
+      return {
+        r: (intVal >> 16) & 255,
+        g: (intVal >> 8) & 255,
+        b: intVal & 255
+      };
+    }
+
+    function parseColorToRgb(colorValue) {
+      const value = String(colorValue || '').trim();
+      if (!value) return null;
+
+      if (value.startsWith('#')) {
+        return hexToRgb(value);
+      }
+
+      const rgbMatch = value.match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+      if (rgbMatch) {
+        return {
+          r: parseInt(rgbMatch[1], 10),
+          g: parseInt(rgbMatch[2], 10),
+          b: parseInt(rgbMatch[3], 10)
+        };
+      }
+
+      return null;
+    }
+
+    function rgbToHsl(r, g, b) {
+      let rn = r / 255;
+      let gn = g / 255;
+      let bn = b / 255;
+      const max = Math.max(rn, gn, bn);
+      const min = Math.min(rn, gn, bn);
+      const delta = max - min;
+      let h = 0;
+      let s = 0;
+      const l = (max + min) / 2;
+
+      if (delta !== 0) {
+        s = delta / (1 - Math.abs(2 * l - 1));
+        switch (max) {
+          case rn:
+            h = 60 * (((gn - bn) / delta) % 6);
+            break;
+          case gn:
+            h = 60 * (((bn - rn) / delta) + 2);
+            break;
+          default:
+            h = 60 * (((rn - gn) / delta) + 4);
+            break;
+        }
+      }
+
+      if (h < 0) h += 360;
+      return { h, s: s * 100, l: l * 100 };
+    }
+
+    function hslToRgb(h, s, l) {
+      const sn = s / 100;
+      const ln = l / 100;
+      const c = (1 - Math.abs(2 * ln - 1)) * sn;
+      const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+      const m = ln - c / 2;
+      let r1 = 0;
+      let g1 = 0;
+      let b1 = 0;
+
+      if (h >= 0 && h < 60) {
+        r1 = c; g1 = x; b1 = 0;
+      } else if (h >= 60 && h < 120) {
+        r1 = x; g1 = c; b1 = 0;
+      } else if (h >= 120 && h < 180) {
+        r1 = 0; g1 = c; b1 = x;
+      } else if (h >= 180 && h < 240) {
+        r1 = 0; g1 = x; b1 = c;
+      } else if (h >= 240 && h < 300) {
+        r1 = x; g1 = 0; b1 = c;
+      } else {
+        r1 = c; g1 = 0; b1 = x;
+      }
+
+      return {
+        r: Math.round((r1 + m) * 255),
+        g: Math.round((g1 + m) * 255),
+        b: Math.round((b1 + m) * 255)
+      };
+    }
+
+    function rgbToCss(rgb) {
+      return `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+    }
+
+    function getEffectiveThemeName(themeName) {
+      if (themeName !== 'auto') return themeName;
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : 'light';
+    }
+
+    function getThemeAdjustmentSettings() {
+      return {
+        hue: parseInt(localStorage.getItem(THEME_ADJUST_STORAGE_KEYS.hue) || '0', 10),
+        saturation: parseInt(localStorage.getItem(THEME_ADJUST_STORAGE_KEYS.saturation) || '100', 10),
+        lightness: parseInt(localStorage.getItem(THEME_ADJUST_STORAGE_KEYS.lightness) || '100', 10)
+      };
+    }
+
+    function resetThemeAdjustments() {
+      THEME_ADJUST_TARGET_VARS.forEach((varName) => {
+        document.documentElement.style.removeProperty(varName);
+      });
+    }
+
+    function updateThemeAdjusterUI(themeName) {
+      const controls = document.getElementById('themeAdjusterControls');
+      const hueInput = document.getElementById('themeHueAdjust');
+      const satInput = document.getElementById('themeSaturationAdjust');
+      const lightInput = document.getElementById('themeLightnessAdjust');
+      const hueValue = document.getElementById('themeHueAdjustValue');
+      const satValue = document.getElementById('themeSaturationAdjustValue');
+      const lightValue = document.getElementById('themeLightnessAdjustValue');
+
+      if (!controls || !hueInput || !satInput || !lightInput || !hueValue || !satValue || !lightValue) return;
+
+      const settings = getThemeAdjustmentSettings();
+      hueInput.value = String(clamp(settings.hue, -180, 180));
+      satInput.value = String(clamp(settings.saturation, 50, 150));
+      lightInput.value = String(clamp(settings.lightness, 50, 150));
+
+      hueValue.textContent = `${hueInput.value}deg`;
+      satValue.textContent = `${satInput.value}%`;
+      lightValue.textContent = `${lightInput.value}%`;
+
+      const isDarkTheme = getEffectiveThemeName(themeName) === 'dark';
+      controls.style.display = isDarkTheme ? 'none' : 'block';
+      hueInput.disabled = isDarkTheme;
+      satInput.disabled = isDarkTheme;
+      lightInput.disabled = isDarkTheme;
+    }
+
+    function initializeThemeAdjusterControls(themeName) {
+      const hueInput = document.getElementById('themeHueAdjust');
+      const satInput = document.getElementById('themeSaturationAdjust');
+      const lightInput = document.getElementById('themeLightnessAdjust');
+      if (!hueInput || !satInput || !lightInput) return;
+
+      updateThemeAdjusterUI(themeName);
+
+      const applyAdjusterChange = function() {
+        localStorage.setItem(THEME_ADJUST_STORAGE_KEYS.hue, String(hueInput.value));
+        localStorage.setItem(THEME_ADJUST_STORAGE_KEYS.saturation, String(satInput.value));
+        localStorage.setItem(THEME_ADJUST_STORAGE_KEYS.lightness, String(lightInput.value));
+
+        const currentTheme = localStorage.getItem('hertzTheme') || 'dark';
+        updateThemeAdjusterUI(currentTheme);
+        applyThemeColorAdjustments(currentTheme);
+      };
+
+      hueInput.removeEventListener('input', hueInput._themeAdjustHandler);
+      satInput.removeEventListener('input', satInput._themeAdjustHandler);
+      lightInput.removeEventListener('input', lightInput._themeAdjustHandler);
+
+      hueInput._themeAdjustHandler = applyAdjusterChange;
+      satInput._themeAdjustHandler = applyAdjusterChange;
+      lightInput._themeAdjustHandler = applyAdjusterChange;
+
+      hueInput.addEventListener('input', hueInput._themeAdjustHandler);
+      satInput.addEventListener('input', satInput._themeAdjustHandler);
+      lightInput.addEventListener('input', lightInput._themeAdjustHandler);
+    }
+
+    function applyThemeColorAdjustments(themeName) {
+      const effectiveTheme = getEffectiveThemeName(themeName);
+      if (effectiveTheme === 'dark') {
+        resetThemeAdjustments();
+        return;
+      }
+
+      resetThemeAdjustments();
+
+      const settings = getThemeAdjustmentSettings();
+      const hueAdjust = clamp(settings.hue, -180, 180);
+      const saturationAdjust = clamp(settings.saturation, 50, 150);
+      const lightnessAdjust = clamp(settings.lightness, 50, 150);
+      const computed = getComputedStyle(document.documentElement);
+
+      THEME_ADJUST_TARGET_VARS.forEach((varName) => {
+        const baseValue = computed.getPropertyValue(varName).trim();
+        const rgb = parseColorToRgb(baseValue);
+        if (!rgb) return;
+
+        const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+        const adjustedHue = (hsl.h + hueAdjust + 360) % 360;
+        const adjustedSat = clamp(hsl.s * (saturationAdjust / 100), 0, 100);
+        const adjustedLight = clamp(hsl.l * (lightnessAdjust / 100), 0, 100);
+        const adjustedRgb = hslToRgb(adjustedHue, adjustedSat, adjustedLight);
+
+        document.documentElement.style.setProperty(varName, rgbToCss(adjustedRgb));
+      });
     }
 
     // Enhanced theme switching function
@@ -24514,7 +24869,111 @@ function showGenrePopup(genre) {
       } else {
         document.documentElement.setAttribute('data-theme', themeName);
       }
+
+      updateThemeAdjusterUI(themeName);
+      applyThemeColorAdjustments(themeName);
       console.log('✅ Theme applied:', themeName);
+    }
+
+    const EQUALIZER_PRESET_SETTINGS = {
+      flat: { bass: 0, mid: 0, treble: 0 },
+      pop: { bass: 4, mid: 1, treble: 4 },
+      rock: { bass: 5, mid: -2, treble: 5 },
+      jazz: { bass: 2, mid: 4, treble: 2 },
+      classical: { bass: -2, mid: 3, treble: 4 },
+      electronic: { bass: 7, mid: -3, treble: 6 },
+      bass: { bass: 9, mid: -2, treble: -1 }
+    };
+
+    function ensureEqualizerEngine() {
+      const audioEl = document.getElementById('playerAudio');
+      if (!audioEl) return null;
+
+      const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextCtor) return null;
+
+      window.__hzEqualizerEngine = window.__hzEqualizerEngine || {};
+      const engine = window.__hzEqualizerEngine;
+
+      if (engine.ready) {
+        return engine;
+      }
+
+      try {
+        engine.context = engine.context || new AudioContextCtor();
+        if (!engine.source) {
+          engine.source = engine.context.createMediaElementSource(audioEl);
+        }
+
+        if (!engine.bassFilter) {
+          engine.bassFilter = engine.context.createBiquadFilter();
+          engine.bassFilter.type = 'lowshelf';
+          engine.bassFilter.frequency.value = 120;
+        }
+
+        if (!engine.midFilter) {
+          engine.midFilter = engine.context.createBiquadFilter();
+          engine.midFilter.type = 'peaking';
+          engine.midFilter.frequency.value = 1000;
+          engine.midFilter.Q.value = 1;
+        }
+
+        if (!engine.trebleFilter) {
+          engine.trebleFilter = engine.context.createBiquadFilter();
+          engine.trebleFilter.type = 'highshelf';
+          engine.trebleFilter.frequency.value = 4500;
+        }
+
+        if (!engine.outputGain) {
+          engine.outputGain = engine.context.createGain();
+          engine.outputGain.gain.value = 1;
+        }
+
+        if (!engine.connected) {
+          engine.source.connect(engine.bassFilter);
+          engine.bassFilter.connect(engine.midFilter);
+          engine.midFilter.connect(engine.trebleFilter);
+          engine.trebleFilter.connect(engine.outputGain);
+          engine.outputGain.connect(engine.context.destination);
+          engine.connected = true;
+        }
+
+        if (!engine.playResumeBound) {
+          audioEl.addEventListener('play', function() {
+            const eqEngine = window.__hzEqualizerEngine;
+            if (eqEngine && eqEngine.context && eqEngine.context.state === 'suspended') {
+              eqEngine.context.resume().catch(function() {});
+            }
+            if (window.__hzPendingEqualizerSettings && eqEngine) {
+              applyEqualizerSettingsToEngine(window.__hzPendingEqualizerSettings);
+              window.__hzPendingEqualizerSettings = null;
+            }
+          });
+          engine.playResumeBound = true;
+        }
+
+        engine.ready = true;
+        return engine;
+      } catch (err) {
+        console.warn('⚠️ Equalizer engine unavailable, falling back to flat output.', err);
+        return null;
+      }
+    }
+
+    function applyEqualizerSettingsToEngine(settings) {
+      const engine = ensureEqualizerEngine();
+      if (!engine || !settings) return false;
+
+      const now = engine.context.currentTime;
+      const bass = clamp(Number(settings.bass) || 0, -12, 12);
+      const mid = clamp(Number(settings.mid) || 0, -12, 12);
+      const treble = clamp(Number(settings.treble) || 0, -12, 12);
+
+      engine.bassFilter.gain.setTargetAtTime(bass, now, 0.03);
+      engine.midFilter.gain.setTargetAtTime(mid, now, 0.03);
+      engine.trebleFilter.gain.setTargetAtTime(treble, now, 0.03);
+
+      return true;
     }
 
     // New function to apply equalizer presets
@@ -24524,23 +24983,18 @@ function showGenrePopup(genre) {
       // Store the preset for audio processing
       localStorage.setItem('hertzActiveEqualizerPreset', preset);
 
-      // In a real implementation, this would adjust audio frequencies
-      // For now, we'll just store the setting
-      const presetSettings = {
-        flat: { bass: 0, mid: 0, treble: 0 },
-        pop: { bass: 2, mid: 1, treble: 3 },
-        rock: { bass: 3, mid: 0, treble: 2 },
-        jazz: { bass: 1, mid: 2, treble: 1 },
-        classical: { bass: 0, mid: 1, treble: 2 },
-        electronic: { bass: 4, mid: -1, treble: 2 },
-        bass: { bass: 5, mid: 0, treble: 0 }
-      };
+      const selectedSettings = EQUALIZER_PRESET_SETTINGS[preset] || EQUALIZER_PRESET_SETTINGS.flat;
+      localStorage.setItem('hertzEqualizerSettings', JSON.stringify(selectedSettings));
 
-      if (presetSettings[preset]) {
-        localStorage.setItem('hertzEqualizerSettings', JSON.stringify(presetSettings[preset]));
+      const applied = applyEqualizerSettingsToEngine(selectedSettings);
+      if (!applied) {
+        // Defer until the audio element/context can be initialized.
+        window.__hzPendingEqualizerSettings = selectedSettings;
+      } else {
+        window.__hzPendingEqualizerSettings = null;
       }
 
-      console.log('✅ Equalizer preset applied:', preset);
+      console.log('✅ Equalizer preset applied:', preset, selectedSettings);
     }
 
     // New function to show temporary feedback messages
@@ -24694,6 +25148,82 @@ function showGenrePopup(genre) {
       accounts[accountKey].likedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
       accounts[accountKey].lastUpdated = new Date().toISOString();
       setStoredAccounts(accounts);
+    }
+
+    function toggleAccountEditMode(isEditing) {
+      const editForm = document.getElementById('accountEditForm');
+      const editBtn = document.getElementById('editAccountBtn');
+      if (!editForm) return;
+
+      if (isEditing) {
+        loadAccountInfo();
+      }
+
+      editForm.style.display = isEditing ? 'block' : 'none';
+      if (editBtn) {
+        editBtn.style.display = isEditing ? 'none' : 'inline-flex';
+      }
+    }
+
+    function saveAccountProfileEdits() {
+      const nameInput = document.getElementById('accountEditName');
+      const usernameInput = document.getElementById('accountEditUsername');
+      const emailInput = document.getElementById('accountEditEmail');
+      const dobInput = document.getElementById('accountEditDob');
+
+      const newName = (nameInput && nameInput.value || '').trim();
+      const newUsername = (usernameInput && usernameInput.value || '').trim();
+      const newEmail = (emailInput && emailInput.value || '').trim();
+      const newDob = (dobInput && dobInput.value || '').trim();
+
+      if (!newName || !newUsername || !newEmail) {
+        alert('Name, username, and email are required.');
+        return;
+      }
+      if (!newEmail.includes('@')) {
+        alert('Please enter a valid email.');
+        return;
+      }
+
+      const savedUserData = JSON.parse(localStorage.getItem('hertzUser') || '{}');
+      const accounts = getStoredAccounts();
+      const oldName = savedUserData.name || localStorage.getItem('hertzUsername') || 'Music Lover';
+      const oldUsername = savedUserData.username || oldName.toLowerCase().replace(/\s+/g, '');
+      const oldEmail = savedUserData.email || localStorage.getItem('hertzUserEmail') || '';
+      const oldKey = localStorage.getItem('hertzActiveAccountKey') || findAccountKey(accounts, oldUsername, oldEmail);
+
+      const existingAccount = accounts[oldKey] || savedUserData || {};
+      const currentLikedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+
+      const updatedProfile = {
+        ...existingAccount,
+        ...savedUserData,
+        name: newName,
+        username: newUsername,
+        email: newEmail,
+        dob: newDob,
+        likedTracks: existingAccount.likedTracks || currentLikedTracks,
+        createdAt: existingAccount.createdAt || savedUserData.createdAt || new Date().toISOString(),
+        lastUpdated: new Date().toISOString(),
+        lastLogin: savedUserData.lastLogin || existingAccount.lastLogin || new Date().toISOString()
+      };
+
+      const newKey = normalizeAccountKey(newUsername, newEmail);
+      if (oldKey && oldKey !== newKey) {
+        delete accounts[oldKey];
+      }
+      accounts[newKey] = updatedProfile;
+      setStoredAccounts(accounts);
+
+      localStorage.setItem('hertzUser', JSON.stringify(updatedProfile));
+      localStorage.setItem('hertzUsername', newName);
+      localStorage.setItem('hertzUserEmail', newEmail);
+      localStorage.setItem('hertzUserDOB', newDob);
+      localStorage.setItem('hertzActiveAccountKey', newKey);
+
+      toggleAccountEditMode(false);
+      loadAccountInfo();
+      showTemporaryMessage('Account info updated');
     }
 
     function openQuickSignupPopup() {
@@ -28956,6 +29486,7 @@ function showPlaylistModal(title, description, tracks, options) {
           <div style="color: #b3b3b3; font-size: 0.85rem;">${track.artist}</div>
         </div>
         <div style="color: #b3b3b3; font-size: 0.85rem; font-weight: 500;">${track.duration || '3:45'}</div>
+        <button class="track-menu-btn" type="button" onclick="showTrackMenu(event, '${track.title.replace(/'/g, "\\'")}', '${track.artist.replace(/'/g, "\\'")}', '${(track.id || track.title).replace(/'/g, "\\'")}', '${(track.url || '').replace(/'/g, "\\'")}')" aria-label="Track options" style="margin-left: 8px;">⋯</button>
       </div>
     </div>
   `).join('');
@@ -29152,7 +29683,7 @@ function openGenrePlaylist(genre) {
     showAfrobeatGoldPopup(afrobeatOnly);
     return;
   }
-  
+
   if ((genre || '').toLowerCase() === 'hiphop') {
     const hiphopOnly = [
       { title: 'Cha-Ching', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', genre: 'hiphop', duration: '3:20' },
@@ -29180,9 +29711,13 @@ function openGenrePlaylist(genre) {
       { title: 'Purpose', artist: 'Unknown', url: 'https://storage.googleapis.com/hertz-music-folder/Purpose.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Power', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Power.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Seek a Smile', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Seek%20a%20Smile.mp3', genre: 'hiphop', duration: '3:20' },
-      { title: 'Mail Ya', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', genre: 'hiphop', duration: '3:20' }
+      { title: 'Mail Ya', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Got Me Guessin', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', genre: 'electronic', duration: '1:35' },
+      { title: 'Ragz 2 Richez', artist: 'Dalton Levi', url: 'https://storage.googleapis.com/hertz-music-folder/Rags%20to%20Riches%20(2).mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Primate', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Primate.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Brandy', artist: 'TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Brandy%20(4).mp3', genre: 'hiphop', duration: '3:20' }
     ];
-    
+
     showPlaylistModal('Hip-Hop', 'Latest rap and hip-hop beats from your collection', hiphopOnly, { hidePlayAll: true });
     return;
   }
@@ -29193,6 +29728,13 @@ function openGenrePlaylist(genre) {
         title: 'Maybe',
         artist: 'Mick Blair',
         url: 'https://storage.googleapis.com/hertz-music-folder/Maybe.mp3',
+        genre: 'pop',
+        duration: '3:20'
+      },
+      {
+        title: 'Icarus',
+        artist: 'Claire Rin',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Icarus.mp3',
         genre: 'pop',
         duration: '3:20'
       }
@@ -29214,6 +29756,34 @@ function openGenrePlaylist(genre) {
         title: 'Watts What',
         artist: 'C-Bucklee',
         url: 'https://storage.googleapis.com/hertz-music-folder/Watt%20in%20the%20World.mp3',
+        genre: 'rock',
+        duration: '3:20'
+      },
+      {
+        title: 'OZ Perf',
+        artist: 'Blake Adams',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Aussie%20Nice%20(1).mp3',
+        genre: 'rock',
+        duration: '3:20'
+      },
+      {
+        title: 'Come in Peace',
+        artist: 'Zander Sphere',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Alien%20Life.mp3',
+        genre: 'rock',
+        duration: '3:20'
+      },
+      {
+        title: 'Kill Ya Demons',
+        artist: 'Brad Stevens',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Kill%20Ya%20Demons.mp3',
+        genre: 'rock',
+        duration: '3:20'
+      },
+      {
+        title: 'Blues',
+        artist: 'SPSW',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Budgeting%20Blues%20(1)_instrumental.mp3',
         genre: 'rock',
         duration: '3:20'
       }
@@ -29307,6 +29877,34 @@ function openGenrePlaylist(genre) {
         url: 'https://storage.googleapis.com/hertz-music-folder/Plum%20Props.mp3',
         genre: 'electronic',
         duration: '3:20'
+      },
+      {
+        title: 'Rhytm',
+        artist: 'Stan Clove',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3',
+        genre: 'electronic',
+        duration: '3:20'
+      },
+      {
+        title: 'Elements',
+        artist: 'Chris Wallace',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Elements.mp3',
+        genre: 'electronic',
+        duration: '3:20'
+      },
+      {
+        title: 'Promise',
+        artist: 'Chris Wallace',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Promise%20_.mp3',
+        genre: 'electronic',
+        duration: '2:18'
+      },
+      {
+        title: 'Bedside',
+        artist: 'Beniam TedlAI',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Bedside%20Autotune.mp3',
+        genre: 'electronic',
+        duration: '2:20'
       }
     ];
     showPlaylistModal('Electronic', 'EDM, house, and electronic vibes', electronicOnly, { hidePlayAll: true });
@@ -29664,10 +30262,30 @@ function openAlbum(albumId) {
   var _bassLevel = 0;
   var _bassBodyLevel = 0;
   var _voiceLevel = 0;
+  var _instLowLevel = 0;
+  var _instMidLevel = 0;
+  var _instHighLevel = 0;
   // Extra-smoothed display levels for fluid circle expansion (separate from signal detection).
   var _dispBass = 0;
   var _dispBassBody = 0;
   var _dispVoice = 0;
+  var _dispInstLow = 0;
+  var _dispInstMid = 0;
+  var _dispInstHigh = 0;
+
+  var _audioCtx = null;
+  var _analyser = null;
+  var _freqData = null;
+  var _streamSource = null;
+  var _attachedStream = null;
+
+  // Slow adaptive peaks normalize different mixes so all ring groups stay consistently reactive.
+  var _peakBass = 0.35;
+  var _peakBassBody = 0.35;
+  var _peakVoice = 0.35;
+  var _peakInstLow = 0.35;
+  var _peakInstMid = 0.35;
+  var _peakInstHigh = 0.35;
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
@@ -29709,8 +30327,56 @@ function openAlbum(albumId) {
   }
 
   function setupAudioAnalyser() {
-    // Intentionally disabled to avoid any interaction with the sticky player's output path.
-    return false;
+    var audio = document.getElementById('playerAudio');
+    if (!audio) return false;
+
+    var AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return false;
+
+    if (!_audioCtx) {
+      try {
+        _audioCtx = new AudioCtx();
+      } catch (err) {
+        return false;
+      }
+    }
+
+    var stream = null;
+    try {
+      if (typeof audio.captureStream === 'function') {
+        stream = audio.captureStream();
+      } else if (typeof audio.mozCaptureStream === 'function') {
+        stream = audio.mozCaptureStream();
+      }
+    } catch (err) {
+      stream = null;
+    }
+    if (!stream) return false;
+
+    if (!_analyser) {
+      _analyser = _audioCtx.createAnalyser();
+      _analyser.fftSize = 2048;
+      _analyser.smoothingTimeConstant = 0.35;
+      _analyser.minDecibels = -95;
+      _analyser.maxDecibels = -10;
+      _freqData = new Uint8Array(_analyser.frequencyBinCount);
+    }
+
+    if (!_streamSource || _attachedStream !== stream) {
+      try {
+        _streamSource = _audioCtx.createMediaStreamSource(stream);
+        _streamSource.connect(_analyser);
+        _attachedStream = stream;
+      } catch (err) {
+        return false;
+      }
+    }
+
+    if (_audioCtx.state === 'suspended' && !audio.paused) {
+      _audioCtx.resume().catch(function() {});
+    }
+
+    return true;
   }
 
   function computeSignals(t) {
@@ -29718,17 +30384,108 @@ function openAlbum(albumId) {
     var playing = audio && !audio.paused && !audio.ended;
 
     if (!playing) {
-      // Decay to zero — waves become calm/flat
+      // Decay to zero — waves become calm/flat.
       _bassLevel *= 0.82;
       _bassBodyLevel *= 0.82;
       _voiceLevel *= 0.82;
-      return { bass: _bassLevel, bassBody: _bassBodyLevel, voice: _voiceLevel };
+      _instLowLevel *= 0.82;
+      _instMidLevel *= 0.82;
+      _instHighLevel *= 0.82;
+      return {
+        bass: _bassLevel,
+        bassBody: _bassBodyLevel,
+        voice: _voiceLevel,
+        instLow: _instLowLevel,
+        instMid: _instMidLevel,
+        instHigh: _instHighLevel
+      };
     }
 
-    setupAudioAnalyser();
+    var hasAnalyser = setupAudioAnalyser();
+    if (hasAnalyser && _analyser && _freqData) {
+      _analyser.getByteFrequencyData(_freqData);
 
-    // If browser/server blocks WebAudio analysis for this source, keep a playback-only fallback
-    // so visuals still respond while music is playing, without touching audio routing.
+      var nyquist = (_audioCtx && _audioCtx.sampleRate ? _audioCtx.sampleRate : 44100) / 2;
+      var maxIndex = _freqData.length - 1;
+      function hzToIndex(hz) {
+        var ratio = Math.max(0, Math.min(1, hz / nyquist));
+        return Math.max(0, Math.min(maxIndex, Math.round(ratio * maxIndex)));
+      }
+
+      function bandEnergy(startHz, endHz) {
+        var start = hzToIndex(startHz);
+        var end = hzToIndex(endHz);
+        if (end < start) {
+          var temp = start;
+          start = end;
+          end = temp;
+        }
+
+        var sum = 0;
+        var count = 0;
+        for (var i = start; i <= end; i++) {
+          var v = _freqData[i] / 255;
+          sum += v * v;
+          count++;
+        }
+        if (!count) return 0;
+        return Math.sqrt(sum / count);
+      }
+
+      var bassRaw = bandEnergy(20, 150);
+      var bassBodyRaw = bandEnergy(150, 320);
+      var vocalBody = bandEnergy(260, 1200);
+      var vocalPresence = bandEnergy(1200, 3400);
+      var voiceRaw = Math.min(1, vocalBody * 0.55 + vocalPresence * 0.90);
+      var instLowRaw = bandEnergy(320, 900);
+      var instMidRaw = bandEnergy(900, 2500);
+      var instHighRaw = bandEnergy(2500, 9000);
+
+      function updateAdaptivePeak(raw, peak) {
+        if (raw > peak) {
+          peak = peak * 0.88 + raw * 0.12;
+        } else {
+          peak = peak * 0.9985 + raw * 0.0015;
+        }
+        return Math.max(0.15, Math.min(1, peak));
+      }
+
+      function normalizeByPeak(raw, peak) {
+        return Math.max(0, Math.min(1, Math.pow(raw / Math.max(0.0001, peak), 0.92)));
+      }
+
+      _peakBass = updateAdaptivePeak(bassRaw, _peakBass);
+      _peakBassBody = updateAdaptivePeak(bassBodyRaw, _peakBassBody);
+      _peakVoice = updateAdaptivePeak(voiceRaw, _peakVoice);
+      _peakInstLow = updateAdaptivePeak(instLowRaw, _peakInstLow);
+      _peakInstMid = updateAdaptivePeak(instMidRaw, _peakInstMid);
+      _peakInstHigh = updateAdaptivePeak(instHighRaw, _peakInstHigh);
+
+      bassRaw = normalizeByPeak(bassRaw, _peakBass);
+      bassBodyRaw = normalizeByPeak(bassBodyRaw, _peakBassBody);
+      voiceRaw = normalizeByPeak(voiceRaw, _peakVoice);
+      instLowRaw = normalizeByPeak(instLowRaw, _peakInstLow);
+      instMidRaw = normalizeByPeak(instMidRaw, _peakInstMid);
+      instHighRaw = normalizeByPeak(instHighRaw, _peakInstHigh);
+
+      _bassLevel = bassRaw > _bassLevel ? (_bassLevel * 0.24 + bassRaw * 0.76) : (_bassLevel * 0.90 + bassRaw * 0.10);
+      _bassBodyLevel = bassBodyRaw > _bassBodyLevel ? (_bassBodyLevel * 0.26 + bassBodyRaw * 0.74) : (_bassBodyLevel * 0.90 + bassBodyRaw * 0.10);
+      _voiceLevel = voiceRaw > _voiceLevel ? (_voiceLevel * 0.32 + voiceRaw * 0.68) : (_voiceLevel * 0.89 + voiceRaw * 0.11);
+      _instLowLevel = instLowRaw > _instLowLevel ? (_instLowLevel * 0.34 + instLowRaw * 0.66) : (_instLowLevel * 0.90 + instLowRaw * 0.10);
+      _instMidLevel = instMidRaw > _instMidLevel ? (_instMidLevel * 0.34 + instMidRaw * 0.66) : (_instMidLevel * 0.90 + instMidRaw * 0.10);
+      _instHighLevel = instHighRaw > _instHighLevel ? (_instHighLevel * 0.34 + instHighRaw * 0.66) : (_instHighLevel * 0.90 + instHighRaw * 0.10);
+
+      return {
+        bass: Math.max(0, Math.min(1, _bassLevel)),
+        bassBody: Math.max(0, Math.min(1, _bassBodyLevel)),
+        voice: Math.max(0, Math.min(1, _voiceLevel)),
+        instLow: Math.max(0, Math.min(1, _instLowLevel)),
+        instMid: Math.max(0, Math.min(1, _instMidLevel)),
+        instHigh: Math.max(0, Math.min(1, _instHighLevel))
+      };
+    }
+
+    // Fallback carrier modulation when analysis is unavailable.
     var ct = audio && isFinite(audio.currentTime) ? audio.currentTime : t;
     var bassCarrier = 0.50
       + 0.34 * Math.sin(ct * 0.92 * Math.PI * 2)
@@ -29743,13 +30500,11 @@ function openAlbum(albumId) {
       + 0.16 * Math.sin(ct * 2.10 * Math.PI * 2 + 2.2)
       + 0.08 * Math.sin(ct * 4.90 * Math.PI * 2 + 0.2);
 
-    // Transient envelopes to make bass/808 waves rise harder right on bass-active moments.
     var bassPulsePhase = (ct * 1.85) % 1;
     var bassPulse = bassPulsePhase < 0.13 ? (1 - bassPulsePhase / 0.13) : 0;
     var bodyPulsePhase = (ct * 3.05 + 0.22) % 1;
     var bodyPulse = bodyPulsePhase < 0.11 ? (1 - bodyPulsePhase / 0.11) : 0;
 
-    // Hard gate + power curve: quiet sections stay low, active bass/808 sections spike high.
     var bassGate = 0.55;
     var bodyGate = 0.53;
     var bassRaw = Math.pow(Math.max(0, (bassCarrier - bassGate) / (1 - bassGate)), 1.55);
@@ -29765,11 +30520,17 @@ function openAlbum(albumId) {
     _bassLevel = bassRaw > _bassLevel ? (_bassLevel * 0.24 + bassRaw * 0.76) : (_bassLevel * 0.86 + bassRaw * 0.14);
     _bassBodyLevel = bassBodyRaw > _bassBodyLevel ? (_bassBodyLevel * 0.26 + bassBodyRaw * 0.74) : (_bassBodyLevel * 0.87 + bassBodyRaw * 0.13);
     _voiceLevel = voiceRaw > _voiceLevel ? (_voiceLevel * 0.42 + voiceRaw * 0.58) : (_voiceLevel * 0.91 + voiceRaw * 0.09);
+    _instLowLevel = _voiceLevel * 0.72;
+    _instMidLevel = _voiceLevel * 0.66;
+    _instHighLevel = _voiceLevel * 0.58;
 
     return {
       bass: Math.max(0, Math.min(1, _bassLevel)),
       bassBody: Math.max(0, Math.min(1, _bassBodyLevel)),
-      voice: Math.max(0, Math.min(1, _voiceLevel))
+      voice: Math.max(0, Math.min(1, _voiceLevel)),
+      instLow: Math.max(0, Math.min(1, _instLowLevel)),
+      instMid: Math.max(0, Math.min(1, _instMidLevel)),
+      instHigh: Math.max(0, Math.min(1, _instHighLevel))
     };
   }
 
@@ -29793,16 +30554,34 @@ function openAlbum(albumId) {
     var bass  = sig.bass;
     var bassBody = sig.bassBody;
     var voice = sig.voice;
-    var energy = bass * 0.38 + bassBody * 0.34 + voice * 0.28;
+    var instLow = sig.instLow || 0;
+    var instMid = sig.instMid || 0;
+    var instHigh = sig.instHigh || 0;
+    var energy = bass * 0.30 + bassBody * 0.24 + voice * 0.20 + instLow * 0.10 + instMid * 0.10 + instHigh * 0.06;
+    var sharedAll = Math.max(0, Math.min(1, bass * 0.22 + bassBody * 0.20 + voice * 0.20 + instLow * 0.14 + instMid * 0.14 + instHigh * 0.10));
+
+    function blendDrive(primary, sharedWeight) {
+      return Math.max(0, Math.min(1, primary * (1 - sharedWeight) + sharedAll * sharedWeight));
+    }
+
+    var driveBass = blendDrive(bass, 0.28);
+    var driveBassBody = blendDrive(bassBody, 0.30);
+    var driveVoice = blendDrive(voice, 0.32);
+    var driveInstLow = blendDrive(instLow, 0.34);
+    var driveInstMid = blendDrive(instMid, 0.36);
+    var driveInstHigh = blendDrive(instHigh, 0.38);
 
     // Extra-smooth display levels so circle expansion feels fluid, not jittery.
     var _ds = 0.07;
-    _dispBass     = _dispBass     + (bass     - _dispBass)     * _ds;
-    _dispBassBody = _dispBassBody + (bassBody - _dispBassBody) * _ds;
-    _dispVoice    = _dispVoice    + (voice    - _dispVoice)    * _ds;
+    _dispBass     = _dispBass     + (driveBass     - _dispBass)     * _ds;
+    _dispBassBody = _dispBassBody + (driveBassBody - _dispBassBody) * _ds;
+    _dispVoice    = _dispVoice    + (driveVoice    - _dispVoice)    * _ds;
+    _dispInstLow  = _dispInstLow  + (driveInstLow  - _dispInstLow)  * _ds;
+    _dispInstMid  = _dispInstMid  + (driveInstMid  - _dispInstMid)  * _ds;
+    _dispInstHigh = _dispInstHigh + (driveInstHigh - _dispInstHigh) * _ds;
 
     // Scale the whole circle using smoothed display levels so it grows fluidly.
-    var velocityDrive = Math.max(0, Math.min(1, _dispBass * 0.45 + _dispBassBody * 0.35 + _dispVoice * 0.20));
+    var velocityDrive = Math.max(0, Math.min(1, _dispBass * 0.34 + _dispBassBody * 0.24 + _dispVoice * 0.18 + _dispInstLow * 0.10 + _dispInstMid * 0.09 + _dispInstHigh * 0.05));
     var velocityGated = Math.max(0, (velocityDrive - 0.12) / 0.88);
     var velocityBoost = Math.pow(velocityGated, 0.88);
     var circleScale = 1 + velocityBoost * 0.40;
@@ -29856,6 +30635,9 @@ function openAlbum(albumId) {
     var bassPalette = wavePalette(42, 6);
     var bassBodyPalette = wavePalette(30, 2);
     var voicePalette = wavePalette(18, 0);
+    var instLowPalette = wavePalette(56, 4);
+    var instMidPalette = wavePalette(72, 3);
+    var instHighPalette = wavePalette(88, 2);
 
     // alwaysVisible: keep ring as an idle perfect circle when drive is low.
     // idleR: the radius of that idle circle (smaller than radiusBase).
@@ -29971,6 +30753,15 @@ function openAlbum(albumId) {
       ctx.arc(w * 0.5, h * 0.5, Math.min(w, h) * (0.07 + energy * 0.08), 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Six additional outer environmental waves driven by dedicated bands.
+    var outerBase = Math.min(w, h);
+    drawCircularBand(outerBase * 0.352, outerBase * 0.042, driveBass, 2.10, 3.80, 1.74, bassPalette, 1.25, 0.03, 1.00, true, outerBase * 0.332);
+    drawCircularBand(outerBase * 0.388, outerBase * 0.044, driveBassBody, 2.34, 4.35, 1.78, bassBodyPalette, 1.20, 0.03, 0.99, true, outerBase * 0.366);
+    drawCircularBand(outerBase * 0.424, outerBase * 0.046, driveInstLow, 2.64, 4.80, 1.84, instLowPalette, 1.15, 0.035, 0.98, true, outerBase * 0.401);
+    drawCircularBand(outerBase * 0.458, outerBase * 0.047, driveVoice, 2.92, 5.40, 1.90, voicePalette, 1.10, 0.035, 0.98, true, outerBase * 0.434);
+    drawCircularBand(outerBase * 0.492, outerBase * 0.049, driveInstMid, 3.18, 5.95, 1.96, instMidPalette, 1.05, 0.04, 0.97, true, outerBase * 0.467);
+    drawCircularBand(outerBase * 0.526, outerBase * 0.051, driveInstHigh, 3.44, 6.55, 2.02, instHighPalette, 1.00, 0.045, 0.96, true, outerBase * 0.500);
 
     var lbl = getLabel();
     if (lbl) {
@@ -30530,9 +31321,18 @@ document.addEventListener('DOMContentLoaded', function() {
   // Sticky controls harmonizer: enforce deterministic button behavior.
   const playPauseBtnEl = document.getElementById('playPauseBtn');
   const nextBtnEl = document.getElementById('nextBtn');
-  const prevBtnEl = document.getElementById('prevBtn');
+  let prevBtnEl = document.getElementById('prevBtn');
+  if (prevBtnEl && !prevBtnEl.dataset.hzPrevHandlerIsolated) {
+    const cleanPrevBtnEl = prevBtnEl.cloneNode(true);
+    cleanPrevBtnEl.dataset.hzPrevHandlerIsolated = 'true';
+    prevBtnEl.parentNode.replaceChild(cleanPrevBtnEl, prevBtnEl);
+    prevBtnEl = cleanPrevBtnEl;
+  }
   const playedTrackHistory = window.stickyPlayedTrackHistory || [];
   window.stickyPlayedTrackHistory = playedTrackHistory;
+  const prevClickState = window.__hzStickyPrevClickState || { trackKey: '', armedAt: 0, lastTrackKey: '' };
+  window.__hzStickyPrevClickState = prevClickState;
+  const PREV_DOUBLE_CLICK_WINDOW_MS = 1500;
 
   const normalizeTrackKey = function(value) {
     return String(value || '')
@@ -30566,7 +31366,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const getCurrentTrackRef = function() {
     const currentTrack = window.currentTrack || window.currentTrackData || {};
     const fromPlayerTitle = (document.getElementById('playerTrackTitle')?.textContent || '').split(' - ')[0].trim();
-    return currentTrack.id || currentTrack.trackId || window.currentTrackId || currentTrack.title || fromPlayerTitle || '';
+    return fromPlayerTitle || currentTrack.id || currentTrack.trackId || window.currentTrackId || currentTrack.title || '';
   };
 
   const getHomepageTrackOrder = function() {
@@ -30627,6 +31427,9 @@ document.addEventListener('DOMContentLoaded', function() {
       markStickySelectionUnlocked();
       const currentRef = getCurrentTrackRef();
       const nextRef = trackId || trackTitle || '';
+      prevClickState.trackKey = '';
+      prevClickState.armedAt = 0;
+      prevClickState.lastTrackKey = normalizeTrackKey(nextRef || currentRef);
       if (currentRef && nextRef && normalizeTrackKey(currentRef) !== normalizeTrackKey(nextRef)) {
         playedTrackHistory.push(currentRef);
         if (playedTrackHistory.length > 200) playedTrackHistory.shift();
@@ -30857,10 +31660,41 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopPropagation();
       e.stopImmediatePropagation();
 
+      const currentRef = getCurrentTrackRef();
+      const currentKey = normalizeTrackKey(currentRef);
+      const now = Date.now();
+
+      if (prevClickState.lastTrackKey !== currentKey) {
+        prevClickState.trackKey = '';
+        prevClickState.armedAt = 0;
+        prevClickState.lastTrackKey = currentKey;
+      }
+
+      const isSecondPressForSameTrack =
+        currentKey &&
+        prevClickState.trackKey === currentKey &&
+        (now - prevClickState.armedAt) <= PREV_DOUBLE_CLICK_WINDOW_MS;
+
+      // First press: restart current track. Second quick press: go to previous track.
+      if (!isSecondPressForSameTrack) {
+        prevClickState.trackKey = currentKey;
+        prevClickState.armedAt = now;
+
+        if (playerAudio) {
+          try {
+            playerAudio.currentTime = 0;
+          } catch (err) {}
+        }
+        return;
+      }
+
+      prevClickState.trackKey = '';
+      prevClickState.armedAt = 0;
+
       let previousRef = '';
       while (playedTrackHistory.length > 0 && !previousRef) {
         const candidate = playedTrackHistory.pop();
-        if (candidate && normalizeTrackKey(candidate) !== normalizeTrackKey(getCurrentTrackRef())) {
+        if (candidate && normalizeTrackKey(candidate) !== currentKey) {
           previousRef = candidate;
         }
       }
@@ -30868,8 +31702,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (previousRef && playTrackById(previousRef)) return;
 
       const order = getHomepageTrackOrder();
-      const currentRef = getCurrentTrackRef();
-      const currentKey = normalizeTrackKey(currentRef);
       const currentIndex = order.findIndex(function(id) { return normalizeTrackKey(id) === currentKey; });
       if (order.length > 0 && currentIndex >= 0) {
         const prevId = order[(currentIndex - 1 + order.length) % order.length];
