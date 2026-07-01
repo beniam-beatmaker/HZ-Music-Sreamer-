@@ -14820,6 +14820,23 @@ p.s I'm Beniam Endale Tedla`;
           console.error('Email send failed:', error);
         });
       }
+
+        function sendWelcomeEmail(toEmail, userName) {
+          if (!toEmail || !String(toEmail).trim()) return;
+          const cleanName = String(userName || 'there').trim() || 'there';
+          emailjs.send('service_p6dv7ey', 'template_46ef7mf', {
+            to_email: toEmail,
+            from_email: 'beniamendaletedla@hz-streams.com',
+            reply_to: 'beniamendaletedla@hz-streams.com',
+            hz_subject: 'Welcome to HZ Music Streamer',
+            hz_message: `Hi ${cleanName},\n\nThank you for joining HZ Music Streamer. We are genuinely glad to have you here. Welcome to HZ Music Streamer, Really enjoy yourself 🔥.\n\nEnjoy the music, explore freely, and make it yours.\n\nWarmly,\nHZ Music Streamer`
+          })
+          .then(function(response) {
+            console.log('Welcome email sent successfully:', response);
+          }, function(error) {
+            console.error('Welcome email failed:', error);
+          });
+        }
       // Card Display Live Update
       const cardNumberInput = document.getElementById('cardNumber');
       const displayCardNumber = document.getElementById('displayCardNumber');
@@ -24952,6 +24969,11 @@ function showGenrePopup(genre) {
           engine.playResumeBound = true;
         }
 
+        // If settings opened while audio is already playing, resume immediately so output does not go silent.
+        if (engine.context && engine.context.state === 'suspended' && !audioEl.paused && !audioEl.ended) {
+          engine.context.resume().catch(function() {});
+        }
+
         engine.ready = true;
         return engine;
       } catch (err) {
@@ -25305,6 +25327,14 @@ function showGenrePopup(genre) {
       if (typeof loadLikedSongs === 'function') {
         setTimeout(() => loadLikedSongs(), 50);
       }
+
+      setTimeout(() => {
+        try {
+          sendWelcomeEmail(email, name);
+        } catch (err) {
+          console.error('Welcome email trigger failed:', err);
+        }
+      }, 0);
     }
 
     function manageNotifications() {
