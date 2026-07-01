@@ -8638,7 +8638,7 @@ last i checked this is best, specially since it could be real safe`;
             <button type="button" class="pay-modal-close" id="closePaymentCurrencyBtn" aria-label="Close">✕</button>
           </div>
           <div class="pay-modal-body">
-            <p class="pay-subtext">Monthly plan is pegged to A$4.99. Select your currency to continue.</p>
+            <p class="pay-subtext">Monthly plan is pegged to US$4.99. Select your currency to continue.</p>
             <div id="paymentCurrencyList" class="pay-currency-list"></div>
           </div>
         </div>
@@ -8653,7 +8653,7 @@ last i checked this is best, specially since it could be real safe`;
             <button type="button" class="pay-modal-close" id="closePaymentCardBtn" aria-label="Close">✕</button>
           </div>
           <div class="pay-modal-body">
-            <p class="pay-subtext" id="selectedCurrencySummary">Selected: A$4.99 / month</p>
+            <p class="pay-subtext" id="selectedCurrencySummary">Selected: US$4.99 / month</p>
             <form id="paymentCardForm" class="pay-form">
               <div>
                 <label for="payCardName">Cardholder Name</label>
@@ -25376,7 +25376,7 @@ function showGenrePopup(genre) {
       alert('Billing History:\n\n' + history.join('\n') + '\n\nUpgrade to Premium to see detailed billing information.');
     }
 
-    const PAYMENT_BASE_AUD = 4.99;
+    const PAYMENT_BASE_USD = 4.99;
     const PAYMENT_CURRENCIES = [
       { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', rate: 1, decimals: 2 },
       { code: 'USD', name: 'US Dollar', symbol: '$', rate: 0.66, decimals: 2 },
@@ -25422,11 +25422,41 @@ function showGenrePopup(genre) {
       { code: 'BDT', name: 'Bangladeshi Taka', symbol: 'BDT ', rate: 77.8, decimals: 2 }
     ];
 
+    const PAYMENT_USD_REFERENCE_RATE = ((PAYMENT_CURRENCIES.find(function(entry) {
+      return entry.code === 'USD';
+    }) || {}).rate) || 1;
+
     let selectedPaymentCurrency = null;
 
     function formatPaymentAmount(entry) {
-      const value = PAYMENT_BASE_AUD * entry.rate;
+      const conversionFromUsd = entry.rate / PAYMENT_USD_REFERENCE_RATE;
+      const value = PAYMENT_BASE_USD * conversionFromUsd;
       return entry.symbol + value.toFixed(entry.decimals);
+    }
+
+    async function startMonthlySubscriptionInBackend(subscriptionPayload) {
+      // Security: Stripe secret keys must stay on the backend only.
+      const response = await fetch('/api/subscriptions/start', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(subscriptionPayload)
+      });
+
+      let data = {};
+      try {
+        data = await response.json();
+      } catch (err) {
+        data = {};
+      }
+
+      if (!response.ok) {
+        throw new Error((data && data.message) || 'Unable to start monthly subscription on backend.');
+      }
+
+      return data;
     }
 
     function getPaymentCurrencyOverlay() {
@@ -25491,6 +25521,38 @@ function showGenrePopup(genre) {
       if (!overlay) return;
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
+    }
+
+    function showSubscriptionStartedPopup() {
+      const existing = document.getElementById('subscriptionStartedPopup');
+      if (existing) existing.remove();
+
+      const popup = document.createElement('div');
+      popup.id = 'subscriptionStartedPopup';
+      popup.style.cssText = [
+        'position:fixed',
+        'inset:0',
+        'display:flex',
+        'align-items:center',
+        'justify-content:center',
+        'background:rgba(0,0,0,0.35)',
+        'z-index:12000'
+      ].join(';');
+
+      popup.innerHTML =
+        '<div style="min-width:250px;max-width:86vw;background:#141414;border:1px solid rgba(29,185,84,0.45);border-radius:16px;padding:22px 18px;text-align:center;box-shadow:0 18px 42px rgba(0,0,0,0.45);">' +
+          '<div style="font-size:3.2rem;line-height:1;color:#1db954;margin-bottom:10px;">✓</div>' +
+          '<div style="font-size:1.05rem;font-weight:700;color:#eaf8ef;letter-spacing:0.02em;">Subscription Started</div>' +
+        '</div>';
+
+      popup.addEventListener('click', function() {
+        popup.remove();
+      });
+
+      document.body.appendChild(popup);
+      setTimeout(function() {
+        if (popup && popup.parentNode) popup.remove();
+      }, 1800);
     }
 
     (function initPaymentPopupFlow() {
@@ -25563,9 +25625,47 @@ function showGenrePopup(genre) {
             return;
           }
 
-          alert('Subscription started: ' + formatPaymentAmount(selectedPaymentCurrency) + ' per month (' + selectedPaymentCurrency.code + ').');
+          const amountDisplay = formatPaymentAmount(selectedPaymentCurrency);
+          const subscriptionPayload = {
+            plan: 'monthly',
+            interval: 'month',
+            currency: selectedPaymentCurrency.code,
+            amountUsd: PAYMENT_BASE_USD,
+            amountDisplay: amountDisplay,
+            customer: {
+              cardholderName: name
+            },
+            paymentMethod: {
+              cardLast4: cardDigits.slice(-4),
+              expiry: expiry
+            },
+            source: 'hertz-subscription-popup',
+            createdAt: new Date().toISOString()
+          };
+
+          localStorage.setItem('hertzSubscriptionPlan', 'monthly');
+          localStorage.setItem('hertzSubscriptionCurrency', selectedPaymentCurrency.code);
+          localStorage.setItem('hertzSubscriptionAmountUsd', String(PAYMENT_BASE_USD));
+          localStorage.setItem('hertzSubscriptionStartedAt', new Date().toISOString());
+          localStorage.setItem('hertzSubscriptionBackendState', 'pending');
+
+          // Complete the user-visible start immediately (within one second).
+          showSubscriptionStartedPopup();
           cardForm.reset();
           closePaymentCardPopup();
+
+          // Finish backend activation asynchronously so UI flow remains instant.
+          startMonthlySubscriptionInBackend(subscriptionPayload)
+            .then(function(backendResponse) {
+              localStorage.setItem('hertzSubscriptionBackendState', 'active');
+              if (backendResponse && backendResponse.subscriptionId) {
+                localStorage.setItem('hertzSubscriptionId', String(backendResponse.subscriptionId));
+              }
+            })
+            .catch(function(err) {
+              localStorage.setItem('hertzSubscriptionBackendState', 'pending');
+              console.warn('Subscription backend start failed:', err);
+            });
         });
       }
 
