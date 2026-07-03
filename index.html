@@ -8739,6 +8739,24 @@ last i checked this is best, specially since it could be real safe`;
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Sell it</div>
+                    <div class="recent-track-artist">B-Flow</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Bruises', 'https://storage.googleapis.com/hertz-music-folder/Bruises%20%26%20Nooses.mp3', 'Bruises', 'B Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:bandage.svg?color=%23ffd700" alt="Bruises cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Bruises</div>
+                    <div class="recent-track-artist">B Flow</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Silicon Ghost', 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', 'Silicon Ghost', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:ghost.svg?color=%23ffd700" alt="Silicon Ghost cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -9908,6 +9926,20 @@ last i checked this is best, specially since it could be real safe`;
             </tr>
           </thead>
           <tbody>
+                <tr class="track-row" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sell it</div><div class="track-artist">B-Flow</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Bruises', 'https://storage.googleapis.com/hertz-music-folder/Bruises%20%26%20Nooses.mp3', 'Bruises', 'B Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:bandage.svg?color=%23ffd700" alt="Bruises cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Bruises</div><div class="track-artist">B Flow</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <tr class="track-row" onclick="playNewTrack('Silicon Ghost', 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', 'Silicon Ghost', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:ghost.svg?color=%23ffd700" alt="Silicon Ghost cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Silicon Ghost</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
@@ -25611,8 +25643,11 @@ function showGenrePopup(genre) {
     const PAYMENT_USD_REFERENCE_RATE = ((PAYMENT_CURRENCIES.find(function(entry) {
       return entry.code === 'USD';
     }) || {}).rate) || 1;
+    const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SRsoIEEsNsUM0iCdIKIVJnvNj23kneqbvws27phqpftZHlUWt5R8R5fUT95Puy38AUDp7WP25YluexM5dDcOts000Df81q0Ng';
     const SUBSCRIPTION_REMINDER_INTERVAL_MS = 14 * 24 * 60 * 60 * 1000;
     let subscriptionReminderIntervalId = null;
+    let stripeClientPromise = null;
+    let subscriptionWebhookPollTimer = null;
 
     let selectedPaymentCurrency = null;
 
@@ -25699,11 +25734,148 @@ function showGenrePopup(genre) {
       }
     }
 
+    async function getStripeClient() {
+      if (window.Stripe) {
+        return window.Stripe(STRIPE_PUBLISHABLE_KEY);
+      }
+
+      if (!stripeClientPromise) {
+        stripeClientPromise = new Promise(function(resolve, reject) {
+          const existing = document.querySelector('script[data-hertz-stripe-js="1"]');
+          if (existing && window.Stripe) {
+            resolve(window.Stripe(STRIPE_PUBLISHABLE_KEY));
+            return;
+          }
+
+          const script = existing || document.createElement('script');
+          if (!existing) {
+            script.src = 'https://js.stripe.com/v3/';
+            script.async = true;
+            script.dataset.hertzStripeJs = '1';
+            document.head.appendChild(script);
+          }
+
+          script.addEventListener('load', function() {
+            if (window.Stripe) {
+              resolve(window.Stripe(STRIPE_PUBLISHABLE_KEY));
+            } else {
+              reject(new Error('Stripe.js loaded without Stripe global.'));
+            }
+          }, { once: true });
+
+          script.addEventListener('error', function() {
+            reject(new Error('Unable to load Stripe.js.'));
+          }, { once: true });
+        });
+      }
+
+      return stripeClientPromise;
+    }
+
+    function applySubscriptionWebhookState(eventType, payload) {
+      const normalizedEventType = String(eventType || '').toLowerCase();
+
+      if (!normalizedEventType) return;
+
+      if (
+        normalizedEventType.includes('payment_succeeded') ||
+        normalizedEventType.includes('invoice.paid') ||
+        normalizedEventType.includes('subscription_active')
+      ) {
+        localStorage.setItem('hertzSubscriptionBackendState', 'active');
+        localStorage.removeItem('hertzSubscriptionCanceledAt');
+        localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
+      } else if (
+        normalizedEventType.includes('payment_failed') ||
+        normalizedEventType.includes('invoice.payment_failed')
+      ) {
+        localStorage.setItem('hertzSubscriptionBackendState', 'payment_failed');
+      } else if (
+        normalizedEventType.includes('subscription_deleted') ||
+        normalizedEventType.includes('subscription.canceled') ||
+        normalizedEventType.includes('customer.subscription.deleted')
+      ) {
+        localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
+        localStorage.setItem('hertzSubscriptionCanceledAt', new Date().toISOString());
+        localStorage.setItem('hertzSubscriptionAutoRenew', 'false');
+      }
+
+      if (payload && payload.subscriptionId) {
+        localStorage.setItem('hertzSubscriptionId', String(payload.subscriptionId));
+      }
+
+      refreshSubscriptionActionState();
+      startSubscriptionReminderScheduler();
+    }
+
+    async function pollSubscriptionWebhookEvents() {
+      const activeState = localStorage.getItem('hertzSubscriptionBackendState') || '';
+      if (!activeState || activeState === 'canceled') return;
+
+      try {
+        const response = await fetch('/api/subscriptions/events?latest=1', {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json().catch(function() {
+          return null;
+        });
+        if (!data) return;
+
+        const latestEvent = data.latestEvent || data.event || null;
+        const eventType = (latestEvent && latestEvent.type) || data.type || data.eventType || '';
+        if (!eventType) return;
+
+        applySubscriptionWebhookState(eventType, {
+          subscriptionId: (latestEvent && latestEvent.subscriptionId) || data.subscriptionId || null
+        });
+      } catch (err) {
+        // Keep polling resilient; webhook sync should never block the UI.
+      }
+    }
+
+    function startSubscriptionWebhookSync() {
+      if (subscriptionWebhookPollTimer) {
+        clearInterval(subscriptionWebhookPollTimer);
+        subscriptionWebhookPollTimer = null;
+      }
+
+      pollSubscriptionWebhookEvents();
+      subscriptionWebhookPollTimer = setInterval(function() {
+        pollSubscriptionWebhookEvents();
+      }, 45000);
+    }
+
+    async function cancelMonthlySubscriptionInBackend() {
+      const subscriptionId = localStorage.getItem('hertzSubscriptionId') || null;
+
+      try {
+        await fetch('/api/subscriptions/cancel', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          credentials: 'include',
+          body: JSON.stringify({
+            subscriptionId: subscriptionId,
+            cancelAtPeriodEnd: true,
+            canceledByUser: true
+          })
+        });
+      } catch (err) {
+        console.warn('Subscription cancel backend sync failed:', err);
+      }
+    }
+
     function cancelMonthlySubscription() {
       if (!hasActiveMonthlySubscription()) return;
 
       localStorage.setItem('hertzSubscriptionCanceledAt', new Date().toISOString());
       localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
+      localStorage.setItem('hertzSubscriptionAutoRenew', 'false');
       localStorage.removeItem('hertzSubscriptionId');
 
       const actionsWrap = document.getElementById('activeSubscriptionActions');
@@ -25721,6 +25893,7 @@ function showGenrePopup(genre) {
       }
 
       startSubscriptionReminderScheduler();
+      cancelMonthlySubscriptionInBackend();
     }
 
     function formatPaymentAmount(entry) {
@@ -25731,6 +25904,8 @@ function showGenrePopup(genre) {
 
     async function startMonthlySubscriptionInBackend(subscriptionPayload) {
       // Security: Stripe secret keys must stay on the backend only.
+      await getStripeClient();
+
       const response = await fetch('/api/subscriptions/start', {
         method: 'POST',
         headers: {
@@ -25749,6 +25924,14 @@ function showGenrePopup(genre) {
 
       if (!response.ok) {
         throw new Error((data && data.message) || 'Unable to start monthly subscription on backend.');
+      }
+
+      if (data && data.eventType) {
+        applySubscriptionWebhookState(data.eventType, { subscriptionId: data.subscriptionId || null });
+      }
+
+      if (data && data.latestEvent && data.latestEvent.type) {
+        applySubscriptionWebhookState(data.latestEvent.type, { subscriptionId: data.subscriptionId || null });
       }
 
       return data;
@@ -25931,6 +26114,11 @@ function showGenrePopup(genre) {
           const subscriptionPayload = {
             plan: 'monthly',
             interval: 'month',
+            renewalMode: 'auto',
+            cancelAtPeriodEnd: false,
+            stripe: {
+              publishableKey: STRIPE_PUBLISHABLE_KEY
+            },
             currency: selectedPaymentCurrency.code,
             amountUsd: PAYMENT_BASE_USD,
             amountDisplay: amountDisplay,
@@ -25950,6 +26138,7 @@ function showGenrePopup(genre) {
           localStorage.setItem('hertzSubscriptionAmountUsd', String(PAYMENT_BASE_USD));
           localStorage.setItem('hertzSubscriptionStartedAt', new Date().toISOString());
           localStorage.removeItem('hertzSubscriptionCanceledAt');
+          localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
           localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
           localStorage.setItem('hertzSubscriptionBackendState', 'pending');
 
@@ -25967,6 +26156,20 @@ function showGenrePopup(genre) {
               if (backendResponse && backendResponse.subscriptionId) {
                 localStorage.setItem('hertzSubscriptionId', String(backendResponse.subscriptionId));
               }
+
+              if (backendResponse && backendResponse.checkoutSessionId) {
+                getStripeClient().then(function(stripeClient) {
+                  if (stripeClient && typeof stripeClient.redirectToCheckout === 'function') {
+                    stripeClient.redirectToCheckout({ sessionId: backendResponse.checkoutSessionId }).catch(function(err) {
+                      console.warn('Stripe Checkout redirect failed:', err);
+                    });
+                  }
+                }).catch(function(err) {
+                  console.warn('Stripe init failed for checkout redirect:', err);
+                });
+              }
+
+              startSubscriptionWebhookSync();
             })
             .catch(function(err) {
               localStorage.setItem('hertzSubscriptionBackendState', 'pending');
@@ -25983,6 +26186,7 @@ function showGenrePopup(genre) {
 
       refreshSubscriptionActionState();
       startSubscriptionReminderScheduler();
+      startSubscriptionWebhookSync();
     })();
 
     function downloadData() {
