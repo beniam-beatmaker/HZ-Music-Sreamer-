@@ -16261,6 +16261,25 @@ function showGenrePopup(genre) {
         window.location.href = 'Account25App.html';
       }
     }
+    function refreshAccountDobDisplay(dobValue) {
+      const resolvedDob = String(dobValue || '').trim();
+      const dobElement = document.getElementById('userDob');
+      const dobInput = document.getElementById('accountEditDob');
+
+      const formattedDob = (() => {
+        const ymdMatch = resolvedDob.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (!ymdMatch) return resolvedDob || 'Not set';
+        return `${ymdMatch[3]}/${ymdMatch[2]}/${ymdMatch[1]}`;
+      })();
+
+      if (dobElement) {
+        dobElement.textContent = formattedDob;
+      }
+
+      if (dobInput) {
+        dobInput.value = /^\d{4}-\d{2}-\d{2}$/.test(resolvedDob) ? resolvedDob : '';
+      }
+    }
 
     function isSettingsOverlayVisible() {
       const overlay = document.getElementById('settingsPageOverlay');
@@ -24576,6 +24595,7 @@ function showGenrePopup(genre) {
       if (userDobElement) {
         userDobElement.textContent = formatDobForDisplay(resolvedDob || 'Not set');
       }
+      refreshAccountDobDisplay(resolvedDob);
 
       if (resolvedDob && savedUserData.dob !== resolvedDob) {
         const syncedUser = {
@@ -25478,6 +25498,7 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzUserEmail', newEmail);
       localStorage.setItem('hertzUserDOB', newDob);
       localStorage.setItem('hertzActiveAccountKey', newKey);
+      refreshAccountDobDisplay(newDob);
 
       if (shouldNotifyHzForEmail) {
         try {
@@ -25550,6 +25571,7 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
       localStorage.setItem('hertzTermsAccepted', 'true');
       localStorage.setItem('hertzTermsAcceptedDate', new Date().toISOString());
+      refreshAccountDobDisplay(accountProfile.dob || '');
 
       const termsOverlay = document.getElementById('termsOverlay');
       const appContainer = document.getElementById('appContainer');
