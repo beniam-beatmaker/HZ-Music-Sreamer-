@@ -8044,6 +8044,15 @@ last i checked this is best, specially since it could be real safe`;
         transition: color 0.3s ease;
     }
 
+    #accountPageOverlay #userDob {
+      display: block;
+      min-height: 1.2em;
+      line-height: 1.35;
+      white-space: normal;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
     .page-close-btn {
         background: transparent;
             color: #333;
@@ -8124,6 +8133,11 @@ last i checked this is best, specially since it could be real safe`;
     }
     .page-content {
       padding-bottom: 120px;
+    }
+
+    #accountPageOverlay #userDob {
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
     }
 
@@ -16240,6 +16254,9 @@ function showGenrePopup(genre) {
       const overlay = getFirstExistingOverlay(['accountPageOverlay']);
       if (showOverlayElement(overlay, 'block')) {
         loadAccountInfo();
+        setTimeout(function() {
+          loadAccountInfo();
+        }, 120);
       } else {
         window.location.href = 'Account25App.html';
       }
@@ -24544,6 +24561,8 @@ function showGenrePopup(genre) {
         userEmailElement.textContent = `📧 ${email}`;
       }
 
+      const resolvedDob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || '';
+
       const formatDobForDisplay = (dobValue) => {
         const value = String(dobValue || '').trim();
         const ymdMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -24555,8 +24574,15 @@ function showGenrePopup(genre) {
       };
 
       if (userDobElement) {
-        const dob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || 'Not set';
-        userDobElement.textContent = formatDobForDisplay(dob);
+        userDobElement.textContent = formatDobForDisplay(resolvedDob || 'Not set');
+      }
+
+      if (resolvedDob && savedUserData.dob !== resolvedDob) {
+        const syncedUser = {
+          ...savedUserData,
+          dob: resolvedDob
+        };
+        localStorage.setItem('hertzUser', JSON.stringify(syncedUser));
       }
 
       if (userCountryElement) {
@@ -24660,7 +24686,7 @@ function showGenrePopup(genre) {
         editEmailInput.value = editEmail;
       }
       if (editDobInput) {
-        const editDob = savedUserData.dob || localStorage.getItem('hertzUserDOB') || '';
+        const editDob = resolvedDob;
         editDobInput.value = /^\d{4}-\d{2}-\d{2}$/.test(editDob) ? editDob : '';
       }
 
@@ -25494,6 +25520,7 @@ function showGenrePopup(genre) {
 
       const currentLikedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
       const existingAccount = accounts[accountKey] || {};
+      const existingDob = existingAccount.dob || localStorage.getItem('hertzUserDOB') || '';
       const mergedLikedTracks = Object.keys(existingAccount.likedTracks || {}).length > 0
         ? existingAccount.likedTracks
         : currentLikedTracks;
@@ -25502,7 +25529,7 @@ function showGenrePopup(genre) {
         name: name,
         username: username,
         email: email,
-        dob: existingAccount.dob || '',
+        dob: existingDob,
         img: existingAccount.img || '',
         likedTracks: mergedLikedTracks,
         createdAt: existingAccount.createdAt || new Date().toISOString(),
@@ -25517,6 +25544,7 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzUser', JSON.stringify(accountProfile));
       localStorage.setItem('hertzUsername', name);
       localStorage.setItem('hertzUserEmail', email);
+      localStorage.setItem('hertzUserDOB', accountProfile.dob || '');
       localStorage.setItem('hertzActiveAccountKey', accountKey);
       localStorage.setItem('hertzLikedTracks', JSON.stringify(mergedLikedTracks));
       localStorage.setItem('hertzLikedTracksUpdate', Date.now().toString());
