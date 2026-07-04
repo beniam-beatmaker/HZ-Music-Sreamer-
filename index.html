@@ -31130,11 +31130,18 @@ function openAlbum(albumId) {
   var _dispInstLow = 0;
   var _dispInstMid = 0;
   var _dispInstHigh = 0;
+  var _expansionEnvelope = 0;
+  var _tinyVoiceEnvelope = 0;
+  var _preOuterBassEnvelope = 0;
+  var _expansionHoldLevel = 0;
+  var _lastBothActiveTime = 0;
+  var _lastFrameTime = 0;
 
   var _audioCtx = null;
   var _analyser = null;
   var _freqData = null;
   var _streamSource = null;
+  var _mediaElementSource = null;
   var _attachedStream = null;
 
   // Slow adaptive peaks normalize different mixes so all ring groups stay consistently reactive.
@@ -31199,6 +31206,15 @@ function openAlbum(albumId) {
       }
     }
 
+    if (!_analyser) {
+      _analyser = _audioCtx.createAnalyser();
+      _analyser.fftSize = 2048;
+      _analyser.smoothingTimeConstant = 0.35;
+      _analyser.minDecibels = -95;
+      _analyser.maxDecibels = -10;
+      _freqData = new Uint8Array(_analyser.frequencyBinCount);
+    }
+
     var stream = null;
     try {
       if (typeof audio.captureStream === 'function') {
@@ -31209,26 +31225,29 @@ function openAlbum(albumId) {
     } catch (err) {
       stream = null;
     }
-    if (!stream) return false;
 
-    if (!_analyser) {
-      _analyser = _audioCtx.createAnalyser();
-      _analyser.fftSize = 2048;
-      _analyser.smoothingTimeConstant = 0.35;
-      _analyser.minDecibels = -95;
-      _analyser.maxDecibels = -10;
-      _freqData = new Uint8Array(_analyser.frequencyBinCount);
-    }
-
-    if (!_streamSource || _attachedStream !== stream) {
+    if (stream && (!_streamSource || _attachedStream !== stream)) {
       try {
         _streamSource = _audioCtx.createMediaStreamSource(stream);
         _streamSource.connect(_analyser);
         _attachedStream = stream;
       } catch (err) {
-        return false;
+        _streamSource = null;
+        _attachedStream = null;
       }
     }
+
+    // Fallback for browsers/tracks where captureStream is unavailable.
+    if (!_streamSource && !_mediaElementSource) {
+      try {
+        _mediaElementSource = _audioCtx.createMediaElementSource(audio);
+        _mediaElementSource.connect(_analyser);
+      } catch (err) {
+        _mediaElementSource = null;
+      }
+    }
+
+    if (!_streamSource && !_mediaElementSource) return false;
 
     if (_audioCtx.state === 'suspended' && !audio.paused) {
       _audioCtx.resume().catch(function() {});
@@ -31429,6 +31448,55 @@ function openAlbum(albumId) {
     var driveInstMid = blendDrive(instMid, 0.36);
     var driveInstHigh = blendDrive(instHigh, 0.38);
 
+    var frameDt = _lastFrameTime > 0 ? Math.max(0.001, Math.min(0.060, t - _lastFrameTime)) : 0.016;
+    _lastFrameTime = t;
+
+    // Shared expansion envelope: bass/808 + voice, held while both are active.
+    var bass808Drive = Math.max(0, Math.min(1, bass * 0.74 + bassBody * 0.26));
+    var voiceDrive = Math.max(0, Math.min(1, voice * 0.90 + instMid * 0.10));
+    // Boost low bass presence so expansion still grows noticeably on bass-light tracks.
+    var bass808Comp = Math.pow(bass808Drive, 0.62);
+    var bass808Boosted = Math.max(0, Math.min(1, bass808Comp + (1 - bass808Comp) * 0.18));
+
+    var bothActive = bass808Boosted > 0.06 && voiceDrive > 0.08;
+    if (bothActive) {
+      _lastBothActiveTime = t;
+    }
+
+    var holdGraceSec = 0.050;
+    var holdActive = bothActive || ((t - _lastBothActiveTime) <= holdGraceSec);
+    var combinedDrive = Math.max(0, Math.min(1, bass808Boosted * 0.60 + voiceDrive * 0.40));
+
+    if (holdActive) {
+      _expansionHoldLevel = Math.max(_expansionHoldLevel, combinedDrive);
+    } else {
+      var holdReleaseBlend = 1 - Math.exp(-frameDt / 0.22);
+      _expansionHoldLevel += (combinedDrive - _expansionHoldLevel) * holdReleaseBlend;
+    }
+
+    var expansionTarget = holdActive
+      ? Math.max(combinedDrive, _expansionHoldLevel)
+      : combinedDrive;
+    var expansionTau = expansionTarget > _expansionEnvelope
+      ? 0.026
+      : (holdActive ? 0.50 : 0.20);
+    var expansionBlend = 1 - Math.exp(-frameDt / Math.max(0.001, expansionTau));
+    _expansionEnvelope += (expansionTarget - _expansionEnvelope) * expansionBlend;
+
+    // Smallest rings: voice-led (sensitive even at low voice levels).
+    var tinyVoiceTarget = Math.max(0, Math.min(1, (voiceDrive - 0.015) / 0.985));
+    tinyVoiceTarget = Math.pow(tinyVoiceTarget, 0.80);
+    var tinyVoiceTau = tinyVoiceTarget > _tinyVoiceEnvelope ? 0.030 : 0.170;
+    var tinyVoiceBlend = 1 - Math.exp(-frameDt / Math.max(0.001, tinyVoiceTau));
+    _tinyVoiceEnvelope += (tinyVoiceTarget - _tinyVoiceEnvelope) * tinyVoiceBlend;
+
+    // Pre-outer rings: bass/808-led expansion toward the outer-wave region.
+    var preOuterBassTarget = Math.max(0, Math.min(1, (bass808Boosted - 0.02) / 0.98));
+    preOuterBassTarget = Math.pow(preOuterBassTarget, 0.76);
+    var preOuterBassTau = preOuterBassTarget > _preOuterBassEnvelope ? 0.028 : 0.135;
+    var preOuterBassBlend = 1 - Math.exp(-frameDt / Math.max(0.001, preOuterBassTau));
+    _preOuterBassEnvelope += (preOuterBassTarget - _preOuterBassEnvelope) * preOuterBassBlend;
+
     // Extra-smooth display levels so circle expansion feels fluid, not jittery.
     var _ds = 0.07;
     _dispBass     = _dispBass     + (driveBass     - _dispBass)     * _ds;
@@ -31438,11 +31506,11 @@ function openAlbum(albumId) {
     _dispInstMid  = _dispInstMid  + (driveInstMid  - _dispInstMid)  * _ds;
     _dispInstHigh = _dispInstHigh + (driveInstHigh - _dispInstHigh) * _ds;
 
-    // Scale the whole circle using smoothed display levels so it grows fluidly.
-    var velocityDrive = Math.max(0, Math.min(1, _dispBass * 0.34 + _dispBassBody * 0.24 + _dispVoice * 0.18 + _dispInstLow * 0.10 + _dispInstMid * 0.09 + _dispInstHigh * 0.05));
-    var velocityGated = Math.max(0, (velocityDrive - 0.12) / 0.88);
-    var velocityBoost = Math.pow(velocityGated, 0.88);
-    var circleScale = 1 + velocityBoost * 0.40;
+    // Scale the whole circle from the shared voice+bass time envelope.
+    var velocityDrive = Math.max(0, Math.min(1, _expansionEnvelope));
+    var velocityGated = Math.max(0, (velocityDrive - 0.08) / 0.92);
+    var velocityBoost = Math.pow(velocityGated, 0.90);
+    var circleScale = 1 + velocityBoost * 0.46;
     canvas.style.transformOrigin = '50% 50%';
     canvas.style.transform = 'scale(' + circleScale.toFixed(3) + ')';
 
@@ -31497,9 +31565,17 @@ function openAlbum(albumId) {
     var instMidPalette = wavePalette(72, 3);
     var instHighPalette = wavePalette(88, 2);
 
+    // Keep ambient chroma active even on quiet/low-energy moments.
+    var ambientChromaAlpha = 0.07 + velocityDrive * 0.14;
+    var ambientChroma = ctx.createRadialGradient(w * 0.5, h * 0.5, Math.min(w, h) * 0.04, w * 0.5, h * 0.5, Math.min(w, h) * 0.56);
+    ambientChroma.addColorStop(0, hsla(36 + hueShift, 84, 62, ambientChromaAlpha));
+    ambientChroma.addColorStop(1, hsla(24 + hueShift, 78, 44, 0));
+    ctx.fillStyle = ambientChroma;
+    ctx.fillRect(0, 0, w, h);
+
     // alwaysVisible: keep ring as an idle perfect circle when drive is low.
     // idleR: the radius of that idle circle (smaller than radiusBase).
-    function drawCircularBand(radiusBase, radiusSpread, drive, speed, freq, harm, palette, lineW, responseGate, responsePower, alwaysVisible, idleR) {
+    function drawCircularBand(radiusBase, radiusSpread, drive, speed, freq, harm, palette, lineW, responseGate, responsePower, alwaysVisible, idleR, forcePerfectCircle) {
       var gatedDrive = Math.max(0, (drive - responseGate) / Math.max(0.0001, 1 - responseGate));
       var visualDrive = Math.pow(gatedDrive, responsePower);
 
@@ -31513,7 +31589,9 @@ function openAlbum(albumId) {
       // Blend from idle perfect-circle radius → active radius as drive rises.
       var _ir = idleR || radiusBase * 0.52;
       var expandBlend = Math.min(1, visualDrive * 3.0);                               // 0→1 as drive rises
-      var shapeBlend  = Math.min(1, Math.max(0, (visualDrive - 0.22) / 0.55));        // distortion only on strong spikes
+      var shapeBlend  = forcePerfectCircle
+        ? 0
+        : Math.min(1, Math.max(0, (visualDrive - 0.22) / 0.55));        // distortion only on strong spikes
       var currentBase = _ir + (radiusBase - _ir) * expandBlend;
       var radialBoost = radiusSpread * (0.20 + visualDrive * 1.86);
 
@@ -31602,6 +31680,55 @@ function openAlbum(albumId) {
       ctx.shadowBlur = 0;
     }
 
+    // Add color-shifting waves smaller than the smallest environmental wave ring.
+    // These smallest waves are voice-only, even at low voice levels.
+    var tinyWaveCount = 3;
+    var tinyBaseStart = minDim * 0.082;
+    var tinyStep = minDim * 0.018;
+    var tinyDrive = Math.max(0.10, Math.min(1, _tinyVoiceEnvelope));
+    for (var tinyIndex = 0; tinyIndex < tinyWaveCount; tinyIndex++) {
+      var tinyPhase = t * (1.85 + tinyIndex * 0.22) + tinyIndex * 1.1;
+      var tinyPulse = Math.sin(tinyPhase);
+      var tinyRadius = tinyBaseStart + tinyIndex * tinyStep + tinyPulse * (minDim * (0.0025 + tinyDrive * 0.014));
+      var tinyHue = 30 + hueShift + tinyIndex * 22;
+      var tinyAlpha = 0.22 + tinyDrive * 0.52;
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, tinyRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = hsla(tinyHue, 84, 66, Math.min(0.92, tinyAlpha));
+      ctx.lineWidth = Math.max(1, dpr * 0.9);
+      ctx.shadowBlur = 4 + tinyDrive * 10;
+      ctx.shadowColor = hsla(tinyHue - 8, 86, 60, 0.48 + tinyDrive * 0.26);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Rings just before the slightly larger waves: expand out to the outer-wave radius on bass/808.
+    var preOuterCount = 3;
+    var preOuterInnerStart = minDim * 0.205;
+    var preOuterInnerStep = minDim * 0.024;
+    var preOuterOuterStart = minDim * 0.352;
+    var preOuterOuterStep = minDim * 0.034;
+    for (var preIdx = 0; preIdx < preOuterCount; preIdx++) {
+      var prePhase = t * (1.55 + preIdx * 0.16) + preIdx * 1.28;
+      var prePulse = Math.sin(prePhase);
+      var preInnerRadius = preOuterInnerStart + preIdx * preOuterInnerStep + prePulse * (minDim * (0.002 + _preOuterBassEnvelope * 0.010));
+      var preOuterRadius = preOuterOuterStart + preIdx * preOuterOuterStep + prePulse * (minDim * (0.003 + _preOuterBassEnvelope * 0.012));
+      var preMix = Math.max(0, Math.min(1, _preOuterBassEnvelope * (0.86 + preIdx * 0.08)));
+      var preRadius = preInnerRadius + (preOuterRadius - preInnerRadius) * preMix;
+      var preHue = 40 + hueShift + preIdx * 16;
+      var preAlpha = 0.20 + _preOuterBassEnvelope * 0.50;
+
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, preRadius, 0, Math.PI * 2);
+      ctx.strokeStyle = hsla(preHue, 82, 64, Math.min(0.92, preAlpha));
+      ctx.lineWidth = Math.max(1, dpr * 1.0);
+      ctx.shadowBlur = 5 + _preOuterBassEnvelope * 12;
+      ctx.shadowColor = hsla(preHue - 10, 82, 58, 0.38 + _preOuterBassEnvelope * 0.32);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
     if (energy > 0.01) {
       var coreGrad = ctx.createRadialGradient(w * 0.5, h * 0.5, 0, w * 0.5, h * 0.5, Math.min(w, h) * (0.07 + energy * 0.08));
       coreGrad.addColorStop(0, 'rgba(255,240,190,' + (0.22 + energy * 0.16).toFixed(3) + ')');
@@ -31612,14 +31739,15 @@ function openAlbum(albumId) {
       ctx.fill();
     }
 
-    // Six additional outer environmental waves driven by dedicated bands.
+    // Six additional outer environmental waves as perfect circles, expanding with shared voice+bass timing.
     var outerBase = Math.min(w, h);
-    drawCircularBand(outerBase * 0.352, outerBase * 0.042, driveBass, 2.10, 3.80, 1.74, bassPalette, 1.25, 0.03, 1.00, true, outerBase * 0.332);
-    drawCircularBand(outerBase * 0.388, outerBase * 0.044, driveBassBody, 2.34, 4.35, 1.78, bassBodyPalette, 1.20, 0.03, 0.99, true, outerBase * 0.366);
-    drawCircularBand(outerBase * 0.424, outerBase * 0.046, driveInstLow, 2.64, 4.80, 1.84, instLowPalette, 1.15, 0.035, 0.98, true, outerBase * 0.401);
-    drawCircularBand(outerBase * 0.458, outerBase * 0.047, driveVoice, 2.92, 5.40, 1.90, voicePalette, 1.10, 0.035, 0.98, true, outerBase * 0.434);
-    drawCircularBand(outerBase * 0.492, outerBase * 0.049, driveInstMid, 3.18, 5.95, 1.96, instMidPalette, 1.05, 0.04, 0.97, true, outerBase * 0.467);
-    drawCircularBand(outerBase * 0.526, outerBase * 0.051, driveInstHigh, 3.44, 6.55, 2.02, instHighPalette, 1.00, 0.045, 0.96, true, outerBase * 0.500);
+    var sharedExpansionDrive = Math.max(0, Math.min(1, _expansionEnvelope));
+    drawCircularBand(outerBase * 0.352, outerBase * 0.042, sharedExpansionDrive * 0.98, 2.10, 3.80, 1.74, bassPalette, 1.25, 0.01, 0.94, true, outerBase * 0.332, true);
+    drawCircularBand(outerBase * 0.388, outerBase * 0.044, sharedExpansionDrive * 1.00, 2.34, 4.35, 1.78, bassBodyPalette, 1.20, 0.01, 0.94, true, outerBase * 0.366, true);
+    drawCircularBand(outerBase * 0.424, outerBase * 0.046, sharedExpansionDrive * 1.02, 2.64, 4.80, 1.84, instLowPalette, 1.15, 0.01, 0.94, true, outerBase * 0.401, true);
+    drawCircularBand(outerBase * 0.458, outerBase * 0.047, sharedExpansionDrive * 1.04, 2.92, 5.40, 1.90, voicePalette, 1.10, 0.01, 0.94, true, outerBase * 0.434, true);
+    drawCircularBand(outerBase * 0.492, outerBase * 0.049, sharedExpansionDrive * 1.06, 3.18, 5.95, 1.96, instMidPalette, 1.05, 0.01, 0.94, true, outerBase * 0.467, true);
+    drawCircularBand(outerBase * 0.526, outerBase * 0.051, sharedExpansionDrive * 1.08, 3.44, 6.55, 2.02, instHighPalette, 1.00, 0.01, 0.94, true, outerBase * 0.500, true);
 
     var lbl = getLabel();
     if (lbl) {
