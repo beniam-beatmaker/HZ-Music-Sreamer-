@@ -5912,8 +5912,11 @@ last i checked this is best, specially since it could be real safe`;
     .home-greeting-circle {
       width: 260px;
       height: 260px;
+      position: relative;
+      overflow: hidden;
       border-radius: 50%;
       border: 3px solid #ffd700;
+      background: #000000;
       box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.35), 0 0 22px rgba(255, 215, 0, 0.18);
       display: flex;
       flex-direction: column;
@@ -5923,6 +5926,17 @@ last i checked this is best, specially since it could be real safe`;
       padding: 16px;
       box-sizing: border-box;
       animation: greetingCircleColorShift 6s linear infinite;
+    }
+
+    .home-greeting-star-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     @keyframes greetingCircleColorShift {
@@ -5945,6 +5959,8 @@ last i checked this is best, specially since it could be real safe`;
       font-weight: 720;
       line-height: 1;
       margin: 0;
+      position: relative;
+      z-index: 1;
       color: #ffd700;
       letter-spacing: -0.02em;
     }
@@ -5953,6 +5969,8 @@ last i checked this is best, specially since it could be real safe`;
       font-size: 2.3rem;
       font-weight: 800;
       margin-top: 8px;
+      position: relative;
+      z-index: 1;
       color: #87cefa;
       line-height: 1.25;
       font-family: "Brush Script MT", "Segoe Script", cursive;
@@ -8766,6 +8784,7 @@ last i checked this is best, specially since it could be real safe`;
 
     <div class="home-greeting-wrap">
       <div class="home-greeting-circle">
+        <canvas id="homeGreetingStarCanvas" class="home-greeting-star-canvas" aria-hidden="true"></canvas>
         <h1 class="home-brand-title">HZ</h1>
         <div class="home-time-greeting" id="greetingText">Good Morning</div>
       </div>
@@ -16333,6 +16352,11 @@ function showGenrePopup(genre) {
     }
 
     function isSettingsOverlayVisible() {
+      // Treat any open popup as guarded to prevent sticky-player auto-mute.
+      if (typeof isAnyPopupVisible === 'function' && isAnyPopupVisible()) {
+        return true;
+      }
+
       const overlay = document.getElementById('settingsPageOverlay');
       if (!overlay) return false;
       const style = window.getComputedStyle(overlay);
@@ -16346,7 +16370,7 @@ function showGenrePopup(genre) {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
 
-      // While settings popup is visible, keep sticky-player audio unmuted.
+      // While any popup is visible, keep sticky-player audio unmuted.
       audio.muted = false;
       audio.defaultMuted = false;
       audio.removeAttribute('muted');
@@ -16392,6 +16416,104 @@ function showGenrePopup(genre) {
       }, 120);
     }
 
+    // Global sticky-player unmute guard: keep audio audible at all times.
+    function lockStickyPlayerMuteState() {
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      if (window.__hzStickyMuteLockedEl !== audio) {
+        if (!audio.__hzMuteAttrLockInstalled) {
+          try {
+            const nativeSetAttribute = audio.setAttribute;
+            audio.setAttribute = function(name, value) {
+              if (String(name || '').toLowerCase() === 'muted') {
+                return;
+              }
+              return nativeSetAttribute.call(this, name, value);
+            };
+          } catch (e) {}
+          audio.__hzMuteAttrLockInstalled = true;
+        }
+
+        try {
+          Object.defineProperty(audio, 'muted', {
+            configurable: true,
+            enumerable: true,
+            get: function() { return false; },
+            set: function() {}
+          });
+        } catch (e) {}
+
+        try {
+          Object.defineProperty(audio, 'defaultMuted', {
+            configurable: true,
+            enumerable: true,
+            get: function() { return false; },
+            set: function() {}
+          });
+        } catch (e) {}
+
+        window.__hzStickyMuteLockedEl = audio;
+      }
+
+      if (!window.__hzStickyMuteObserver || window.__hzStickyMuteObserverTarget !== audio) {
+        if (window.__hzStickyMuteObserver) {
+          try { window.__hzStickyMuteObserver.disconnect(); } catch (e) {}
+        }
+        window.__hzStickyMuteObserver = new MutationObserver(function() {
+          const a = document.getElementById('playerAudio');
+          if (!a) return;
+          if (a.hasAttribute('muted')) {
+            a.removeAttribute('muted');
+          }
+          try { a.muted = false; } catch (e) {}
+          try { a.defaultMuted = false; } catch (e) {}
+        });
+        window.__hzStickyMuteObserver.observe(audio, { attributes: true, attributeFilter: ['muted'] });
+        window.__hzStickyMuteObserverTarget = audio;
+      }
+    }
+
+    function enforceGlobalStickyPlayerUnmute() {
+      const audio = document.getElementById('playerAudio');
+      if (!audio) return;
+
+      lockStickyPlayerMuteState();
+
+      audio.muted = false;
+      audio.defaultMuted = false;
+      audio.removeAttribute('muted');
+
+      if (Number(audio.volume || 0) <= 0.0001) {
+        const savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
+        const safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
+        audio.volume = Math.max(0.05, Math.min(1, safePercent / 100));
+      }
+    }
+
+    function startGlobalStickyPlayerUnmuteGuard() {
+      if (window.__hzGlobalStickyUnmuteGuardInterval) return;
+      lockStickyPlayerMuteState();
+      enforceGlobalStickyPlayerUnmute();
+
+      const audio = document.getElementById('playerAudio');
+      if (audio && !window.__hzGlobalStickyUnmuteGuardBound) {
+        const hardGuardHandler = function() {
+          enforceGlobalStickyPlayerUnmute();
+        };
+        audio.addEventListener('volumechange', hardGuardHandler);
+        audio.addEventListener('play', hardGuardHandler);
+        audio.addEventListener('canplay', hardGuardHandler);
+        audio.addEventListener('loadedmetadata', hardGuardHandler);
+        window.__hzGlobalStickyUnmuteGuardBound = true;
+        window.__hzGlobalStickyUnmuteGuardHandler = hardGuardHandler;
+      }
+
+      window.__hzGlobalStickyUnmuteGuardInterval = setInterval(function() {
+        enforceGlobalStickyPlayerUnmute();
+      }, 120);
+    }
+
     function openSettingsPage() {
       console.log('⚙️ Opening settings page');
       updateBottomNavActive('settings');
@@ -16404,6 +16526,16 @@ function showGenrePopup(genre) {
         setTimeout(enforceSettingsAudioUnmuted, 140);
         setTimeout(enforceSettingsAudioUnmuted, 320);
       }
+    }
+
+    // Keep popup audio guard active globally so sticky player is never auto-muted
+    // while Environmental Waves or any other popup is visible.
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', startSettingsAudioGuard);
+      document.addEventListener('DOMContentLoaded', startGlobalStickyPlayerUnmuteGuard);
+    } else {
+      startSettingsAudioGuard();
+      startGlobalStickyPlayerUnmuteGuard();
     }
 
     // App Selection Popup Functions
@@ -29857,6 +29989,112 @@ function showGenrePopup(genre) {
     updateGreeting();
     setInterval(updateGreeting, 60000);
 
+    (function initHomeGreetingStars() {
+      const canvas = document.getElementById('homeGreetingStarCanvas');
+      if (!canvas) return;
+
+      let rafId = null;
+
+      function drawGreetingStars() {
+        rafId = requestAnimationFrame(drawGreetingStars);
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const w = Math.floor(canvas.clientWidth * dpr);
+        const h = Math.floor(canvas.clientHeight * dpr);
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+        }
+
+        const centerX = w * 0.5;
+        const centerY = h * 0.5;
+        const circleR = Math.min(w, h) * 0.5;
+
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = '#000000';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, circleR, 0, Math.PI * 2);
+        ctx.fill();
+
+        const greetingElement = document.getElementById('greetingText');
+        let starCyclePhase = 0;
+        let starsEnabled = false;
+        if (greetingElement && greetingElement.textContent && greetingElement.textContent.trim() === 'Good Night') {
+          starCyclePhase = (performance.now() * 0.001) % 12;
+          starsEnabled = true;
+        }
+
+        if (!starsEnabled) return;
+
+        const edgeStarCount = 3;
+        const edgeR = circleR * 0.96;
+        const starYOffsets = [
+          -edgeR * 0.12,
+          0,
+          edgeR * 0.12
+        ];
+
+        // Same travel behavior: fast sequential burst left->right, visible until 3rd reaches edge.
+        const edgeRunSec = 1.55;
+        const edgeStaggerSec = 0.42;
+        const thirdReachSec = edgeRunSec + edgeStaggerSec * (edgeStarCount - 1);
+        const burstActive = starCyclePhase <= thirdReachSec;
+        if (!burstActive) return;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, circleR * 0.985, 0, Math.PI * 2);
+        ctx.clip();
+
+        for (let es = 0; es < edgeStarCount; es++) {
+          const localT = starCyclePhase - es * edgeStaggerSec;
+          if (localT < 0) continue;
+
+          const esProgress = Math.max(0, Math.min(1, localT / edgeRunSec));
+          if (esProgress >= 1) continue;
+          const esX = (centerX - edgeR) + (edgeR * 2 * esProgress);
+          const esY = centerY + starYOffsets[es % starYOffsets.length];
+
+          const edgeDY = esY - centerY;
+          const edgeHalfWidth = Math.sqrt(Math.max(0, edgeR * edgeR - edgeDY * edgeDY));
+          const edgeLeftX = centerX - edgeHalfWidth;
+          const edgeRightX = centerX + edgeHalfWidth;
+          if (esX < edgeLeftX || esX > edgeRightX) continue;
+
+          const esTailLen = Math.min(w, h) * 0.095;
+          const esTailX = esX - esTailLen;
+          const esTailY = esY;
+          const endFade = Math.max(0, Math.min(1, (1 - esProgress) / 0.18));
+          const esPulse = 0.82 + 0.18 * Math.sin(performance.now() * 0.0024 + es * 1.3);
+          const esAlpha = (0.80 + esPulse * 0.18) * endFade;
+
+          const edgeGrad = ctx.createLinearGradient(esX, esY, esTailX, esTailY);
+          edgeGrad.addColorStop(0, 'rgba(255,255,255,' + esAlpha.toFixed(3) + ')');
+          edgeGrad.addColorStop(1, 'rgba(255,255,255,0)');
+
+          ctx.strokeStyle = edgeGrad;
+          ctx.lineWidth = Math.max(1.8, dpr * 1.35);
+          ctx.shadowBlur = 10 + esPulse * 8;
+          ctx.shadowColor = 'rgba(255,255,255,0.90)';
+          ctx.beginPath();
+          ctx.moveTo(esX, esY);
+          ctx.lineTo(esTailX, esTailY);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.restore();
+      }
+
+      drawGreetingStars();
+
+      window.addEventListener('beforeunload', function() {
+        if (rafId) cancelAnimationFrame(rafId);
+      });
+    })();
+
   </script>
 
   </div> <!-- End App Container -->
@@ -31132,6 +31370,7 @@ function openAlbum(albumId) {
   var _dispInstHigh = 0;
   var _expansionEnvelope = 0;
   var _tinyVoiceEnvelope = 0;
+  var _tinyEdgeEnvelope = 0;
   var _preOuterBassEnvelope = 0;
   var _expansionHoldLevel = 0;
   var _lastBothActiveTime = 0;
@@ -31140,9 +31379,22 @@ function openAlbum(albumId) {
   var _audioCtx = null;
   var _analyser = null;
   var _freqData = null;
+  var _timeData = null;
   var _streamSource = null;
-  var _mediaElementSource = null;
   var _attachedStream = null;
+  var _elementSource = null;
+  var _attachedElement = null;
+  var _analyserSourceMode = 'stream';
+  var _signalLastTime = 0;
+  var _loudnessLevel = 0;
+  var _volumeVelocityLevel = 0;
+  var _prevVolumeWeight = 0;
+  var _beatPulseLevel = 0;
+  var _prevSub808Norm = 0;
+  var _shootingStars = [];
+  var _lastStarSpawnAt = 0;
+  var _stillStars = [];
+  var _stillStarsClipR = 0;
 
   // Slow adaptive peaks normalize different mixes so all ring groups stay consistently reactive.
   var _peakBass = 0.35;
@@ -31151,6 +31403,9 @@ function openAlbum(albumId) {
   var _peakInstLow = 0.35;
   var _peakInstMid = 0.35;
   var _peakInstHigh = 0.35;
+  var _peakLoudness = 0.25;
+  var _peakTransient = 0.16;
+  var _peakSub808 = 0.32;
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
@@ -31209,11 +31464,15 @@ function openAlbum(albumId) {
     if (!_analyser) {
       _analyser = _audioCtx.createAnalyser();
       _analyser.fftSize = 2048;
-      _analyser.smoothingTimeConstant = 0.35;
-      _analyser.minDecibels = -95;
-      _analyser.maxDecibels = -10;
+      _analyser.smoothingTimeConstant = 0.16;
+      _analyser.minDecibels = -100;
+      _analyser.maxDecibels = -8;
       _freqData = new Uint8Array(_analyser.frequencyBinCount);
+      _timeData = new Uint8Array(_analyser.fftSize);
     }
+
+    // Analysis-only path: capture stream from sticky-player audio and feed analyser.
+    // No destination connection here, so popup itself never adds/duplicates audible output.
 
     var stream = null;
     try {
@@ -31228,26 +31487,38 @@ function openAlbum(albumId) {
 
     if (stream && (!_streamSource || _attachedStream !== stream)) {
       try {
+        if (_streamSource && typeof _streamSource.disconnect === 'function') {
+          _streamSource.disconnect();
+        }
         _streamSource = _audioCtx.createMediaStreamSource(stream);
         _streamSource.connect(_analyser);
         _attachedStream = stream;
+        _analyserSourceMode = 'stream';
       } catch (err) {
         _streamSource = null;
         _attachedStream = null;
       }
     }
 
-    // Fallback for browsers/tracks where captureStream is unavailable.
-    if (!_streamSource && !_mediaElementSource) {
+    // Fallback live feed: use the sticky player element directly when captureStream is unavailable.
+    if (!_streamSource && (!_elementSource || _attachedElement !== audio)) {
       try {
-        _mediaElementSource = _audioCtx.createMediaElementSource(audio);
-        _mediaElementSource.connect(_analyser);
+        if (_elementSource && typeof _elementSource.disconnect === 'function') {
+          _elementSource.disconnect();
+        }
+        _elementSource = _audioCtx.createMediaElementSource(audio);
+        _elementSource.connect(_analyser);
+        _attachedElement = audio;
+        _analyserSourceMode = 'element';
       } catch (err) {
-        _mediaElementSource = null;
+        _elementSource = null;
+        _attachedElement = null;
       }
     }
 
-    if (!_streamSource && !_mediaElementSource) return false;
+    var hasLiveSource = (_analyserSourceMode === 'stream' && !!_streamSource)
+      || (_analyserSourceMode === 'element' && !!_elementSource);
+    if (!hasLiveSource) return false;
 
     if (_audioCtx.state === 'suspended' && !audio.paused) {
       _audioCtx.resume().catch(function() {});
@@ -31259,15 +31530,28 @@ function openAlbum(albumId) {
   function computeSignals(t) {
     var audio = document.getElementById('playerAudio');
     var playing = audio && !audio.paused && !audio.ended;
+    var signalDt = _signalLastTime > 0 ? Math.max(0.001, Math.min(0.060, t - _signalLastTime)) : 0.016;
+    _signalLastTime = t;
+
+    function smoothSignalLevel(current, target, attackTau, releaseTau) {
+      var tau = target > current ? attackTau : releaseTau;
+      var blend = 1 - Math.exp(-signalDt / Math.max(0.001, tau));
+      return current + (target - current) * blend;
+    }
 
     if (!playing) {
       // Decay to zero — waves become calm/flat.
-      _bassLevel *= 0.82;
-      _bassBodyLevel *= 0.82;
-      _voiceLevel *= 0.82;
-      _instLowLevel *= 0.82;
-      _instMidLevel *= 0.82;
-      _instHighLevel *= 0.82;
+      _bassLevel = smoothSignalLevel(_bassLevel, 0, 0.03, 0.12);
+      _bassBodyLevel = smoothSignalLevel(_bassBodyLevel, 0, 0.03, 0.13);
+      _voiceLevel = smoothSignalLevel(_voiceLevel, 0, 0.03, 0.14);
+      _instLowLevel = smoothSignalLevel(_instLowLevel, 0, 0.03, 0.14);
+      _instMidLevel = smoothSignalLevel(_instMidLevel, 0, 0.03, 0.14);
+      _instHighLevel = smoothSignalLevel(_instHighLevel, 0, 0.03, 0.14);
+      _loudnessLevel = smoothSignalLevel(_loudnessLevel, 0, 0.03, 0.16);
+      _volumeVelocityLevel = smoothSignalLevel(_volumeVelocityLevel, 0, 0.02, 0.10);
+      _prevVolumeWeight = smoothSignalLevel(_prevVolumeWeight, 0, 0.02, 0.10);
+      _beatPulseLevel = smoothSignalLevel(_beatPulseLevel, 0, 0.02, 0.10);
+      _prevSub808Norm = smoothSignalLevel(_prevSub808Norm, 0, 0.03, 0.12);
       return {
         bass: _bassLevel,
         bassBody: _bassBodyLevel,
@@ -31281,6 +31565,9 @@ function openAlbum(albumId) {
     var hasAnalyser = setupAudioAnalyser();
     if (hasAnalyser && _analyser && _freqData) {
       _analyser.getByteFrequencyData(_freqData);
+      if (_timeData) {
+        _analyser.getByteTimeDomainData(_timeData);
+      }
 
       var nyquist = (_audioCtx && _audioCtx.sampleRate ? _audioCtx.sampleRate : 44100) / 2;
       var maxIndex = _freqData.length - 1;
@@ -31309,6 +31596,8 @@ function openAlbum(albumId) {
         return Math.sqrt(sum / count);
       }
 
+      var sub808Raw = bandEnergy(24, 95);
+      var bassPunchRaw = bandEnergy(95, 180);
       var bassRaw = bandEnergy(20, 150);
       var bassBodyRaw = bandEnergy(150, 320);
       var vocalBody = bandEnergy(260, 1200);
@@ -31337,6 +31626,27 @@ function openAlbum(albumId) {
       _peakInstLow = updateAdaptivePeak(instLowRaw, _peakInstLow);
       _peakInstMid = updateAdaptivePeak(instMidRaw, _peakInstMid);
       _peakInstHigh = updateAdaptivePeak(instHighRaw, _peakInstHigh);
+      _peakSub808 = updateAdaptivePeak(sub808Raw, _peakSub808);
+
+      var loudnessRaw = 0;
+      var transientRaw = 0;
+      if (_timeData && _timeData.length) {
+        var rmsSum = 0;
+        var transientSum = 0;
+        var prevCentered = (_timeData[0] - 128) / 128;
+        for (var td = 0; td < _timeData.length; td++) {
+          var centered = (_timeData[td] - 128) / 128;
+          rmsSum += centered * centered;
+          if (td > 0) {
+            transientSum += Math.abs(centered - prevCentered);
+          }
+          prevCentered = centered;
+        }
+        loudnessRaw = Math.sqrt(rmsSum / _timeData.length);
+        transientRaw = transientSum / Math.max(1, _timeData.length - 1);
+      }
+      _peakLoudness = updateAdaptivePeak(loudnessRaw, _peakLoudness);
+      _peakTransient = updateAdaptivePeak(transientRaw, _peakTransient);
 
       bassRaw = normalizeByPeak(bassRaw, _peakBass);
       bassBodyRaw = normalizeByPeak(bassBodyRaw, _peakBassBody);
@@ -31344,13 +31654,59 @@ function openAlbum(albumId) {
       instLowRaw = normalizeByPeak(instLowRaw, _peakInstLow);
       instMidRaw = normalizeByPeak(instMidRaw, _peakInstMid);
       instHighRaw = normalizeByPeak(instHighRaw, _peakInstHigh);
+      var sub808Norm = normalizeByPeak(sub808Raw, _peakSub808);
 
-      _bassLevel = bassRaw > _bassLevel ? (_bassLevel * 0.24 + bassRaw * 0.76) : (_bassLevel * 0.90 + bassRaw * 0.10);
-      _bassBodyLevel = bassBodyRaw > _bassBodyLevel ? (_bassBodyLevel * 0.26 + bassBodyRaw * 0.74) : (_bassBodyLevel * 0.90 + bassBodyRaw * 0.10);
-      _voiceLevel = voiceRaw > _voiceLevel ? (_voiceLevel * 0.32 + voiceRaw * 0.68) : (_voiceLevel * 0.89 + voiceRaw * 0.11);
-      _instLowLevel = instLowRaw > _instLowLevel ? (_instLowLevel * 0.34 + instLowRaw * 0.66) : (_instLowLevel * 0.90 + instLowRaw * 0.10);
-      _instMidLevel = instMidRaw > _instMidLevel ? (_instMidLevel * 0.34 + instMidRaw * 0.66) : (_instMidLevel * 0.90 + instMidRaw * 0.10);
-      _instHighLevel = instHighRaw > _instHighLevel ? (_instHighLevel * 0.34 + instHighRaw * 0.66) : (_instHighLevel * 0.90 + instHighRaw * 0.10);
+      var loudnessNorm = normalizeByPeak(loudnessRaw, _peakLoudness);
+      var transientNorm = normalizeByPeak(transientRaw, _peakTransient);
+      _loudnessLevel = smoothSignalLevel(_loudnessLevel, loudnessNorm, 0.06, 0.22);
+      var volumeWeight = Math.max(0.20, Math.min(1, _loudnessLevel));
+      var volumeDelta = Math.max(0, volumeWeight - _prevVolumeWeight);
+      _prevVolumeWeight = _prevVolumeWeight * 0.80 + volumeWeight * 0.20;
+      var volumeVelocityRaw = Math.max(0, Math.min(1, volumeDelta * 3.4 + transientNorm * 0.12));
+      _volumeVelocityLevel = smoothSignalLevel(_volumeVelocityLevel, volumeVelocityRaw, 0.018, 0.14);
+
+      // Volume-based weighting, with stronger response for bass/808 than voice.
+      var bassGain = 0.60 + volumeWeight * 0.96;
+      var voiceGain = 0.52 + volumeWeight * 0.72;
+      var instGain = 0.50 + volumeWeight * 0.70;
+
+      bassRaw = Math.max(0, Math.min(1, bassRaw * bassGain));
+      bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw * (bassGain * 0.98)));
+      voiceRaw = Math.max(0, Math.min(1, voiceRaw * voiceGain));
+      instLowRaw = Math.max(0, Math.min(1, instLowRaw * instGain));
+      instMidRaw = Math.max(0, Math.min(1, instMidRaw * instGain));
+      instHighRaw = Math.max(0, Math.min(1, instHighRaw * (instGain * 0.95)));
+
+      // Dedicated 808 isolation blended into low-end drives.
+      var lowEndPrimary = Math.max(0, Math.min(1, sub808Norm * 0.78 + bassPunchRaw * 0.22));
+      bassRaw = Math.max(0, Math.min(1, bassRaw * 0.50 + lowEndPrimary * 0.62));
+      bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw * 0.66 + lowEndPrimary * 0.34));
+
+      // Low-end onset detector from live feed for tighter beat-locking.
+      var subDelta = Math.max(0, lowEndPrimary - _prevSub808Norm);
+      _prevSub808Norm = _prevSub808Norm * 0.84 + lowEndPrimary * 0.16;
+      var beatRaw = Math.max(0, Math.min(1, subDelta * 2.4 + transientNorm * 0.40));
+      _beatPulseLevel = smoothSignalLevel(_beatPulseLevel, beatRaw, 0.012, 0.085);
+
+      // Use live waveform transients to tighten timing of voice/808 reactions.
+      bassRaw = Math.max(0, Math.min(1, bassRaw * 0.86 + transientNorm * 0.22));
+      bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw * 0.88 + transientNorm * 0.18));
+      voiceRaw = Math.max(0, Math.min(1, voiceRaw * 0.90 + transientNorm * 0.14));
+
+      // Beat pulse subtly drives all bands so the full wave field stays in real-time sync.
+      bassRaw = Math.max(0, Math.min(1, bassRaw + _beatPulseLevel * 0.30));
+      bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw + _beatPulseLevel * 0.22));
+      voiceRaw = Math.max(0, Math.min(1, voiceRaw + _beatPulseLevel * 0.10));
+      instLowRaw = Math.max(0, Math.min(1, instLowRaw + _beatPulseLevel * 0.10));
+      instMidRaw = Math.max(0, Math.min(1, instMidRaw + _beatPulseLevel * 0.08));
+      instHighRaw = Math.max(0, Math.min(1, instHighRaw + _beatPulseLevel * 0.06));
+
+      _bassLevel = smoothSignalLevel(_bassLevel, bassRaw, 0.020, 0.13);
+      _bassBodyLevel = smoothSignalLevel(_bassBodyLevel, bassBodyRaw, 0.022, 0.14);
+      _voiceLevel = smoothSignalLevel(_voiceLevel, voiceRaw, 0.030, 0.16);
+      _instLowLevel = smoothSignalLevel(_instLowLevel, instLowRaw, 0.032, 0.16);
+      _instMidLevel = smoothSignalLevel(_instMidLevel, instMidRaw, 0.032, 0.16);
+      _instHighLevel = smoothSignalLevel(_instHighLevel, instHighRaw, 0.032, 0.16);
 
       return {
         bass: Math.max(0, Math.min(1, _bassLevel)),
@@ -31394,9 +31750,9 @@ function openAlbum(albumId) {
     bassBodyRaw = Math.max(0, Math.min(1, bassBodyRaw));
     voiceRaw = Math.max(0, Math.min(1, voiceRaw));
 
-    _bassLevel = bassRaw > _bassLevel ? (_bassLevel * 0.24 + bassRaw * 0.76) : (_bassLevel * 0.86 + bassRaw * 0.14);
-    _bassBodyLevel = bassBodyRaw > _bassBodyLevel ? (_bassBodyLevel * 0.26 + bassBodyRaw * 0.74) : (_bassBodyLevel * 0.87 + bassBodyRaw * 0.13);
-    _voiceLevel = voiceRaw > _voiceLevel ? (_voiceLevel * 0.42 + voiceRaw * 0.58) : (_voiceLevel * 0.91 + voiceRaw * 0.09);
+    _bassLevel = smoothSignalLevel(_bassLevel, bassRaw, 0.030, 0.16);
+    _bassBodyLevel = smoothSignalLevel(_bassBodyLevel, bassBodyRaw, 0.032, 0.17);
+    _voiceLevel = smoothSignalLevel(_voiceLevel, voiceRaw, 0.045, 0.19);
     _instLowLevel = _voiceLevel * 0.72;
     _instMidLevel = _voiceLevel * 0.66;
     _instHighLevel = _voiceLevel * 0.58;
@@ -31428,6 +31784,22 @@ function openAlbum(albumId) {
 
     var t   = performance.now() * 0.001;
     var sig = computeSignals(t);
+
+    function enforceVisualizerPopupAudio() {
+      if (!_vizOpen) return;
+      var audio = document.getElementById('playerAudio');
+      if (!audio) return;
+      audio.muted = false;
+      audio.defaultMuted = false;
+      audio.removeAttribute('muted');
+      if (Number(audio.volume || 0) <= 0.0001) {
+        var savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
+        var safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
+        audio.volume = Math.max(0.05, Math.min(1, safePercent / 100));
+      }
+    }
+    enforceVisualizerPopupAudio();
+
     var bass  = sig.bass;
     var bassBody = sig.bassBody;
     var voice = sig.voice;
@@ -31451,21 +31823,34 @@ function openAlbum(albumId) {
     var frameDt = _lastFrameTime > 0 ? Math.max(0.001, Math.min(0.060, t - _lastFrameTime)) : 0.016;
     _lastFrameTime = t;
 
-    // Shared expansion envelope: bass/808 + voice, held while both are active.
+    // Shared expansion envelope: reacts to voice + bass, with expansion strength led by 808/bass.
     var bass808Drive = Math.max(0, Math.min(1, bass * 0.74 + bassBody * 0.26));
     var voiceDrive = Math.max(0, Math.min(1, voice * 0.90 + instMid * 0.10));
     // Boost low bass presence so expansion still grows noticeably on bass-light tracks.
     var bass808Comp = Math.pow(bass808Drive, 0.62);
     var bass808Boosted = Math.max(0, Math.min(1, bass808Comp + (1 - bass808Comp) * 0.18));
 
-    var bothActive = bass808Boosted > 0.06 && voiceDrive > 0.08;
+    // Expansion follows both voice and 808 volume; 808 remains the primary driver.
+    var expansion808Primary = Math.pow(bass808Boosted, 0.90);
+    var expansionVoiceSupport = Math.pow(voiceDrive, 0.90);
+    var louderComponent = Math.max(expansion808Primary, expansionVoiceSupport);
+    var volumeVelocityBoost = Math.max(0, Math.min(1, _volumeVelocityLevel));
+    var combinedDrive = Math.max(0, Math.min(1,
+      expansion808Primary * 0.72 +
+      expansionVoiceSupport * 0.28 +
+      louderComponent * 0.18
+    ));
+    combinedDrive = Math.max(0, Math.min(1,
+      combinedDrive * (1 + volumeVelocityBoost * 0.46) + volumeVelocityBoost * 0.12
+    ));
+
+    var bothActive = bass808Boosted > 0.04 || voiceDrive > 0.06;
     if (bothActive) {
       _lastBothActiveTime = t;
     }
 
     var holdGraceSec = 0.050;
     var holdActive = bothActive || ((t - _lastBothActiveTime) <= holdGraceSec);
-    var combinedDrive = Math.max(0, Math.min(1, bass808Boosted * 0.60 + voiceDrive * 0.40));
 
     if (holdActive) {
       _expansionHoldLevel = Math.max(_expansionHoldLevel, combinedDrive);
@@ -31478,8 +31863,8 @@ function openAlbum(albumId) {
       ? Math.max(combinedDrive, _expansionHoldLevel)
       : combinedDrive;
     var expansionTau = expansionTarget > _expansionEnvelope
-      ? 0.026
-      : (holdActive ? 0.50 : 0.20);
+      ? 0.018
+      : (holdActive ? 0.30 : 0.14);
     var expansionBlend = 1 - Math.exp(-frameDt / Math.max(0.001, expansionTau));
     _expansionEnvelope += (expansionTarget - _expansionEnvelope) * expansionBlend;
 
@@ -31489,6 +31874,16 @@ function openAlbum(albumId) {
     var tinyVoiceTau = tinyVoiceTarget > _tinyVoiceEnvelope ? 0.030 : 0.170;
     var tinyVoiceBlend = 1 - Math.exp(-frameDt / Math.max(0.001, tinyVoiceTau));
     _tinyVoiceEnvelope += (tinyVoiceTarget - _tinyVoiceEnvelope) * tinyVoiceBlend;
+
+    // Tiny waves can expand to outer edge when 808 or voice gets louder (808 weighted primary).
+    var tinyEdgeTarget = Math.max(0, Math.min(1,
+      expansion808Primary * 0.74 +
+      expansionVoiceSupport * 0.26 +
+      louderComponent * 0.16
+    ));
+    var tinyEdgeTau = tinyEdgeTarget > _tinyEdgeEnvelope ? 0.024 : 0.170;
+    var tinyEdgeBlend = 1 - Math.exp(-frameDt / Math.max(0.001, tinyEdgeTau));
+    _tinyEdgeEnvelope += (tinyEdgeTarget - _tinyEdgeEnvelope) * tinyEdgeBlend;
 
     // Pre-outer rings: bass/808-led expansion toward the outer-wave region.
     var preOuterBassTarget = Math.max(0, Math.min(1, (bass808Boosted - 0.02) / 0.98));
@@ -31509,12 +31904,14 @@ function openAlbum(albumId) {
     // Scale the whole circle from the shared voice+bass time envelope.
     var velocityDrive = Math.max(0, Math.min(1, _expansionEnvelope));
     var velocityGated = Math.max(0, (velocityDrive - 0.08) / 0.92);
-    var velocityBoost = Math.pow(velocityGated, 0.90);
-    var circleScale = 1 + velocityBoost * 0.46;
+    var velocityBoost = Math.pow(velocityGated, 0.88);
+    var circleScale = 1 + velocityBoost * 0.58 + Math.max(0, Math.min(1, _volumeVelocityLevel)) * 0.10;
     canvas.style.transformOrigin = '50% 50%';
     canvas.style.transform = 'scale(' + circleScale.toFixed(3) + ')';
 
     ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, w, h);
 
     // Central glow grows with overall energy.
     if (energy > 0.005) {
@@ -31540,36 +31937,33 @@ function openAlbum(albumId) {
       return 'hsla(' + hue.toFixed(2) + ',' + s.toFixed(2) + '%,' + l.toFixed(2) + '%,' + a.toFixed(3) + ')';
     }
 
-    // Smoothly shift each ring palette every 2 seconds.
-    var colorCycle = 2.0;
-    var cycleStep = 18.0;
-    var cycleIndex = Math.floor(t / colorCycle);
-    var cycleProgress = smoothstep01((t % colorCycle) / colorCycle);
-    var hueShift = (cycleIndex + cycleProgress) * cycleStep;
+    // Fixed tone: stop color cycling.
+    var activeTone = { h: 228, s: 68, l: 26 };
 
-    function wavePalette(baseHue, satBoost) {
-      var hue = baseHue + hueShift;
-      var sat = 78 + satBoost;
+    function wavePalette(hueOffset, satBoost, lightOffset) {
+      var hue = activeTone.h + hueOffset;
+      var sat = Math.max(0, Math.min(100, activeTone.s + satBoost));
+      var light = Math.max(0, Math.min(100, activeTone.l + lightOffset));
       return {
-        top: hsla(hue, sat, 72, 0.95),
-        base: hsla(hue - 10, sat - 10, 42, 0.08),
-        fill: hsla(hue - 4, sat - 4, 58, 0.14),
-        shadow: hsla(hue - 6, sat - 14, 58, 0.54)
+        top: hsla(hue, sat, Math.max(8, light + 24), 0.95),
+        base: hsla(hue - 4, Math.max(0, sat - 16), Math.max(4, light + 4), 0.10),
+        fill: hsla(hue - 2, Math.max(0, sat - 8), Math.max(5, light + 14), 0.15),
+        shadow: hsla(hue - 2, Math.max(0, sat - 10), Math.max(5, light + 12), 0.56)
       };
     }
 
-    var bassPalette = wavePalette(42, 6);
-    var bassBodyPalette = wavePalette(30, 2);
-    var voicePalette = wavePalette(18, 0);
-    var instLowPalette = wavePalette(56, 4);
-    var instMidPalette = wavePalette(72, 3);
-    var instHighPalette = wavePalette(88, 2);
+    var bassPalette = wavePalette(-8, 6, 0);
+    var bassBodyPalette = wavePalette(-4, 2, 2);
+    var voicePalette = wavePalette(0, 0, 3);
+    var instLowPalette = wavePalette(4, 4, 1);
+    var instMidPalette = wavePalette(8, 3, 2);
+    var instHighPalette = wavePalette(12, 2, 3);
 
-    // Keep ambient chroma active even on quiet/low-energy moments.
+    // Fixed ambient layer over static background color.
     var ambientChromaAlpha = 0.07 + velocityDrive * 0.14;
     var ambientChroma = ctx.createRadialGradient(w * 0.5, h * 0.5, Math.min(w, h) * 0.04, w * 0.5, h * 0.5, Math.min(w, h) * 0.56);
-    ambientChroma.addColorStop(0, hsla(36 + hueShift, 84, 62, ambientChromaAlpha));
-    ambientChroma.addColorStop(1, hsla(24 + hueShift, 78, 44, 0));
+    ambientChroma.addColorStop(0, hsla(activeTone.h, Math.max(0, activeTone.s - 6), Math.max(4, activeTone.l + 22), ambientChromaAlpha));
+    ambientChroma.addColorStop(1, hsla(activeTone.h - 6, Math.max(0, activeTone.s - 10), Math.max(3, activeTone.l + 10), 0));
     ctx.fillStyle = ambientChroma;
     ctx.fillRect(0, 0, w, h);
 
@@ -31657,18 +32051,119 @@ function openAlbum(albumId) {
     var minDim = Math.min(w, h);
     var centerX = w * 0.5;
     var centerY = h * 0.5;
+
+    // Three medium white stars: appear after track reaches 3s; burst repeats every 26s.
+    var circleClipR = minDim * 0.53;
+    var trackAudio = document.getElementById('playerAudio');
+    var starsEnabled = false;
+    var starCyclePhase = 0;
+    if (trackAudio && !trackAudio.paused && !trackAudio.ended && isFinite(trackAudio.currentTime) && trackAudio.currentTime >= 3) {
+      starCyclePhase = (trackAudio.currentTime - 3) % 26;
+      starsEnabled = starCyclePhase < 6;
+    }
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, circleClipR, 0, Math.PI * 2);
+    ctx.clip();
+
+    // Hundreds of still stars inside the circle, slightly smaller than shooting stars.
+    var stillStarCount = 720;
+    if (!_stillStars.length || Math.abs(_stillStarsClipR - circleClipR) > 1) {
+      _stillStars = [];
+      for (var si = 0; si < stillStarCount; si++) {
+        var sr = Math.sqrt(Math.random()) * circleClipR * 0.98;
+        var sa = Math.random() * Math.PI * 2;
+        _stillStars.push({
+          x: Math.cos(sa) * sr,
+          y: Math.sin(sa) * sr,
+          alpha: 0.30 + Math.random() * 0.46,
+          size: 0.7 + Math.random() * 0.7
+        });
+      }
+      _stillStarsClipR = circleClipR;
+    }
+
+    for (var st = 0; st < _stillStars.length; st++) {
+      var still = _stillStars[st];
+      ctx.fillStyle = 'rgba(255,255,255,' + still.alpha.toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(centerX + still.x, centerY + still.y, still.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    if (starsEnabled) {
+      var edgeStarCount = 3;
+      var edgeR = circleClipR * 0.98;
+      var starYOffsets = [
+        -edgeR * 0.12,
+        0,
+        edgeR * 0.12
+      ];
+
+      // Faster left->right burst; all stars stay visible until the 3rd reaches right edge.
+      var edgeRunSec = 1.55;
+      var edgeStaggerSec = 0.42;
+      var thirdReachSec = edgeRunSec + edgeStaggerSec * (edgeStarCount - 1);
+      var burstActive = starCyclePhase <= thirdReachSec;
+
+      if (burstActive) {
+        for (var es = 0; es < edgeStarCount; es++) {
+          var localT = starCyclePhase - es * edgeStaggerSec;
+          if (localT < 0) {
+            continue;
+          }
+
+          var esProgress = Math.max(0, Math.min(1, localT / edgeRunSec));
+          var esX = (centerX - edgeR) + (edgeR * 2 * esProgress);
+          var esY = centerY + starYOffsets[es % starYOffsets.length];
+
+          // Keep stars on the outer circle edge path and hide outside edge boundary.
+          var edgeDY = esY - centerY;
+          var edgeHalfWidth = Math.sqrt(Math.max(0, edgeR * edgeR - edgeDY * edgeDY));
+          var edgeLeftX = centerX - edgeHalfWidth;
+          var edgeRightX = centerX + edgeHalfWidth;
+          if (esX < edgeLeftX || esX > edgeRightX) {
+            continue;
+          }
+
+          var esTailLen = minDim * 0.095;
+          var esTailX = esX - esTailLen;
+          var esTailY = esY;
+          var esPulse = 0.82 + 0.18 * Math.sin(t * 2.4 + es * 1.3);
+          var esAlpha = 0.80 + esPulse * 0.18;
+
+          var edgeGrad = ctx.createLinearGradient(esX, esY, esTailX, esTailY);
+          edgeGrad.addColorStop(0, 'rgba(255,255,255,' + esAlpha.toFixed(3) + ')');
+          edgeGrad.addColorStop(1, 'rgba(255,255,255,0)');
+
+          ctx.strokeStyle = edgeGrad;
+          ctx.lineWidth = Math.max(1.9, dpr * 1.45);
+          ctx.shadowBlur = 11 + esPulse * 9;
+          ctx.shadowColor = 'rgba(255,255,255,0.90)';
+          ctx.beginPath();
+          ctx.moveTo(esX, esY);
+          ctx.lineTo(esTailX, esTailY);
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+      }
+    }
+    ctx.restore();
+
     var ringCount = 5;
     var baseStart = minDim * 0.15;
     var baseStep = minDim * 0.038;
     var velocityForRings = Math.max(0, Math.min(1, velocityDrive));
+    var innerReactionBoost = 1 + Math.max(0, Math.min(1, _volumeVelocityLevel)) * 0.72;
 
     for (var ringIndex = 0; ringIndex < ringCount; ringIndex++) {
       var phase = t * (1.15 + ringIndex * 0.16) + ringIndex * 0.9;
       var pulse = 0.5 + 0.5 * Math.sin(phase);
       var pulseSigned = (pulse * 2 - 1);
-      var ringVelocityAmp = (minDim * 0.010) + velocityForRings * (minDim * 0.038);
+      var ringVelocityAmp = ((minDim * 0.010) + velocityForRings * (minDim * 0.038)) * innerReactionBoost;
       var ringRadius = baseStart + ringIndex * baseStep + pulseSigned * ringVelocityAmp;
-      var ringAlpha = 0.22 + velocityForRings * 0.34 + ringIndex * 0.03;
+      var ringAlpha = 0.24 + velocityForRings * 0.42 + ringIndex * 0.03;
 
       ctx.beginPath();
       ctx.arc(centerX, centerY, ringRadius, 0, Math.PI * 2);
@@ -31685,13 +32180,19 @@ function openAlbum(albumId) {
     var tinyWaveCount = 3;
     var tinyBaseStart = minDim * 0.082;
     var tinyStep = minDim * 0.018;
-    var tinyDrive = Math.max(0.10, Math.min(1, _tinyVoiceEnvelope));
+    var tinyVelocity = Math.max(0, Math.min(1, _volumeVelocityLevel));
+    var tinyDrive = Math.max(0.18, Math.min(1, _tinyVoiceEnvelope * 1.14 + tinyVelocity * 0.46));
+    var tinyEdgeMix = Math.max(0, Math.min(1, _tinyEdgeEnvelope * 0.72 + tinyVelocity * 0.74 + velocityDrive * 0.12));
+    var tinyOuterEdgeBase = minDim * (0.492 + tinyVelocity * 0.030);
+    var tinyOuterEdgeStep = minDim * (0.014 + tinyVelocity * 0.004);
     for (var tinyIndex = 0; tinyIndex < tinyWaveCount; tinyIndex++) {
       var tinyPhase = t * (1.85 + tinyIndex * 0.22) + tinyIndex * 1.1;
       var tinyPulse = Math.sin(tinyPhase);
-      var tinyRadius = tinyBaseStart + tinyIndex * tinyStep + tinyPulse * (minDim * (0.0025 + tinyDrive * 0.014));
-      var tinyHue = 30 + hueShift + tinyIndex * 22;
-      var tinyAlpha = 0.22 + tinyDrive * 0.52;
+      var tinyInnerRadius = tinyBaseStart + tinyIndex * tinyStep + tinyPulse * (minDim * (0.0032 + tinyDrive * 0.020));
+      var tinyEdgeRadius = tinyOuterEdgeBase + tinyIndex * tinyOuterEdgeStep + tinyPulse * (minDim * (0.004 + tinyEdgeMix * 0.024));
+      var tinyRadius = tinyInnerRadius + (tinyEdgeRadius - tinyInnerRadius) * tinyEdgeMix;
+      var tinyHue = activeTone.h + 6 + tinyIndex * 4;
+      var tinyAlpha = 0.22 + Math.max(tinyDrive, tinyEdgeMix) * 0.52;
 
       ctx.beginPath();
       ctx.arc(centerX, centerY, tinyRadius, 0, Math.PI * 2);
@@ -31709,15 +32210,16 @@ function openAlbum(albumId) {
     var preOuterInnerStep = minDim * 0.024;
     var preOuterOuterStart = minDim * 0.352;
     var preOuterOuterStep = minDim * 0.034;
+    var preOuterVelocityBoost = Math.max(0, Math.min(1, _volumeVelocityLevel * 0.55 + _preOuterBassEnvelope * 0.25));
     for (var preIdx = 0; preIdx < preOuterCount; preIdx++) {
       var prePhase = t * (1.55 + preIdx * 0.16) + preIdx * 1.28;
       var prePulse = Math.sin(prePhase);
-      var preInnerRadius = preOuterInnerStart + preIdx * preOuterInnerStep + prePulse * (minDim * (0.002 + _preOuterBassEnvelope * 0.010));
-      var preOuterRadius = preOuterOuterStart + preIdx * preOuterOuterStep + prePulse * (minDim * (0.003 + _preOuterBassEnvelope * 0.012));
-      var preMix = Math.max(0, Math.min(1, _preOuterBassEnvelope * (0.86 + preIdx * 0.08)));
+      var preInnerRadius = preOuterInnerStart + preIdx * preOuterInnerStep + prePulse * (minDim * (0.0026 + _preOuterBassEnvelope * 0.014));
+      var preOuterRadius = preOuterOuterStart + preIdx * preOuterOuterStep + prePulse * (minDim * (0.004 + _preOuterBassEnvelope * 0.016));
+      var preMix = Math.max(0, Math.min(1, _preOuterBassEnvelope * (0.94 + preIdx * 0.10) + preOuterVelocityBoost * 0.18));
       var preRadius = preInnerRadius + (preOuterRadius - preInnerRadius) * preMix;
-      var preHue = 40 + hueShift + preIdx * 16;
-      var preAlpha = 0.20 + _preOuterBassEnvelope * 0.50;
+      var preHue = activeTone.h + 10 + preIdx * 3;
+      var preAlpha = 0.22 + Math.max(_preOuterBassEnvelope, preOuterVelocityBoost) * 0.56;
 
       ctx.beginPath();
       ctx.arc(centerX, centerY, preRadius, 0, Math.PI * 2);
@@ -31762,9 +32264,22 @@ function openAlbum(albumId) {
     var overlay = getOverlay();
     if (!overlay) return;
     overlay.style.display = 'block';
+    var audio = document.getElementById('playerAudio');
+    if (audio) {
+      audio.muted = false;
+      audio.defaultMuted = false;
+      audio.removeAttribute('muted');
+    }
     setupAudioAnalyser();
     if (_raf) cancelAnimationFrame(_raf);
     drawWaves();
+    setTimeout(function() {
+      var audioEl = document.getElementById('playerAudio');
+      if (!audioEl) return;
+      audioEl.muted = false;
+      audioEl.defaultMuted = false;
+      audioEl.removeAttribute('muted');
+    }, 80);
   };
 
   window.closeCubeVisualizer = function() {
