@@ -644,6 +644,28 @@
       'Prime': { url: 'https://storage.googleapis.com/hertz-music-folder/Prime.wav', title: 'Prime', artist: 'SlattZ', genre: 'hiphop' },
       'Silicon Ghost': { url: 'https://storage.googleapis.com/hertz-music-folder/Silicon%20Ghost.mp3', title: 'Silicon Ghost', artist: 'Beniam TedlAI' },
       'Cha-Ching': { url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', title: 'Cha-Ching', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'FELON': { url: 'https://storage.googleapis.com/hertz-music-folder/Mars%20(2).mp3', title: 'FELON', artist: 'Beniam TedlAI', genre: 'hiphop', lyrics: `they really meant it when they said never meet ya heroes, cos that shit breaks ya heart, i aint met a hero, since i don't have one, last one i had, also called technoking, wanted to see me bleed yea, fuck the piece a shit, he aint done nothin slick, all his workers did, oh uh, uh uh uh uh,
+
+    if ya look to yaselves he don't think much, always there for the talk but never for the thought uh, he wants to go to mars real fast, cos he don't care bout the earth uh uh, wants to die on mars, probs cos he thinksa lightin things up yea, said himself he don't care to be hated, all while holdin a smile on his face, what makes ya think he cares bout the human race, uh
+
+    if ya look to yaselves he don't think much, always there for the talk, never for the thought uh, yea yea. He jus wanna sit back on a camera, while he makes me suffer oh yea, i don give a fuck if he wants me dead, ackin like a bitch, can't do it himself uh
+
+    if ya look to yaselves he don't think much, always there for the talk but never for the thought uh, he wants to go to mars real fast, cos he don't care bout the earth uh uh, wants to die on mars, probs cos he thinksa lightin things up yea, said himself he don't care to be hated, all while holdin a smile on his face, what makes ya think he cares bout the human race, uh
+
+    jus feel it aint right, don't look 4 a hero less ya wanna fight, jus look to build yaself, if ya meet one, might find out, who they really are uh
+
+    if ya seek the glow check out h z streamer on the browser oh yea yea, go wid the flow uh Yea yea aye uh uh uh` },
+  'Dead 2 Me': { url: 'https://storage.googleapis.com/hertz-music-folder/Dead%20to%20Me.mp3', title: 'Dead 2 Me', artist: 'B Flow', genre: 'drill', lyrics: `All the shit i been thru, doesn't make no sense, felt like it was to change me into someone wrecked uh, don't make no sense, all i ever did was try at life, if that what gets you set back behind then fuck what they try i'm abouta ghost em 4 life uh,yea they dead to me dead to me dead to me,  don't give a fuck what they do to try to make me seem free uh.
+
+Shit like dis really makes me mad, been alone at home uh, all my life wid no love at all uh, don't care bout them no more yea, i'm tired of tryin at life uh, been alone all my life n to cop the hate on top of that uh, over nothing's got me mad yea uh uh uh
+
+Sick n tired of how i feel, been smilin as if it's real, yet when i wake up all i feels, the bullshit i had to chew through, all dis shit needa stop, if we live in a clown world, don't want no part in it uh uh yea yea
+
+Shit like dis really makes me mad, been alone at home uh, all my life wid no love at all uh, don't care bout them no more yea, i'm tired of tryin at life uh, been alone all my life n to cop the hate on top of that uh, over nothing's got me mad yea uh uh uh
+
+sicka tryin my best, everytime i feel upset, but can't stop, since the only thing that can help, is to make myself feel known uh
+
+feel known yea` },
       'Sell it': { url: 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', title: 'Sell it', artist: 'B-Flow', genre: 'drill', lyrics: `You wanna deal drugs, fuck that shit, look at makin a biz, make it slick, if ya want ya can think bout it like dis, Time to build is the time to pick up, when ya sell some things from ya biz its like sellin ya shit to some crips uh, why sell drugs when you can do
     this, uh
 
@@ -4986,6 +5008,8 @@ last i checked this is best, specially since it could be real safe`;
                 font-size: 1.5rem;
             }
 
+          }
+
         /* Ensure main content has bottom padding for the bottom nav */
         .main-content {
             padding-bottom: 100px;
@@ -8753,6 +8777,24 @@ last i checked this is best, specially since it could be real safe`;
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('FELON', 'https://storage.googleapis.com/hertz-music-folder/Mars%20(2).mp3', 'FELON', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:music-circle.svg?color=%23ffd700" alt="FELON cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">FELON</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Dead 2 Me', 'https://storage.googleapis.com/hertz-music-folder/Dead%20to%20Me.mp3', 'Dead 2 Me', 'B Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:heart-broken.svg?color=%23ffd700" alt="Dead 2 Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Dead 2 Me</div>
+                    <div class="recent-track-artist">B Flow</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -9940,6 +9982,20 @@ last i checked this is best, specially since it could be real safe`;
             </tr>
           </thead>
           <tbody>
+                <tr class="track-row" onclick="playNewTrack('FELON', 'https://storage.googleapis.com/hertz-music-folder/Mars%20(2).mp3', 'FELON', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-circle.svg?color=%23ffd700" alt="FELON cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">FELON</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Dead 2 Me', 'https://storage.googleapis.com/hertz-music-folder/Dead%20to%20Me.mp3', 'Dead 2 Me', 'B Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:heart-broken.svg?color=%23ffd700" alt="Dead 2 Me cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Dead 2 Me</div><div class="track-artist">B Flow</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <tr class="track-row" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sell it</div><div class="track-artist">B-Flow</div></div></div></td>
@@ -14218,12 +14274,8 @@ p.s I'm Beniam Endale Tedla`;
             <div id="userUsername" style="font-weight:600;"></div>
           </div>
           <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
-            <div style="font-size:0.8rem;color:#a7a7a7;">Name</div>
+            <div style="font-size:0.8rem;color:#a7a7a7;">Name <span style="color:#ffd700;">Enjoy!!!</span></div>
             <div id="userName" style="font-weight:600;"></div>
-          </div>
-          <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
-            <div style="font-size:0.8rem;color:#a7a7a7;">DOB <span style="color:#ffd700;">Enjoy!!!</span></div>
-            <div id="userDob" style="font-weight:600;"></div>
           </div>
           <div style="padding:0.75rem;border-radius:10px;background:rgba(255,255,255,0.02);">
             <div style="font-size:0.8rem;color:#a7a7a7;">Email</div>
@@ -14236,7 +14288,6 @@ p.s I'm Beniam Endale Tedla`;
             <input id="accountEditName" type="text" placeholder="Name" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
             <input id="accountEditUsername" type="text" placeholder="Username" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
             <input id="accountEditEmail" type="email" placeholder="Email" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
-            <input id="accountEditDob" type="date" style="background:#1d1d1d;border:1px solid #3a3a3a;color:#fff;border-radius:10px;padding:0.65rem;outline:none;">
           </div>
           <div style="display:flex;justify-content:flex-end;gap:0.5rem;margin-top:0.8rem;">
             <button class="upload-btn" type="button" onclick="toggleAccountEditMode(false)" style="background:linear-gradient(45deg,#2b2b2b,#1f1f1f);">Cancel</button>
@@ -25472,6 +25523,7 @@ function showGenrePopup(genre) {
 
       const existingAccount = accounts[oldKey] || savedUserData || {};
       const currentLikedTracks = JSON.parse(localStorage.getItem('hertzLikedTracks') || '{}');
+      const preservedDob = existingAccount.dob || savedUserData.dob || localStorage.getItem('hertzUserDOB') || '';
 
       const updatedProfile = {
         ...existingAccount,
@@ -25479,7 +25531,7 @@ function showGenrePopup(genre) {
         name: newName,
         username: newUsername,
         email: newEmail,
-        dob: newDob,
+        dob: dobInput ? newDob : preservedDob,
         likedTracks: existingAccount.likedTracks || currentLikedTracks,
         createdAt: existingAccount.createdAt || savedUserData.createdAt || new Date().toISOString(),
         lastUpdated: new Date().toISOString(),
@@ -25496,9 +25548,9 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzUser', JSON.stringify(updatedProfile));
       localStorage.setItem('hertzUsername', newName);
       localStorage.setItem('hertzUserEmail', newEmail);
-      localStorage.setItem('hertzUserDOB', newDob);
+      localStorage.setItem('hertzUserDOB', updatedProfile.dob || '');
       localStorage.setItem('hertzActiveAccountKey', newKey);
-      refreshAccountDobDisplay(newDob);
+      refreshAccountDobDisplay(updatedProfile.dob || '');
 
       if (shouldNotifyHzForEmail) {
         try {
