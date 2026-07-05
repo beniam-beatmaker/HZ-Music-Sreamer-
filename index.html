@@ -30083,10 +30083,11 @@ function showGenrePopup(genre) {
           starsEnabled = true;
         }
 
-        function drawSunAt(sunX, sunY, sunRadius) {
+        function drawSunAt(sunX, sunY, sunRadius, alphaScale) {
+          const a = Math.max(0, Math.min(1, alphaScale == null ? 1 : alphaScale));
           const core = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.20, sunX, sunY, sunRadius * 1.9);
-          core.addColorStop(0, 'rgba(255,230,150,0.98)');
-          core.addColorStop(0.45, 'rgba(255,192,90,0.95)');
+          core.addColorStop(0, 'rgba(255,230,150,' + (0.98 * a).toFixed(3) + ')');
+          core.addColorStop(0.45, 'rgba(255,192,90,' + (0.95 * a).toFixed(3) + ')');
           core.addColorStop(1, 'rgba(255,170,70,0)');
 
           ctx.fillStyle = core;
@@ -30094,7 +30095,7 @@ function showGenrePopup(genre) {
           ctx.arc(sunX, sunY, sunRadius * 1.9, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = 'rgba(255,210,110,0.98)';
+          ctx.fillStyle = 'rgba(255,210,110,' + (0.98 * a).toFixed(3) + ')';
           ctx.beginPath();
           ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
           ctx.fill();
@@ -30111,8 +30112,12 @@ function showGenrePopup(genre) {
           const prosperPhase = (performance.now() * 0.001) % 24;
           const prosperProgress = prosperPhase / 24;
           const sunX = (centerX - edgeR) + (edgeR * 2 * prosperProgress);
-          const sunY = centerY - edgeR * 0.06;
-          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036));
+          const dx = sunX - centerX;
+          const sunY = centerY - Math.sqrt(Math.max(0, edgeR * edgeR - dx * dx));
+          const prosperFadeIn = Math.max(0, Math.min(1, prosperProgress / 0.14));
+          const prosperFadeOut = Math.max(0, Math.min(1, (1 - prosperProgress) / 0.14));
+          const prosperAlpha = Math.min(prosperFadeIn, prosperFadeOut);
+          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), prosperAlpha);
           ctx.restore();
           return;
         }
@@ -30123,9 +30128,12 @@ function showGenrePopup(genre) {
           const morningPhase = (performance.now() * 0.001) % 28;
           const morningProgress = morningPhase / 28;
           const sunX = (centerX + edgeR) - (edgeR * 2 * morningProgress);
-          const riseCurve = Math.sin(morningProgress * Math.PI);
-          const sunY = centerY + edgeR * 0.34 - riseCurve * edgeR * 0.62;
-          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036));
+          const dx = sunX - centerX;
+          const sunY = centerY - Math.sqrt(Math.max(0, edgeR * edgeR - dx * dx));
+          const morningFadeIn = Math.max(0, Math.min(1, morningProgress / 0.14));
+          const morningFadeOut = Math.max(0, Math.min(1, (1 - morningProgress) / 0.14));
+          const morningAlpha = Math.min(morningFadeIn, morningFadeOut);
+          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), morningAlpha);
           ctx.restore();
           return;
         }
