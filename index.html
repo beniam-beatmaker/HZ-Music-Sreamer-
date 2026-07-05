@@ -16297,6 +16297,13 @@ function showGenrePopup(genre) {
         setTimeout(restorePopupAudioGuardIfNeeded, 80);
         setTimeout(restorePopupAudioGuardIfNeeded, 260);
       }
+      if (currentlyVisible) {
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        } else {
+          enforceSettingsAudioUnmuted();
+        }
+      }
       popupAudioGuardPrevVisible = currentlyVisible;
     }
 
@@ -30061,17 +30068,69 @@ function showGenrePopup(genre) {
         ctx.fill();
 
         const greetingElement = document.getElementById('greetingText');
+        const greetingText = greetingElement && greetingElement.textContent ? greetingElement.textContent.trim() : '';
         const nowHour = new Date().getHours();
         const isNightByClock = !(nowHour >= 5 && nowHour < 18);
-        const isNightByLabel = !!(greetingElement && greetingElement.textContent && greetingElement.textContent.trim() === 'Good Night');
+        const isNightByLabel = greetingText === 'Good Night';
         const isNightGreetingActive = isNightByClock || isNightByLabel;
+        const isProsperGreetingActive = greetingText === 'Prosper' || (nowHour >= 12 && nowHour < 18);
+        const isMorningGreetingActive = greetingText === 'Good Morning' || (nowHour >= 5 && nowHour < 12);
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
         let starCyclePhase = 0;
         let starsEnabled = false;
         if (isNightGreetingActive) {
-          starCyclePhase = (performance.now() * 0.001) % 12;
+          starCyclePhase = (performance.now() * 0.001) % 13;
           starsEnabled = true;
         }
+
+        function drawSunAt(sunX, sunY, sunRadius) {
+          const core = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.20, sunX, sunY, sunRadius * 1.9);
+          core.addColorStop(0, 'rgba(255,230,150,0.98)');
+          core.addColorStop(0.45, 'rgba(255,192,90,0.95)');
+          core.addColorStop(1, 'rgba(255,170,70,0)');
+
+          ctx.fillStyle = core;
+          ctx.beginPath();
+          ctx.arc(sunX, sunY, sunRadius * 1.9, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(255,210,110,0.98)';
+          ctx.beginPath();
+          ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, circleR * 0.985, 0, Math.PI * 2);
+        ctx.clip();
+
+        if (isProsperGreetingActive && !isNightGreetingActive) {
+          // Prosper: same directional travel style as stars (left -> right), but slow.
+          const edgeR = circleR * 0.88;
+          const prosperPhase = (performance.now() * 0.001) % 24;
+          const prosperProgress = prosperPhase / 24;
+          const sunX = (centerX - edgeR) + (edgeR * 2 * prosperProgress);
+          const sunY = centerY - edgeR * 0.06;
+          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036));
+          ctx.restore();
+          return;
+        }
+
+        if (isMorningGreetingActive && !isNightGreetingActive) {
+          // Morning: slow sunrise arc from east to west.
+          const edgeR = circleR * 0.88;
+          const morningPhase = (performance.now() * 0.001) % 28;
+          const morningProgress = morningPhase / 28;
+          const sunX = (centerX + edgeR) - (edgeR * 2 * morningProgress);
+          const riseCurve = Math.sin(morningProgress * Math.PI);
+          const sunY = centerY + edgeR * 0.34 - riseCurve * edgeR * 0.62;
+          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036));
+          ctx.restore();
+          return;
+        }
+
+        ctx.restore();
 
         if (!starsEnabled) return;
 
