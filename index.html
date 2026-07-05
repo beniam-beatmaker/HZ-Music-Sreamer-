@@ -666,7 +666,7 @@ Shit like dis really makes me mad, been alone at home uh, all my life wid no lov
 sicka tryin my best, everytime i feel upset, but can't stop, since the only thing that can help, is to make myself feel known uh
 
 feel known yea` },
-      'Sell it': { url: 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', title: 'Sell it', artist: 'B-Flow', genre: 'drill', lyrics: `You wanna deal drugs, fuck that shit, look at makin a biz, make it slick, if ya want ya can think bout it like dis, Time to build is the time to pick up, when ya sell some things from ya biz its like sellin ya shit to some crips uh, why sell drugs when you can do
+      'Sell it': { url: 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', title: 'Sell it', artist: 'B-Flow, MK-Bobley', genre: 'drill', lyrics: `You wanna deal drugs, fuck that shit, look at makin a biz, make it slick, if ya want ya can think bout it like dis, Time to build is the time to pick up, when ya sell some things from ya biz its like sellin ya shit to some crips uh, why sell drugs when you can do
     this, uh
 
     Sales in the streets n sales on the net, they the same shit, give the people what they want n, you can see em dancin as they walk away, happy to get what they want, only diffs the fact that it aint wrong, uh, with a biz you can sell to many more, steada lookin 4 some peeps who wanna smoke uh build a biz real fuckin quick least then you won't have to get time from sellin shit uh
@@ -8814,11 +8814,11 @@ last i checked this is best, specially since it could be real safe`;
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
                 </div>
-                <div class="recent-track-item" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <div class="recent-track-item" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow, MK-Bobley');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
                     <div class="recent-track-name">Sell it</div>
-                    <div class="recent-track-artist">B-Flow</div>
+                    <div class="recent-track-artist">B-Flow, MK-Bobley</div>
                   </div>
                   <div class="recent-track-time">Just now</div>
                   <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
@@ -10015,9 +10015,9 @@ last i checked this is best, specially since it could be real safe`;
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <tr class="track-row" onclick="playNewTrack('Sell it', 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3', 'Sell it', 'B-Flow, MK-Bobley');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
-                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sell it</div><div class="track-artist">B-Flow</div></div></div></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:cash-fast.svg?color=%23ffd700" alt="Sell it cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Sell it</div><div class="track-artist">B-Flow, MK-Bobley</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
                   <td><div class="track-duration">3:20</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
@@ -16276,6 +16276,10 @@ function showGenrePopup(genre) {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
 
+      if (typeof lockStickyPlayerMuteState === 'function') {
+        lockStickyPlayerMuteState();
+      }
+
       // Never override intentional mute/zero-volume states from before popup open.
       if (!popupAudioGuardSnapshot.wasMuted && audio.muted) {
         audio.muted = false;
@@ -16293,11 +16297,17 @@ function showGenrePopup(genre) {
     function monitorPopupAudioGuard() {
       const currentlyVisible = isAnyPopupVisible();
       if (currentlyVisible && !popupAudioGuardPrevVisible) {
+        if (typeof lockStickyPlayerMuteState === 'function') {
+          lockStickyPlayerMuteState();
+        }
         armPopupAudioGuardSnapshot();
         setTimeout(restorePopupAudioGuardIfNeeded, 80);
         setTimeout(restorePopupAudioGuardIfNeeded, 260);
       }
       if (currentlyVisible) {
+        if (typeof lockStickyPlayerMuteState === 'function') {
+          lockStickyPlayerMuteState();
+        }
         if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
           enforceGlobalStickyPlayerUnmute();
         } else {
@@ -16310,6 +16320,38 @@ function showGenrePopup(genre) {
     if (!window.__hzPopupAudioGuardInterval) {
       window.__hzPopupAudioGuardInterval = setInterval(monitorPopupAudioGuard, 180);
       monitorPopupAudioGuard();
+    }
+
+    function enforcePopupStickyPlayerAudioLock() {
+      if (!isAnyPopupVisible()) return;
+      if (typeof lockStickyPlayerMuteState === 'function') {
+        lockStickyPlayerMuteState();
+      }
+      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+        enforceGlobalStickyPlayerUnmute();
+      } else {
+        enforceSettingsAudioUnmuted();
+      }
+    }
+
+    function startMobilePopupAudioGuardListeners() {
+      if (window.__hzMobilePopupAudioGuardBound) return;
+
+      var mobileGuardHandler = function() {
+        enforcePopupStickyPlayerAudioLock();
+      };
+
+      ['touchstart', 'touchend', 'pointerdown'].forEach(function(eventName) {
+        document.addEventListener(eventName, mobileGuardHandler, { passive: true });
+      });
+      document.addEventListener('visibilitychange', mobileGuardHandler);
+      window.addEventListener('focus', mobileGuardHandler);
+      window.addEventListener('pageshow', mobileGuardHandler);
+      window.addEventListener('orientationchange', mobileGuardHandler);
+      window.addEventListener('resize', mobileGuardHandler);
+
+      window.__hzMobilePopupAudioGuardBound = true;
+      window.__hzMobilePopupAudioGuardHandler = mobileGuardHandler;
     }
 
     function openLikedPage() {
@@ -16582,9 +16624,11 @@ function showGenrePopup(genre) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', startSettingsAudioGuard);
       document.addEventListener('DOMContentLoaded', startGlobalStickyPlayerUnmuteGuard);
+      document.addEventListener('DOMContentLoaded', startMobilePopupAudioGuardListeners);
     } else {
       startSettingsAudioGuard();
       startGlobalStickyPlayerUnmuteGuard();
+      startMobilePopupAudioGuardListeners();
     }
 
     // App Selection Popup Functions
@@ -30911,7 +30955,7 @@ function openGenrePlaylist(genre) {
     const drillOnly = [
       {
         title: 'Sell it',
-        artist: 'B-Flow',
+        artist: 'B-Flow, MK-Bobley',
         url: 'https://storage.googleapis.com/hertz-music-folder/Salesman%20(2).mp3',
         genre: 'drill',
         duration: '3:20'
