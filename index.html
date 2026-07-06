@@ -16470,6 +16470,16 @@ function showGenrePopup(genre) {
           enforceSettingsAudioUnmuted();
         }
       }
+      if (!currentlyVisible && popupAudioGuardPrevVisible) {
+        if (typeof lockStickyPlayerMuteState === 'function') {
+          lockStickyPlayerMuteState();
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        } else {
+          enforceSettingsAudioUnmuted();
+        }
+      }
       popupAudioGuardPrevVisible = currentlyVisible;
     }
 
@@ -16743,20 +16753,37 @@ function showGenrePopup(genre) {
       lockStickyPlayerMuteState();
       enforceGlobalStickyPlayerUnmute();
 
-      const audio = document.getElementById('playerAudio');
-      if (audio && !window.__hzGlobalStickyUnmuteGuardBound) {
-        const hardGuardHandler = function() {
-          enforceGlobalStickyPlayerUnmute();
-        };
-        audio.addEventListener('volumechange', hardGuardHandler);
-        audio.addEventListener('play', hardGuardHandler);
-        audio.addEventListener('canplay', hardGuardHandler);
-        audio.addEventListener('loadedmetadata', hardGuardHandler);
-        window.__hzGlobalStickyUnmuteGuardBound = true;
-        window.__hzGlobalStickyUnmuteGuardHandler = hardGuardHandler;
-      }
+      const bindGlobalStickyUnmuteListeners = function(audioEl) {
+        if (!audioEl) return;
+
+        const existingHandler = window.__hzGlobalStickyUnmuteGuardHandler;
+        const previousTarget = window.__hzGlobalStickyUnmuteGuardTarget;
+        if (previousTarget && existingHandler && previousTarget !== audioEl) {
+          previousTarget.removeEventListener('volumechange', existingHandler);
+          previousTarget.removeEventListener('play', existingHandler);
+          previousTarget.removeEventListener('canplay', existingHandler);
+          previousTarget.removeEventListener('loadedmetadata', existingHandler);
+          previousTarget.removeEventListener('ended', existingHandler);
+        }
+
+        if (!existingHandler || previousTarget !== audioEl) {
+          const hardGuardHandler = existingHandler || function() {
+            enforceGlobalStickyPlayerUnmute();
+          };
+          audioEl.addEventListener('volumechange', hardGuardHandler);
+          audioEl.addEventListener('play', hardGuardHandler);
+          audioEl.addEventListener('canplay', hardGuardHandler);
+          audioEl.addEventListener('loadedmetadata', hardGuardHandler);
+          audioEl.addEventListener('ended', hardGuardHandler);
+          window.__hzGlobalStickyUnmuteGuardHandler = hardGuardHandler;
+          window.__hzGlobalStickyUnmuteGuardTarget = audioEl;
+        }
+      };
+
+      bindGlobalStickyUnmuteListeners(document.getElementById('playerAudio'));
 
       window.__hzGlobalStickyUnmuteGuardInterval = setInterval(function() {
+        bindGlobalStickyUnmuteListeners(document.getElementById('playerAudio'));
         enforceGlobalStickyPlayerUnmute();
       }, 120);
     }
