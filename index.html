@@ -6024,11 +6024,10 @@ last i checked this is best, specially since it could be real safe`;
         radial-gradient(circle at 38% 47%, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0.07) 26%, rgba(0, 0, 0, 0) 49%),
         radial-gradient(circle at 62% 53%, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.09) 28%, rgba(0, 0, 0, 0) 52%),
         conic-gradient(from 8deg at 50% 50%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.2)),
-        repeating-conic-gradient(from 14deg at 50% 50%, rgba(255, 255, 255, 0.14) 0deg 0.7deg, rgba(255, 255, 255, 0) 0.7deg 7deg),
         repeating-conic-gradient(from 9deg at 50% 50%, rgba(17, 14, 32, 0.46) 0deg 1.2deg, rgba(17, 14, 32, 0) 1.2deg 6.8deg),
         radial-gradient(ellipse at 50% 50%, rgba(5, 2, 14, 0) 55%, rgba(5, 2, 14, 0.58) 100%);
-      background-size: 100% 100%, 100% 100%, 86% 82%, 84% 82%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-      background-position: 50% 50%, 50% 50%, 37% 47%, 63% 53%, 50% 50%, 50% 50%, 50% 50%, 50% 50%;
+      background-size: 100% 100%, 100% 100%, 86% 82%, 84% 82%, 100% 100%, 100% 100%, 100% 100%;
+      background-position: 50% 50%, 50% 50%, 37% 47%, 63% 53%, 50% 50%, 50% 50%, 50% 50%;
       filter: blur(2px) saturate(1.14) contrast(1.04) brightness(0.6);
       opacity: 1;
       mix-blend-mode: normal;
@@ -6047,13 +6046,7 @@ last i checked this is best, specially since it could be real safe`;
       border-radius: 50%;
       transform: translate(-50%, -50%);
       background:
-        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0 3.2%, rgba(0, 0, 0, 0.26) 3.2% 5.4%, rgba(0, 0, 0, 0.14) 5.4% 7.6%, rgba(0, 0, 0, 0) 11%),
-        radial-gradient(circle at 28% 62%, rgba(255, 255, 255, 0.88) 0 0.9px, rgba(255, 255, 255, 0) 1.3px),
-        radial-gradient(circle at 44% 35%, rgba(255, 255, 255, 0.96) 0 0.8px, rgba(255, 255, 255, 0) 1.2px),
-        radial-gradient(circle at 56% 24%, rgba(255, 255, 255, 0.92) 0 0.9px, rgba(255, 255, 255, 0) 1.3px),
-        radial-gradient(circle at 68% 71%, rgba(255, 255, 255, 0.94) 0 0.8px, rgba(255, 255, 255, 0) 1.2px),
-        radial-gradient(circle at 73% 16%, rgba(255, 255, 255, 0.82) 0 0.7px, rgba(255, 255, 255, 0) 1.1px),
-        radial-gradient(circle at 22% 84%, rgba(255, 255, 255, 0.82) 0 0.7px, rgba(255, 255, 255, 0) 1.1px);
+        radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 1) 0 3.2%, rgba(0, 0, 0, 0.26) 3.2% 5.4%, rgba(0, 0, 0, 0.14) 5.4% 7.6%, rgba(0, 0, 0, 0) 11%);
       filter: blur(0.35px) brightness(0.66);
       opacity: 0.82;
       mix-blend-mode: screen;
@@ -8901,21 +8894,11 @@ last i checked this is best, specially since it could be real safe`;
                 <input id="payCardName" type="text" autocomplete="cc-name" required>
               </div>
               <div>
-                <label for="payCardNumberInput">Card Number</label>
-                <input id="payCardNumberInput" type="text" inputmode="numeric" autocomplete="cc-number" maxlength="23" placeholder="1234 5678 9012 3456" required>
-              </div>
-              <div class="pay-row">
-                <div>
-                  <label for="payCardExpiry">Expiry (MM/YY)</label>
-                  <input id="payCardExpiry" type="text" inputmode="numeric" autocomplete="cc-exp" maxlength="5" placeholder="11/29" required>
-                </div>
-                <div>
-                  <label for="payCardCvc">CVC</label>
-                  <input id="payCardCvc" type="password" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" required>
-                </div>
+                <label for="paymentCardElement">Card details</label>
+                <div id="paymentCardElement" class="pay-stripe-element" aria-label="Secure card entry"></div>
               </div>
               <div id="payCardStripeError" class="pay-stripe-error" aria-live="polite"></div>
-              <div class="pay-note">For security, card PINs are never collected in online checkout forms.</div>
+              <div class="pay-note">Stripe securely handles the card details. Hertz never receives the full card number.</div>
               <div class="pay-actions">
                 <button type="button" class="pay-btn pay-btn-secondary" id="backToCurrencyBtn">Back</button>
                 <button type="submit" class="pay-btn pay-btn-primary">Start Subscription</button>
@@ -16725,8 +16708,13 @@ function showGenrePopup(genre) {
           }
           try { a.muted = false; } catch (e) {}
           try { a.defaultMuted = false; } catch (e) {}
+          if (Number(a.volume || 0) <= 0.0001) {
+            const savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
+            const safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
+            a.volume = Math.max(0.05, Math.min(1, safePercent / 100));
+          }
         });
-        window.__hzStickyMuteObserver.observe(audio, { attributes: true, attributeFilter: ['muted'] });
+        window.__hzStickyMuteObserver.observe(audio, { attributes: true, attributeFilter: ['muted', 'src'] });
         window.__hzStickyMuteObserverTarget = audio;
       }
     }
@@ -16761,6 +16749,10 @@ function showGenrePopup(genre) {
         if (previousTarget && existingHandler && previousTarget !== audioEl) {
           previousTarget.removeEventListener('volumechange', existingHandler);
           previousTarget.removeEventListener('play', existingHandler);
+          previousTarget.removeEventListener('playing', existingHandler);
+          previousTarget.removeEventListener('timeupdate', existingHandler);
+          previousTarget.removeEventListener('loadstart', existingHandler);
+          previousTarget.removeEventListener('loadeddata', existingHandler);
           previousTarget.removeEventListener('canplay', existingHandler);
           previousTarget.removeEventListener('loadedmetadata', existingHandler);
           previousTarget.removeEventListener('ended', existingHandler);
@@ -16772,6 +16764,10 @@ function showGenrePopup(genre) {
           };
           audioEl.addEventListener('volumechange', hardGuardHandler);
           audioEl.addEventListener('play', hardGuardHandler);
+          audioEl.addEventListener('playing', hardGuardHandler);
+          audioEl.addEventListener('timeupdate', hardGuardHandler);
+          audioEl.addEventListener('loadstart', hardGuardHandler);
+          audioEl.addEventListener('loadeddata', hardGuardHandler);
           audioEl.addEventListener('canplay', hardGuardHandler);
           audioEl.addEventListener('loadedmetadata', hardGuardHandler);
           audioEl.addEventListener('ended', hardGuardHandler);
@@ -26106,7 +26102,7 @@ function showGenrePopup(genre) {
 
     const PAYMENT_BASE_USD = 4.99;
     const PAYMENT_CURRENCIES = [
-      { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', rate: 1, decimals: 2 },
+      { code: 'AUD', name: 'Australian Dollar', symbol: 'A$', rate: 1.013, decimals: 2 },
       { code: 'USD', name: 'US Dollar', symbol: '$', rate: 0.66, decimals: 2 },
       { code: 'EUR', name: 'Euro', symbol: 'EUR ', rate: 0.61, decimals: 2 },
       { code: 'GBP', name: 'British Pound', symbol: 'GBP ', rate: 0.52, decimals: 2 },
@@ -26310,12 +26306,21 @@ function showGenrePopup(genre) {
 
       if (
         normalizedEventType.includes('payment_succeeded') ||
+        normalizedEventType.includes('invoice.payment_succeeded') ||
         normalizedEventType.includes('invoice.paid') ||
+        normalizedEventType.includes('checkout.session.completed') ||
+        normalizedEventType.includes('customer.session.completed') ||
         normalizedEventType.includes('subscription_active')
       ) {
+        const shouldFinalize = window.__hzSubscriptionActivationPending === true || (localStorage.getItem('hertzSubscriptionBackendState') || '') === 'pending';
         localStorage.setItem('hertzSubscriptionBackendState', 'active');
         localStorage.removeItem('hertzSubscriptionCanceledAt');
         localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
+
+        if (shouldFinalize && typeof window.finalizeSubscriptionActivation === 'function') {
+          window.finalizeSubscriptionActivation(payload && payload.subscriptionId ? String(payload.subscriptionId) : null);
+          return;
+        }
       } else if (
         normalizedEventType.includes('payment_failed') ||
         normalizedEventType.includes('invoice.payment_failed')
@@ -26324,6 +26329,7 @@ function showGenrePopup(genre) {
       } else if (
         normalizedEventType.includes('subscription_deleted') ||
         normalizedEventType.includes('subscription.canceled') ||
+        normalizedEventType.includes('customer-subscription.deleted') ||
         normalizedEventType.includes('customer.subscription.deleted')
       ) {
         localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
@@ -26557,8 +26563,8 @@ function showGenrePopup(genre) {
 
       popup.innerHTML =
         '<div style="min-width:250px;max-width:86vw;background:#141414;border:1px solid rgba(29,185,84,0.45);border-radius:16px;padding:22px 18px;text-align:center;box-shadow:0 18px 42px rgba(0,0,0,0.45);">' +
-          '<div style="font-size:3.2rem;line-height:1;color:#1db954;margin-bottom:10px;">✓</div>' +
-          '<div style="font-size:1.05rem;font-weight:700;color:#eaf8ef;letter-spacing:0.02em;">Subscription Started</div>' +
+          '<div style="font-size:3.5rem;line-height:1;color:#1db954;margin-bottom:10px;">✓</div>' +
+          '<div style="font-size:1.06rem;font-weight:800;color:#eaf8ef;letter-spacing:0.02em;">Enjoy it Premium!!!</div>' +
         '</div>';
 
       popup.addEventListener('click', function() {
@@ -26571,12 +26577,45 @@ function showGenrePopup(genre) {
       }, 1800);
     }
 
+    function finalizeSubscriptionActivation(subscriptionId) {
+      const pendingCurrency = localStorage.getItem('hertzSubscriptionPendingCurrency') || localStorage.getItem('hertzSubscriptionCurrency') || '';
+      const pendingAmountUsd = localStorage.getItem('hertzSubscriptionPendingAmountUsd') || String(PAYMENT_BASE_USD);
+      const pendingStartedAt = localStorage.getItem('hertzSubscriptionPendingStartedAt') || new Date().toISOString();
+
+      localStorage.setItem('hertzSubscriptionPlan', 'monthly');
+      if (pendingCurrency) {
+        localStorage.setItem('hertzSubscriptionCurrency', pendingCurrency);
+      }
+      localStorage.setItem('hertzSubscriptionAmountUsd', pendingAmountUsd);
+      localStorage.setItem('hertzSubscriptionStartedAt', pendingStartedAt);
+      localStorage.removeItem('hertzSubscriptionCanceledAt');
+      localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
+      localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
+      localStorage.setItem('hertzSubscriptionBackendState', 'active');
+      if (subscriptionId) {
+        localStorage.setItem('hertzSubscriptionId', String(subscriptionId));
+      }
+
+      localStorage.removeItem('hertzSubscriptionPendingCurrency');
+      localStorage.removeItem('hertzSubscriptionPendingAmountUsd');
+      localStorage.removeItem('hertzSubscriptionPendingStartedAt');
+      window.__hzSubscriptionActivationPending = false;
+
+      showSubscriptionStartedPopup();
+      refreshSubscriptionActionState();
+      startSubscriptionReminderScheduler();
+      startSubscriptionWebhookSync();
+    }
+
     (function initPaymentPopupFlow() {
       if (window.__paymentPopupFlowInitialized) return;
       window.__paymentPopupFlowInitialized = true;
 
       let stripeInstance = null;
+      let stripeElementsInstance = null;
+      let stripeCardElement = null;
       let submittingSubscription = false;
+      window.__hzSubscriptionActivationPending = false;
 
       const currencyOverlay = getPaymentCurrencyOverlay();
       const cardOverlay = getPaymentCardOverlay();
@@ -26585,9 +26624,7 @@ function showGenrePopup(genre) {
       const backBtn = document.getElementById('backToCurrencyBtn');
       const cardForm = document.getElementById('paymentCardForm');
       const cardNameInput = document.getElementById('payCardName');
-      const cardNumberInput = document.getElementById('payCardNumberInput');
-      const cardExpiryInput = document.getElementById('payCardExpiry');
-      const cardCvcInput = document.getElementById('payCardCvc');
+      const paymentCardElementMount = document.getElementById('paymentCardElement');
       const stripeErrorEl = document.getElementById('payCardStripeError');
       const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
       const submitButton = cardForm ? cardForm.querySelector('button[type="submit"]') : null;
@@ -26596,6 +26633,48 @@ function showGenrePopup(genre) {
         if (stripeErrorEl) {
           stripeErrorEl.textContent = message || '';
         }
+      }
+
+      async function ensureStripeCardElement() {
+        if (stripeCardElement) return stripeCardElement;
+
+        stripeInstance = stripeInstance || await getStripeClient();
+        stripeElementsInstance = stripeElementsInstance || stripeInstance.elements({ locale: 'auto' });
+
+        stripeCardElement = stripeElementsInstance.create('card', {
+          hidePostalCode: true,
+          style: {
+            base: {
+              color: '#ffffff',
+              fontFamily: 'inherit',
+              fontSize: '16px',
+              iconColor: '#ffffff',
+              '::placeholder': {
+                color: 'rgba(255,255,255,0.45)'
+              }
+            },
+            invalid: {
+              color: '#ffb0b0',
+              iconColor: '#ffb0b0'
+            }
+          }
+        });
+
+        stripeCardElement.on('change', function(event) {
+          if (event.error) {
+            setStripeError(event.error.message || 'Please check your card details.');
+          } else if (stripeErrorEl && stripeErrorEl.textContent) {
+            setStripeError('');
+          }
+
+          if (paymentCardElementMount) {
+            paymentCardElementMount.classList.toggle('pay-stripe-element--invalid', !!event.error);
+            paymentCardElementMount.classList.toggle('pay-stripe-element--focus', !!event.complete || !!event.focus);
+          }
+        });
+
+        stripeCardElement.mount('#paymentCardElement');
+        return stripeCardElement;
       }
 
       function withTimeout(promise, timeoutMs, timeoutMessage) {
@@ -26650,25 +26729,10 @@ function showGenrePopup(genre) {
         });
       }
 
-      if (cardNumberInput) {
-        cardNumberInput.addEventListener('input', function() {
-          const digits = this.value.replace(/\D/g, '').slice(0, 19);
-          this.value = digits.replace(/(.{4})/g, '$1 ').trim();
-        });
-      }
-
-      if (cardExpiryInput) {
-        cardExpiryInput.addEventListener('input', function() {
-          const digits = this.value.replace(/\D/g, '').slice(0, 4);
-          this.value = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
-        });
-      }
-
-      if (cardCvcInput) {
-        cardCvcInput.addEventListener('input', function() {
-          this.value = this.value.replace(/\D/g, '').slice(0, 4);
-        });
-      }
+      ensureStripeCardElement().catch(function(err) {
+        console.warn('Unable to mount Stripe Card Element:', err);
+        setStripeError('Unable to load secure card entry. Please reload and try again.');
+      });
 
       if (cardForm) {
         cardForm.addEventListener('submit', async function(e) {
@@ -26689,22 +26753,10 @@ function showGenrePopup(genre) {
             return;
           }
 
-          const cardDigits = (cardNumberInput && cardNumberInput.value ? cardNumberInput.value : '').replace(/\D/g, '');
-          const expiryRaw = cardExpiryInput && cardExpiryInput.value ? cardExpiryInput.value.trim() : '';
-          const cvcRaw = cardCvcInput && cardCvcInput.value ? cardCvcInput.value.trim() : '';
-
-          if (cardDigits.length < 12 || expiryRaw.length < 4 || cvcRaw.length < 3) {
-            setStripeError('Please enter valid card number, expiry, and CVC.');
-            return;
-          }
-
-          const expiryParts = expiryRaw.split('/');
-          const expMonth = Number(expiryParts[0]);
-          const expYearTwoDigit = Number(expiryParts[1]);
-          const expYear = expYearTwoDigit < 100 ? 2000 + expYearTwoDigit : expYearTwoDigit;
-
-          if (!expMonth || expMonth < 1 || expMonth > 12 || !expYear || Number.isNaN(expYear)) {
-            setStripeError('Please enter a valid expiry date in MM/YY format.');
+          try {
+            await ensureStripeCardElement();
+          } catch (elementError) {
+            setStripeError((elementError && elementError.message) || 'Unable to load secure card entry.');
             return;
           }
 
@@ -26718,12 +26770,7 @@ function showGenrePopup(genre) {
             paymentMethodResult = await withTimeout(
               stripeInstance.createPaymentMethod({
                 type: 'card',
-                card: {
-                  number: cardDigits,
-                  exp_month: expMonth,
-                  exp_year: expYear,
-                  cvc: cvcRaw
-                },
+                card: stripeCardElement,
                 billing_details: {
                   name: name
                 }
@@ -26743,13 +26790,6 @@ function showGenrePopup(genre) {
           }
 
           const paymentMethodId = paymentMethodResult.paymentMethod.id;
-          const last4 = (((paymentMethodResult.paymentMethod || {}).card || {}).last4) || '';
-          const pmExpMonth = (((paymentMethodResult.paymentMethod || {}).card || {}).exp_month) || '';
-          const pmExpYear = (((paymentMethodResult.paymentMethod || {}).card || {}).exp_year) || '';
-          const expiryLabel = pmExpMonth && pmExpYear
-            ? String(pmExpMonth).padStart(2, '0') + '/' + String(pmExpYear).slice(-2)
-            : '';
-
           const amountDisplay = formatPaymentAmount(selectedPaymentCurrency);
           const subscriptionPayload = {
             plan: 'monthly',
@@ -26765,14 +26805,20 @@ function showGenrePopup(genre) {
             paymentMethod: {
               provider: 'stripe',
               stripePaymentMethodId: paymentMethodId,
-              cardLast4: last4,
-              expiry: expiryLabel
+              cardLast4: (((paymentMethodResult.paymentMethod || {}).card || {}).last4) || '',
+              expiry: (((paymentMethodResult.paymentMethod || {}).card || {}).exp_month) && (((paymentMethodResult.paymentMethod || {}).card || {}).exp_year)
+                ? String(((paymentMethodResult.paymentMethod || {}).card || {}).exp_month).padStart(2, '0') + '/' + String(((paymentMethodResult.paymentMethod || {}).card || {}).exp_year).slice(-2)
+                : ''
             },
             source: 'hertz-subscription-popup',
             createdAt: new Date().toISOString()
           };
 
           localStorage.setItem('hertzSubscriptionBackendState', 'pending');
+          localStorage.setItem('hertzSubscriptionPendingCurrency', selectedPaymentCurrency.code);
+          localStorage.setItem('hertzSubscriptionPendingAmountUsd', String(PAYMENT_BASE_USD));
+          localStorage.setItem('hertzSubscriptionPendingStartedAt', new Date().toISOString());
+          window.__hzSubscriptionActivationPending = true;
 
           // Finish backend activation asynchronously so UI flow remains instant.
           withTimeout(
@@ -26802,28 +26848,22 @@ function showGenrePopup(genre) {
               });
             })
             .then(function(backendResponse) {
-              localStorage.setItem('hertzSubscriptionPlan', 'monthly');
-              localStorage.setItem('hertzSubscriptionCurrency', selectedPaymentCurrency.code);
-              localStorage.setItem('hertzSubscriptionAmountUsd', String(PAYMENT_BASE_USD));
-              localStorage.setItem('hertzSubscriptionStartedAt', new Date().toISOString());
-              localStorage.removeItem('hertzSubscriptionCanceledAt');
-              localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
-              localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
-              localStorage.setItem('hertzSubscriptionBackendState', 'active');
-              if (backendResponse && backendResponse.subscriptionId) {
-                localStorage.setItem('hertzSubscriptionId', String(backendResponse.subscriptionId));
+              if (backendResponse && backendResponse.status === 'active') {
+                finalizeSubscriptionActivation(backendResponse.subscriptionId || null);
+                return backendResponse;
               }
 
-              cardForm.reset();
               closePaymentCardPopup();
-              showSubscriptionStartedPopup();
-              refreshSubscriptionActionState();
-              startSubscriptionReminderScheduler();
+              cardForm.reset();
               startSubscriptionWebhookSync();
               return backendResponse;
             })
             .catch(function(err) {
               localStorage.setItem('hertzSubscriptionBackendState', 'pending');
+              window.__hzSubscriptionActivationPending = false;
+              localStorage.removeItem('hertzSubscriptionPendingCurrency');
+              localStorage.removeItem('hertzSubscriptionPendingAmountUsd');
+              localStorage.removeItem('hertzSubscriptionPendingStartedAt');
               setStripeError((err && err.message) ? err.message : 'Subscription could not be started. Please check details and try again.');
               console.warn('Subscription backend start failed:', err);
             })
@@ -30416,7 +30456,7 @@ function showGenrePopup(genre) {
       if (!canvas) return;
 
       let rafId = null;
-      const ROUND_TWINKLE_STAR_COUNT = 300;
+      const ROUND_TWINKLE_STAR_COUNT = 0;
 
       function seededRandomFactory(seed) {
         let state = seed >>> 0;
@@ -30497,28 +30537,29 @@ function showGenrePopup(genre) {
         const isProsperGreetingActive = greetingText === 'Prosper' || (nowHour >= 12 && nowHour < 18);
         const isMorningGreetingActive = greetingText === 'Good Morning' || (nowHour >= 5 && nowHour < 12);
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
-        let starCyclePhase = 0;
-        let starsEnabled = false;
-        if (isNightGreetingActive) {
-          starCyclePhase = (performance.now() * 0.001) % 13;
-          starsEnabled = true;
-        }
+        const starCyclePhase = (performance.now() * 0.001) % 6;
+        const starsEnabled = true;
 
         function drawSunAt(sunX, sunY, sunRadius, alphaScale) {
           const a = Math.max(0, Math.min(1, alphaScale == null ? 1 : alphaScale));
           const core = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.20, sunX, sunY, sunRadius * 1.9);
-          core.addColorStop(0, 'rgba(255,230,150,' + (0.98 * a).toFixed(3) + ')');
-          core.addColorStop(0.45, 'rgba(255,192,90,' + (0.95 * a).toFixed(3) + ')');
-          core.addColorStop(1, 'rgba(255,170,70,0)');
+          core.addColorStop(0, 'rgba(255,245,190,' + (1.00 * a).toFixed(3) + ')');
+          core.addColorStop(0.40, 'rgba(255,214,118,' + (0.98 * a).toFixed(3) + ')');
+          core.addColorStop(1, 'rgba(255,182,80,' + (0.10 * a).toFixed(3) + ')');
 
           ctx.fillStyle = core;
           ctx.beginPath();
           ctx.arc(sunX, sunY, sunRadius * 1.9, 0, Math.PI * 2);
           ctx.fill();
 
-          ctx.fillStyle = 'rgba(255,210,110,' + (0.98 * a).toFixed(3) + ')';
+          ctx.fillStyle = 'rgba(255,228,142,' + (1.00 * a).toFixed(3) + ')';
           ctx.beginPath();
           ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = 'rgba(255,250,220,' + (0.95 * a).toFixed(3) + ')';
+          ctx.beginPath();
+          ctx.arc(sunX, sunY, sunRadius * 0.36, 0, Math.PI * 2);
           ctx.fill();
         }
 
@@ -30542,7 +30583,6 @@ function showGenrePopup(genre) {
           const prosperAlpha = Math.min(prosperFadeIn, prosperFadeOut);
           drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), prosperAlpha);
           ctx.restore();
-          return;
         }
 
         if (isMorningGreetingActive && !isNightGreetingActive) {
@@ -30558,14 +30598,13 @@ function showGenrePopup(genre) {
           const morningAlpha = Math.min(morningFadeIn, morningFadeOut);
           drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), morningAlpha);
           ctx.restore();
-          return;
         }
 
         ctx.restore();
 
         if (!starsEnabled) return;
 
-        const edgeStarCount = 3;
+        const edgeStarCount = 4;
         const edgeR = circleR * 0.96;
         const starYOffsets = [
           -edgeR * 0.12,
@@ -30573,11 +30612,11 @@ function showGenrePopup(genre) {
           edgeR * 0.12
         ];
 
-        // Same travel behavior: fast sequential burst left->right, visible until 3rd reaches edge.
+        // Same travel behavior: fast sequential burst left->right on a 6-second loop.
         const edgeRunSec = 1.55;
-        const edgeStaggerSec = 0.42;
-        const thirdReachSec = edgeRunSec + edgeStaggerSec * (edgeStarCount - 1);
-        const burstActive = starCyclePhase <= thirdReachSec;
+        const edgeStaggerSec = 0.35;
+        const burstWindowSec = edgeRunSec + edgeStaggerSec * (edgeStarCount - 1);
+        const burstActive = starCyclePhase <= burstWindowSec;
         if (!burstActive) return;
 
         ctx.save();
@@ -31874,20 +31913,20 @@ function openAlbum(albumId) {
 }
 </script>
 
-<!-- 3D Environmental Light Waves Visualizer Popup -->
+<!-- Psychedelic Loop Visualizer Popup -->
 <div id="cubeVisualizerOverlay" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:170px;z-index:10050;width:min(92vw,420px);pointer-events:auto;">
-  <div style="background:radial-gradient(circle at 20% 20%,rgba(255,220,110,0.12),rgba(8,8,12,0.96) 55%);border:1px solid rgba(255,215,0,0.35);border-radius:18px;box-shadow:0 -8px 40px rgba(255,180,0,0.16),0 4px 30px rgba(0,0,0,0.72);padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:hidden;">
+  <div style="background:radial-gradient(circle at 18% 16%,rgba(80,255,220,0.16),rgba(8,8,12,0.95) 54%),radial-gradient(circle at 82% 24%,rgba(255,110,190,0.14),rgba(8,8,12,0) 46%);border:1px solid rgba(160,245,255,0.38);border-radius:18px;box-shadow:0 -8px 42px rgba(90,235,255,0.18),0 4px 30px rgba(0,0,0,0.72);padding:18px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:hidden;">
     <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-      <span style="color:#FFD700;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.86;">Environmental Waves</span>
-      <button onclick="window.closeCubeVisualizer && window.closeCubeVisualizer()" style="background:none;border:none;color:#FFD700;font-size:1.1rem;cursor:pointer;line-height:1;opacity:0.7;" title="Close">✕</button>
+      <span style="color:#b9fff1;font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;opacity:0.9;">Psychedelic Loop</span>
+      <button onclick="window.closeCubeVisualizer && window.closeCubeVisualizer()" style="background:none;border:none;color:#b9fff1;font-size:1.1rem;cursor:pointer;line-height:1;opacity:0.76;" title="Close">✕</button>
     </div>
 
-    <div id="envWaveScene" style="width:236px;height:236px;position:relative;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;border:1.5px solid rgba(255,215,0,0.34);background:radial-gradient(circle at 50% 50%,rgba(255,220,110,0.12),rgba(8,8,12,0.98) 72%);box-shadow:inset 0 0 22px rgba(255,225,140,0.08),0 0 24px rgba(255,180,40,0.12);flex:0 0 auto;">
-      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(255,205,60,0.16),rgba(255,205,60,0) 62%);"></div>
-      <canvas id="envWaveCanvas" width="236" height="236" style="width:236px;height:236px;display:block;border-radius:50%;filter:drop-shadow(0 0 12px rgba(255,210,90,0.3)) drop-shadow(0 0 30px rgba(255,170,0,0.18));"></canvas>
+    <div id="envWaveScene" style="width:236px;height:236px;position:relative;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;border:1.5px solid rgba(150,246,255,0.38);background:radial-gradient(circle at 50% 50%,rgba(72,255,234,0.14),rgba(8,8,12,0.98) 72%);box-shadow:inset 0 0 24px rgba(146,255,242,0.1),0 0 28px rgba(95,232,255,0.17);flex:0 0 auto;">
+      <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(90,255,228,0.2),rgba(90,255,228,0) 62%);"></div>
+      <canvas id="envWaveCanvas" width="236" height="236" style="width:236px;height:236px;display:block;border-radius:50%;filter:drop-shadow(0 0 12px rgba(126,255,236,0.35)) drop-shadow(0 0 32px rgba(120,220,255,0.22));"></canvas>
     </div>
 
-    <div id="cubeVisualizerLabel" style="color:#FFD700;font-size:0.7rem;font-weight:600;opacity:0.7;letter-spacing:0.05em;">—</div>
+    <div id="cubeVisualizerLabel" style="color:#b9fff1;font-size:0.7rem;font-weight:600;opacity:0.78;letter-spacing:0.05em;">—</div>
   </div>
 </div>
 
@@ -31917,6 +31956,8 @@ function openAlbum(albumId) {
   var _expansionHoldLevel = 0;
   var _lastBothActiveTime = 0;
   var _lastFrameTime = 0;
+  var _psySpinAngle = 0;
+  var _psySpinTurnsPerSec = 0;
 
   var _audioCtx = null;
   var _analyser = null;
@@ -31948,6 +31989,11 @@ function openAlbum(albumId) {
   var _peakLoudness = 0.25;
   var _peakTransient = 0.16;
   var _peakSub808 = 0.32;
+  var _psyRefReady = false;
+  var _psyRefImage = new Image();
+  _psyRefImage.onload = function() { _psyRefReady = true; };
+  _psyRefImage.onerror = function() { _psyRefReady = false; };
+  _psyRefImage.src = 'psychedelic-reference.png.png';
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
@@ -32350,6 +32396,150 @@ function openAlbum(albumId) {
     var instHigh = sig.instHigh || 0;
     var energy = bass * 0.30 + bassBody * 0.24 + voice * 0.20 + instLow * 0.10 + instMid * 0.10 + instHigh * 0.06;
     var sharedAll = Math.max(0, Math.min(1, bass * 0.22 + bassBody * 0.20 + voice * 0.20 + instLow * 0.14 + instMid * 0.14 + instHigh * 0.10));
+
+    // Simple psychedelic loop renderer.
+    var bass808 = Math.max(0, Math.min(1, bass * 0.72 + bassBody * 0.28));
+    var frameDt = _lastFrameTime > 0 ? Math.max(0.001, Math.min(0.060, t - _lastFrameTime)) : 0.016;
+    _lastFrameTime = t;
+    var targetSpinTurnsPerSec = 0.036;
+    var spinBlend = 1 - Math.exp(-frameDt / 0.30);
+    _psySpinTurnsPerSec += (targetSpinTurnsPerSec - _psySpinTurnsPerSec) * spinBlend;
+    _psySpinAngle += _psySpinTurnsPerSec * frameDt * Math.PI * 2;
+    var spin = _psySpinAngle;
+    var pulse = 0.20 + Math.sin(t * 0.58) * 0.03;
+    var minDim = Math.min(w, h);
+    var cx = w * 0.5;
+    var cy = h * 0.5;
+
+    canvas.style.transformOrigin = '50% 50%';
+    canvas.style.transform = 'scale(1)';
+
+    ctx.clearRect(0, 0, w, h);
+    var bg = ctx.createRadialGradient(cx, cy, minDim * 0.06, cx, cy, minDim * 0.62);
+    bg.addColorStop(0, 'rgba(16,24,28,0.98)');
+    bg.addColorStop(1, 'rgba(4,4,8,1)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, w, h);
+
+    if (_psyRefReady && _psyRefImage && _psyRefImage.naturalWidth > 0) {
+      var zoom = 1 + Math.sin(spin) * 0.045;
+      canvas.style.transform = 'scale(' + zoom.toFixed(3) + ')';
+      var coverScale = Math.max(w / _psyRefImage.naturalWidth, h / _psyRefImage.naturalHeight);
+      var drawW = _psyRefImage.naturalWidth * coverScale;
+      var drawH = _psyRefImage.naturalHeight * coverScale;
+
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(spin);
+      ctx.beginPath();
+      ctx.arc(0, 0, minDim * 0.5, 0, Math.PI * 2);
+      ctx.clip();
+      ctx.drawImage(_psyRefImage, -drawW * 0.5, -drawH * 0.5, drawW, drawH);
+
+      // Subtle tint glow to blend image with existing popup look.
+      var overlay = ctx.createRadialGradient(0, 0, minDim * 0.06, 0, 0, minDim * 0.5);
+      overlay.addColorStop(0, 'rgba(120,255,228,0.10)');
+      overlay.addColorStop(1, 'rgba(0,0,0,0.18)');
+      ctx.fillStyle = overlay;
+      ctx.beginPath();
+      ctx.arc(0, 0, minDim * 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      var lblImg = getLabel();
+      if (lblImg) {
+        var titleImg = (document.getElementById('playerTrackTitle') || {}).textContent || '';
+        lblImg.textContent = titleImg || '—';
+      }
+      return;
+    }
+
+    // Sparse cosmic grain similar to the reference texture.
+    var grainCount = 120;
+    for (var g = 0; g < grainCount; g++) {
+      var ga = (g / grainCount) * Math.PI * 2 + spin * 0.08;
+      var gr = minDim * (0.16 + (g % 17) / 17 * 0.34);
+      var gx = cx + Math.cos(ga * (1 + (g % 5) * 0.04)) * gr;
+      var gy = cy + Math.sin(ga * (1 + (g % 7) * 0.03)) * gr;
+      var galpha = 0.08 + ((g % 9) / 9) * 0.18;
+      ctx.fillStyle = 'rgba(255,255,255,' + galpha.toFixed(3) + ')';
+      ctx.fillRect(gx, gy, 1, 1);
+    }
+
+    function drawPetalRing(petalCount, innerR, outerR, phase, hueA, hueB, alphaBase, lineW, wobble) {
+      var points = 260;
+      ctx.beginPath();
+      for (var i = 0; i <= points; i++) {
+        var p = i / points;
+        var a = p * Math.PI * 2;
+        var petalRaw = Math.max(0, Math.cos(a * petalCount + phase));
+        var petal = Math.pow(petalRaw, 0.62);
+        var morph = Math.sin(a * (petalCount * 0.5) - phase * 0.72) * wobble;
+        var r = innerR + (outerR - innerR) * petal + morph;
+        var x = cx + Math.cos(a) * r;
+        var y = cy + Math.sin(a) * r;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.closePath();
+
+      var hueMix = (Math.sin(phase * 0.6) + 1) * 0.5;
+      var hue = hueA + (hueB - hueA) * hueMix;
+      ctx.strokeStyle = 'hsla(' + hue.toFixed(2) + ',92%,62%,' + alphaBase.toFixed(3) + ')';
+      ctx.lineWidth = lineW;
+      ctx.shadowBlur = 8 + bass808 * 16;
+      ctx.shadowColor = 'hsla(' + (hue + 8).toFixed(2) + ',98%,66%,0.62)';
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Mandala-like layered petals (closer to reference image geometry).
+    var petalPhase = spin * 1.28 + pulse * 2.2;
+    drawPetalRing(12, minDim * 0.06, minDim * (0.18 + pulse * 0.05), petalPhase, 316, 174, 0.88, Math.max(1.2, minDim * 0.008), minDim * 0.006);
+    drawPetalRing(12, minDim * 0.12, minDim * (0.24 + pulse * 0.06), -petalPhase * 0.86, 176, 330, 0.76, Math.max(1.1, minDim * 0.007), minDim * 0.007);
+    drawPetalRing(16, minDim * 0.20, minDim * (0.32 + pulse * 0.05), petalPhase * 0.64, 286, 192, 0.64, Math.max(1.0, minDim * 0.006), minDim * 0.006);
+
+    // Outer scalloped ring stack for kaleidoscopic boundary feel.
+    for (var or = 0; or < 3; or++) {
+      var rOuter = minDim * (0.38 + or * 0.09 + pulse * 0.028);
+      var scallop = 0.014 + or * 0.003;
+      ctx.beginPath();
+      for (var k = 0; k <= 320; k++) {
+        var kp = k / 320;
+        var ka = kp * Math.PI * 2;
+        var kr = rOuter + Math.sin(ka * (14 + or * 2) + spin * (0.88 - or * 0.12)) * minDim * scallop;
+        var kx = cx + Math.cos(ka) * kr;
+        var ky = cy + Math.sin(ka) * kr;
+        if (k === 0) ctx.moveTo(kx, ky);
+        else ctx.lineTo(kx, ky);
+      }
+      ctx.closePath();
+      var oh = (272 + or * 24 + t * (18 + bass808 * 90) * 0.74) % 360;
+      ctx.strokeStyle = 'hsla(' + oh.toFixed(2) + ',86%,60%,' + (0.42 - or * 0.08).toFixed(3) + ')';
+      ctx.lineWidth = Math.max(0.9, minDim * 0.0048 - or * 0.25);
+      ctx.shadowBlur = 5 + bass808 * 10;
+      ctx.shadowColor = 'hsla(' + (oh + 10).toFixed(2) + ',88%,62%,0.42)';
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+
+    // Breathing center orb.
+    var orbR = minDim * (0.07 + pulse * 0.19);
+    var orb = ctx.createRadialGradient(cx, cy, orbR * 0.1, cx, cy, orbR * 1.4);
+    orb.addColorStop(0, 'rgba(220,255,244,0.98)');
+    orb.addColorStop(0.55, 'rgba(123,255,226,0.55)');
+    orb.addColorStop(1, 'rgba(123,255,226,0)');
+    ctx.fillStyle = orb;
+    ctx.beginPath();
+    ctx.arc(cx, cy, orbR * 1.4, 0, Math.PI * 2);
+    ctx.fill();
+
+    var lblSimple = getLabel();
+    if (lblSimple) {
+      var titleSimple = (document.getElementById('playerTrackTitle') || {}).textContent || '';
+      lblSimple.textContent = titleSimple || '—';
+    }
+    return;
 
     function blendDrive(primary, sharedWeight) {
       return Math.max(0, Math.min(1, primary * (1 - sharedWeight) + sharedAll * sharedWeight));
