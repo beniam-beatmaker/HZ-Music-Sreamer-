@@ -8897,11 +8897,12 @@ last i checked this is best, specially since it could be real safe`;
                 <label for="paymentCardElement">Card details</label>
                 <div id="paymentCardElement" class="pay-stripe-element" aria-label="Secure card entry"></div>
               </div>
+              <div id="subscriptionSuccessTick" class="pay-subtext" style="display:none;color:#1db954;font-weight:800;margin-top:8px;">✓ Subscription active</div>
               <div id="payCardStripeError" class="pay-stripe-error" aria-live="polite"></div>
               <div class="pay-note">Stripe securely handles the card details. Hertz never receives the full card number.</div>
               <div class="pay-actions">
                 <button type="button" class="pay-btn pay-btn-secondary" id="backToCurrencyBtn">Back</button>
-                <button type="submit" class="pay-btn pay-btn-primary">Start Subscription</button>
+                <button type="submit" class="pay-btn pay-btn-primary" id="startSubscriptionBtn">Start Subscription</button>
               </div>
             </form>
           </div>
@@ -26288,10 +26289,36 @@ function showGenrePopup(genre) {
       }
 
       if (window.location.protocol === 'file:') {
-        return 'http://127.0.0.1:3000';
+        return 'http://localhost:3010';
       }
 
       return window.location.origin;
+    }
+
+    function getSubscriptionApiBaseCandidates() {
+      const runtimeConfiguredBase =
+        (window.HERTZ_API_BASE && String(window.HERTZ_API_BASE).trim()) ||
+        (localStorage.getItem('hertzApiBaseUrl') || '').trim();
+
+      const candidates = [];
+      function pushCandidate(value) {
+        const normalized = String(value || '').trim().replace(/\/$/, '');
+        if (!normalized) return;
+        if (candidates.indexOf(normalized) !== -1) return;
+        candidates.push(normalized);
+      }
+
+      if (runtimeConfiguredBase) {
+        pushCandidate(runtimeConfiguredBase);
+      }
+
+      if (window.location.protocol === 'file:') {
+        pushCandidate('http://localhost:3010');
+      } else {
+        pushCandidate(window.location.origin);
+      }
+
+      return candidates;
     }
 
     function subscriptionApiUrl(path) {
@@ -26388,27 +26415,46 @@ function showGenrePopup(genre) {
 
     async function cancelMonthlySubscriptionInBackend() {
       const subscriptionId = localStorage.getItem('hertzSubscriptionId') || null;
-
-      try {
-        await fetch(subscriptionApiUrl('/api/subscriptions/cancel'), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify({
-            subscriptionId: subscriptionId,
-            cancelAtPeriodEnd: true,
-            canceledByUser: true
-          })
-        });
-      } catch (err) {
-        console.warn('Subscription cancel backend sync failed:', err);
+      if (!subscriptionId) {
+        throw new Error('No active subscription found to cancel.');
       }
+
+      const response = await fetch(subscriptionApiUrl('/api/subscriptions/cancel'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          subscriptionId: subscriptionId,
+          cancelAtPeriodEnd: true,
+          canceledByUser: true
+        })
+      });
+
+      let responseBody = null;
+      try {
+        responseBody = await response.json();
+      } catch (err) {
+        responseBody = null;
+      }
+
+      if (!response.ok) {
+        throw new Error((responseBody && responseBody.message) || 'Unable to cancel subscription in backend.');
+      }
+
+      return responseBody;
     }
 
-    function cancelMonthlySubscription() {
+    async function cancelMonthlySubscription() {
       if (!hasActiveMonthlySubscription()) return;
+
+      try {
+        await cancelMonthlySubscriptionInBackend();
+      } catch (err) {
+        alert((err && err.message) ? err.message : 'Unable to cancel subscription right now. Please try again.');
+        return;
+      }
 
       localStorage.setItem('hertzSubscriptionCanceledAt', new Date().toISOString());
       localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
@@ -26429,8 +26475,11 @@ function showGenrePopup(genre) {
         cancelMessage.style.display = 'block';
       }
 
+      if (typeof window.__refreshSubscriptionCardPopupState === 'function') {
+        window.__refreshSubscriptionCardPopupState();
+      }
+
       startSubscriptionReminderScheduler();
-      cancelMonthlySubscriptionInBackend();
     }
 
     function formatPaymentAmount(entry) {
@@ -26443,30 +26492,57 @@ function showGenrePopup(genre) {
       // Security: Stripe secret keys must stay on the backend only.
       await getStripeClient();
 
-      const endpoint = subscriptionApiUrl('/api/subscriptions/start');
-      let response;
-      try {
-        response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          credentials: 'include',
-          body: JSON.stringify(subscriptionPayload)
-        });
-      } catch (networkError) {
-        throw new Error('Unable to reach subscription server at ' + endpoint + '. Start your backend API or set window.HERTZ_API_BASE/localStorage.hertzApiBaseUrl to your API host.');
-      }
-
+      const baseCandidates = getSubscriptionApiBaseCandidates();
+      let response = null;
       let data = {};
-      try {
-        data = await response.json();
-      } catch (err) {
+      let successfulBase = '';
+      let lastHandledError = null;
+
+      for (let i = 0; i < baseCandidates.length; i++) {
+        const apiBase = baseCandidates[i];
+        const endpoint = apiBase + '/api/subscriptions/start';
+
+        try {
+          response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(subscriptionPayload)
+          });
+        } catch (networkError) {
+          lastHandledError = new Error('Unable to reach subscription server at ' + endpoint + '. Please check your connection and try again.');
+          continue;
+        }
+
         data = {};
+        try {
+          data = await response.json();
+        } catch (err) {
+          data = {};
+        }
+
+        if (response.ok) {
+          successfulBase = apiBase;
+          break;
+        }
+
+        lastHandledError = new Error((data && data.message) || 'Unable to start monthly subscription on backend.');
+
+        // Retry only when this host clearly does not provide the route/method.
+        // For real Stripe/backend errors, stop immediately and show the true message.
+        if (response.status !== 404 && response.status !== 405) {
+          throw lastHandledError;
+        }
       }
 
-      if (!response.ok) {
-        throw new Error((data && data.message) || 'Unable to start monthly subscription on backend.');
+      if (!response || !response.ok) {
+        throw lastHandledError || new Error('Unable to start monthly subscription on backend.');
+      }
+
+      if (successfulBase) {
+        localStorage.setItem('hertzApiBaseUrl', successfulBase);
       }
 
       if (data && data.eventType) {
@@ -26539,6 +26615,9 @@ function showGenrePopup(genre) {
     function paymentMethods() {
       renderPaymentCurrencyList();
       refreshSubscriptionActionState();
+      if (typeof window.__refreshSubscriptionCardPopupState === 'function') {
+        window.__refreshSubscriptionCardPopupState();
+      }
       const overlay = getPaymentCurrencyOverlay();
       if (!overlay) return;
       overlay.classList.add('show');
@@ -26603,6 +26682,9 @@ function showGenrePopup(genre) {
 
       showSubscriptionStartedPopup();
       refreshSubscriptionActionState();
+      if (typeof window.__refreshSubscriptionCardPopupState === 'function') {
+        window.__refreshSubscriptionCardPopupState();
+      }
       startSubscriptionReminderScheduler();
       startSubscriptionWebhookSync();
     }
@@ -26626,8 +26708,29 @@ function showGenrePopup(genre) {
       const cardNameInput = document.getElementById('payCardName');
       const paymentCardElementMount = document.getElementById('paymentCardElement');
       const stripeErrorEl = document.getElementById('payCardStripeError');
+      const subscriptionSuccessTick = document.getElementById('subscriptionSuccessTick');
       const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
-      const submitButton = cardForm ? cardForm.querySelector('button[type="submit"]') : null;
+      const submitButton = document.getElementById('startSubscriptionBtn') || (cardForm ? cardForm.querySelector('button[type="submit"]') : null);
+
+      function refreshSubscriptionCardPopupState() {
+        const active = hasActiveMonthlySubscription();
+
+        if (subscriptionSuccessTick) {
+          subscriptionSuccessTick.style.display = active ? 'block' : 'none';
+        }
+
+        if (submitButton) {
+          submitButton.textContent = active ? 'Subscribed ✓' : 'Start Subscription';
+          submitButton.disabled = !!active || submittingSubscription;
+        }
+
+        if (backBtn) {
+          backBtn.textContent = active ? 'Cancel Subscription' : 'Back';
+          backBtn.disabled = false;
+        }
+      }
+
+      window.__refreshSubscriptionCardPopupState = refreshSubscriptionCardPopupState;
 
       function setStripeError(message) {
         if (stripeErrorEl) {
@@ -26705,8 +26808,9 @@ function showGenrePopup(genre) {
       if (closeCurrencyBtn) closeCurrencyBtn.addEventListener('click', closePaymentCurrencyPopup);
       if (closeCardBtn) closeCardBtn.addEventListener('click', closePaymentCardPopup);
       if (cancelSubscriptionBtn) {
-        cancelSubscriptionBtn.addEventListener('click', function() {
-          cancelMonthlySubscription();
+        cancelSubscriptionBtn.addEventListener('click', async function() {
+          await cancelMonthlySubscription();
+          refreshSubscriptionCardPopupState();
         });
       }
 
@@ -26723,7 +26827,12 @@ function showGenrePopup(genre) {
       }
 
       if (backBtn) {
-        backBtn.addEventListener('click', function() {
+        backBtn.addEventListener('click', async function() {
+          if (hasActiveMonthlySubscription()) {
+            await cancelMonthlySubscription();
+            refreshSubscriptionCardPopupState();
+            return;
+          }
           closePaymentCardPopup();
           paymentMethods();
         });
@@ -26761,7 +26870,7 @@ function showGenrePopup(genre) {
           }
 
           submittingSubscription = true;
-          if (submitButton) submitButton.disabled = true;
+          refreshSubscriptionCardPopupState();
           setStripeError('');
 
           let paymentMethodResult;
@@ -26785,7 +26894,7 @@ function showGenrePopup(genre) {
           if (!paymentMethodResult || paymentMethodResult.error || !paymentMethodResult.paymentMethod) {
             setStripeError((paymentMethodResult && paymentMethodResult.error && paymentMethodResult.error.message) || 'Unable to securely tokenize card details.');
             submittingSubscription = false;
-            if (submitButton) submitButton.disabled = false;
+            refreshSubscriptionCardPopupState();
             return;
           }
 
@@ -26869,7 +26978,7 @@ function showGenrePopup(genre) {
             })
             .finally(function() {
               submittingSubscription = false;
-              if (submitButton) submitButton.disabled = false;
+              refreshSubscriptionCardPopupState();
             });
         });
       }
@@ -26881,6 +26990,7 @@ function showGenrePopup(genre) {
       });
 
       refreshSubscriptionActionState();
+      refreshSubscriptionCardPopupState();
       startSubscriptionReminderScheduler();
       startSubscriptionWebhookSync();
     })();
