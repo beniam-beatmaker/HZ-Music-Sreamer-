@@ -546,6 +546,12 @@
       const navRect = nav.getBoundingClientRect();
       const offsetFromBottom = Math.max(0, window.innerHeight - navRect.top);
       document.documentElement.style.setProperty('--sticky-player-bottom', offsetFromBottom + 'px');
+
+      const stickyPlayer = document.getElementById('stickyPlayer');
+      const stickyHeight = stickyPlayer
+        ? Math.max(0, Math.round(stickyPlayer.getBoundingClientRect().height || 0))
+        : 55;
+      document.documentElement.style.setProperty('--sticky-player-height', stickyHeight + 'px');
     };
 
     if (document.readyState === 'loading') {
@@ -1705,37 +1711,15 @@ last i checked this is best, specially since it could be real safe`;
     // Enhanced playNewTrack function with random autoplay integration
     const originalPlayNewTrack = window.playNewTrack;
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
-      // Call the original function
-      originalPlayNewTrack(trackId, trackUrl, trackTitle, trackArtist);
+      const runTrackPlayback = function() {
+        // Call the original function
+        originalPlayNewTrack(trackId, trackUrl, trackTitle, trackArtist);
 
-      // Get the player audio element
-      const playerAudio = document.getElementById('playerAudio');
-      if (playerAudio && window.randomAutoplayEnabled) {
-        // Remove any existing ended listeners to avoid duplicates
-        playerAudio.removeEventListener('ended', window.randomAutoplayHandler);
+        // Random autoplay/ad transitions are centrally handled by playerAudio.onended.
+        // Avoid attaching additional ended listeners here to prevent duplicate ad counting.
+      };
 
-        // Add new random autoplay handler
-        window.randomAutoplayHandler = function() {
-          if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
-            return;
-          }
-          if (typeof window.hasManualQueueTracks === 'function' && window.hasManualQueueTracks()) {
-            if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
-              return;
-            }
-            if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
-              return;
-            }
-          }
-          console.log('🏁 Track ended - triggering random autoplay');
-          setTimeout(() => {
-            window.playRandomTrack();
-          }, 1000); // Wait 1 second before playing next track
-        };
-
-        playerAudio.addEventListener('ended', window.randomAutoplayHandler);
-        console.log('🎲 Random autoplay enabled for track:', trackTitle);
-      }
+      runTrackPlayback();
     };
 
     console.log('🎲 Random Autoplay System initialized with', window.allAvailableTracks.length, 'tracks');
@@ -4664,6 +4648,10 @@ last i checked this is best, specially since it could be real safe`;
       font-size: 0.75rem;
       color: #a7a7a7;
       white-space: nowrap;
+    }
+
+    .recently-played-tracks .recent-track-time {
+      display: none;
     }
 
     /* Spotify Quick Access Cards */
@@ -8846,6 +8834,44 @@ last i checked this is best, specially since it could be real safe`;
     .video-mini-btn { background: none; border: none; color: white; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s; }
     .video-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; transform: none !important; border-radius: 0 !important; z-index: 2001; }
     .video-fullscreen video { max-height: 100vh !important; }
+
+    .sticky-ad-popup {
+      display: none;
+      position: fixed;
+      left: 50%;
+      bottom: calc(var(--sticky-player-bottom, 88px) + var(--sticky-player-height, 55px));
+      transform: translateX(-50%);
+      width: min(92vw, 420px);
+      height: min(92vw, 420px);
+      max-height: 420px;
+      z-index: 12050;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      border-radius: 18px;
+      background: #000;
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      box-shadow: 0 -8px 42px rgba(90, 235, 255, 0.18), 0 4px 30px rgba(0, 0, 0, 0.72);
+      pointer-events: auto;
+    }
+
+    .sticky-ad-popup video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      background: #000;
+    }
+
+    @media (max-width: 700px) {
+      .sticky-ad-popup {
+        width: min(92vw, 420px);
+        left: 50%;
+        transform: translateX(-50%);
+        height: min(92vw, 420px);
+        border-radius: 18px;
+      }
+    }
   </style>
 
   <div id="videoOverlay" class="video-overlay"></div>
@@ -8855,6 +8881,10 @@ last i checked this is best, specially since it could be real safe`;
     <button class="video-mini-mute" id="miniMuteBtn">🔇</button>
     <button class="video-mini-fullscreen" id="miniFullscreenBtn">⛶</button>
     <button class="video-close-mini" id="miniCloseBtn">×</button>
+  </div>
+
+  <div id="stickyTrackAdPopup" class="sticky-ad-popup" aria-hidden="true">
+    <video id="stickyTrackAdVideo" preload="auto" playsinline autoplay></video>
   </div>
 
   <div class="container">
@@ -14139,6 +14169,468 @@ p.s I'm Beniam Endale Tedla`;
             });
           }
 
+          const STICKY_AD_CADENCE_PATTERN = [4, 5];
+          const STICKY_AD_SEQUENCE_PATTERN = ['US', 'AUS'];
+          const STICKY_AD_START_TIMEOUT_MS = 12000;
+          const STICKY_AD_MIN_VISIBLE_MS = 3500;
+          const STICKY_AD_GAP_PX = 12;
+          const STICKY_AD_US_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20U.S%20Ad%20.mp4';
+          const STICKY_AD_AUS_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
+          const STICKY_AD_US_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/H%20Z%20a%20Hub.mp3';
+          const STICKY_AD_AUS_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/Australia.mp3';
+
+          function getStickyAdCadenceTarget() {
+            const pattern = (Array.isArray(STICKY_AD_CADENCE_PATTERN) && STICKY_AD_CADENCE_PATTERN.length)
+              ? STICKY_AD_CADENCE_PATTERN
+              : [4];
+            const idx = Number(window.__hzStickyAdCadenceIndex || 0);
+            const raw = Number(pattern[idx % pattern.length]);
+            return Math.max(1, Math.floor(raw || 4));
+          }
+
+          function consumeStickyAdCadenceTarget() {
+            window.__hzStickyAdCadenceIndex = Number(window.__hzStickyAdCadenceIndex || 0) + 1;
+            const target = getStickyAdCadenceTarget();
+            window.__hzStickyAdNextTriggerCount = target;
+            return target;
+          }
+
+          function getNextStickyAdFileName() {
+            const pattern = (Array.isArray(STICKY_AD_SEQUENCE_PATTERN) && STICKY_AD_SEQUENCE_PATTERN.length)
+              ? STICKY_AD_SEQUENCE_PATTERN
+              : ['US'];
+            const idx = Number(window.__hzStickyAdSequenceIndex || 0);
+            const token = String(pattern[idx % pattern.length] || 'US').toUpperCase();
+            window.__hzStickyAdSequenceIndex = idx + 1;
+            return token === 'AUS' ? STICKY_AD_AUS_FILE_NAME : STICKY_AD_US_FILE_NAME;
+          }
+
+          function getStickyAdCompanionAudioSource(primaryAdFileName) {
+            const normalized = String(primaryAdFileName || STICKY_AD_US_FILE_NAME).trim();
+            return normalized === STICKY_AD_AUS_FILE_NAME ? STICKY_AD_AUS_AUDIO_FILE_NAME : STICKY_AD_US_AUDIO_FILE_NAME;
+          }
+
+          function hasActiveMonthlySubscriptionForAds() {
+            const plan = localStorage.getItem('hertzSubscriptionPlan');
+            const canceledAt = localStorage.getItem('hertzSubscriptionCanceledAt');
+            return String(plan || '').toLowerCase() === 'monthly' && !canceledAt;
+          }
+
+          function getStickyAdVideoSources(primaryAdFileName) {
+            const sources = [];
+            const seen = new Set();
+            const selectedPrimaryAdFileName = String(primaryAdFileName || STICKY_AD_US_FILE_NAME).trim() || STICKY_AD_US_FILE_NAME;
+            const secondaryAdFileName = selectedPrimaryAdFileName === STICKY_AD_AUS_FILE_NAME ? STICKY_AD_US_FILE_NAME : STICKY_AD_AUS_FILE_NAME;
+
+            function buildAbsoluteFileUrl(fileName) {
+              const normalizedFileName = String(fileName || '').trim();
+              if (!normalizedFileName) return '';
+
+              if (/^[a-z][a-z0-9+.-]*:/i.test(normalizedFileName)) {
+                return normalizedFileName;
+              }
+
+              try {
+                const pageUrl = String(window.location.href || '');
+                const cleanPageUrl = pageUrl.split('#')[0].split('?')[0];
+                const dirUrl = cleanPageUrl.slice(0, cleanPageUrl.lastIndexOf('/') + 1);
+                const encodedName = encodeURIComponent(normalizedFileName).replace(/%2F/g, '/');
+                return new URL(encodedName, dirUrl).toString();
+              } catch (e) {
+                return '';
+              }
+            }
+
+            function pushSource(value) {
+              const normalized = String(value || '').trim();
+              if (!normalized || seen.has(normalized)) return;
+              seen.add(normalized);
+              sources.push(normalized);
+            }
+
+            const encodedPrimary = buildAbsoluteFileUrl(selectedPrimaryAdFileName);
+            pushSource(encodedPrimary);
+            if (!/^[a-z][a-z0-9+.-]*:/i.test(selectedPrimaryAdFileName)) {
+              pushSource('./' + encodeURIComponent(selectedPrimaryAdFileName));
+            }
+
+            const encodedSecondary = buildAbsoluteFileUrl(secondaryAdFileName);
+            pushSource(encodedSecondary);
+            if (!/^[a-z][a-z0-9+.-]*:/i.test(secondaryAdFileName)) {
+              pushSource('./' + encodeURIComponent(secondaryAdFileName));
+            }
+
+            return sources;
+          }
+
+          window.__hzStickyTracksPlayedSinceAd = Number(window.__hzStickyTracksPlayedSinceAd || 0);
+          window.__hzStickyTracksPlayedTotal = Number(window.__hzStickyTracksPlayedTotal || 0);
+          window.__hzStickyAdCadenceIndex = Number(window.__hzStickyAdCadenceIndex || 0);
+          window.__hzStickyAdSequenceIndex = Number(window.__hzStickyAdSequenceIndex || 0);
+          if (!Number.isFinite(Number(window.__hzStickyAdNextTriggerCount)) || Number(window.__hzStickyAdNextTriggerCount) < 1) {
+            window.__hzStickyAdNextTriggerCount = getStickyAdCadenceTarget();
+          }
+
+          if (!window.__hzStickyAdInteractionGuardBound) {
+            window.__hzStickyAdInteractionGuardBound = true;
+
+            const guardEvents = ['click', 'dblclick', 'pointerdown', 'touchstart', 'contextmenu'];
+            guardEvents.forEach(function(eventType) {
+              document.addEventListener(eventType, function(evt) {
+                if (!window.__hzStickyAdActive) return;
+                const popupEl = document.getElementById('stickyTrackAdPopup');
+                if (popupEl && popupEl.contains(evt.target)) return;
+                evt.preventDefault();
+                evt.stopPropagation();
+                if (typeof evt.stopImmediatePropagation === 'function') evt.stopImmediatePropagation();
+              }, true);
+            });
+
+            document.addEventListener('keydown', function(evt) {
+              if (!window.__hzStickyAdActive) return;
+              evt.preventDefault();
+              evt.stopPropagation();
+              if (typeof evt.stopImmediatePropagation === 'function') evt.stopImmediatePropagation();
+            }, true);
+          }
+
+          window.playStickyTrackTransitionAd = function(onComplete, preferredAdFileName) {
+            if (typeof onComplete !== 'function') return false;
+            if (window.__hzStickyAdActive) return true;
+
+            const normalizedPreferredAd = String(preferredAdFileName || '').trim();
+            const isUsAdPlayback = normalizedPreferredAd === STICKY_AD_US_FILE_NAME;
+            const companionAudioSource = getStickyAdCompanionAudioSource(preferredAdFileName);
+
+            const adSources = getStickyAdVideoSources(preferredAdFileName);
+            if (!adSources || adSources.length === 0) return false;
+
+            const popup = document.getElementById('stickyTrackAdPopup');
+            const adVideo = document.getElementById('stickyTrackAdVideo');
+            if (!popup || !adVideo) return false;
+
+            const mainPlayerAudio = document.getElementById('playerAudio');
+            if (mainPlayerAudio && !mainPlayerAudio.paused) {
+              try {
+                mainPlayerAudio.pause();
+              } catch (e) {}
+            }
+
+            let adShield = document.getElementById('stickyTrackAdShield');
+            if (!adShield) {
+              adShield = document.createElement('div');
+              adShield.id = 'stickyTrackAdShield';
+              adShield.setAttribute('aria-hidden', 'true');
+              adShield.style.display = 'none';
+              adShield.style.position = 'fixed';
+              adShield.style.left = '0';
+              adShield.style.top = '0';
+              adShield.style.width = '100vw';
+              adShield.style.height = '100vh';
+              adShield.style.zIndex = '12049';
+              adShield.style.background = 'transparent';
+              adShield.style.pointerEvents = 'auto';
+              adShield.style.touchAction = 'none';
+              document.body.appendChild(adShield);
+            }
+
+            const stickyPlayerEl = document.getElementById('stickyPlayer');
+            if (stickyPlayerEl) {
+              const stickyStyle = window.getComputedStyle(stickyPlayerEl);
+              const stickyVisible = stickyStyle.display !== 'none' && stickyStyle.visibility !== 'hidden' && Number(stickyStyle.opacity || '1') > 0;
+              if (stickyVisible) {
+                const stickyRect = stickyPlayerEl.getBoundingClientRect();
+                const offsetFromBottomToStickyTop = Math.max(0, Math.round(window.innerHeight - stickyRect.top));
+                popup.style.bottom = (offsetFromBottomToStickyTop + STICKY_AD_GAP_PX) + 'px';
+              } else {
+                popup.style.bottom = '';
+              }
+            }
+
+            window.__hzStickyAdActive = true;
+            adShield.style.display = 'block';
+            popup.style.display = 'block';
+            popup.setAttribute('aria-hidden', 'false');
+            const popupShownAt = Date.now();
+
+            let resolved = false;
+
+            const finishAd = function(forceImmediateClose) {
+              if (resolved) return;
+              const elapsed = Date.now() - popupShownAt;
+              if (!forceImmediateClose && elapsed < STICKY_AD_MIN_VISIBLE_MS) {
+                setTimeout(finishAd, STICKY_AD_MIN_VISIBLE_MS - elapsed);
+                return;
+              }
+              resolved = true;
+
+              if (window.__hzStickyAdTimer) {
+                clearTimeout(window.__hzStickyAdTimer);
+                window.__hzStickyAdTimer = null;
+              }
+              if (adAudioSilenceProbeTimer) {
+                clearInterval(adAudioSilenceProbeTimer);
+                adAudioSilenceProbeTimer = null;
+              }
+              if (adAudioSyncTimer) {
+                clearInterval(adAudioSyncTimer);
+                adAudioSyncTimer = null;
+              }
+
+              adVideo.onended = null;
+              adVideo.onerror = null;
+              try {
+                adVideo.pause();
+              } catch (e) {}
+              try {
+                adAudioEl.pause();
+                adAudioEl.removeAttribute('src');
+                adAudioEl.load();
+              } catch (e) {}
+
+              popup.style.display = 'none';
+              popup.setAttribute('aria-hidden', 'true');
+              popup.style.bottom = '';
+              if (adShield) adShield.style.display = 'none';
+              window.__hzStickyAdActive = false;
+
+              onComplete();
+            };
+
+            let sourceIndex = -1;
+            let playbackStarted = false;
+            let adAudioForceTimer = null;
+            let adAudioSyncTimer = null;
+            let adAudioSilenceProbeTimer = null;
+            let currentPlaybackSource = '';
+            const stickyAdBlobCache = window.__hzStickyAdBlobCache || (window.__hzStickyAdBlobCache = Object.create(null));
+
+            let adAudioEl = window.__hzStickyAdAudioEl || null;
+            if (!adAudioEl) {
+              adAudioEl = document.createElement('audio');
+              adAudioEl.preload = 'auto';
+              adAudioEl.style.display = 'none';
+              adAudioEl.setAttribute('aria-hidden', 'true');
+              document.body.appendChild(adAudioEl);
+              window.__hzStickyAdAudioEl = adAudioEl;
+            }
+
+            const forceAdAudible = function() {
+              try { adVideo.muted = false; } catch (e) {}
+              try { adVideo.defaultMuted = false; } catch (e) {}
+              try { adVideo.removeAttribute('muted'); } catch (e) {}
+              try { adVideo.volume = 1; } catch (e) {}
+            };
+
+            adVideo.onended = function() {
+              finishAd(true);
+            };
+
+            const resolveAdPlaybackSource = function(rawSource) {
+              const normalizedSource = String(rawSource || '').trim();
+              if (!normalizedSource) {
+                return Promise.resolve('');
+              }
+
+              if (stickyAdBlobCache[normalizedSource]) {
+                return Promise.resolve(stickyAdBlobCache[normalizedSource]);
+              }
+
+              const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(normalizedSource);
+              const isHttpSource = /^https?:/i.test(normalizedSource);
+              const shouldFetchAsBlob = !isHttpSource && (window.location.protocol === 'file:' || !hasScheme || normalizedSource.startsWith('file://'));
+
+              if (!shouldFetchAsBlob) {
+                return Promise.resolve(normalizedSource);
+              }
+
+              return fetch(normalizedSource)
+                .then(function(response) {
+                  if (!response.ok) {
+                    throw new Error('Unable to fetch ad source: ' + normalizedSource + ' (' + response.status + ')');
+                  }
+                  return response.blob();
+                })
+                .then(function(blob) {
+                  const objectUrl = URL.createObjectURL(blob);
+                  stickyAdBlobCache[normalizedSource] = objectUrl;
+                  return objectUrl;
+                });
+            };
+
+            const playCurrentSource = function() {
+              // Try normal unmuted playback first. If autoplay policy blocks audio,
+              // bootstrap muted playback and immediately restore audible state.
+              forceAdAudible();
+              adVideo.play().catch(function() {
+                try {
+                  adVideo.muted = true;
+                  adVideo.defaultMuted = true;
+                  adVideo.setAttribute('muted', '');
+                } catch (e) {}
+
+                adVideo.play().then(function() {
+                  setTimeout(function() {
+                    forceAdAudible();
+                    adVideo.play().catch(function() {});
+                  }, 80);
+                }).catch(function() {
+                  tryNextSource();
+                });
+              });
+            };
+
+            const tryNextSource = function() {
+              sourceIndex += 1;
+              if (sourceIndex >= adSources.length) {
+                setTimeout(finishAd, 180);
+                return;
+              }
+
+              const nextSource = adSources[sourceIndex];
+              if (!nextSource) {
+                tryNextSource();
+                return;
+              }
+
+              try {
+                adVideo.pause();
+                adVideo.currentTime = 0;
+              } catch (e) {}
+
+              resolveAdPlaybackSource(nextSource).then(function(playbackSource) {
+                if (!playbackSource) {
+                  tryNextSource();
+                  return;
+                }
+
+                currentPlaybackSource = playbackSource;
+
+                adVideo.src = playbackSource;
+                adVideo.load();
+                playbackStarted = true;
+                if (window.__hzStickyAdTimer) {
+                  clearTimeout(window.__hzStickyAdTimer);
+                  window.__hzStickyAdTimer = null;
+                }
+                if (adAudioForceTimer) {
+                  clearInterval(adAudioForceTimer);
+                  adAudioForceTimer = null;
+                }
+
+                adVideo.removeEventListener('playing', forceAdAudible);
+                adVideo.removeEventListener('timeupdate', forceAdAudible);
+                adVideo.removeEventListener('volumechange', forceAdAudible);
+
+                const startCompanionAudio = function() {
+                  // Keep companion MP3 start aligned with when ad playback begins.
+                  try {
+                    adAudioEl.src = companionAudioSource || currentPlaybackSource;
+                    adAudioEl.loop = false;
+                    adAudioEl.currentTime = 0;
+                    adAudioEl.muted = false;
+                    adAudioEl.defaultMuted = false;
+                    adAudioEl.volume = 1;
+                    adAudioEl.play().catch(function() {
+                      try {
+                        adAudioEl.muted = true;
+                        adAudioEl.defaultMuted = true;
+                      } catch (e) {}
+                      adAudioEl.play().then(function() {
+                        setTimeout(function() {
+                          try {
+                            adAudioEl.muted = false;
+                            adAudioEl.defaultMuted = false;
+                            adAudioEl.volume = 1;
+                          } catch (e) {}
+                          adAudioEl.play().catch(function() {});
+                        }, 80);
+                      }).catch(function() {});
+                    });
+                  } catch (e) {}
+                };
+
+                adVideo.addEventListener('playing', function onAdPlaying() {
+                  adVideo.removeEventListener('playing', onAdPlaying);
+                  startCompanionAudio();
+                });
+
+                // Attempt playback immediately so ad starts as soon as popup opens.
+                playCurrentSource();
+              }).catch(function() {
+                tryNextSource();
+              });
+            };
+
+            adVideo.onerror = function() {
+              tryNextSource();
+            };
+
+            try {
+              adVideo.pause();
+              adVideo.currentTime = 0;
+            } catch (e) {}
+
+              forceAdAudible();
+
+            adVideo.muted = false;
+            adVideo.defaultMuted = false;
+            adVideo.removeAttribute('muted');
+            adVideo.volume = 1;
+            if (isUsAdPlayback) {
+              // Ensure U.S ad always plays with audible audio.
+              adVideo.muted = false;
+              adVideo.defaultMuted = false;
+              adVideo.removeAttribute('muted');
+              adVideo.volume = 1;
+            }
+            adVideo.autoplay = true;
+            adVideo.playsInline = true;
+            adVideo.loop = false;
+            forceAdAudible();
+            adVideo.addEventListener('playing', forceAdAudible);
+            adVideo.addEventListener('timeupdate', forceAdAudible);
+            adVideo.addEventListener('volumechange', forceAdAudible);
+            adAudioForceTimer = setInterval(function() {
+              if (!window.__hzStickyAdActive) return;
+              forceAdAudible();
+            }, 250);
+            const startupTimeout = Number(window.hzStickyAdStartTimeoutMs || STICKY_AD_START_TIMEOUT_MS);
+            window.__hzStickyAdTimer = setTimeout(function() {
+              if (playbackStarted) return;
+              tryNextSource();
+            }, Math.max(3500, startupTimeout));
+
+            tryNextSource();
+
+            return true;
+          };
+
+          window.playStickyAdThenTrack = function(playNextTrackFn) {
+            if (typeof playNextTrackFn !== 'function') return false;
+            if (window.__hzStickyAdActive) return true;
+
+            window.__hzStickyTracksPlayedTotal = Number(window.__hzStickyTracksPlayedTotal || 0) + 1;
+            window.__hzStickyTracksPlayedSinceAd = Number(window.__hzStickyTracksPlayedSinceAd || 0) + 1;
+
+            if (hasActiveMonthlySubscriptionForAds()) {
+              return false;
+            }
+
+            const nextAdAtTrackCount = Math.max(1, Math.floor(Number(window.__hzStickyAdNextTriggerCount || getStickyAdCadenceTarget())));
+            if (window.__hzStickyTracksPlayedSinceAd < nextAdAtTrackCount) {
+              return false;
+            }
+
+            const selectedAdFileName = getNextStickyAdFileName();
+
+            window.__hzStickyTracksPlayedSinceAd = 0;
+            consumeStickyAdCadenceTarget();
+            return window.playStickyTrackTransitionAd(function() {
+              playNextTrackFn();
+            }, selectedAdFileName);
+          };
+
           // Update play/pause button on audio events
           playerAudio.addEventListener('play', function() {
             playPauseBtn.innerHTML = '&#10073;&#10073;';
@@ -14158,6 +14650,20 @@ p.s I'm Beniam Endale Tedla`;
             if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
               return;
             }
+            if (typeof window.hasManualQueueTracks === 'function' && window.hasManualQueueTracks()) {
+              var queuedAction = function() {
+                return typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack();
+              };
+
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(queuedAction)) {
+                return;
+              }
+
+              if (queuedAction()) {
+                return;
+              }
+            }
+
             if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
               return;
             }
@@ -14166,21 +14672,47 @@ p.s I'm Beniam Endale Tedla`;
             }
             if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
               console.log('🎲 Random autoplay override (sticky player loop logic)');
-              setTimeout(() => {
-                window.playRandomTrack();
-              }, 300);
+              var randomAction = function() {
+                setTimeout(function() {
+                  window.playRandomTrack();
+                }, 300);
+              };
+
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(randomAction)) {
+                return;
+              }
+
+              randomAction();
               return;
             }
             if (loopMode === 1) {
               // Loop all mode - continue to next track, wrap to beginning if at end
               currentTrackIndex = (currentTrackIndex + 1) % trackOrder.length;
               window.currentTrackIndex = currentTrackIndex;
-              playTrack(trackOrder[currentTrackIndex]);
-              console.log('🔂 Loop ALL - Playing next track:', trackOrder[currentTrackIndex]);
+              var loopAllTrackId = trackOrder[currentTrackIndex];
+              var loopAllAction = function() {
+                playTrack(loopAllTrackId);
+                console.log('🔂 Loop ALL - Playing next track:', loopAllTrackId);
+              };
+
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(loopAllAction)) {
+                return;
+              }
+
+              loopAllAction();
             } else if (loopMode === 0 && currentTrackIndex < trackOrder.length - 1) {
               // Normal mode - only continue if not at last track
               currentTrackIndex++;
-              playTrack(trackOrder[currentTrackIndex]);
+              var nextTrackId = trackOrder[currentTrackIndex];
+              var normalNextAction = function() {
+                playTrack(nextTrackId);
+              };
+
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(normalNextAction)) {
+                return;
+              }
+
+              normalNextAction();
             } else {
               // Track ended and no more to play
               if (typeof window.updateMediaSessionState === 'function') {
@@ -16400,7 +16932,7 @@ function showGenrePopup(genre) {
     }
     // Preserve sticky-player audio continuity when popups open.
     // This only restores state if popup-opening changed it unexpectedly.
-    const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, #queuePopup, #cubeVisualizerOverlay';
+    const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, .popup-overlay, .modal-overlay, .pay-modal-shell, #queuePopup, #cubeVisualizerOverlay, #miniVideoPlayer, [id$="Overlay"]';
     let popupAudioGuardPrevVisible = false;
     let popupAudioGuardSnapshot = null;
 
@@ -32170,11 +32702,15 @@ function openAlbum(albumId) {
   var _psyRefImage = new Image();
   _psyRefImage.onload = function() { _psyRefReady = true; };
   _psyRefImage.onerror = function() { _psyRefReady = false; };
-  _psyRefImage.src = 'psychedelic-reference.png.png';
+  _psyRefImage.src = 'Loop/psychedelic-reference.png.png';
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
   function getLabel() { return document.getElementById('cubeVisualizerLabel'); }
+  function isHzStreamsHost() {
+    var host = String(window.location.hostname || '').toLowerCase();
+    return host === 'hz-streams.com' || host.endsWith('.hz-streams.com');
+  }
 
   function updateStickyWaveBadge() {
     var badge = document.getElementById('stickyHzWaveBadge');
@@ -32554,6 +33090,16 @@ function openAlbum(albumId) {
       if (!_vizOpen) return;
       var audio = document.getElementById('playerAudio');
       if (!audio) return;
+
+      if (isHzStreamsHost()) {
+        if (typeof lockStickyPlayerMuteState === 'function') {
+          lockStickyPlayerMuteState();
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
+      }
+
       audio.muted = false;
       audio.defaultMuted = false;
       audio.removeAttribute('muted');
@@ -33179,6 +33725,28 @@ function openAlbum(albumId) {
       audio.defaultMuted = false;
       audio.removeAttribute('muted');
     }
+
+    if (isHzStreamsHost()) {
+      if (typeof lockStickyPlayerMuteState === 'function') {
+        lockStickyPlayerMuteState();
+      }
+      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+        enforceGlobalStickyPlayerUnmute();
+      }
+      if (window.__hzVisualizerStickyUnmuteInterval) {
+        clearInterval(window.__hzVisualizerStickyUnmuteInterval);
+      }
+      window.__hzVisualizerStickyUnmuteInterval = setInterval(function() {
+        if (!_vizOpen) return;
+        if (typeof lockStickyPlayerMuteState === 'function') {
+          lockStickyPlayerMuteState();
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
+      }, 140);
+    }
+
     setupAudioAnalyser();
     if (_raf) cancelAnimationFrame(_raf);
     drawWaves();
@@ -33195,6 +33763,10 @@ function openAlbum(albumId) {
     _vizOpen = false;
     var overlay = getOverlay();
     if (overlay) overlay.style.display = 'none';
+    if (window.__hzVisualizerStickyUnmuteInterval) {
+      clearInterval(window.__hzVisualizerStickyUnmuteInterval);
+      window.__hzVisualizerStickyUnmuteInterval = null;
+    }
     if (_raf) {
       cancelAnimationFrame(_raf);
       _raf = null;
@@ -33237,17 +33809,21 @@ function openAlbum(albumId) {
     var tolW = 28;
     var tolH = 10;
 
-    return Math.abs(rect.width - targetW) <= tolW && Math.abs(rect.height - targetH) <= tolH;
+    var strictMatch = Math.abs(rect.width - targetW) <= tolW && Math.abs(rect.height - targetH) <= tolH;
+    if (strictMatch) return true;
+
+    // Fallback: keep visualizer available whenever sticky player is actively playing.
+    var audio = document.getElementById('playerAudio');
+    var titleEl = document.getElementById('playerTrackTitle');
+    var hasTrackSource = !!(audio && String(audio.currentSrc || audio.src || '').trim());
+    var hasTrackTitle = !!(titleEl && String(titleEl.textContent || '').trim() && String(titleEl.textContent || '').trim().toLowerCase() !== 'no track selected');
+    var isPlaying = !!(audio && !audio.paused && !audio.ended);
+
+    return hasTrackSource && hasTrackTitle && isPlaying;
   }
 
   function monitorStickyAreaForVisualizer() {
     var matches = stickyPlayerMatchesWaveArea();
-
-    // Trigger once per entry into target area.
-    if (matches && !_stickyAreaPrevMatch && typeof window.openCubeVisualizer === 'function') {
-      window.openCubeVisualizer();
-    }
-
     _stickyAreaPrevMatch = matches;
   }
 
@@ -33833,6 +34409,26 @@ document.addEventListener('DOMContentLoaded', function() {
   if (typeof window.playNewTrack === 'function' && !window.playNewTrack._hzStickyControlWrapped) {
     const originalPlayNewTrack = window.playNewTrack;
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
+      if (!window.__hzStickyAdBypassOnce && typeof window.playStickyAdThenTrack === 'function') {
+        const deferredTrackId = trackId;
+        const deferredTrackUrl = trackUrl;
+        const deferredTrackTitle = trackTitle;
+        const deferredTrackArtist = trackArtist;
+
+        const startedAdBreak = window.playStickyAdThenTrack(function() {
+          window.__hzStickyAdBypassOnce = true;
+          window.playNewTrack(deferredTrackId, deferredTrackUrl, deferredTrackTitle, deferredTrackArtist);
+        });
+
+        if (startedAdBreak) {
+          return true;
+        }
+      }
+
+      if (window.__hzStickyAdBypassOnce) {
+        window.__hzStickyAdBypassOnce = false;
+      }
+
       resetOfflineToHomeControlState();
       markStickySelectionUnlocked();
       const currentRef = getCurrentTrackRef();
@@ -33925,7 +34521,8 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
       }
 
-      return originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
+      const playResult = originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
+      return playResult;
     };
     window.playNewTrack._hzStickyControlWrapped = true;
     window.playNewTrack._hzOriginalPlayNewTrack = originalPlayNewTrack;
