@@ -8884,7 +8884,7 @@ last i checked this is best, specially since it could be real safe`;
   </div>
 
   <div id="stickyTrackAdPopup" class="sticky-ad-popup" aria-hidden="true">
-    <video id="stickyTrackAdVideo" preload="auto" playsinline autoplay></video>
+    <video id="stickyTrackAdVideo" preload="auto" playsinline webkit-playsinline x5-playsinline="true" autoplay></video>
   </div>
 
   <div class="container">
@@ -14586,6 +14586,14 @@ p.s I'm Beniam Endale Tedla`;
             }
             adVideo.autoplay = true;
             adVideo.playsInline = true;
+            adVideo.setAttribute('playsinline', '');
+            adVideo.setAttribute('webkit-playsinline', '');
+            adVideo.setAttribute('x5-playsinline', 'true');
+            adVideo.setAttribute('x5-video-player-type', 'h5');
+            adVideo.setAttribute('x5-video-player-fullscreen', 'false');
+            try { adVideo.webkitPlaysInline = true; } catch (e) {}
+            adVideo.controls = false;
+            adVideo.disablePictureInPicture = true;
             adVideo.loop = false;
             forceAdAudible();
             adVideo.addEventListener('playing', forceAdAudible);
