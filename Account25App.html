@@ -2,212 +2,970 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>HZ - Account</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGRlZnM+CjxyYWRpYWxHcmFkaWVudCBpZD0iZ29sZGVuIiBjeD0iNTAlIiBjeT0iNTAlIiByPSI1MCUiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkZENzAwO3N0b3Atb3BhY2l0eToxIiAvPgo8c3RvcCBvZmZzZXQ9IjMwJSIgc3R5bGU9InN0b3AtY29sb3I6I0ZGQTUwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPHN0b3Agb2Zmc2V0PSI3MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNEQTdGMDA7c3RvcC1vcGFjaXR5OjEiIC8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6Izg4NEQwMDtzdG9wLW9wYWNpdHk6MSIgLz4KPC9yYWRpYWxHcmFkaWVudD4KPC9kZWZzPgo8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSIxNiIgZmlsbD0idXJsKCNnb2xkZW4pIi8+CjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDE2LDE2KSI+CjxnPgo8cGF0aCBkPSJNLTEwIDAgTDEwIDAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMCAtMTAgTDAgMTAiIHN0cm9rZT0iI0ZGRDQ0NCIgc3Ryb2tlLXdpZHRoPSIwLjUiIG9wYWNpdHk9IjAuOCIvPgo8L2c+CjxnIHRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CjxwYXRoIGQ9Ik0tOCAwIEw4IDAiIHN0cm9rZT0iI0ZGRjY2NiIgc3Ryb2tlLXdpZHRoPSIwLjMiIG9wYWNpdHk9IjAuNiIvPgo8cGF0aCBkPSJNMCAtOCBMMCA4IiBzdHJva2U9IiNGRkY2NjYiIHN0cm9rZS13aWR0aD0iMC4zIiBvcGFjaXR5PSIwLjYiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSgyMi41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8ZyB0cmFuc2Zvcm09InJvdGF0ZSg2Ny41KSI+CjxwYXRoIGQ9Ik0tNiAwIEw2IDAiIHN0cm9rZT0iI0ZGRjg4OCIgc3Ryb2tlLXdpZHRoPSIwLjIiIG9wYWNpdHk9IjAuNCIvPgo8cGF0aCBkPSJNMCAtNiBMMCA2IiBzdHJva2U9IiNGRkY4ODgiIHN0cm9rZS13aWR0aD0iMC4yIiBvcGFjaXR5PSIwLjQiLz4KPC9nPgo8Y2lyY2xlIGN4PSIwIiBjeT0iMCIgcj0iMyIgZmlsbD0iI0ZGRjAwMCIgb3BhY2l0eT0iMC45Ii8+CjxjaXJjbGUgY3g9IjAiIGN5PSIwIiByPSIxLjUiIGZpbGw9IiNGRkZGRkYiIG9wYWNpdHk9IjAuOCIvPgo8L2c+Cjwvc3ZnPg==">
+  <title>HZ Endpoint Access | Stripe Event Viewer</title>
   <style>
-    body { font-family: 'Segoe UI', Arial, sans-serif; background: #181818; color: #fff; margin: 0; }
-    header { position: sticky; top: 0; background: #121212; padding: 1rem 2rem; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-    .logo-btn { font-size: 1.7rem; font-weight: bold; color: gold; background: transparent; border: 2px solid gold; border-radius: 30px; padding: 0.4rem 1.6rem; text-decoration: none; letter-spacing: 2px; cursor: pointer; transition: background 0.2s, color 0.2s;}
-    .logo-btn:hover, .logo-btn:focus { background: #0066ff; color: #fff; outline: none; border-color: #0066ff;}
-    nav { display: flex; gap: 1rem;}
-    nav a { text-decoration: none; color: #fff; background: #282828; padding: 0.6rem 1.4rem; border-radius: 30px; font-weight: 500; transition: background 0.2s, color 0.2s; border: 2px solid transparent;}
-    nav a:hover, nav a.active { background: #0066ff; color: #fff; border-color: #0066ff;}
-    .mobile-menu-btn { display: none; background: none; border: 2px solid gold; color: gold; font-size: 1.5rem; padding: 0.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-    .mobile-menu-btn:hover { background: #0066ff; color: #fff; border-color: #0066ff; }
-    .mobile-nav { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18, 18, 18, 0.95); z-index: 1000; padding-top: 4rem; }
-    .mobile-nav.active { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; }
-    .mobile-nav a { color: #fff; background: #282828; padding: 1rem 2rem; border-radius: 30px; font-weight: 500; text-decoration: none; font-size: 1.1rem; border: 2px solid transparent; transition: all 0.2s; }
-    .mobile-nav a:hover, .mobile-nav a.active { background: #0066ff; color: #fff; border-color: #0066ff; }
-    .mobile-nav .close-btn { position: absolute; top: 1rem; right: 2rem; background: none; border: none; color: #fff; font-size: 2rem; cursor: pointer; }
-    .account-container { max-width: 440px; margin: 3rem auto; background: #232526; padding: 2rem; border-radius: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);}
-    h2 { margin-bottom: 1.5rem; }
-    label { display: block; margin-top: 1rem; color: #b3b3b3; }
-    input, select { width: 100%; padding: 0.7rem; margin-top: 0.3rem; border-radius: 8px; border: none; background: #181818; color: #fff; font-size: 1rem; }
-    button { margin-top: 1.5rem; padding: 0.7rem 2rem; border-radius: 30px; background: gold; color: #181818; font-weight: bold; font-size: 1.1rem; border: none; cursor: pointer; transition: background 0.2s, color 0.2s; }
-    button:hover { background: #0066ff; color: #fff; }
-    .saved { color: gold; margin-top: 1rem; }
-    .profile-img-container { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; }
-    .profile-img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid gold; background: #282828; }
-    .img-upload-label { color: gold; cursor: pointer; font-size: 0.95rem; margin-top: 0.5rem; display: inline-block;}
-    .account-options { margin-top: 2rem; }
-    .option-group { margin-bottom: 1.5rem; }
-    .signout-btn { background: #282828; color: #fff; border: 2px solid gold; }
-    .signout-btn:hover { background: #0066ff; color: #fff; }
-    .danger-zone { margin-top: 2.5rem; border-top: 1px solid #333; padding-top: 1.5rem; }
-    .danger-btn { background: #d32f2f; color: #fff; border: none; }
-    .danger-btn:hover { background: #b71c1c; }
-    @media (max-width: 768px) {
-      nav { display: none; }
-      .mobile-menu-btn { display: block; }
-      header { flex-wrap: wrap; padding: 1rem; }
-      .account-container { margin: 1rem; padding: 1.5rem; }
+    :root {
+      --bg: #080b12;
+      --panel: #101826;
+      --panel-2: #0c1320;
+      --line: #22324c;
+      --text: #e8eefb;
+      --muted: #8ea2c2;
+      --accent: #2dd4bf;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(1200px 450px at 90% -10%, rgba(45, 212, 191, 0.22), transparent 55%),
+        radial-gradient(900px 380px at -5% -10%, rgba(59, 130, 246, 0.16), transparent 60%),
+        var(--bg);
+      padding: 24px;
+    }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: grid;
+      gap: 14px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(16, 24, 38, 0.96), rgba(12, 19, 32, 0.96));
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 16px 38px rgba(0, 0, 0, 0.45);
+    }
+
+    .head {
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.87rem;
+    }
+
+    .body {
+      padding: 14px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.28);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--warn);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.75);
+    }
+
+    .dot.ok {
+      background: var(--ok);
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    }
+
+    .dot.err {
+      background: var(--danger);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.035em;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #0a1220;
+      color: var(--text);
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.14);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 11px;
+    }
+
+    button {
+      background: #0c1524;
+      color: var(--text);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #14b8a6, #0ea5e9);
+      border: none;
+      color: #06202a;
+    }
+
+    .hint {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(9, 17, 32, 0.95);
+      padding: 10px 12px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ebf2ff;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 980px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .events-wrap {
+      max-height: 58vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+    }
+
+    .event-tools {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr 0.6fr;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .event-tools select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: #0a1220;
+      color: var(--text);
+      outline: none;
+    }
+
+    @media (max-width: 760px) {
+      .event-tools {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #0a1220;
+      color: var(--muted);
+      text-align: left;
+      padding: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    tbody td {
+      padding: 10px;
+      border-bottom: 1px solid rgba(34, 50, 76, 0.45);
+      cursor: pointer;
+      color: #d7e3f8;
+    }
+
+    tbody tr:hover td { background: rgba(45, 212, 191, 0.07); }
+
+    .mono {
+      font-family: Consolas, Menlo, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 58vh;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      background: #091120;
+      color: #dce8ff;
+    }
+
+    .section-title {
+      margin: 0 0 8px 0;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      font-size: 0.78rem;
+    }
+
+    .quick {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      background: #0a1220;
+      color: #c8d7f0;
+      border-radius: 999px;
+      padding: 7px 10px;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+
+    .pill:hover {
+      border-color: var(--accent);
+      color: #e7f6ff;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 8, 20, 0.78);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 4000;
+      padding: 18px;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-card {
+      width: min(540px, 96vw);
+      background: linear-gradient(180deg, rgba(16, 24, 38, 0.98), rgba(10, 17, 30, 0.98));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+      padding: 16px;
+    }
+
+    .modal-title {
+      margin: 0 0 6px 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .modal-sub {
+      margin: 0 0 12px 0;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .modal-actions {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .modal-large {
+      width: min(1100px, 98vw);
+      max-height: 90vh;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 10px;
+    }
+
+    .popup-tools {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 8px;
+    }
+
+    @media (max-width: 760px) {
+      .popup-tools {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .popup-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    @media (max-width: 980px) {
+      .popup-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .popup-events-wrap {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: auto;
+      max-height: 60vh;
+      background: #081020;
+    }
+
+    .popup-payload {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #081020;
+      padding: 12px;
+      max-height: 60vh;
+      overflow: auto;
+      font-family: Consolas, Menlo, monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #dce8ff;
     }
   </style>
 </head>
 <body>
-  <header>
-    <a href="index.html" class="logo-btn" aria-label="index.html">HZ</a>
-  </header>
-  <div class="account-container">
-    <h2>Your Account</h2>
-    <form id="accountForm" autocomplete="off">
-      <div class="profile-img-container">
-        <img id="profileImg" class="profile-img" src="https://ui-avatars.com/api/?name=User&background=232526&color=FFD700" alt="Profile Image">
+  <div class="shell">
+    <div class="card">
+      <div class="head">
         <div>
-          <label class="img-upload-label">
-            Change Image
-            <input type="file" id="imgInput" accept="image/*" style="display:none;">
-          </label>
+          <h1 class="title">HZ Music Streamer | Stripe Endpoint Viewer</h1>
+          <div class="sub">Public monitor UI with key-gated access to Stripe event notifications</div>
+        </div>
+        <div class="status"><span id="statusDot" class="dot"></span><span id="statusText">Locked</span></div>
+      </div>
+      <div class="body">
+        <div class="grid">
+          <div>
+            <label for="endpointUrl">Endpoint URL</label>
+            <input id="endpointUrl" value="/api/subscriptions/account25app-endpoint" />
+          </div>
+          <div>
+            <label for="accessKey">Access Key (Stripe Publishable Key)</label>
+            <input id="accessKey" type="password" placeholder="Enter Stripe publishable key" />
+          </div>
+          <div>
+            <label for="pollMs">Refresh Interval (ms)</label>
+            <input id="pollMs" value="3000" />
+          </div>
+        </div>
+        <div class="actions">
+          <button id="eventDetailsBtn" class="primary">Event Details</button>
+          <button id="refreshBtn">Refresh Events</button>
+          <button id="viewEndpointBtn">View Endpoint Response</button>
+          <button id="copyWebhookBtn">Copy Endpoint URL</button>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Stored Events</div>
+            <div class="stat-value" id="statTotal">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Live Events</div>
+            <div class="stat-value" id="statLive">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Test Events</div>
+            <div class="stat-value" id="statTest">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Visible Events</div>
+            <div class="stat-value" id="statVisible">0</div>
+          </div>
+        </div>
+        <div class="quick" id="quickEndpoints"></div>
+        <div class="hint">Stripe should send notifications directly to this same endpoint URL. UI reads events via GET using your key; webhook POST remains Stripe-signature validated.</div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="card">
+        <div class="head"><h2 class="title" style="font-size:1rem;">Stripe Event Notifications</h2></div>
+        <div class="body">
+          <div class="event-tools">
+            <input id="eventSearch" placeholder="Search event type, ID, customer, subscription" />
+            <select id="modeFilter">
+              <option value="all">All Modes</option>
+              <option value="live">Live Only</option>
+              <option value="test">Test Only</option>
+            </select>
+            <select id="sortOrder">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div>
+          <div class="events-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Created</th>
+                  <th>Type</th>
+                  <th>Event ID</th>
+                  <th>Mode</th>
+                </tr>
+              </thead>
+              <tbody id="eventsBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <label for="name">Name</label>
-      <input type="text" id="name" required>
-      <label for="email">Email</label>
-      <input type="email" id="email" required>
-      <label for="username">Username</label>
-      <input type="text" id="username" required>
-      <label for="country">Country</label>
-      <select id="country">
-        <option value="">Select country</option>
-        <option value="us">United States</option>
-        <option value="uk">United Kingdom</option>
-        <option value="ca">Canada</option>
-        <option value="au">Australia</option>
-        <option value="fr">France</option>
-        <option value="de">Germany</option>
-        <option value="other">Other</option>
-      </select>
-      <label for="bio">Bio</label>
-      <input type="text" id="bio" maxlength="120" placeholder="Tell us about yourself...">
-      <button type="submit">Save</button>
-      <div class="saved" id="savedMsg" style="display:none;">Saved!</div>
-    </form>
-    <div class="account-options">
-      <div class="option-group">
-        <label>
-          <input type="checkbox" id="newsletter"> Subscribe to newsletter
-        </label>
+
+      <div class="card">
+        <div class="head"><h2 class="title" style="font-size:1rem;">Inspect</h2></div>
+        <div class="body">
+          <p class="section-title">Selected Event Payload</p>
+          <div id="payloadView" class="mono">No event selected yet.</div>
+          <p class="section-title" style="margin-top:12px;">Endpoint Response</p>
+          <div id="endpointResponseView" class="mono">No endpoint response loaded yet.</div>
+        </div>
       </div>
-      <div class="option-group">
-        <label>
-          <input type="checkbox" id="privateProfile"> Private profile
-        </label>
-      </div>
-      <div class="option-group">
-        <label>
-          <input type="checkbox" id="emailNotifications"> Email notifications
-        </label>
-      </div>
-      <button class="signout-btn" id="signoutBtn" type="button">Sign Out</button>
-    </div>
-    <div class="danger-zone">
-      <button class="danger-btn" id="deleteBtn" type="button">Delete Account</button>
     </div>
   </div>
-  <script src="hertz-universal.js"></script>
-  <script>
-    const nameInput = document.getElementById('name');
-    const emailInput = document.getElementById('email');
-    const usernameInput = document.getElementById('username');
-    const countryInput = document.getElementById('country');
-    const bioInput = document.getElementById('bio');
-    const profileImg = document.getElementById('profileImg');
-    const imgInput = document.getElementById('imgInput');
-    const savedMsg = document.getElementById('savedMsg');
-    const newsletter = document.getElementById('newsletter');
-    const privateProfile = document.getElementById('privateProfile');
-    const emailNotifications = document.getElementById('emailNotifications');
-    const signoutBtn = document.getElementById('signoutBtn');
-    const deleteBtn = document.getElementById('deleteBtn');
 
-    // Load user data
-    window.onload = function() {
-      const user = JSON.parse(localStorage.getItem('hertzUser')) || {};
-      if(user.name) nameInput.value = user.name;
-      if(user.email) emailInput.value = user.email;
-      if(user.username) usernameInput.value = user.username;
-      if(user.country) countryInput.value = user.country;
-      if(user.bio) bioInput.value = user.bio;
-      if(user.img) profileImg.src = user.img;
-      newsletter.checked = !!user.newsletter;
-      privateProfile.checked = !!user.privateProfile;
-      emailNotifications.checked = !!user.emailNotifications;
-    };
-
-    // Save user data
-    document.getElementById('accountForm').onsubmit = function(e) {
-      e.preventDefault();
-      const user = {
-        name: nameInput.value,
-        email: emailInput.value,
-        username: usernameInput.value,
-        country: countryInput.value,
-        bio: bioInput.value,
-        img: profileImg.src,
-        newsletter: newsletter.checked,
-        privateProfile: privateProfile.checked,
-        emailNotifications: emailNotifications.checked
-      };
-      localStorage.setItem('hertzUser', JSON.stringify(user));
-      savedMsg.style.display = 'block';
-      setTimeout(()=>savedMsg.style.display='none', 1500);
-    };
-
-    // Handle image upload
-    imgInput.addEventListener('change', function() {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          profileImg.src = e.target.result;
-          // Save image to localStorage user object immediately
-          let user = JSON.parse(localStorage.getItem('hertzUser')) || {};
-          user.img = e.target.result;
-          user.name = nameInput.value;
-          user.email = emailInput.value;
-          user.username = usernameInput.value;
-          user.country = countryInput.value;
-          user.bio = bioInput.value;
-          user.newsletter = newsletter.checked;
-          user.privateProfile = privateProfile.checked;
-          user.emailNotifications = emailNotifications.checked;
-          localStorage.setItem('hertzUser', JSON.stringify(user));
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    // Click label triggers file input
-    document.querySelector('.img-upload-label').onclick = function() {
-      imgInput.click();
-    };
-
-    // Sign out
-    signoutBtn.onclick = function() {
-      localStorage.removeItem('hertzUser');
-      window.location.href = "Hertz App.html";
-    };
-
-    // Delete account
-    deleteBtn.onclick = function() {
-      if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-        localStorage.removeItem('hertzUser');
-        window.location.href = "Hertz App.html";
-      }
-    };
-  </script>
-
-  <!-- Copyright Footer -->
-   <footer style="position: relative; bottom: 0; left: 0; right: 0; background: rgba(24, 24, 24, 0.95); border-top: 1px solid #404040; padding: 12px 16px; text-align: center; font-size: 0.75rem; color: #b3b3b3; margin-top: 2rem;">
-    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto;">
-      <div>
-        © 2025 HZ Music Streamer. All rights reserved.
-      </div>
-      <div style="font-weight: 500; color: gold;">
-        Founded & Developed by <span style="color: #fff;">Beniam Endale Tedla</span>
+  <div id="keyPromptModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="keyPromptTitle">
+      <h3 id="keyPromptTitle" class="modal-title">Enter Publishable Key</h3>
+      <p class="modal-sub">Provide the Stripe publishable key from hertz25AIpp.com to view event notifications.</p>
+      <label for="keyPromptInput">Publishable Key</label>
+      <input id="keyPromptInput" type="password" placeholder="pk_live_..." />
+      <div class="modal-actions">
+        <button id="cancelKeyPromptBtn" type="button">Cancel</button>
+        <button id="submitKeyPromptBtn" class="primary" type="button">View Events</button>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <div id="eventDetailsModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card modal-large" role="dialog" aria-modal="true" aria-labelledby="eventDetailsTitle">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div>
+          <h3 id="eventDetailsTitle" class="modal-title" style="margin-bottom:2px;">Stripe Event Notifications</h3>
+          <p class="modal-sub" style="margin:0;">Browse every event notification sent to this endpoint.</p>
+        </div>
+        <button id="closeEventDetailsBtn" type="button">Close</button>
+      </div>
+      <div class="popup-tools">
+        <input id="popupEventSearch" placeholder="Search event type, id, customer, subscription" />
+        <select id="popupModeFilter">
+          <option value="all">All Modes</option>
+          <option value="live">Live Only</option>
+          <option value="test">Test Only</option>
+        </select>
+      </div>
+      <div class="popup-grid">
+        <div class="popup-events-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Created</th>
+                <th>Type</th>
+                <th>Event ID</th>
+                <th>Mode</th>
+              </tr>
+            </thead>
+            <tbody id="popupEventsBody"></tbody>
+          </table>
+        </div>
+        <div id="popupPayloadView" class="popup-payload">Select an event to inspect payload.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const endpointInput = document.getElementById('endpointUrl');
+      const accessKeyInput = document.getElementById('accessKey');
+      const pollInput = document.getElementById('pollMs');
+      const eventDetailsBtn = document.getElementById('eventDetailsBtn');
+      const refreshBtn = document.getElementById('refreshBtn');
+      const viewEndpointBtn = document.getElementById('viewEndpointBtn');
+      const copyWebhookBtn = document.getElementById('copyWebhookBtn');
+      const eventsBody = document.getElementById('eventsBody');
+      const payloadView = document.getElementById('payloadView');
+      const endpointResponseView = document.getElementById('endpointResponseView');
+      const quickEndpoints = document.getElementById('quickEndpoints');
+      const statTotal = document.getElementById('statTotal');
+      const statLive = document.getElementById('statLive');
+      const statTest = document.getElementById('statTest');
+      const statVisible = document.getElementById('statVisible');
+      const eventSearch = document.getElementById('eventSearch');
+      const modeFilter = document.getElementById('modeFilter');
+      const sortOrder = document.getElementById('sortOrder');
+      const statusDot = document.getElementById('statusDot');
+      const statusText = document.getElementById('statusText');
+      const keyPromptModal = document.getElementById('keyPromptModal');
+      const keyPromptInput = document.getElementById('keyPromptInput');
+      const cancelKeyPromptBtn = document.getElementById('cancelKeyPromptBtn');
+      const submitKeyPromptBtn = document.getElementById('submitKeyPromptBtn');
+      const eventDetailsModal = document.getElementById('eventDetailsModal');
+      const closeEventDetailsBtn = document.getElementById('closeEventDetailsBtn');
+      const popupEventsBody = document.getElementById('popupEventsBody');
+      const popupPayloadView = document.getElementById('popupPayloadView');
+      const popupEventSearch = document.getElementById('popupEventSearch');
+      const popupModeFilter = document.getElementById('popupModeFilter');
+
+      let pollTimer = null;
+      let latestEvents = [];
+      let allEvents = [];
+      let popupFilteredEvents = [];
+
+      const defaultQuickEndpoints = [
+        '/api/subscriptions/account25app-endpoint',
+        '/api/subscriptions/account25app-endpoint?format=json',
+        '/api/subscriptions/endpoint?format=json',
+        '/api/subscriptions/events?latest=1',
+        '/api/subscriptions/privacy-policy?format=json',
+        '/api/privacy-policy?format=json'
+      ];
+
+      endpointInput.value = localStorage.getItem('hzAccountEndpointUrl') || endpointInput.value;
+      accessKeyInput.value = localStorage.getItem('hzAccountEndpointKey') || '';
+      pollInput.value = localStorage.getItem('hzAccountEndpointPollMs') || pollInput.value;
+
+      function setStatus(text, mode) {
+        statusText.textContent = text;
+        statusDot.classList.remove('ok', 'err');
+        if (mode === 'ok') statusDot.classList.add('ok');
+        if (mode === 'err') statusDot.classList.add('err');
+      }
+
+      function getConfiguredUrl() {
+        return String(endpointInput.value || '/api/subscriptions/account25app-endpoint').trim() || '/api/subscriptions/account25app-endpoint';
+      }
+
+      function getConfiguredKey() {
+        return String(accessKeyInput.value || '').trim();
+      }
+
+      function formatTime(value) {
+        if (!value) return '-';
+        try {
+          return new Date(value).toLocaleString();
+        } catch (e) {
+          return String(value);
+        }
+      }
+
+      function buildAuthorizedUrl(base, forceJson) {
+        const url = new URL(base, window.location.origin);
+        if (forceJson) {
+          url.searchParams.set('format', 'json');
+          url.searchParams.set('limit', '120');
+        }
+        const key = getConfiguredKey();
+        if (key) {
+          url.searchParams.set('key', key);
+        }
+        return url;
+      }
+
+      function renderEvents(events) {
+        allEvents = Array.isArray(events) ? events : [];
+        latestEvents = allEvents;
+
+        const liveCount = allEvents.filter(function(evt) { return !!evt.livemode; }).length;
+        const testCount = allEvents.length - liveCount;
+        if (statTotal) statTotal.textContent = String(allEvents.length);
+        if (statLive) statLive.textContent = String(liveCount);
+        if (statTest) statTest.textContent = String(testCount);
+
+        if (!allEvents.length) {
+          eventsBody.innerHTML = '<tr><td colspan="4" style="color:#8ea2c2;">No Stripe notifications received yet.</td></tr>';
+          payloadView.textContent = 'No event selected yet.';
+          if (statVisible) statVisible.textContent = '0';
+          return;
+        }
+
+        const searchTerm = String((eventSearch && eventSearch.value) || '').trim().toLowerCase();
+        const selectedMode = String((modeFilter && modeFilter.value) || 'all').toLowerCase();
+        const selectedSort = String((sortOrder && sortOrder.value) || 'newest').toLowerCase();
+
+        let filteredEvents = allEvents.filter(function(evt) {
+          if (selectedMode === 'live' && !evt.livemode) return false;
+          if (selectedMode === 'test' && evt.livemode) return false;
+          if (!searchTerm) return true;
+
+          const stack = [
+            evt.type,
+            evt.id,
+            evt.customerId,
+            evt.subscriptionId,
+            (evt.payload && evt.payload.type) || '',
+            (evt.payload && evt.payload.id) || ''
+          ].join(' ').toLowerCase();
+          return stack.includes(searchTerm);
+        });
+
+        filteredEvents = filteredEvents.slice().sort(function(a, b) {
+          const aTs = Number(a.created || 0);
+          const bTs = Number(b.created || 0);
+          if (selectedSort === 'oldest') return aTs - bTs;
+          return bTs - aTs;
+        });
+
+        if (statVisible) statVisible.textContent = String(filteredEvents.length);
+
+        if (!filteredEvents.length) {
+          eventsBody.innerHTML = '<tr><td colspan="4" style="color:#8ea2c2;">No events match your filters.</td></tr>';
+          payloadView.textContent = 'No event selected yet.';
+          return;
+        }
+
+        eventsBody.innerHTML = filteredEvents.map(function(evt, idx) {
+          const mode = evt.livemode ? 'live' : 'test';
+          return '<tr data-idx="' + idx + '">' +
+            '<td>' + formatTime(evt.createdAt || evt.created * 1000) + '</td>' +
+            '<td>' + (evt.type || '-') + '</td>' +
+            '<td>' + (evt.id || '-') + '</td>' +
+            '<td>' + mode + '</td>' +
+          '</tr>';
+        }).join('');
+
+        latestEvents = filteredEvents;
+
+        payloadView.textContent = JSON.stringify(filteredEvents[0].payload || filteredEvents[0], null, 2);
+        renderPopupEvents(allEvents);
+      }
+
+      function renderPopupEvents(events) {
+        const sourceEvents = Array.isArray(events) ? events : [];
+        const searchTerm = String((popupEventSearch && popupEventSearch.value) || '').trim().toLowerCase();
+        const selectedMode = String((popupModeFilter && popupModeFilter.value) || 'all').toLowerCase();
+
+        popupFilteredEvents = sourceEvents.filter(function(evt) {
+          if (selectedMode === 'live' && !evt.livemode) return false;
+          if (selectedMode === 'test' && evt.livemode) return false;
+          if (!searchTerm) return true;
+
+          const stack = [
+            evt.type,
+            evt.id,
+            evt.customerId,
+            evt.subscriptionId,
+            (evt.payload && evt.payload.type) || '',
+            (evt.payload && evt.payload.id) || ''
+          ].join(' ').toLowerCase();
+          return stack.includes(searchTerm);
+        });
+
+        if (!popupEventsBody) return;
+        if (!popupFilteredEvents.length) {
+          popupEventsBody.innerHTML = '<tr><td colspan="4" style="color:#8ea2c2;">No events match your popup filters.</td></tr>';
+          if (popupPayloadView) {
+            popupPayloadView.textContent = 'No event selected yet.';
+          }
+          return;
+        }
+
+        popupEventsBody.innerHTML = popupFilteredEvents.map(function(evt, idx) {
+          const mode = evt.livemode ? 'live' : 'test';
+          return '<tr data-popup-idx="' + idx + '">' +
+            '<td>' + formatTime(evt.createdAt || evt.created * 1000) + '</td>' +
+            '<td>' + (evt.type || '-') + '</td>' +
+            '<td>' + (evt.id || '-') + '</td>' +
+            '<td>' + mode + '</td>' +
+          '</tr>';
+        }).join('');
+
+        if (popupPayloadView) {
+          popupPayloadView.textContent = JSON.stringify(popupFilteredEvents[0].payload || popupFilteredEvents[0], null, 2);
+        }
+      }
+
+      async function fetchEvents() {
+        const url = buildAuthorizedUrl(getConfiguredUrl(), true);
+        try {
+          const response = await fetch(url.toString(), { method: 'GET', credentials: 'include' });
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error((data && data.message) || ('HTTP ' + response.status));
+          }
+
+          renderEvents(data.events || []);
+          setStatus('Unlocked: ' + (data.totalStored || 0) + ' events available', 'ok');
+          return true;
+        } catch (error) {
+          setStatus('Access failed: ' + (error.message || 'Unknown error'), 'err');
+          return false;
+        }
+      }
+
+      async function viewEndpointResponse() {
+        const url = buildAuthorizedUrl(getConfiguredUrl(), false);
+        try {
+          const response = await fetch(url.toString(), { method: 'GET', credentials: 'include' });
+          const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+
+          let body = '';
+          if (contentType.includes('application/json')) {
+            const json = await response.json();
+            body = JSON.stringify(json, null, 2);
+          } else {
+            body = await response.text();
+          }
+
+          endpointResponseView.textContent =
+            'HTTP ' + response.status + '\n' +
+            'URL: ' + url.toString() + '\n\n' +
+            body;
+        } catch (error) {
+          endpointResponseView.textContent = 'Request failed: ' + (error.message || 'Unknown error');
+        }
+      }
+
+      function startPolling() {
+        const pollMsRaw = Number(pollInput.value || 3000);
+        const pollMs = Math.max(1000, Math.min(60000, Number.isFinite(pollMsRaw) ? Math.floor(pollMsRaw) : 3000));
+
+        localStorage.setItem('hzAccountEndpointUrl', getConfiguredUrl());
+        localStorage.setItem('hzAccountEndpointKey', getConfiguredKey());
+        localStorage.setItem('hzAccountEndpointPollMs', String(pollMs));
+
+        if (pollTimer) {
+          clearInterval(pollTimer);
+          pollTimer = null;
+        }
+
+        fetchEvents();
+        viewEndpointResponse();
+        pollTimer = setInterval(fetchEvents, pollMs);
+      }
+
+      function openKeyPromptModal() {
+        if (!keyPromptModal) return;
+        keyPromptInput.value = accessKeyInput.value || '';
+        keyPromptModal.classList.add('show');
+        keyPromptModal.setAttribute('aria-hidden', 'false');
+        setTimeout(function() {
+          if (keyPromptInput) keyPromptInput.focus();
+        }, 30);
+      }
+
+      function closeKeyPromptModal() {
+        if (!keyPromptModal) return;
+        keyPromptModal.classList.remove('show');
+        keyPromptModal.setAttribute('aria-hidden', 'true');
+      }
+
+      function openEventDetailsModal() {
+        if (!eventDetailsModal) return;
+        eventDetailsModal.classList.add('show');
+        eventDetailsModal.setAttribute('aria-hidden', 'false');
+        renderPopupEvents(allEvents);
+      }
+
+      function closeEventDetailsModal() {
+        if (!eventDetailsModal) return;
+        eventDetailsModal.classList.remove('show');
+        eventDetailsModal.setAttribute('aria-hidden', 'true');
+      }
+
+      async function handleEventDetailsFlow() {
+        const enteredKey = String((keyPromptInput && keyPromptInput.value) || '').trim();
+        if (!enteredKey) {
+          setStatus('Publishable key is required to view events.', 'err');
+          return;
+        }
+
+        accessKeyInput.value = enteredKey;
+        startPolling();
+        const ok = await fetchEvents();
+        if (!ok) {
+          return;
+        }
+
+        closeKeyPromptModal();
+        openEventDetailsModal();
+      }
+
+      if (eventDetailsBtn) {
+        eventDetailsBtn.addEventListener('click', openKeyPromptModal);
+      }
+      if (cancelKeyPromptBtn) {
+        cancelKeyPromptBtn.addEventListener('click', closeKeyPromptModal);
+      }
+      if (submitKeyPromptBtn) {
+        submitKeyPromptBtn.addEventListener('click', handleEventDetailsFlow);
+      }
+      if (closeEventDetailsBtn) {
+        closeEventDetailsBtn.addEventListener('click', closeEventDetailsModal);
+      }
+
+      refreshBtn.addEventListener('click', fetchEvents);
+      viewEndpointBtn.addEventListener('click', viewEndpointResponse);
+
+      copyWebhookBtn.addEventListener('click', async function() {
+        const url = new URL(getConfiguredUrl(), window.location.origin).toString();
+        try {
+          await navigator.clipboard.writeText(url);
+          setStatus('Endpoint URL copied.', 'ok');
+        } catch (error) {
+          setStatus('Copy failed: ' + url, 'err');
+        }
+      });
+
+      eventsBody.addEventListener('click', function(evt) {
+        const row = evt.target.closest('tr[data-idx]');
+        if (!row) return;
+        const idx = Number(row.getAttribute('data-idx'));
+        const selected = latestEvents[idx];
+        if (!selected) return;
+        payloadView.textContent = JSON.stringify(selected.payload || selected, null, 2);
+      });
+
+      if (eventSearch) {
+        eventSearch.addEventListener('input', function() {
+          renderEvents(allEvents);
+        });
+      }
+      if (modeFilter) {
+        modeFilter.addEventListener('change', function() {
+          renderEvents(allEvents);
+        });
+      }
+      if (sortOrder) {
+        sortOrder.addEventListener('change', function() {
+          renderEvents(allEvents);
+        });
+      }
+
+      if (quickEndpoints) {
+        quickEndpoints.innerHTML = defaultQuickEndpoints.map(function(item) {
+          return '<button type="button" class="pill" data-endpoint="' + item + '">' + item + '</button>';
+        }).join('');
+
+        quickEndpoints.addEventListener('click', function(evt) {
+          const btn = evt.target.closest('[data-endpoint]');
+          if (!btn) return;
+          endpointInput.value = btn.getAttribute('data-endpoint') || '/api/subscriptions/account25app-endpoint';
+          viewEndpointResponse();
+        });
+      }
+
+      if (popupEventSearch) {
+        popupEventSearch.addEventListener('input', function() {
+          renderPopupEvents(allEvents);
+        });
+      }
+
+      if (popupModeFilter) {
+        popupModeFilter.addEventListener('change', function() {
+          renderPopupEvents(allEvents);
+        });
+      }
+
+      if (popupEventsBody) {
+        popupEventsBody.addEventListener('click', function(evt) {
+          const row = evt.target.closest('tr[data-popup-idx]');
+          if (!row) return;
+          const idx = Number(row.getAttribute('data-popup-idx'));
+          const selected = popupFilteredEvents[idx];
+          if (!selected || !popupPayloadView) return;
+          popupPayloadView.textContent = JSON.stringify(selected.payload || selected, null, 2);
+        });
+      }
+
+      if (keyPromptModal) {
+        keyPromptModal.addEventListener('click', function(evt) {
+          if (evt.target === keyPromptModal) closeKeyPromptModal();
+        });
+      }
+      if (eventDetailsModal) {
+        eventDetailsModal.addEventListener('click', function(evt) {
+          if (evt.target === eventDetailsModal) closeEventDetailsModal();
+        });
+      }
+
+      document.addEventListener('keydown', function(evt) {
+        if (evt.key === 'Escape') {
+          closeKeyPromptModal();
+          closeEventDetailsModal();
+        }
+        if (evt.key === 'Enter' && keyPromptModal && keyPromptModal.classList.contains('show')) {
+          handleEventDetailsFlow();
+        }
+      });
+
+      setStatus('Locked. Enter key to unlock event access.', '');
+      viewEndpointResponse();
+    })();
+  </script>
 </body>
 </html>
