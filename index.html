@@ -8863,6 +8863,34 @@ last i checked this is best, specially since it could be real safe`;
       background: #000;
     }
 
+    .sticky-ad-skip-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 6px 11px;
+      cursor: pointer;
+      line-height: 1;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+    }
+
+    .sticky-ad-skip-btn:active {
+      transform: scale(0.98);
+    }
+
+    .sticky-ad-skip-btn:disabled {
+      opacity: 0.72;
+      cursor: not-allowed;
+    }
+
     @media (max-width: 700px) {
       .sticky-ad-popup {
         width: min(92vw, 420px);
@@ -8885,6 +8913,7 @@ last i checked this is best, specially since it could be real safe`;
 
   <div id="stickyTrackAdPopup" class="sticky-ad-popup" aria-hidden="true">
     <video id="stickyTrackAdVideo" preload="auto" playsinline webkit-playsinline x5-playsinline="true" autoplay></video>
+    <button id="stickyTrackAdSkipBtn" class="sticky-ad-skip-btn" type="button" aria-label="Skip ad">Skip</button>
   </div>
 
   <div class="container">
@@ -14211,6 +14240,9 @@ p.s I'm Beniam Endale Tedla`;
           }
 
           function hasActiveMonthlySubscriptionForAds() {
+            if (typeof hasActiveMonthlySubscription === 'function') {
+              return !!hasActiveMonthlySubscription();
+            }
             const plan = localStorage.getItem('hertzSubscriptionPlan');
             const canceledAt = localStorage.getItem('hertzSubscriptionCanceledAt');
             return String(plan || '').toLowerCase() === 'monthly' && !canceledAt;
@@ -14278,6 +14310,7 @@ p.s I'm Beniam Endale Tedla`;
             guardEvents.forEach(function(eventType) {
               document.addEventListener(eventType, function(evt) {
                 if (!window.__hzStickyAdActive) return;
+                if (window.__hzStickyAdAwaitingUnlock) return;
                 const popupEl = document.getElementById('stickyTrackAdPopup');
                 if (popupEl && popupEl.contains(evt.target)) return;
                 evt.preventDefault();
@@ -14307,6 +14340,7 @@ p.s I'm Beniam Endale Tedla`;
 
             const popup = document.getElementById('stickyTrackAdPopup');
             const adVideo = document.getElementById('stickyTrackAdVideo');
+            const skipAdBtn = document.getElementById('stickyTrackAdSkipBtn');
             if (!popup || !adVideo) return false;
 
             const mainPlayerAudio = document.getElementById('playerAudio');
@@ -14348,12 +14382,56 @@ p.s I'm Beniam Endale Tedla`;
             }
 
             window.__hzStickyAdActive = true;
+            window.__hzStickyAdAwaitingUnlock = false;
             adShield.style.display = 'block';
-            popup.style.display = 'block';
-            popup.setAttribute('aria-hidden', 'false');
-            const popupShownAt = Date.now();
+            popup.style.display = 'none';
+            popup.setAttribute('aria-hidden', 'true');
+            if (skipAdBtn) {
+              skipAdBtn.style.display = 'inline-flex';
+              skipAdBtn.disabled = true;
+              skipAdBtn.setAttribute('aria-disabled', 'true');
+              skipAdBtn.textContent = 'Skip in 5';
+            }
+            let popupShownAt = 0;
+            let popupRevealed = false;
 
             let resolved = false;
+            let adSkippedByUser = false;
+            let onSkipAdClick = null;
+            let skipCountdownTimer = null;
+
+            const revealAdPopupNow = function() {
+              if (popupRevealed || resolved || !window.__hzStickyAdActive) return;
+              popupRevealed = true;
+              popupShownAt = Date.now();
+              popup.style.display = 'block';
+              popup.setAttribute('aria-hidden', 'false');
+
+              // Lock skip for first 5s after popup is visible, then allow skipping.
+              if (skipAdBtn) {
+                let skipRemainingSeconds = 5;
+                skipAdBtn.disabled = true;
+                skipAdBtn.setAttribute('aria-disabled', 'true');
+                skipAdBtn.textContent = 'Skip in 5';
+
+                if (skipCountdownTimer) {
+                  clearInterval(skipCountdownTimer);
+                }
+                skipCountdownTimer = setInterval(function() {
+                  if (!window.__hzStickyAdActive) return;
+                  skipRemainingSeconds -= 1;
+                  if (skipRemainingSeconds <= 0) {
+                    clearInterval(skipCountdownTimer);
+                    skipCountdownTimer = null;
+                    skipAdBtn.disabled = false;
+                    skipAdBtn.removeAttribute('aria-disabled');
+                    skipAdBtn.textContent = 'Skip';
+                    return;
+                  }
+                  skipAdBtn.textContent = 'Skip in ' + skipRemainingSeconds;
+                }, 1000);
+              }
+            };
 
             const finishAd = function(forceImmediateClose) {
               if (resolved) return;
@@ -14376,11 +14454,21 @@ p.s I'm Beniam Endale Tedla`;
                 clearInterval(adAudioSyncTimer);
                 adAudioSyncTimer = null;
               }
+              if (skipCountdownTimer) {
+                clearInterval(skipCountdownTimer);
+                skipCountdownTimer = null;
+              }
+              clearAdUnlockWait();
 
               adVideo.onended = null;
               adVideo.onerror = null;
               try {
                 adVideo.pause();
+                if (adSkippedByUser) {
+                  adVideo.removeAttribute('data-active-ad-src');
+                  adVideo.removeAttribute('src');
+                  adVideo.load();
+                }
               } catch (e) {}
               try {
                 adAudioEl.pause();
@@ -14391,18 +14479,41 @@ p.s I'm Beniam Endale Tedla`;
               popup.style.display = 'none';
               popup.setAttribute('aria-hidden', 'true');
               popup.style.bottom = '';
+              if (skipAdBtn && onSkipAdClick) {
+                skipAdBtn.removeEventListener('click', onSkipAdClick);
+                skipAdBtn.disabled = false;
+                skipAdBtn.removeAttribute('aria-disabled');
+                skipAdBtn.textContent = 'Skip';
+              }
               if (adShield) adShield.style.display = 'none';
               window.__hzStickyAdActive = false;
 
               onComplete();
             };
 
+            onSkipAdClick = function(evt) {
+              if (skipAdBtn && skipAdBtn.disabled) return;
+              if (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+              }
+              adSkippedByUser = true;
+              finishAd(true);
+            };
+
+            if (skipAdBtn) {
+              skipAdBtn.addEventListener('click', onSkipAdClick);
+            }
+
             let sourceIndex = -1;
             let playbackStarted = false;
             let adAudioForceTimer = null;
             let adAudioSyncTimer = null;
             let adAudioSilenceProbeTimer = null;
+            let awaitingAdPlaybackUnlock = false;
+            let removeAdUnlockListeners = null;
             let currentPlaybackSource = '';
+            let companionAudioStarted = false;
             const stickyAdBlobCache = window.__hzStickyAdBlobCache || (window.__hzStickyAdBlobCache = Object.create(null));
 
             let adAudioEl = window.__hzStickyAdAudioEl || null;
@@ -14420,6 +14531,86 @@ p.s I'm Beniam Endale Tedla`;
               try { adVideo.defaultMuted = false; } catch (e) {}
               try { adVideo.removeAttribute('muted'); } catch (e) {}
               try { adVideo.volume = 1; } catch (e) {}
+            };
+
+            const startCompanionAudio = function() {
+              if (companionAudioStarted || resolved || !window.__hzStickyAdActive) return;
+              const companionSource = companionAudioSource || currentPlaybackSource;
+              if (!companionSource) return;
+              companionAudioStarted = true;
+
+              try {
+                adAudioEl.src = companionSource;
+                adAudioEl.loop = false;
+                adAudioEl.currentTime = 0;
+                adAudioEl.muted = false;
+                adAudioEl.defaultMuted = false;
+                adAudioEl.volume = 1;
+                adAudioEl.play().catch(function() {
+                  try {
+                    adAudioEl.muted = true;
+                    adAudioEl.defaultMuted = true;
+                  } catch (e) {}
+                  adAudioEl.play().then(function() {
+                    setTimeout(function() {
+                      try {
+                        adAudioEl.muted = false;
+                        adAudioEl.defaultMuted = false;
+                        adAudioEl.volume = 1;
+                      } catch (e) {}
+                      adAudioEl.play().catch(function() {});
+                    }, 80);
+                  }).catch(function() {});
+                });
+              } catch (e) {}
+            };
+
+            const isAutoplayBlockedError = function(error) {
+              const name = String((error && error.name) || '').toLowerCase();
+              const message = String((error && error.message) || '').toLowerCase();
+              return name === 'notallowederror'
+                || message.includes('notallowederror')
+                || message.includes('user gesture')
+                || message.includes('autoplay');
+            };
+
+            const clearAdUnlockWait = function() {
+              awaitingAdPlaybackUnlock = false;
+              if (typeof removeAdUnlockListeners === 'function') {
+                try { removeAdUnlockListeners(); } catch (e) {}
+              }
+              removeAdUnlockListeners = null;
+              window.__hzStickyAdAwaitingUnlock = false;
+            };
+
+            const waitForAdPlaybackUnlock = function(retryPlayback) {
+              if (awaitingAdPlaybackUnlock || typeof retryPlayback !== 'function') return;
+              awaitingAdPlaybackUnlock = true;
+              window.__hzStickyAdAwaitingUnlock = true;
+
+              const unlockHandler = function() {
+                if (!window.__hzStickyAdActive) {
+                  clearAdUnlockWait();
+                  return;
+                }
+                clearAdUnlockWait();
+                retryPlayback();
+              };
+
+              const unlockEvents = ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'];
+              unlockEvents.forEach(function(eventType) {
+                document.addEventListener(eventType, unlockHandler, true);
+              });
+              popup.addEventListener('click', unlockHandler, true);
+              adVideo.addEventListener('click', unlockHandler, true);
+
+              removeAdUnlockListeners = function() {
+                unlockEvents.forEach(function(eventType) {
+                  document.removeEventListener(eventType, unlockHandler, true);
+                });
+                popup.removeEventListener('click', unlockHandler, true);
+                adVideo.removeEventListener('click', unlockHandler, true);
+              };
             };
 
             adVideo.onended = function() {
@@ -14459,10 +14650,11 @@ p.s I'm Beniam Endale Tedla`;
             };
 
             const playCurrentSource = function() {
+              if (resolved || !window.__hzStickyAdActive) return;
               // Try normal unmuted playback first. If autoplay policy blocks audio,
               // bootstrap muted playback and immediately restore audible state.
               forceAdAudible();
-              adVideo.play().catch(function() {
+              adVideo.play().catch(function(primaryError) {
                 try {
                   adVideo.muted = true;
                   adVideo.defaultMuted = true;
@@ -14474,13 +14666,18 @@ p.s I'm Beniam Endale Tedla`;
                     forceAdAudible();
                     adVideo.play().catch(function() {});
                   }, 80);
-                }).catch(function() {
+                }).catch(function(secondaryError) {
+                  if (isAutoplayBlockedError(primaryError) || isAutoplayBlockedError(secondaryError)) {
+                    waitForAdPlaybackUnlock(playCurrentSource);
+                    return;
+                  }
                   tryNextSource();
                 });
               });
             };
 
             const tryNextSource = function() {
+              if (resolved || !window.__hzStickyAdActive) return;
               sourceIndex += 1;
               if (sourceIndex >= adSources.length) {
                 setTimeout(finishAd, 180);
@@ -14499,16 +14696,17 @@ p.s I'm Beniam Endale Tedla`;
               } catch (e) {}
 
               resolveAdPlaybackSource(nextSource).then(function(playbackSource) {
+                if (resolved || !window.__hzStickyAdActive) return;
                 if (!playbackSource) {
                   tryNextSource();
                   return;
                 }
 
                 currentPlaybackSource = playbackSource;
+                adVideo.setAttribute('data-active-ad-src', playbackSource);
 
                 adVideo.src = playbackSource;
                 adVideo.load();
-                playbackStarted = true;
                 if (window.__hzStickyAdTimer) {
                   clearTimeout(window.__hzStickyAdTimer);
                   window.__hzStickyAdTimer = null;
@@ -14522,47 +14720,24 @@ p.s I'm Beniam Endale Tedla`;
                 adVideo.removeEventListener('timeupdate', forceAdAudible);
                 adVideo.removeEventListener('volumechange', forceAdAudible);
 
-                const startCompanionAudio = function() {
-                  // Keep companion MP3 start aligned with when ad playback begins.
-                  try {
-                    adAudioEl.src = companionAudioSource || currentPlaybackSource;
-                    adAudioEl.loop = false;
-                    adAudioEl.currentTime = 0;
-                    adAudioEl.muted = false;
-                    adAudioEl.defaultMuted = false;
-                    adAudioEl.volume = 1;
-                    adAudioEl.play().catch(function() {
-                      try {
-                        adAudioEl.muted = true;
-                        adAudioEl.defaultMuted = true;
-                      } catch (e) {}
-                      adAudioEl.play().then(function() {
-                        setTimeout(function() {
-                          try {
-                            adAudioEl.muted = false;
-                            adAudioEl.defaultMuted = false;
-                            adAudioEl.volume = 1;
-                          } catch (e) {}
-                          adAudioEl.play().catch(function() {});
-                        }, 80);
-                      }).catch(function() {});
-                    });
-                  } catch (e) {}
-                };
-
                 adVideo.addEventListener('playing', function onAdPlaying() {
                   adVideo.removeEventListener('playing', onAdPlaying);
+                  playbackStarted = true;
+                  clearAdUnlockWait();
+                  revealAdPopupNow();
                   startCompanionAudio();
                 });
 
                 // Attempt playback immediately so ad starts as soon as popup opens.
                 playCurrentSource();
               }).catch(function() {
+                if (resolved || !window.__hzStickyAdActive) return;
                 tryNextSource();
               });
             };
 
             adVideo.onerror = function() {
+              if (resolved || !window.__hzStickyAdActive) return;
               tryNextSource();
             };
 
@@ -14603,11 +14778,13 @@ p.s I'm Beniam Endale Tedla`;
               if (!window.__hzStickyAdActive) return;
               forceAdAudible();
             }, 250);
+
             const startupTimeout = Number(window.hzStickyAdStartTimeoutMs || STICKY_AD_START_TIMEOUT_MS);
+            const effectiveStartupTimeout = Math.max(120, Math.min(startupTimeout, 500));
             window.__hzStickyAdTimer = setTimeout(function() {
               if (playbackStarted) return;
               tryNextSource();
-            }, Math.max(3500, startupTimeout));
+            }, effectiveStartupTimeout);
 
             tryNextSource();
 
@@ -17134,6 +17311,7 @@ function showGenrePopup(genre) {
     function enforceSettingsAudioUnmuted() {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
+      if (window.__hzStickyAdActive) return;
 
       // While any popup is visible, keep sticky-player audio unmuted.
       audio.muted = false;
@@ -17200,6 +17378,9 @@ function showGenrePopup(genre) {
                 },
                 set: function(value) {
                   if (this && this.id === 'playerAudio') {
+                    if (window.__hzStickyAdActive) {
+                      return mutedDesc.set.call(this, value);
+                    }
                     return mutedDesc.set.call(this, false);
                   }
                   return mutedDesc.set.call(this, value);
@@ -17217,6 +17398,9 @@ function showGenrePopup(genre) {
                 },
                 set: function(value) {
                   if (this && this.id === 'playerAudio') {
+                    if (window.__hzStickyAdActive) {
+                      return defaultMutedDesc.set.call(this, value);
+                    }
                     return defaultMutedDesc.set.call(this, false);
                   }
                   return defaultMutedDesc.set.call(this, value);
@@ -17242,24 +17426,6 @@ function showGenrePopup(genre) {
           audio.__hzMuteAttrLockInstalled = true;
         }
 
-        try {
-          Object.defineProperty(audio, 'muted', {
-            configurable: true,
-            enumerable: true,
-            get: function() { return false; },
-            set: function() {}
-          });
-        } catch (e) {}
-
-        try {
-          Object.defineProperty(audio, 'defaultMuted', {
-            configurable: true,
-            enumerable: true,
-            get: function() { return false; },
-            set: function() {}
-          });
-        } catch (e) {}
-
         window.__hzStickyMuteLockedEl = audio;
       }
 
@@ -17270,6 +17436,7 @@ function showGenrePopup(genre) {
         window.__hzStickyMuteObserver = new MutationObserver(function() {
           const a = document.getElementById('playerAudio');
           if (!a) return;
+          if (window.__hzStickyAdActive) return;
           if (a.hasAttribute('muted')) {
             a.removeAttribute('muted');
           }
@@ -17289,6 +17456,7 @@ function showGenrePopup(genre) {
     function enforceGlobalStickyPlayerUnmute() {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
+      if (window.__hzStickyAdActive) return;
 
       lockStickyPlayerMuteState();
 
@@ -33099,13 +33267,11 @@ function openAlbum(albumId) {
       var audio = document.getElementById('playerAudio');
       if (!audio) return;
 
-      if (isHzStreamsHost()) {
-        if (typeof lockStickyPlayerMuteState === 'function') {
-          lockStickyPlayerMuteState();
-        }
-        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-          enforceGlobalStickyPlayerUnmute();
-        }
+      if (typeof lockStickyPlayerMuteState === 'function') {
+        lockStickyPlayerMuteState();
+      }
+      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+        enforceGlobalStickyPlayerUnmute();
       }
 
       audio.muted = false;
@@ -33734,26 +33900,24 @@ function openAlbum(albumId) {
       audio.removeAttribute('muted');
     }
 
-    if (isHzStreamsHost()) {
+    if (typeof lockStickyPlayerMuteState === 'function') {
+      lockStickyPlayerMuteState();
+    }
+    if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+      enforceGlobalStickyPlayerUnmute();
+    }
+    if (window.__hzVisualizerStickyUnmuteInterval) {
+      clearInterval(window.__hzVisualizerStickyUnmuteInterval);
+    }
+    window.__hzVisualizerStickyUnmuteInterval = setInterval(function() {
+      if (!_vizOpen) return;
       if (typeof lockStickyPlayerMuteState === 'function') {
         lockStickyPlayerMuteState();
       }
       if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
         enforceGlobalStickyPlayerUnmute();
       }
-      if (window.__hzVisualizerStickyUnmuteInterval) {
-        clearInterval(window.__hzVisualizerStickyUnmuteInterval);
-      }
-      window.__hzVisualizerStickyUnmuteInterval = setInterval(function() {
-        if (!_vizOpen) return;
-        if (typeof lockStickyPlayerMuteState === 'function') {
-          lockStickyPlayerMuteState();
-        }
-        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-          enforceGlobalStickyPlayerUnmute();
-        }
-      }, 140);
-    }
+    }, 140);
 
     setupAudioAnalyser();
     if (_raf) cancelAnimationFrame(_raf);
