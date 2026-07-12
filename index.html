@@ -711,6 +711,21 @@ Hit em clean with the hooks, feed em jabs to make em look, make em run around th
       'Seek a Smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Seek%20a%20Smile.mp3', title: 'Seek a Smile', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Mail Ya': { url: 'https://storage.googleapis.com/hertz-music-folder/Mail%20Ya.mp3', title: 'Mail Ya', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Icarus': { url: 'https://storage.googleapis.com/hertz-music-folder/Icarus.mp3', title: 'Icarus', artist: 'Beniam TedlAI', genre: 'pop' },
+      'Coulda Been You': { url: 'https://storage.googleapis.com/hertz-music-folder/Coulda%20Been%20You%20(1).mp3', title: 'Coulda Been You', artist: 'Beniam TedlAI', genre: 'pop', lyrics: `Been the dream 4 me all my life, been lookin 4 a wife, needin some chick who'd love me right, to the point that everytime i see her i feel delight yea yea uh
+
+    Whose the girl of my dreams, i dunno, i been tryin all dis time to see her no, if she wanted me too, she'd say fuck the rules imma see him ooh, can't wait 2 find out uh uh
+
+
+    could be at my door, she could be in my room, i might love her tight, if she wants me too uhuh, but over a span of time i, jus feel like i, waited 4 what, some chick too scared to see the luh uh, last chance, better come 2 me, if i see ya later imma make sure i aint free yea, uh, uh, uh, uh, 
+    uhuh
+
+
+    If she'd like 2, jus gotta pull through steada waitin 4 the right time ooh, could be the right time soon as i see you, steada waitin all dis time, i could find love ooh uh, coulda been you, yea, coulda been you uh
+
+    Coulda been you,Coulda been youu
+
+
+    could be at my door, she could be in my room, i might love her tight, if she wants me too uhuh, but over a span of time i, jus feel like i, waited 4 what, some chick too scared to see the luh uh, last chance, better come 2 me, if i see ya later imma make sure i aint free yea, uh, uh, uh, uh, uhuh` },
       'Got me Guessin': { url: 'https://storage.googleapis.com/hertz-music-folder/What%27s%20Her%20Name_.mp3', title: 'Got me Guessin', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Opti': { url: 'https://storage.googleapis.com/hertz-music-folder/Optimus%20(1).mp3', title: 'Opti', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Robo-Taxi': { url: 'https://storage.googleapis.com/hertz-music-folder/Robo-taxi%20(1).mp3', title: 'Robo-Taxi', artist: 'Beniam TedlAI', genre: 'hiphop' },
@@ -8966,6 +8981,7 @@ last i checked this is best, specially since it could be real safe`;
                 <div id="paymentCardElement" class="pay-stripe-element" aria-label="Secure card entry"></div>
               </div>
               <div id="subscriptionSuccessTick" class="pay-subtext" style="display:none;color:#1db954;font-weight:800;margin-top:8px;">✓ Subscription active</div>
+              <div id="subscriptionInactiveTick" class="pay-subtext" style="display:none;color:#ff6b6b;font-weight:800;margin-top:8px;">❌ Subscription Inactive</div>
               <div id="payCardStripeError" class="pay-stripe-error" aria-live="polite"></div>
               <div class="pay-note">Stripe securely handles the card details. Hertz never receives the full card number.</div>
               <div class="pay-actions">
@@ -16485,6 +16501,7 @@ p.s I'm Beniam Endale Tedla`;
       'Watts What': { id: 'Watts What', title: 'Watts What', artist: 'C-Bucklee', url: 'https://storage.googleapis.com/hertz-music-folder/Watt%20in%20the%20World.mp3', cover: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?auto=format&fit=crop&w=400&q=80', genre: 'Rock' },
       // Pop popup tracks
       'Maybe': { id: 'Maybe', title: 'Maybe', artist: 'Mick Blair', url: 'https://storage.googleapis.com/hertz-music-folder/Maybe.mp3', cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
+      'Coulda Been You': { id: 'Coulda Been You', title: 'Coulda Been You', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Coulda%20Been%20You%20(1).mp3', cover: 'https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
       // Hip-hop popup tracks
       'Cha-Ching': { id: 'Cha-Ching', title: 'Cha-Ching', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Keys For Me': { id: 'Keys For Me', title: 'Keys For Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Keys%20For%20Me.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
@@ -26890,10 +26907,23 @@ function showGenrePopup(genre) {
 
     let selectedPaymentCurrency = null;
 
+    function getSubscriptionCancellationEffectiveAtMs() {
+      const canceledAtRaw = String(localStorage.getItem('hertzSubscriptionCanceledAt') || '').trim();
+      if (!canceledAtRaw) return 0;
+      const parsed = Date.parse(canceledAtRaw);
+      return Number.isFinite(parsed) ? parsed : 0;
+    }
+
     function hasActiveMonthlySubscription() {
       const plan = localStorage.getItem('hertzSubscriptionPlan');
-      const canceledAt = localStorage.getItem('hertzSubscriptionCanceledAt');
-      return plan === 'monthly' && !canceledAt;
+      if (plan !== 'monthly') return false;
+
+      const backendState = String(localStorage.getItem('hertzSubscriptionBackendState') || '').toLowerCase();
+      if (backendState === 'canceled') return false;
+
+      const canceledAtMs = getSubscriptionCancellationEffectiveAtMs();
+      if (!canceledAtMs) return true;
+      return canceledAtMs > Date.now();
     }
 
     function getMonthlyChargeDate(startedAtIso, fromDate) {
@@ -27058,6 +27088,66 @@ function showGenrePopup(genre) {
       return getSubscriptionsApiBaseUrl() + normalizedPath;
     }
 
+    function resolveStoredSubscriptionId() {
+      const keys = [
+        'hertzSubscriptionId',
+        'hertzActiveSubscriptionId',
+        'hertzStripeSubscriptionId'
+      ];
+
+      for (let i = 0; i < keys.length; i++) {
+        const value = String(localStorage.getItem(keys[i]) || '').trim();
+        if (value) return value;
+      }
+
+      return '';
+    }
+
+    function persistResolvedSubscriptionId(subscriptionId) {
+      const normalized = String(subscriptionId || '').trim();
+      if (!normalized) return;
+      localStorage.setItem('hertzSubscriptionId', normalized);
+      localStorage.setItem('hertzActiveSubscriptionId', normalized);
+      localStorage.setItem('hertzStripeSubscriptionId', normalized);
+    }
+
+    function extractSubscriptionIdFromPayload(payload) {
+      if (!payload || typeof payload !== 'object') return '';
+
+      const direct = String(
+        payload.subscriptionId
+        || payload.subscription_id
+        || payload.subscription
+        || payload.id
+        || ''
+      ).trim();
+      if (direct) return direct;
+
+      const eventData = payload.data || null;
+      if (eventData && typeof eventData === 'object') {
+        const nested = String(
+          eventData.subscriptionId
+          || eventData.subscription_id
+          || eventData.subscription
+          || ''
+        ).trim();
+        if (nested) return nested;
+
+        const eventObject = eventData.object || null;
+        if (eventObject && typeof eventObject === 'object') {
+          const objectId = String(
+            eventObject.subscription
+            || eventObject.subscriptionId
+            || eventObject.id
+            || ''
+          ).trim();
+          if (objectId) return objectId;
+        }
+      }
+
+      return '';
+    }
+
     function applySubscriptionWebhookState(eventType, payload) {
       const normalizedEventType = String(eventType || '').toLowerCase();
 
@@ -27098,6 +27188,8 @@ function showGenrePopup(genre) {
 
       if (payload && payload.subscriptionId) {
         localStorage.setItem('hertzSubscriptionId', String(payload.subscriptionId));
+        localStorage.setItem('hertzActiveSubscriptionId', String(payload.subscriptionId));
+        localStorage.setItem('hertzStripeSubscriptionId', String(payload.subscriptionId));
       }
 
       refreshSubscriptionActionState();
@@ -27125,8 +27217,13 @@ function showGenrePopup(genre) {
         const eventType = (latestEvent && latestEvent.type) || data.type || data.eventType || '';
         if (!eventType) return;
 
+        const resolvedSubscriptionId = extractSubscriptionIdFromPayload(latestEvent || data);
+        if (resolvedSubscriptionId) {
+          persistResolvedSubscriptionId(resolvedSubscriptionId);
+        }
+
         applySubscriptionWebhookState(eventType, {
-          subscriptionId: (latestEvent && latestEvent.subscriptionId) || data.subscriptionId || null
+          subscriptionId: (latestEvent && latestEvent.subscriptionId) || data.subscriptionId || resolvedSubscriptionId || null
         });
       } catch (err) {
         // Keep polling resilient; webhook sync should never block the UI.
@@ -27146,7 +27243,33 @@ function showGenrePopup(genre) {
     }
 
     async function cancelMonthlySubscriptionInBackend() {
-      const subscriptionId = localStorage.getItem('hertzSubscriptionId') || null;
+      let subscriptionId = resolveStoredSubscriptionId();
+
+      if (!subscriptionId) {
+        await pollSubscriptionWebhookEvents();
+        subscriptionId = resolveStoredSubscriptionId();
+      }
+
+      if (!subscriptionId) {
+        try {
+          const response = await fetch(subscriptionApiUrl('/api/subscriptions/events?latest=1'), {
+            method: 'GET',
+            credentials: 'include'
+          });
+          if (response.ok) {
+            const data = await response.json().catch(function() { return null; });
+            const latestEvent = data ? (data.latestEvent || data.event || null) : null;
+            const resolvedSubscriptionId = extractSubscriptionIdFromPayload(latestEvent || data || {});
+            if (resolvedSubscriptionId) {
+              persistResolvedSubscriptionId(resolvedSubscriptionId);
+              subscriptionId = resolvedSubscriptionId;
+            }
+          }
+        } catch (err) {
+          // Fall through to explicit missing-id error below.
+        }
+      }
+
       if (!subscriptionId) {
         throw new Error('No active subscription found to cancel.');
       }
@@ -27181,17 +27304,28 @@ function showGenrePopup(genre) {
     async function cancelMonthlySubscription() {
       if (!hasActiveMonthlySubscription()) return;
 
+      let cancelResponse = null;
       try {
-        await cancelMonthlySubscriptionInBackend();
+        cancelResponse = await cancelMonthlySubscriptionInBackend();
       } catch (err) {
         alert((err && err.message) ? err.message : 'Unable to cancel subscription right now. Please try again.');
         return;
       }
 
-      localStorage.setItem('hertzSubscriptionCanceledAt', new Date().toISOString());
-      localStorage.setItem('hertzSubscriptionBackendState', 'canceled');
+      const cancelAtIsoFromBackend = String((cancelResponse && cancelResponse.currentPeriodEndIso) || '').trim();
+      const cancelAtMsFromBackend = Number((cancelResponse && cancelResponse.currentPeriodEnd) || 0) * 1000;
+      const fallbackCancelAt = getMonthlyChargeDate(localStorage.getItem('hertzSubscriptionStartedAt') || new Date().toISOString(), new Date());
+      const fallbackCancelAtMs = fallbackCancelAt.getTime();
+      const effectiveCancelAtMs = Number.isFinite(cancelAtMsFromBackend) && cancelAtMsFromBackend > Date.now()
+        ? cancelAtMsFromBackend
+        : (cancelAtIsoFromBackend && Number.isFinite(Date.parse(cancelAtIsoFromBackend))
+            ? Date.parse(cancelAtIsoFromBackend)
+            : fallbackCancelAtMs);
+      const effectiveCancelAtIso = new Date(effectiveCancelAtMs).toISOString();
+
+      localStorage.setItem('hertzSubscriptionCanceledAt', effectiveCancelAtIso);
+      localStorage.setItem('hertzSubscriptionBackendState', 'canceling');
       localStorage.setItem('hertzSubscriptionAutoRenew', 'false');
-      localStorage.removeItem('hertzSubscriptionId');
 
       const actionsWrap = document.getElementById('activeSubscriptionActions');
       const cancelButton = document.getElementById('cancelSubscriptionBtn');
@@ -27203,7 +27337,7 @@ function showGenrePopup(genre) {
         cancelButton.style.display = 'none';
       }
       if (cancelMessage) {
-        cancelMessage.innerHTML = '<strong>It hurts to see you go! 😭</strong>';
+        cancelMessage.innerHTML = '<strong>Cancellation scheduled.</strong> Premium stays active until ' + formatChargeDateLabel(new Date(effectiveCancelAtIso)) + '.';
         cancelMessage.style.display = 'block';
       }
 
@@ -27404,7 +27538,7 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
       localStorage.setItem('hertzSubscriptionBackendState', 'active');
       if (subscriptionId) {
-        localStorage.setItem('hertzSubscriptionId', String(subscriptionId));
+        persistResolvedSubscriptionId(subscriptionId);
       }
 
       localStorage.removeItem('hertzSubscriptionPendingCurrency');
@@ -27441,6 +27575,7 @@ function showGenrePopup(genre) {
       const paymentCardElementMount = document.getElementById('paymentCardElement');
       const stripeErrorEl = document.getElementById('payCardStripeError');
       const subscriptionSuccessTick = document.getElementById('subscriptionSuccessTick');
+      const subscriptionInactiveTick = document.getElementById('subscriptionInactiveTick');
       const cancelSubscriptionBtn = document.getElementById('cancelSubscriptionBtn');
       const submitButton = document.getElementById('startSubscriptionBtn') || (cardForm ? cardForm.querySelector('button[type="submit"]') : null);
 
@@ -27449,6 +27584,10 @@ function showGenrePopup(genre) {
 
         if (subscriptionSuccessTick) {
           subscriptionSuccessTick.style.display = active ? 'block' : 'none';
+        }
+
+        if (subscriptionInactiveTick) {
+          subscriptionInactiveTick.style.display = active ? 'none' : 'block';
         }
 
         if (submitButton) {
@@ -32281,6 +32420,13 @@ function openGenrePlaylist(genre) {
         title: 'Hangin by a Thread',
         artist: 'Ben.I.Am TedlAI',
         url: 'https://storage.googleapis.com/hertz-music-folder/Hangin%20by%20a%20thread.mp3',
+        genre: 'pop',
+        duration: '3:20'
+      },
+      {
+        title: 'Coulda Been You',
+        artist: 'Beniam TedlAI',
+        url: 'https://storage.googleapis.com/hertz-music-folder/Coulda%20Been%20You%20(1).mp3',
         genre: 'pop',
         duration: '3:20'
       },
