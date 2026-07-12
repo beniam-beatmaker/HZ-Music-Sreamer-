@@ -14238,6 +14238,7 @@ p.s I'm Beniam Endale Tedla`;
           const STICKY_AD_AUS_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
           const STICKY_AD_US_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/H%20Z%20a%20Hub.mp3';
           const STICKY_AD_AUS_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/Australia.mp3';
+          const STICKY_AD_COMPANION_AUDIO_MUTED = true;
 
           function getStickyAdCadenceTarget() {
             const pattern = (Array.isArray(STICKY_AD_CADENCE_PATTERN) && STICKY_AD_CADENCE_PATTERN.length)
@@ -14574,25 +14575,10 @@ p.s I'm Beniam Endale Tedla`;
                 adAudioEl.src = companionSource;
                 adAudioEl.loop = false;
                 adAudioEl.currentTime = 0;
-                adAudioEl.muted = false;
-                adAudioEl.defaultMuted = false;
-                adAudioEl.volume = 1;
-                adAudioEl.play().catch(function() {
-                  try {
-                    adAudioEl.muted = true;
-                    adAudioEl.defaultMuted = true;
-                  } catch (e) {}
-                  adAudioEl.play().then(function() {
-                    setTimeout(function() {
-                      try {
-                        adAudioEl.muted = false;
-                        adAudioEl.defaultMuted = false;
-                        adAudioEl.volume = 1;
-                      } catch (e) {}
-                      adAudioEl.play().catch(function() {});
-                    }, 80);
-                  }).catch(function() {});
-                });
+                adAudioEl.muted = !!STICKY_AD_COMPANION_AUDIO_MUTED;
+                adAudioEl.defaultMuted = !!STICKY_AD_COMPANION_AUDIO_MUTED;
+                adAudioEl.volume = STICKY_AD_COMPANION_AUDIO_MUTED ? 0 : 1;
+                adAudioEl.play().catch(function() {});
               } catch (e) {}
             };
 
