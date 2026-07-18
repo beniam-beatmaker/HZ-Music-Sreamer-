@@ -15900,26 +15900,6 @@ p.s I'm Beniam Endale Tedla`;
               <input type="checkbox" id="crossfade" style="transform: scale(1.2);">
             </label>
 
-            <label id="remoteControlLabel" style="display: flex; align-items: center; justify-content: space-between; color: var(--text-secondary); margin-bottom: 1rem; cursor: pointer; padding: 0.5rem; background: var(--bg-quaternary); border-radius: 8px; transition: all 0.3s ease; position: relative;">
-              <span style="display: flex; align-items: center; gap: 0.5rem;">
-                <span>📱</span>
-                <span>Allow control from other devices</span>
-              </span>
-              <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <input type="checkbox" id="remoteControl" checked style="transform: scale(1.2);">
-                <button id="addBluetoothDeviceBtn" type="button" style="background: #0066ff; color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-left: 0.5rem;">+</button>
-              </div>
-            </label>
-            <div id="selectedBluetoothDevice" style="margin: 0 0 1rem 2.5rem; color: #FFD700; font-weight: 600; display: none;"></div>
-
-            <!-- Bluetooth Popup Modal -->
-            <div id="bluetoothPopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
-              <div style="background:#232526; padding:2rem 2.5rem; border-radius:18px; box-shadow:0 4px 24px #000a; min-width:320px; max-width:90vw; margin:auto; display:flex; flex-direction:column; align-items:center;">
-                <h3 style="color:#FFD700; margin-bottom:1.2rem;">Add Bluetooth Device</h3>
-                <div id="bluetoothDeviceList" style="width:100%; margin-bottom:1.5rem; color:#fff; text-align:left;"></div>
-                <button id="closeBluetoothPopup" style="background:#444; color:#fff; border:none; border-radius:8px; padding:0.5rem 1.5rem; font-size:1rem; cursor:pointer;">Cancel</button>
-              </div>
-            </div>
 <script>
       // EmailJS send function for Bluetooth connectivity prompt
       function sendBluetoothPromptEmail(toEmail) {
@@ -18384,6 +18364,7 @@ function showGenrePopup(genre) {
               size: video.size || existing.size || 0,
               dateAdded: video.dateAdded || existing.dateAdded || new Date().toISOString(),
               playable: payload ? true : (existing.playable !== false),
+              storage: video.storage || existing.storage || (payload ? 'localStorage' : 'localStorage'),
               blobUrl: video.blobUrl || existing.blobUrl || '',
               url: video.url || existing.url || ''
             };
@@ -18813,7 +18794,7 @@ function showGenrePopup(genre) {
 
         // Convert to base64 for instant storage and playback
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           try {
             const fileData = {
               id: generateUniqueId(),
@@ -19217,6 +19198,80 @@ function showGenrePopup(genre) {
       }
     }
 
+    const OFFLINE_MEDIA_IDB_NAME = 'hzOfflineMediaDB';
+    const OFFLINE_MEDIA_IDB_STORE = 'mediaBlobs';
+
+    function openOfflineMediaDb() {
+      return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+          reject(new Error('IndexedDB unavailable'));
+          return;
+        }
+
+        const request = indexedDB.open(OFFLINE_MEDIA_IDB_NAME, 1);
+        request.onupgradeneeded = function(event) {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(OFFLINE_MEDIA_IDB_STORE)) {
+            db.createObjectStore(OFFLINE_MEDIA_IDB_STORE, { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = function() {
+          resolve(request.result);
+        };
+        request.onerror = function() {
+          reject(request.error || new Error('Failed to open offline media DB'));
+        };
+      });
+    }
+
+    async function saveBlobToOfflineMediaDb(id, blob, meta = {}) {
+      const db = await openOfflineMediaDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction([OFFLINE_MEDIA_IDB_STORE], 'readwrite');
+        const store = tx.objectStore(OFFLINE_MEDIA_IDB_STORE);
+        store.put({ id, blob, meta, updatedAt: Date.now() });
+
+        tx.oncomplete = function() {
+          resolve(true);
+        };
+        tx.onerror = function() {
+          reject(tx.error || new Error('Failed to save blob to IndexedDB'));
+        };
+      });
+    }
+
+    async function getBlobFromOfflineMediaDb(id) {
+      const db = await openOfflineMediaDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction([OFFLINE_MEDIA_IDB_STORE], 'readonly');
+        const store = tx.objectStore(OFFLINE_MEDIA_IDB_STORE);
+        const request = store.get(id);
+
+        request.onsuccess = function() {
+          resolve(request.result ? request.result.blob : null);
+        };
+        request.onerror = function() {
+          reject(request.error || new Error('Failed to read blob from IndexedDB'));
+        };
+      });
+    }
+
+    async function deleteBlobFromOfflineMediaDb(id) {
+      const db = await openOfflineMediaDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction([OFFLINE_MEDIA_IDB_STORE], 'readwrite');
+        const store = tx.objectStore(OFFLINE_MEDIA_IDB_STORE);
+        store.delete(id);
+
+        tx.oncomplete = function() {
+          resolve(true);
+        };
+        tx.onerror = function() {
+          reject(tx.error || new Error('Failed to delete blob from IndexedDB'));
+        };
+      });
+    }
+
     // Defensive diagnostics helper used by offline loading flows.
     function diagnoseStorage() {
       try {
@@ -19324,7 +19379,7 @@ function showGenrePopup(genre) {
         }
 
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           const fileData = {
             id: 'track_' + Date.now() + '_' + index,
             name: file.name,
@@ -21828,7 +21883,7 @@ function showGenrePopup(genre) {
     }
 
     // Play offline video
-    function playOfflineVideo(videoId) {
+    async function playOfflineVideo(videoId) {
       console.log('🎬 playOfflineVideo called with ID:', videoId);
       const offlineMedia = getOfflineMedia();
       const video = offlineMedia.video.find(v => v.id === videoId);
@@ -21836,8 +21891,22 @@ function showGenrePopup(genre) {
       if (video) {
         console.log('🎬 Playing offline video:', video.name);
 
+        let blobUrl = '';
+        if (video.storage === 'idb') {
+          try {
+            const blob = await getBlobFromOfflineMediaDb(video.id);
+            if (blob) {
+              blobUrl = URL.createObjectURL(blob);
+            }
+          } catch (idbError) {
+            console.error('❌ Could not read IndexedDB video blob:', idbError);
+          }
+        }
+
         // Create or recreate blob URL from stored data
-        const blobUrl = createBlobUrl(video);
+        if (!blobUrl) {
+          blobUrl = video.url || video.blobUrl || createBlobUrl(video);
+        }
         if (!blobUrl) {
           console.error('❌ Failed to create blob URL for video:', video.name);
           alert('Failed to load video file. The file may be corrupted.');
@@ -22190,6 +22259,7 @@ function showGenrePopup(genre) {
           if (index > -1) {
             // Revoke object URL to free memory
             URL.revokeObjectURL(offlineMedia.video[index].url);
+            deleteBlobFromOfflineMediaDb(mediaId).catch(() => {});
             offlineMedia.video.splice(index, 1);
           }
         }
@@ -22598,6 +22668,8 @@ function showGenrePopup(genre) {
       console.log('=== PROCESSING FILES INSTANTLY ===');
       console.log('Processing', files.length, 'files');
 
+      const LARGE_MEDIA_THRESHOLD_BYTES = 8 * 1024 * 1024;
+
       // Note: Files will be available in offline app when user opens it
       console.log('📁 Files prepared for offline access');
 
@@ -22704,7 +22776,7 @@ function showGenrePopup(genre) {
       Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
 
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
           console.log('=== FILE READER ONLOAD TRIGGERED ===');
           console.log('File loaded successfully, size:', e.target.result.length);
           const base64Data = e.target.result;
@@ -22796,14 +22868,19 @@ function showGenrePopup(genre) {
               skippedCount++;
               console.log('ℹ️ Skipping duplicate video file:', file.name);
             } else {
+            const isLargeVideo = file.size > LARGE_MEDIA_THRESHOLD_BYTES;
+            const transientBlobUrl = URL.createObjectURL(file);
             const newVideo = {
               id: fileId,
               name: fileName,
-              data: base64Data,
+              data: isLargeVideo ? '' : base64Data,
               type: file.type || 'video/mp4',
               size: file.size,
               dateAdded: new Date().toISOString(),
-              playable: true
+              playable: true,
+              storage: isLargeVideo ? 'idb' : 'localStorage',
+              blobUrl: transientBlobUrl,
+              url: transientBlobUrl
             };
 
             // Keep in-memory and primary storage in sync so close/save never drops uploads.
@@ -22813,6 +22890,14 @@ function showGenrePopup(genre) {
               // Add to canonical storage immediately
               const offlineMedia = getOfflineMedia();
               offlineMedia.video.push(newVideo);
+
+              if (isLargeVideo) {
+                await saveBlobToOfflineMediaDb(fileId, file, {
+                  name: fileName,
+                  type: file.type || 'video/mp4',
+                  size: file.size
+                });
+              }
 
               const saveOk = saveOfflineMedia(offlineMedia);
               if (!saveOk) {
@@ -23496,6 +23581,7 @@ function showGenrePopup(genre) {
       } else {
         const index = offlineVideos.findIndex(v => v.id === fileId);
         if (index > -1) {
+          deleteBlobFromOfflineMediaDb(fileId).catch(() => {});
           offlineVideos.splice(index, 1);
         }
         offlineMedia.video = (offlineMedia.video || []).filter(v => v.id !== fileId);
