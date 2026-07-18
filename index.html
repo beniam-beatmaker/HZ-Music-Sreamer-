@@ -633,21 +633,6 @@
       'Bight-Gum': { url: 'https://storage.googleapis.com/hertz-music-folder/Bight_Thigh_FULL_SONG_MusicGPT.mp3', title: 'Bight-Gum', artist: 'Sour Parsonz', genre: 'afrobeat' },
       'Keys For Me': { url: 'https://storage.googleapis.com/hertz-music-folder/Keys%20For%20Me.mp3', title: 'Keys For Me', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Waitin To See': { url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20to%20See.mp3', title: 'Waitin To See', artist: 'Beniam TedlAI', genre: 'hiphop' },
-      'Useda Be Wild': { url: 'https://storage.googleapis.com/hertz-music-folder/Useda%20Be%20Wild.mp3', title: 'Useda Be Wild', artist: 'O.F.P', genre: 'hiphop', lyrics: `The streets useda be real wild uh, can't trust the outdoors wid a smile uh, now shit's changed 4 da better oh, but the way it useda be before five o uh, useda be wild wild wild wild uh, Had to watch they fuckin backs, jus to keep the people safe, steada lack, uh
-
-
-    in the streets needa be on guard, in case some crips wan leave ya scarred uh, fuck kickin back, fuck sippin Jacks, leave da home,  steada feelin fear from all ya thrones, all ya peeps needa be real brave, never know what might ya in the day
-
-
-    In the times of tha past, bodies useda pile, got peeps out dere lookin real fast, yo Fuck dat shit uh, in those times, peeps useda grab a blicky to feel aight uh, what else could be done uh, can't call da cops in da hood n think they'd show up in time uh, can't teleport, in those times, i think uh
-
-
-    Drive-byes had em shook, what more can you expect from da hood yea, useda buy themselves some blickys' jus incase the streets had some thugs blood craved, shit they had to in those times, can't blame em 4 wantin to feel alright yea
-
-
-    in the streets needa be on guard, in case some crips wan leave ya scarred uh, fuck kickin back, fuck sippin Jacks, leave da home,  steada feelin fear from all ya thrones, all ya peeps needa be real brave, never know what might ya in the day
-
-    Never knew how the bullet would come uh, felt the need to keep a blicky jus incase uh` },
       '3 AM': { url: 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', title: '3 AM', artist: 'AI-ght', genre: 'hiphop' },
       'Be My Baby': { url: 'https://storage.googleapis.com/hertz-music-folder/Be%20My%20Baby.mp3', title: 'Be My Baby', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Clip It': { url: 'https://storage.googleapis.com/hertz-music-folder/Clip%20It.mp3', title: 'Clip It', artist: 'Beniam TedlAI', genre: 'hiphop' },
@@ -9013,7 +8998,7 @@ last i checked this is best, specially since it could be real safe`;
     <div class="nav-dropdown" id="navDropdown">
         <a href="index.html" class="nav-btn active">🏠 Home</a>
         <a href="Online25App.html" class="nav-btn">🌐 Online</a>
-        <a href="HZ%20Free%20Downloader.html" class="nav-btn">📱 Download</a>
+        <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
 
         <a href="Account25App.html" class="nav-btn">👤 Account</a>
@@ -14238,7 +14223,6 @@ p.s I'm Beniam Endale Tedla`;
           const STICKY_AD_AUS_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
           const STICKY_AD_US_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/H%20Z%20a%20Hub.mp3';
           const STICKY_AD_AUS_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/Australia.mp3';
-          const STICKY_AD_COMPANION_AUDIO_MUTED = true;
 
           function getStickyAdCadenceTarget() {
             const pattern = (Array.isArray(STICKY_AD_CADENCE_PATTERN) && STICKY_AD_CADENCE_PATTERN.length)
@@ -14575,10 +14559,25 @@ p.s I'm Beniam Endale Tedla`;
                 adAudioEl.src = companionSource;
                 adAudioEl.loop = false;
                 adAudioEl.currentTime = 0;
-                adAudioEl.muted = !!STICKY_AD_COMPANION_AUDIO_MUTED;
-                adAudioEl.defaultMuted = !!STICKY_AD_COMPANION_AUDIO_MUTED;
-                adAudioEl.volume = STICKY_AD_COMPANION_AUDIO_MUTED ? 0 : 1;
-                adAudioEl.play().catch(function() {});
+                adAudioEl.muted = false;
+                adAudioEl.defaultMuted = false;
+                adAudioEl.volume = 1;
+                adAudioEl.play().catch(function() {
+                  try {
+                    adAudioEl.muted = true;
+                    adAudioEl.defaultMuted = true;
+                  } catch (e) {}
+                  adAudioEl.play().then(function() {
+                    setTimeout(function() {
+                      try {
+                        adAudioEl.muted = false;
+                        adAudioEl.defaultMuted = false;
+                        adAudioEl.volume = 1;
+                      } catch (e) {}
+                      adAudioEl.play().catch(function() {});
+                    }, 80);
+                  }).catch(function() {});
+                });
               } catch (e) {}
             };
 
@@ -15443,16 +15442,13 @@ p.s I'm Beniam Endale Tedla`;
 
       <div style="padding:0.95rem 1rem;border-bottom:1px solid #2b2b2b;display:flex;gap:0.55rem;flex-wrap:wrap;background:#171717;flex-shrink:0;">
         <button class="upload-btn" onclick="addOfflineTracks()" style="margin:0;">🎵 Add Music</button>
-        <button class="upload-btn" onclick="addOfflineVideos()" style="margin:0;line-height:1.15;">
-          🎬 Add Video
-          <p style="margin:2px 0 0 0;font-size:0.68rem;opacity:0.75;">Only for computers</p>
-        </button>
+        <button class="upload-btn" onclick="addOfflineVideos()" style="margin:0;">🎬 Add Video</button>
         <button class="upload-btn" onclick="clearOfflineStorage()" style="margin:0;">🧹 Clear All</button>
       </div>
 
       <div style="padding:0.85rem 1rem 0.55rem 1rem;background:#181818;display:flex;gap:0.5rem;flex-shrink:0;">
-        <button id="tracksTabBtn" onclick="switchMediaTab('tracks')" class="active" style="flex:1;background:#2a2a2a;color:#fff;border:1px solid #3a3a3a;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Tracks <span id="tracksCount"></span></button>
-        <button id="videosTabBtn" onclick="switchMediaTab('videos')" style="flex:1;background:#202020;color:#bdbdbd;border:1px solid #333;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Videos <span id="videosCount"></span></button>
+        <button id="tracksTabBtn" onclick="switchMediaTab('tracks')" class="active" style="flex:1;background:#2a2a2a;color:#fff;border:1px solid #3a3a3a;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Tracks <span id="tracksCount">(0)</span></button>
+        <button id="videosTabBtn" onclick="switchMediaTab('videos')" style="flex:1;background:#202020;color:#bdbdbd;border:1px solid #333;border-radius:999px;padding:0.55rem 0.75rem;cursor:pointer;font-weight:600;">Videos <span id="videosCount">(0)</span></button>
       </div>
 
       <div style="flex:1;min-height:260px;overflow-y:auto;padding:0.7rem 1rem 1rem 1rem;">
@@ -23433,10 +23429,10 @@ function showGenrePopup(genre) {
       const videosCount = document.getElementById('videosCount');
 
       if (tracksCount) {
-        tracksCount.textContent = '';
+        tracksCount.textContent = `(${offlineMedia.audio ? offlineMedia.audio.length : 0})`;
       }
       if (videosCount) {
-        videosCount.textContent = '';
+        videosCount.textContent = `(${offlineMedia.video ? offlineMedia.video.length : 0})`;
       }
     }
 
@@ -32319,10 +32315,8 @@ function openGenrePlaylist(genre) {
   if ((genre || '').toLowerCase() === 'hiphop') {
     const hiphopOnly = [
       { title: 'Cha-Ching', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cha-Ching.mp3', genre: 'hiphop', duration: '3:20' },
-      { title: 'Horn-Dogg', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Horn-Dogg.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Keys For Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Keys%20For%20Me.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Waitin To See', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20to%20See.mp3', genre: 'hiphop', duration: '3:20' },
-      { title: 'Useda Be Wild', artist: 'O.F.P', url: 'https://storage.googleapis.com/hertz-music-folder/Useda%20Be%20Wild.mp3', genre: 'hiphop', duration: '3:20' },
       { title: '3 AM', artist: 'AI-ght', url: 'https://storage.googleapis.com/hertz-music-folder/3A.M.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Be My Baby', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Be%20My%20Baby.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Clip It', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Clip%20It.mp3', genre: 'hiphop', duration: '3:20' },
