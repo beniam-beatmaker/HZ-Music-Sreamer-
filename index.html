@@ -8841,14 +8841,15 @@ last i checked this is best, specially since it could be real safe`;
     }
     .video-mini-resize-handle {
       position: absolute;
-      right: 0;
-      bottom: 0;
       width: 18px;
       height: 18px;
-      cursor: nwse-resize;
       z-index: 2002;
       background: linear-gradient(135deg, transparent 48%, rgba(255,255,255,0.9) 50%, rgba(255,255,255,0.9) 58%, transparent 60%);
     }
+    .video-mini-resize-handle.corner-se { right: 0; bottom: 0; cursor: nwse-resize; }
+    .video-mini-resize-handle.corner-sw { left: 0; bottom: 0; cursor: nesw-resize; transform: scaleX(-1); }
+    .video-mini-resize-handle.corner-ne { right: 0; top: 0; cursor: nesw-resize; transform: scaleY(-1); }
+    .video-mini-resize-handle.corner-nw { left: 0; top: 0; cursor: nwse-resize; transform: scale(-1); }
     .video-mini-player video {
       width: 100%;
       height: 100%;
@@ -15524,7 +15525,7 @@ p.s I'm Beniam Endale Tedla`;
       </div>
 
       <div style="padding:0.95rem 1rem;border-bottom:1px solid #2b2b2b;display:flex;gap:0.55rem;flex-wrap:wrap;background:#171717;flex-shrink:0;">
-        <button class="upload-btn" onclick="addOfflineTracks()" style="margin:0;">🎵 Add Music</button>
+        <button class="upload-btn" onclick="addOfflineTracks()" style="margin:0;">🎵 Add Media</button>
         <button class="upload-btn" onclick="addOfflineVideos()" style="margin:0;line-height:1.15;">
           🎬 Add Video
           <p style="margin:2px 0 0 0;font-size:0.68rem;opacity:0.75;">Only for computers</p>
@@ -17896,84 +17897,18 @@ function showGenrePopup(genre) {
             offlinePlayer.style.display = 'none';
           }
         }, 200);
-        // DIRECT TRACK LOADING - FOOLPROOF APPROACH
+        // Canonical hydration for popup lists/playability.
         setTimeout(() => {
-          console.log('💾 === DIRECT TRACK LOADING ===');
-
-          // DIRECT localStorage access - no functions, no complexity
-          try {
-            const savedTracks = localStorage.getItem('offlineTracks');
-            const savedVideos = localStorage.getItem('offlineVideos');
-
-            console.log('💾 Direct check - savedTracks exists:', !!savedTracks);
-            console.log('💾 Direct check - savedVideos exists:', !!savedVideos);
-
-            if (savedTracks) {
-              const parsed = JSON.parse(savedTracks);
-              offlineTracks.length = 0; // Clear existing
-              offlineTracks.push(...parsed); // Add all saved tracks
-              console.log('✅ DIRECT: Loaded', offlineTracks.length, 'tracks');
-            } else {
-              console.log('⚠️ No saved tracks found in localStorage');
-            }
-
-            if (savedVideos) {
-              const parsed = JSON.parse(savedVideos);
-              offlineVideos.length = 0; // Clear existing
-              offlineVideos.push(...parsed); // Add all saved videos
-              console.log('✅ DIRECT: Loaded', offlineVideos.length, 'videos');
-            }
-
-          } catch (error) {
-            console.error('❌ Direct loading error:', error);
-          }
-
-          // Update queue
-          queue = [...offlineTracks];
-          console.log('🔄 Queue set to', queue.length, 'tracks');
-
-          // IMMEDIATE render
-          console.log('📝 IMMEDIATE RENDER with', offlineTracks.length, 'tracks');
-
-          const libraryElement = document.getElementById('offlineTracksList');
-          if (libraryElement && offlineTracks.length > 0) {
-            let html = '';
-            offlineTracks.forEach(track => {
-              const fileName = track.name || track.title || 'Unknown Track';
-              const artist = track.artist || '';
-
-              html += `
-                <div class="offline-track-item" onclick="playOfflineTrack('${track.id}')" style="cursor:pointer;">
-                  <div class="offline-track-artwork">
-                    <span class="audio-file-icon">🎵</span>
-                  </div>
-                  <div class="offline-track-info">
-                    <div class="offline-track-title">${fileName}</div>
-                    <div class="offline-track-meta">
-                      <span class="offline-track-artist">${artist}</span>
-                      <span>Offline Track</span>
-                    </div>
-                  </div>
-                  <div class="offline-track-actions">
-                    <button class="offline-action-btn play-btn" onclick="event.stopPropagation(); playOfflineTrack('${track.id}')" title="Play">▶️</button>
-                    <button class="offline-action-btn delete-btn" onclick="event.stopPropagation(); removeTrack('${track.id}')" title="Delete">🗑️</button>
-                  </div>
-                </div>
-              `;
-            });
-            libraryElement.innerHTML = html;
-            console.log('✅ DIRECT RENDER: Displayed', offlineTracks.length, 'tracks in DOM');
-          } else if (libraryElement) {
-            libraryElement.innerHTML = '<div class="no-files-message"><p>🎵 No offline tracks yet</p></div>';
-            console.log('� DIRECT RENDER: Showed empty message');
-          }
+          console.log('💾 === CANONICAL POPUP HYDRATION ===');
+          loadStoredData(true);
+          loadOfflineFiles(true);
 
           // Initialize other systems
           initializeEnhancedOffline();
           initializeOfflineQueue();
           updateMediaCounts();
 
-          console.log('✅ === DIRECT LOADING COMPLETE ===');
+          console.log('✅ === CANONICAL LOADING COMPLETE ===');
         }, 100);
       }
     }
@@ -18329,8 +18264,16 @@ function showGenrePopup(genre) {
         secondaryData = { audio: [], video: [] };
       }
 
+      const primaryTracksHaveData = primaryTracks.some(track => !!(track && (track.data || track.base64 || track.audioUrl)));
+      const secondaryTracksHaveData = (secondaryData.audio || []).some(track => !!(track && (track.data || track.base64 || track.audioUrl)));
+      const primaryVideosHaveData = primaryVideos.some(video => !!(video && video.data));
+      const secondaryVideosHaveData = (secondaryData.video || []).some(video => !!(video && video.data));
+
       // USE WHICHEVER HAS MORE DATA (most recent/complete)
-      if (primaryTracks.length >= (secondaryData.audio ? secondaryData.audio.length : 0)) {
+      if (secondaryTracksHaveData && !primaryTracksHaveData) {
+        offlineTracks = secondaryData.audio || [];
+        console.log('✅ Using SECONDARY tracks (payload-preserving):', offlineTracks.length);
+      } else if (primaryTracks.length >= (secondaryData.audio ? secondaryData.audio.length : 0)) {
         offlineTracks = primaryTracks;
         console.log('✅ Using PRIMARY tracks:', offlineTracks.length);
       } else {
@@ -18341,7 +18284,10 @@ function showGenrePopup(genre) {
       // Keep the tracks row strictly audio-only.
       offlineTracks = offlineTracks.filter(track => !isOfflineVideoLikeFile(track));
 
-      if (primaryVideos.length >= (secondaryData.video ? secondaryData.video.length : 0)) {
+      if (secondaryVideosHaveData && !primaryVideosHaveData) {
+        offlineVideos = secondaryData.video || [];
+        console.log('✅ Using SECONDARY videos (payload-preserving):', offlineVideos.length);
+      } else if (primaryVideos.length >= (secondaryData.video ? secondaryData.video.length : 0)) {
         offlineVideos = primaryVideos;
         console.log('✅ Using PRIMARY videos:', offlineVideos.length);
       } else {
@@ -18376,25 +18322,72 @@ function showGenrePopup(genre) {
       console.log('Saving', offlineTracks.length, 'tracks and', offlineVideos.length, 'videos');
 
       try {
-        // Save to primary storage (matching Offline25App.html)
-        localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
-        localStorage.setItem('offlineVideos', JSON.stringify(offlineVideos));
+        const existingMedia = getOfflineMedia();
+        const existingAudioById = new Map((existingMedia.audio || []).map(item => [item.id, item]));
+        const existingVideoById = new Map((existingMedia.video || []).map(item => [item.id, item]));
+
+        // Save lightweight primary indexes to reduce storage pressure.
+        const lightweightTracks = offlineTracks.map(track => ({
+          id: track.id,
+          name: track.name,
+          title: track.title || track.name,
+          artist: track.artist || '',
+          type: track.type || 'audio/mpeg',
+          size: track.size || 0,
+          dateAdded: track.dateAdded || new Date().toISOString(),
+          uploadDate: track.uploadDate || Date.now(),
+          liked: !!track.liked,
+          addedToLibrary: track.addedToLibrary !== false
+        }));
+        const lightweightVideos = offlineVideos.map(video => ({
+          id: video.id,
+          name: video.name,
+          type: video.type || 'video/mp4',
+          size: video.size || 0,
+          dateAdded: video.dateAdded || new Date().toISOString(),
+          playable: video.playable !== false
+        }));
+
+        localStorage.setItem('offlineTracks', JSON.stringify(lightweightTracks));
+        localStorage.setItem('offlineVideos', JSON.stringify(lightweightVideos));
 
         // Also save to hertzOfflineMedia for full compatibility
         const offlineMedia = {
-          audio: offlineTracks.map(track => ({
-            id: track.id,
-            name: track.name,
-            title: track.title || track.name,
-            artist: track.artist || '',
-            base64: track.base64,
-            audioUrl: track.audioUrl,
-            type: track.type,
-            size: track.size,
-            dateAdded: track.dateAdded,
-            liked: track.liked || false
-          })),
-          video: offlineVideos
+          audio: offlineTracks.map(track => {
+            const existing = existingAudioById.get(track.id) || {};
+            const payload = track.data || track.base64 || track.audioUrl || existing.data || existing.base64 || existing.audioUrl || '';
+
+            return {
+              id: track.id,
+              name: track.name,
+              title: track.title || track.name,
+              artist: track.artist || '',
+              data: payload,
+              base64: track.base64 || existing.base64 || payload,
+              audioUrl: track.audioUrl || existing.audioUrl || payload,
+              type: track.type || existing.type,
+              size: track.size || existing.size,
+              dateAdded: track.dateAdded || existing.dateAdded,
+              liked: track.liked || false,
+              playable: payload ? true : (existing.playable !== false)
+            };
+          }),
+          video: offlineVideos.map(video => {
+            const existing = existingVideoById.get(video.id) || {};
+            const payload = video.data || existing.data || '';
+
+            return {
+              id: video.id,
+              name: video.name,
+              data: payload,
+              type: video.type || existing.type || 'video/mp4',
+              size: video.size || existing.size || 0,
+              dateAdded: video.dateAdded || existing.dateAdded || new Date().toISOString(),
+              playable: payload ? true : (existing.playable !== false),
+              blobUrl: video.blobUrl || existing.blobUrl || '',
+              url: video.url || existing.url || ''
+            };
+          })
         };
         localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
 
@@ -18435,42 +18428,9 @@ function showGenrePopup(genre) {
     function initializeOfflineApp() {
       console.log('🔧 === INITIALIZING OFFLINE APP ===');
 
-      // IMMEDIATE DATA LOADING - NO DELAYS
-      console.log('💾 Loading saved tracks immediately...');
-
-      try {
-        const storedTracks = localStorage.getItem('offlineTracks');
-        const storedVideos = localStorage.getItem('offlineVideos');
-
-        console.log('💾 Raw check - tracks exist:', !!storedTracks);
-        console.log('💾 Raw check - videos exist:', !!storedVideos);
-
-        if (storedTracks) {
-          const parsed = JSON.parse(storedTracks);
-          offlineTracks.splice(0); // Clear array
-          offlineTracks.push(...parsed.filter(track => !isOfflineVideoLikeFile(track))); // Add saved audio tracks only
-          console.log('✅ INIT: Restored', offlineTracks.length, 'tracks');
-        } else {
-          console.log('⚠️ INIT: No saved tracks found');
-        }
-
-        if (storedVideos) {
-          const parsed = JSON.parse(storedVideos);
-          offlineVideos.splice(0); // Clear array
-          offlineVideos.push(...parsed); // Add saved videos
-          console.log('✅ INIT: Restored', offlineVideos.length, 'videos');
-        }
-
-        // Update queue
-        queue = [...offlineTracks];
-        console.log('🔄 INIT: Queue set to', queue.length, 'tracks');
-
-      } catch (error) {
-        console.error('❌ INIT: Error loading data:', error);
-        offlineTracks = [];
-        offlineVideos = [];
-        queue = [];
-      }
+      // IMMEDIATE canonical hydration so tracks/videos stay visible and playable.
+      console.log('💾 Loading canonical offline media immediately...');
+      loadStoredData(false);
 
       // Verify DOM elements exist
       const container = document.getElementById('offlineFilesList');
@@ -19254,6 +19214,23 @@ function showGenrePopup(genre) {
           console.error('❌ Emergency save also failed:', e2);
           return false;
         }
+      }
+    }
+
+    // Defensive diagnostics helper used by offline loading flows.
+    function diagnoseStorage() {
+      try {
+        const offlineMedia = getOfflineMedia();
+        const tracksRaw = localStorage.getItem('offlineTracks');
+        const videosRaw = localStorage.getItem('offlineVideos');
+        console.log('🩺 Storage diagnose:', {
+          canonicalAudio: (offlineMedia.audio || []).length,
+          canonicalVideo: (offlineMedia.video || []).length,
+          primaryTracksExists: !!tracksRaw,
+          primaryVideosExists: !!videosRaw
+        });
+      } catch (error) {
+        console.warn('⚠️ Storage diagnose failed:', error);
       }
     }
 
@@ -22030,9 +22007,12 @@ function showGenrePopup(genre) {
       miniPlayer.dataset.dragBound = 'true';
 
       if (!miniPlayer.querySelector('.video-mini-resize-handle')) {
-        const resizeHandle = document.createElement('div');
-        resizeHandle.className = 'video-mini-resize-handle';
-        miniPlayer.appendChild(resizeHandle);
+        ['se', 'sw', 'ne', 'nw'].forEach((corner) => {
+          const resizeHandle = document.createElement('div');
+          resizeHandle.className = `video-mini-resize-handle corner-${corner}`;
+          resizeHandle.dataset.corner = corner;
+          miniPlayer.appendChild(resizeHandle);
+        });
       }
 
       let dragging = false;
@@ -22041,6 +22021,7 @@ function showGenrePopup(genre) {
       let startLeft = 0;
       let startTop = 0;
       let resizing = false;
+      let resizeCorner = 'se';
       let startWidth = 0;
       let startHeight = 0;
       const minWidth = 220;
@@ -22048,9 +22029,10 @@ function showGenrePopup(genre) {
       const aspectRatio = 16 / 9;
 
       miniPlayer.addEventListener('mousedown', (event) => {
-        const isResizeHandle = event.target.classList && event.target.classList.contains('video-mini-resize-handle');
-        if (isResizeHandle) {
+        const resizeHandle = event.target.closest('.video-mini-resize-handle');
+        if (resizeHandle) {
           resizing = true;
+          resizeCorner = resizeHandle.dataset.corner || 'se';
           const rect = miniPlayer.getBoundingClientRect();
           startX = event.clientX;
           startY = event.clientY;
@@ -22084,16 +22066,34 @@ function showGenrePopup(genre) {
       document.addEventListener('mousemove', (event) => {
         if (resizing) {
           const deltaX = event.clientX - startX;
-          const proposedWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + deltaX));
-          const proposedHeight = Math.max(124, Math.round(proposedWidth / aspectRatio));
+          const deltaY = event.clientY - startY;
+          const horizontalDelta = resizeCorner.includes('e') ? deltaX : -deltaX;
+          let width = Math.max(minWidth, Math.min(maxWidth, startWidth + horizontalDelta));
+          let height = Math.max(124, Math.round(width / aspectRatio));
 
-          const rect = miniPlayer.getBoundingClientRect();
-          const maxAllowedWidth = window.innerWidth - rect.left;
-          const maxAllowedHeight = window.innerHeight - rect.top;
+          let left = startLeft;
+          let top = startTop;
 
-          const width = Math.max(minWidth, Math.min(proposedWidth, maxAllowedWidth));
-          const height = Math.max(124, Math.min(proposedHeight, maxAllowedHeight));
+          if (resizeCorner.includes('w')) {
+            left = startLeft + (startWidth - width);
+          }
+          if (resizeCorner.includes('n')) {
+            const verticalDelta = Math.round(deltaY);
+            const suggestedTop = startTop + verticalDelta;
+            top = Math.min(startTop + startHeight - height, suggestedTop);
+            if (top < 0) top = 0;
+          }
 
+          left = Math.max(0, Math.min(left, window.innerWidth - minWidth));
+          top = Math.max(0, Math.min(top, window.innerHeight - 124));
+
+          const maxAllowedWidth = window.innerWidth - left;
+          const maxAllowedHeight = window.innerHeight - top;
+          width = Math.max(minWidth, Math.min(width, maxAllowedWidth));
+          height = Math.max(124, Math.min(Math.round(width / aspectRatio), maxAllowedHeight));
+
+          miniPlayer.style.left = `${left}px`;
+          miniPlayer.style.top = `${top}px`;
           miniPlayer.style.width = `${width}px`;
           miniPlayer.style.height = `${height}px`;
           return;
@@ -22615,6 +22615,92 @@ function showGenrePopup(genre) {
       let videoCount = 0;
       let skippedCount = 0;
 
+      function writePrimaryMediaIndexes() {
+        // Keep compatibility keys lightweight to avoid quota failures.
+        const lightweightTracks = offlineTracks.map(track => ({
+          id: track.id,
+          name: track.name,
+          title: track.title || track.name,
+          artist: track.artist || '',
+          type: track.type || 'audio/mpeg',
+          size: track.size || 0,
+          dateAdded: track.dateAdded || new Date().toISOString(),
+          uploadDate: track.uploadDate || Date.now(),
+          liked: !!track.liked,
+          addedToLibrary: track.addedToLibrary !== false
+        }));
+
+        const lightweightVideos = offlineVideos.map(video => ({
+          id: video.id,
+          name: video.name,
+          type: video.type || 'video/mp4',
+          size: video.size || 0,
+          dateAdded: video.dateAdded || new Date().toISOString(),
+          playable: video.playable !== false
+        }));
+
+        try {
+          localStorage.setItem('offlineTracks', JSON.stringify(lightweightTracks));
+          localStorage.setItem('offlineVideos', JSON.stringify(lightweightVideos));
+        } catch (storageError) {
+          console.warn('⚠️ Could not write compatibility indexes:', storageError);
+          // Force fallback readers to canonical store if lightweight indexes still fail.
+          try { localStorage.removeItem('offlineTracks'); } catch (_) {}
+          try { localStorage.removeItem('offlineVideos'); } catch (_) {}
+        }
+      }
+
+      function finalizeProcessing() {
+        if (processed !== files.length) return;
+
+        console.log('=== ALL FILES PROCESSED ===');
+        console.log('Audio count:', audioCount, 'Video count:', videoCount);
+
+        // Final render and updates
+        console.log('Final render and updates');
+        // Don't re-render if we used direct insertion, just update counts
+        updateMediaCounts();
+
+        // Force update queue - EXACT FROM OFFLINE25APP.HTML
+        if (audioCount > 0) {
+          console.log('🔄 Refreshing queue with new tracks');
+          queue = [...offlineTracks];
+          // Final instant render
+          console.log('Final instant render - no delays');
+          renderOfflineLibrary();
+        }
+
+        // Only render if direct insertion might have failed
+        if (audioCount === 0) {
+          console.log('No audio files processed via direct insertion, using render function');
+          renderEnhancedOfflineLibrary();
+        }
+        if (videoCount > 0) {
+          console.log('Video files processed, refreshing video library');
+          renderEnhancedOfflineVideoLibrary();
+        }
+
+        // Final canonical sync from storage so first upload always appears.
+        const canonicalMedia = getOfflineMedia();
+        offlineTracks = (canonicalMedia.audio || []).filter(track => !isOfflineVideoLikeFile(track));
+        offlineVideos = canonicalMedia.video || [];
+        queue = [...offlineTracks];
+        writePrimaryMediaIndexes();
+
+        renderOfflineLibrary();
+        renderEnhancedOfflineVideoLibrary();
+        loadOfflineFiles(true);
+
+        // Keep the visible tab aligned with uploaded media on first upload.
+        if (audioCount === 0 && videoCount > 0) {
+          switchMediaTab('videos');
+        } else if (audioCount > 0) {
+          switchMediaTab('tracks');
+        }
+
+        showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully${skippedCount > 0 ? ` (${skippedCount} duplicate file(s) skipped)` : ''}!`);
+      }
+
       Array.from(files).forEach((file, index) => {
         const reader = new FileReader();
 
@@ -22628,8 +22714,11 @@ function showGenrePopup(genre) {
           console.log('File name:', fileName);
           console.log('File type:', file.type);
 
-          // Check if it's an audio file - EXACT LOGIC FROM OFFLINE25APP.HTML
-          if (file.type.startsWith('audio/') || /\.(mp3|wav|ogg|aac|flac|m4a|wma|opus|webm)$/i.test(file.name)) {
+          // Classify files deterministically so first-upload routing is correct.
+          const isVideoFile = file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name);
+          const isAudioFile = file.type.startsWith('audio/') || /\.(mp3|wav|ogg|aac|flac|m4a|wma|opus)$/i.test(file.name);
+
+          if (isAudioFile && !(mediaType === 'video' && isVideoFile)) {
             const duplicateInTracks = isDuplicateOfflineEntry(offlineTracks, file);
             const duplicateInStorage = isDuplicateOfflineEntry((getOfflineMedia().audio || []), file);
             if (duplicateInTracks || duplicateInStorage) {
@@ -22666,15 +22755,27 @@ function showGenrePopup(genre) {
 
             // IMMEDIATE SAVE - NO DELAYS
             console.log('💾 IMMEDIATE SAVE after adding track:', fileName);
-            localStorage.setItem('offlineTracks', JSON.stringify(offlineTracks));
+            try {
+              // Keep canonical storage in sync so first playback resolves immediately.
+              const offlineMedia = getOfflineMedia();
+              offlineMedia.audio.push({
+                id: fileId,
+                name: fileName,
+                data: base64Data,
+                type: file.type || 'audio/mp3',
+                size: file.size,
+                dateAdded: new Date().toISOString(),
+                playable: true
+              });
 
-            // Immediate verification
-            const immediateCheck = localStorage.getItem('offlineTracks');
-            if (immediateCheck) {
-              const parsed = JSON.parse(immediateCheck);
-              console.log('✅ IMMEDIATE verification:', parsed.length, 'tracks saved');
-            } else {
-              console.error('❌ IMMEDIATE save failed!');
+              const saveOk = saveOfflineMedia(offlineMedia);
+              if (!saveOk) {
+                throw new Error('Failed to persist canonical audio media');
+              }
+
+              writePrimaryMediaIndexes();
+            } catch (storageError) {
+              console.error('❌ Audio persistence failed:', storageError);
             }
 
             console.log('Added audio track:', fileName);
@@ -22688,7 +22789,7 @@ function showGenrePopup(genre) {
               renderOfflineLibrary();
             }, 100);
             }
-          } else if (mediaType === 'video' || file.type.startsWith('video/') || /\.(mp4|webm|avi|mov|wmv|m4v|mkv|flv|3gp|ogv)$/i.test(file.name)) {
+          } else if (mediaType === 'video' || isVideoFile) {
             const duplicateInMemory = isDuplicateOfflineEntry(offlineVideos, file);
             const duplicateInStorage = isDuplicateOfflineEntry((getOfflineMedia().video || []), file);
             if (duplicateInMemory || duplicateInStorage) {
@@ -22707,12 +22808,21 @@ function showGenrePopup(genre) {
 
             // Keep in-memory and primary storage in sync so close/save never drops uploads.
             offlineVideos.push(newVideo);
-            localStorage.setItem('offlineVideos', JSON.stringify(offlineVideos));
 
-            // Add to compatibility storage immediately
-            const offlineMedia = getOfflineMedia();
-            offlineMedia.video.push(newVideo);
-            localStorage.setItem('hertzOfflineMedia', JSON.stringify(offlineMedia));
+            try {
+              // Add to canonical storage immediately
+              const offlineMedia = getOfflineMedia();
+              offlineMedia.video.push(newVideo);
+
+              const saveOk = saveOfflineMedia(offlineMedia);
+              if (!saveOk) {
+                throw new Error('Failed to persist canonical video media');
+              }
+
+              writePrimaryMediaIndexes();
+            } catch (storageError) {
+              console.error('❌ Video persistence failed:', storageError);
+            }
 
             videoCount++;
             console.log('Added video file:', fileName);
@@ -22725,42 +22835,13 @@ function showGenrePopup(genre) {
           }
 
           processed++;
-
-          // When all files are processed
-          if (processed === files.length) {
-            console.log('=== ALL FILES PROCESSED ===');
-            console.log('Audio count:', audioCount, 'Video count:', videoCount);
-
-            // Final render and updates
-            console.log('Final render and updates');
-            // Don't re-render if we used direct insertion, just update counts
-            updateMediaCounts();
-
-            // Force update queue - EXACT FROM OFFLINE25APP.HTML
-            if (audioCount > 0) {
-              console.log('🔄 Refreshing queue with new tracks');
-              queue = [...offlineTracks];
-              // Final instant render
-              console.log('Final instant render - no delays');
-              renderOfflineLibrary();
-            }
-
-            // Only render if direct insertion might have failed
-            if (audioCount === 0) {
-              console.log('No audio files processed via direct insertion, using render function');
-              renderEnhancedOfflineLibrary();
-            }
-            if (videoCount > 0) {
-              console.log('Video files processed, refreshing video library');
-              renderEnhancedOfflineVideoLibrary();
-            }
-            showNotification(`✅ Added ${audioCount} track(s) and ${videoCount} video(s) successfully${skippedCount > 0 ? ` (${skippedCount} duplicate file(s) skipped)` : ''}!`);
-          }
+          finalizeProcessing();
         };
 
         reader.onerror = function(error) {
           console.error('❌ Error reading file:', file.name, error);
           processed++;
+          finalizeProcessing();
         };
 
         reader.readAsDataURL(file);
@@ -23471,20 +23552,22 @@ function showGenrePopup(genre) {
     function addOfflineTracks() {
       console.log('🎵 Adding offline tracks...');
 
-      // Create a temporary file input for audio files
+      // Create a temporary file input for offline media (audio + video)
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = 'audio/*,.mp3,.wav,.flac,.aac,.ogg,.m4a,.wma';
+      input.accept = 'audio/*,video/*,.mp3,.wav,.flac,.aac,.ogg,.m4a,.wma,.opus,.mp4,.webm,.avi,.mov,.wmv,.m4v,.mkv,.flv,.3gp,.ogv';
       input.multiple = true;
       input.style.display = 'none';
 
       input.onchange = function(e) {
         const files = Array.from(e.target.files);
         if (files.length > 0) {
-          console.log('🎵 Selected', files.length, 'audio files');
+          console.log('🎵 Selected', files.length, 'media files');
           processFilesInstantly(files, 'audio');
         }
-        document.body.removeChild(input);
+        if (input && input.parentNode) {
+          input.parentNode.removeChild(input);
+        }
       };
 
       document.body.appendChild(input);
@@ -23508,7 +23591,9 @@ function showGenrePopup(genre) {
           console.log('🎬 Selected', files.length, 'video files');
           processFilesInstantly(files, 'video');
         }
-        document.body.removeChild(input);
+        if (input && input.parentNode) {
+          input.parentNode.removeChild(input);
+        }
       };
 
       document.body.appendChild(input);
@@ -34349,12 +34434,12 @@ function showMiniVideoPlayer(src) {
 
 
 window.showMiniVideoPlayer = showMiniVideoPlayer;
-window.playOfflineVideoInMiniPlayer = function(videoData) {
-  if (!videoData) return;
+window.playOfflineVideoInMiniPlayer = function(videoData, providedSrc) {
+  if (!videoData && !providedSrc) return;
 
-  const existingUrl = videoData.url || videoData.blobUrl;
-  const generatedUrl = (typeof createBlobUrl === 'function') ? createBlobUrl(videoData) : null;
-  const source = existingUrl || generatedUrl;
+  const existingUrl = videoData ? (videoData.url || videoData.blobUrl) : '';
+  const generatedUrl = (!providedSrc && videoData && typeof createBlobUrl === 'function') ? createBlobUrl(videoData) : null;
+  const source = providedSrc || existingUrl || generatedUrl;
 
   if (source) {
     showMiniVideoPlayer(source);
