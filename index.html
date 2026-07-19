@@ -17201,7 +17201,7 @@ function showGenrePopup(genre) {
     }
     // Preserve sticky-player audio continuity when popups open.
     // This only restores state if popup-opening changed it unexpectedly.
-    const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, .popup-overlay, .modal-overlay, .pay-modal-shell, #queuePopup, #cubeVisualizerOverlay, #miniVideoPlayer, [id$="Overlay"]';
+    const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, .popup-overlay, .modal-overlay, .pay-modal-shell, #queuePopup, #miniVideoPlayer, [id$="Overlay"]';
     let popupAudioGuardPrevVisible = false;
     let popupAudioGuardSnapshot = null;
 
@@ -17217,9 +17217,17 @@ function showGenrePopup(genre) {
       return true;
     }
 
+    function shouldPopupAffectStickyAudio(el) {
+      if (!el) return false;
+      // The 3D visualizer is a non-blocking HUD and should not trigger popup audio interventions.
+      if (el.id === 'cubeVisualizerOverlay') return false;
+      return true;
+    }
+
     function isAnyPopupVisible() {
       const popups = document.querySelectorAll(POPUP_AUDIO_GUARD_SELECTOR);
       for (let i = 0; i < popups.length; i++) {
+        if (!shouldPopupAffectStickyAudio(popups[i])) continue;
         if (isElementPopupVisible(popups[i])) return true;
       }
       return false;
@@ -33248,6 +33256,11 @@ function openAlbum(albumId) {
       <button onclick="window.closeCubeVisualizer && window.closeCubeVisualizer()" style="background:none;border:none;color:#b9fff1;font-size:1.1rem;cursor:pointer;line-height:1;opacity:0.76;" title="Close">✕</button>
     </div>
 
+    <div style="width:100%;display:flex;justify-content:center;align-items:center;gap:8px;margin-bottom:4px;">
+      <button id="cubeVisualizerUploadBtn" type="button" style="background:rgba(84,246,228,0.12);border:1px solid rgba(132,255,236,0.42);color:#b9fff1;font-size:0.68rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;border-radius:999px;padding:6px 12px;cursor:pointer;">Upload Image</button>
+      <input id="cubeVisualizerImageInput" type="file" accept="image/*" style="display:none;">
+    </div>
+
     <div id="envWaveScene" style="width:236px;height:236px;position:relative;display:flex;align-items:center;justify-content:center;border-radius:50%;overflow:hidden;border:1.5px solid rgba(150,246,255,0.38);background:radial-gradient(circle at 50% 50%,rgba(72,255,234,0.14),rgba(8,8,12,0.98) 72%);box-shadow:inset 0 0 24px rgba(146,255,242,0.1),0 0 28px rgba(95,232,255,0.17);flex:0 0 auto;">
       <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(90,255,228,0.2),rgba(90,255,228,0) 62%);"></div>
       <canvas id="envWaveCanvas" width="236" height="236" style="width:236px;height:236px;display:block;border-radius:50%;filter:drop-shadow(0 0 12px rgba(126,255,236,0.35)) drop-shadow(0 0 32px rgba(120,220,255,0.22));"></canvas>
@@ -33292,6 +33305,8 @@ function openAlbum(albumId) {
   var _timeData = null;
   var _streamSource = null;
   var _attachedStream = null;
+  var _capturedStream = null;
+  var _capturedStreamForAudio = null;
   var _elementSource = null;
   var _attachedElement = null;
   var _analyserSourceMode = 'stream';
@@ -33305,6 +33320,8 @@ function openAlbum(albumId) {
   var _lastStarSpawnAt = 0;
   var _stillStars = [];
   var _stillStarsClipR = 0;
+  var _vizShowEmptyFrame = false;
+  var _vizAudioRestoreTimer = null;
 
   // Slow adaptive peaks normalize different mixes so all ring groups stay consistently reactive.
   var _peakBass = 0.35;
@@ -33318,13 +33335,142 @@ function openAlbum(albumId) {
   var _peakSub808 = 0.32;
   var _psyRefReady = false;
   var _psyRefImage = new Image();
+  var VISUALIZER_IMAGE_STORAGE_KEY = 'hertzVisualizerCustomImage';
   _psyRefImage.onload = function() { _psyRefReady = true; };
   _psyRefImage.onerror = function() { _psyRefReady = false; };
-  _psyRefImage.src = 'Loop/psychedelic-reference.png.png';
+  _psyRefImage.src = '';
+
+  function applyStoredVisualizerImage() {
+    try {
+      var storedImage = localStorage.getItem(VISUALIZER_IMAGE_STORAGE_KEY);
+      if (storedImage && storedImage.startsWith('data:image/')) {
+        _psyRefImage.src = storedImage;
+      } else {
+        _psyRefReady = false;
+        _psyRefImage.src = '';
+      }
+    } catch (err) {
+      _psyRefReady = false;
+      _psyRefImage.src = '';
+    }
+  }
+
+  function initVisualizerImageUpload() {
+    var uploadBtn = document.getElementById('cubeVisualizerUploadBtn');
+    var input = document.getElementById('cubeVisualizerImageInput');
+    if (!uploadBtn || !input || uploadBtn.dataset.boundUpload === 'true') return;
+    uploadBtn.dataset.boundUpload = 'true';
+
+    uploadBtn.addEventListener('click', function(event) {
+      event.stopPropagation();
+      input.click();
+    });
+
+    input.addEventListener('change', function(event) {
+      var file = event.target && event.target.files ? event.target.files[0] : null;
+      if (!file) return;
+
+      if (!file.type || !file.type.startsWith('image/')) {
+        if (typeof showTemporaryMessage === 'function') {
+          showTemporaryMessage('Please choose an image file.');
+        }
+        input.value = '';
+        return;
+      }
+
+      var reader = new FileReader();
+      reader.onload = function(loadEvent) {
+        var dataUrl = loadEvent && loadEvent.target ? String(loadEvent.target.result || '') : '';
+        if (!dataUrl.startsWith('data:image/')) {
+          input.value = '';
+          return;
+        }
+
+        try {
+          localStorage.setItem(VISUALIZER_IMAGE_STORAGE_KEY, dataUrl);
+          _psyRefImage.src = dataUrl;
+          if (typeof showTemporaryMessage === 'function') {
+            showTemporaryMessage('Visualizer image updated');
+          }
+        } catch (storageError) {
+          if (typeof showTemporaryMessage === 'function') {
+            showTemporaryMessage('Image is too large to save. Use a smaller image.');
+          }
+        }
+
+        input.value = '';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  applyStoredVisualizerImage();
 
   function getOverlay() { return document.getElementById('cubeVisualizerOverlay'); }
   function getCanvas() { return document.getElementById('envWaveCanvas'); }
   function getLabel() { return document.getElementById('cubeVisualizerLabel'); }
+  function snapshotVisualizerAudioState() {
+    var audio = document.getElementById('playerAudio');
+    if (!audio) {
+      window.__hzVizAudioSnapshot = null;
+      return;
+    }
+
+    window.__hzVizAudioSnapshot = {
+      wasPlaying: !audio.paused && !audio.ended,
+      wasMuted: !!audio.muted,
+      volume: Number(audio.volume || 0)
+    };
+  }
+
+  function restoreVisualizerAudioIfNeeded() {
+    if (!_vizOpen) return;
+    var audio = document.getElementById('playerAudio');
+    var snapshot = window.__hzVizAudioSnapshot;
+    if (!audio || !snapshot) return;
+
+    if (!snapshot.wasMuted && audio.muted) {
+      audio.muted = false;
+      audio.defaultMuted = false;
+      audio.removeAttribute('muted');
+    }
+
+    if (snapshot.volume > 0.01 && Number(audio.volume || 0) <= 0.0001) {
+      audio.volume = snapshot.volume;
+    }
+
+    if (snapshot.wasPlaying && audio.paused) {
+      audio.play().catch(function() {});
+    }
+
+    if (window.__hzEqualizerEngine && window.__hzEqualizerEngine.context && window.__hzEqualizerEngine.context.state === 'suspended' && snapshot.wasPlaying) {
+      window.__hzEqualizerEngine.context.resume().catch(function() {});
+    }
+  }
+  function clearVisualizerCanvasToEmpty() {
+    var canvas = getCanvas();
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    var dpr = Math.max(1, window.devicePixelRatio || 1);
+    var w = Math.floor(canvas.clientWidth * dpr);
+    var h = Math.floor(canvas.clientHeight * dpr);
+    if (w <= 0 || h <= 0) return;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    canvas.style.transformOrigin = '50% 50%';
+    canvas.style.transform = 'scale(1)';
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = 'rgba(0,0,0,0.92)';
+    ctx.fillRect(0, 0, w, h);
+
+    var lbl = getLabel();
+    if (lbl) lbl.textContent = '—';
+  }
   function isHzStreamsHost() {
     var host = String(window.location.hostname || '').toLowerCase();
     return host === 'hz-streams.com' || host.endsWith('.hz-streams.com');
@@ -33394,14 +33540,22 @@ function openAlbum(albumId) {
     // No destination connection here, so popup itself never adds/duplicates audible output.
 
     var stream = null;
-    try {
-      if (typeof audio.captureStream === 'function') {
-        stream = audio.captureStream();
-      } else if (typeof audio.mozCaptureStream === 'function') {
-        stream = audio.mozCaptureStream();
+    if (_capturedStreamForAudio === audio && _capturedStream) {
+      stream = _capturedStream;
+    } else {
+      try {
+        if (typeof audio.captureStream === 'function') {
+          stream = audio.captureStream();
+        } else if (typeof audio.mozCaptureStream === 'function') {
+          stream = audio.mozCaptureStream();
+        }
+      } catch (err) {
+        stream = null;
       }
-    } catch (err) {
-      stream = null;
+      if (stream) {
+        _capturedStream = stream;
+        _capturedStreamForAudio = audio;
+      }
     }
 
     if (stream && (!_streamSource || _attachedStream !== stream)) {
@@ -33419,24 +33573,7 @@ function openAlbum(albumId) {
       }
     }
 
-    // Fallback live feed: use the sticky player element directly when captureStream is unavailable.
-    if (!_streamSource && (!_elementSource || _attachedElement !== audio)) {
-      try {
-        if (_elementSource && typeof _elementSource.disconnect === 'function') {
-          _elementSource.disconnect();
-        }
-        _elementSource = _audioCtx.createMediaElementSource(audio);
-        _elementSource.connect(_analyser);
-        _attachedElement = audio;
-        _analyserSourceMode = 'element';
-      } catch (err) {
-        _elementSource = null;
-        _attachedElement = null;
-      }
-    }
-
-    var hasLiveSource = (_analyserSourceMode === 'stream' && !!_streamSource)
-      || (_analyserSourceMode === 'element' && !!_elementSource);
+    var hasLiveSource = (_analyserSourceMode === 'stream' && !!_streamSource);
     if (!hasLiveSource) return false;
 
     if (_audioCtx.state === 'suspended' && !audio.paused) {
@@ -33701,31 +33838,14 @@ function openAlbum(albumId) {
       canvas.height = h;
     }
 
+    if (_vizShowEmptyFrame) {
+      _vizShowEmptyFrame = false;
+      clearVisualizerCanvasToEmpty();
+      return;
+    }
+
     var t   = performance.now() * 0.001;
     var sig = computeSignals(t);
-
-    function enforceVisualizerPopupAudio() {
-      if (!_vizOpen) return;
-      var audio = document.getElementById('playerAudio');
-      if (!audio) return;
-
-      if (typeof lockStickyPlayerMuteState === 'function') {
-        lockStickyPlayerMuteState();
-      }
-      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-        enforceGlobalStickyPlayerUnmute();
-      }
-
-      audio.muted = false;
-      audio.defaultMuted = false;
-      audio.removeAttribute('muted');
-      if (Number(audio.volume || 0) <= 0.0001) {
-        var savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
-        var safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
-        audio.volume = Math.max(0.05, Math.min(1, safePercent / 100));
-      }
-    }
-    enforceVisualizerPopupAudio();
 
     var bass  = sig.bass;
     var bassBody = sig.bassBody;
@@ -34331,52 +34451,36 @@ function openAlbum(albumId) {
 
   window.openCubeVisualizer = function() {
     if (_vizOpen) return;
-    _vizOpen = true;
     var overlay = getOverlay();
     if (!overlay) return;
+    snapshotVisualizerAudioState();
+    _vizOpen = true;
     overlay.style.display = 'block';
-    var audio = document.getElementById('playerAudio');
-    if (audio) {
-      audio.muted = false;
-      audio.defaultMuted = false;
-      audio.removeAttribute('muted');
-    }
 
-    if (typeof lockStickyPlayerMuteState === 'function') {
-      lockStickyPlayerMuteState();
+    _vizShowEmptyFrame = true;
+    clearVisualizerCanvasToEmpty();
+    restoreVisualizerAudioIfNeeded();
+    setTimeout(restoreVisualizerAudioIfNeeded, 90);
+    setTimeout(restoreVisualizerAudioIfNeeded, 240);
+    setTimeout(restoreVisualizerAudioIfNeeded, 520);
+    if (_vizAudioRestoreTimer) {
+      clearInterval(_vizAudioRestoreTimer);
     }
-    if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-      enforceGlobalStickyPlayerUnmute();
-    }
-    if (window.__hzVisualizerStickyUnmuteInterval) {
-      clearInterval(window.__hzVisualizerStickyUnmuteInterval);
-    }
-    window.__hzVisualizerStickyUnmuteInterval = setInterval(function() {
-      if (!_vizOpen) return;
-      if (typeof lockStickyPlayerMuteState === 'function') {
-        lockStickyPlayerMuteState();
-      }
-      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-        enforceGlobalStickyPlayerUnmute();
-      }
-    }, 140);
+    _vizAudioRestoreTimer = setInterval(restoreVisualizerAudioIfNeeded, 350);
 
     setupAudioAnalyser();
     if (_raf) cancelAnimationFrame(_raf);
     drawWaves();
-    setTimeout(function() {
-      var audioEl = document.getElementById('playerAudio');
-      if (!audioEl) return;
-      audioEl.muted = false;
-      audioEl.defaultMuted = false;
-      audioEl.removeAttribute('muted');
-    }, 80);
   };
 
   window.closeCubeVisualizer = function() {
     _vizOpen = false;
     var overlay = getOverlay();
     if (overlay) overlay.style.display = 'none';
+    if (_vizAudioRestoreTimer) {
+      clearInterval(_vizAudioRestoreTimer);
+      _vizAudioRestoreTimer = null;
+    }
     if (window.__hzVisualizerStickyUnmuteInterval) {
       clearInterval(window.__hzVisualizerStickyUnmuteInterval);
       window.__hzVisualizerStickyUnmuteInterval = null;
@@ -34461,10 +34565,12 @@ function openAlbum(albumId) {
     document.addEventListener('DOMContentLoaded', attachTitleClick);
     document.addEventListener('DOMContentLoaded', startStickyWaveBadge);
     document.addEventListener('DOMContentLoaded', startStickyAreaWatcher);
+    document.addEventListener('DOMContentLoaded', initVisualizerImageUpload);
   } else {
     attachTitleClick();
     startStickyWaveBadge();
     startStickyAreaWatcher();
+    initVisualizerImageUpload();
     setTimeout(attachTitleClick, 800);
   }
 })();
