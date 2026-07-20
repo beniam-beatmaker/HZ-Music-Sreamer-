@@ -19632,7 +19632,6 @@ function showGenrePopup(genre) {
 
       if (!trackInfo) {
         console.error('❌ Track not found:', trackId);
-        showNotification('❌ Track not found - please refresh and try again');
         return;
       }
 
@@ -23624,7 +23623,22 @@ function showGenrePopup(genre) {
       stopCurrentOfflineTrackPlayback();
 
       // Find the track in stored tracks
-      const track = offlineTracks.find(t => t.id === trackId);
+      const targetId = String(trackId);
+      let track = offlineTracks.find(t => String(t && t.id) === targetId);
+      if (!track) {
+        const canonicalMedia = getOfflineMedia();
+        const canonicalTrack = (canonicalMedia.audio || []).find(t => String(t && t.id) === targetId);
+        if (canonicalTrack) {
+          track = {
+            artist: '',
+            title: canonicalTrack.name || 'Offline Track',
+            ...canonicalTrack
+          };
+          offlineTracks.push(track);
+          queue = [...offlineTracks];
+          console.log('🔄 Rehydrated missing offline track from canonical storage:', track.name);
+        }
+      }
       if (!track) {
         console.error('❌ Track not found:', trackId);
         return;
