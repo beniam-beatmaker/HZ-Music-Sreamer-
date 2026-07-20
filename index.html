@@ -8929,6 +8929,20 @@ last i checked this is best, specially since it could be real safe`;
     .video-mini-btn { background: none; border: none; color: white; font-size: 16px; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s; }
     .video-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; max-width: none !important; transform: none !important; border-radius: 0 !important; z-index: 2001; }
     .video-fullscreen video { max-height: 100vh !important; }
+    @media (hover: none), (pointer: coarse) {
+      .video-mini-mute,
+      .video-mini-fullscreen,
+      .video-close-mini {
+        opacity: 1;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+      }
+      .video-mini-resize-handle {
+        width: 20px;
+        height: 20px;
+      }
+    }
 
     .sticky-ad-popup {
       display: none;
@@ -22230,21 +22244,32 @@ function showGenrePopup(genre) {
       const maxWidth = 720;
       const aspectRatio = 16 / 9;
 
-      miniPlayer.addEventListener('mousedown', (event) => {
+      const getPointer = (event) => {
+        if (event.touches && event.touches.length > 0) return event.touches[0];
+        if (event.changedTouches && event.changedTouches.length > 0) return event.changedTouches[0];
+        return event;
+      };
+
+      const startPointerInteraction = (event) => {
+        const pointer = getPointer(event);
+        if (!pointer) return;
+
         const resizeHandle = event.target.closest('.video-mini-resize-handle');
         if (resizeHandle) {
           resizing = true;
           resizeCorner = resizeHandle.dataset.corner || 'se';
           const rect = miniPlayer.getBoundingClientRect();
-          startX = event.clientX;
-          startY = event.clientY;
+          startX = pointer.clientX;
+          startY = pointer.clientY;
+          startLeft = rect.left;
+          startTop = rect.top;
           startWidth = rect.width;
           startHeight = rect.height;
           miniPlayer.style.left = `${rect.left}px`;
           miniPlayer.style.top = `${rect.top}px`;
           miniPlayer.style.right = 'auto';
           miniPlayer.style.transform = 'none';
-          event.preventDefault();
+          if (event.cancelable) event.preventDefault();
           return;
         }
 
@@ -22253,8 +22278,8 @@ function showGenrePopup(genre) {
         miniPlayer.classList.add('dragging');
 
         const rect = miniPlayer.getBoundingClientRect();
-        startX = event.clientX;
-        startY = event.clientY;
+        startX = pointer.clientX;
+        startY = pointer.clientY;
         startLeft = rect.left;
         startTop = rect.top;
 
@@ -22262,13 +22287,16 @@ function showGenrePopup(genre) {
         miniPlayer.style.top = `${startTop}px`;
         miniPlayer.style.right = 'auto';
         miniPlayer.style.transform = 'none';
-        event.preventDefault();
-      });
+        if (event.cancelable) event.preventDefault();
+      };
 
-      document.addEventListener('mousemove', (event) => {
+      const movePointerInteraction = (event) => {
+        const pointer = getPointer(event);
+        if (!pointer) return;
+
         if (resizing) {
-          const deltaX = event.clientX - startX;
-          const deltaY = event.clientY - startY;
+          const deltaX = pointer.clientX - startX;
+          const deltaY = pointer.clientY - startY;
           const horizontalDelta = resizeCorner.includes('e') ? deltaX : -deltaX;
           let width = Math.max(minWidth, Math.min(maxWidth, startWidth + horizontalDelta));
           let height = Math.max(124, Math.round(width / aspectRatio));
@@ -22298,25 +22326,27 @@ function showGenrePopup(genre) {
           miniPlayer.style.top = `${top}px`;
           miniPlayer.style.width = `${width}px`;
           miniPlayer.style.height = `${height}px`;
+          if (event.cancelable) event.preventDefault();
           return;
         }
 
         if (!dragging) return;
 
         const nextLeft = Math.min(
-          Math.max(0, startLeft + (event.clientX - startX)),
+          Math.max(0, startLeft + (pointer.clientX - startX)),
           window.innerWidth - miniPlayer.offsetWidth
         );
         const nextTop = Math.min(
-          Math.max(0, startTop + (event.clientY - startY)),
+          Math.max(0, startTop + (pointer.clientY - startY)),
           window.innerHeight - miniPlayer.offsetHeight
         );
 
         miniPlayer.style.left = `${nextLeft}px`;
         miniPlayer.style.top = `${nextTop}px`;
-      });
+        if (event.cancelable) event.preventDefault();
+      };
 
-      document.addEventListener('mouseup', () => {
+      const endPointerInteraction = () => {
         if (resizing) {
           resizing = false;
           return;
@@ -22324,6 +22354,34 @@ function showGenrePopup(genre) {
         if (!dragging) return;
         dragging = false;
         miniPlayer.classList.remove('dragging');
+      };
+
+      miniPlayer.addEventListener('mousedown', (event) => {
+        startPointerInteraction(event);
+      });
+
+      document.addEventListener('mousemove', (event) => {
+        movePointerInteraction(event);
+      });
+
+      document.addEventListener('mouseup', () => {
+        endPointerInteraction();
+      });
+
+      miniPlayer.addEventListener('touchstart', (event) => {
+        startPointerInteraction(event);
+      }, { passive: false });
+
+      document.addEventListener('touchmove', (event) => {
+        movePointerInteraction(event);
+      }, { passive: false });
+
+      document.addEventListener('touchend', () => {
+        endPointerInteraction();
+      });
+
+      document.addEventListener('touchcancel', () => {
+        endPointerInteraction();
       });
     })();
 
@@ -35177,14 +35235,9 @@ if (miniFullscreenBtn && !miniFullscreenBtn.dataset.boundMiniControls) {
   miniFullscreenBtn.dataset.boundMiniControls = 'true';
   miniFullscreenBtn.addEventListener('click', () => {
     if (!miniVideoPlayer) return;
-
-    if (!isMiniFullscreen) {
-      if (miniVideoPlayer.requestFullscreen) miniVideoPlayer.requestFullscreen();
-      isMiniFullscreen = true;
-    } else {
-      if (document.exitFullscreen) document.exitFullscreen();
-      isMiniFullscreen = false;
-    }
+    isMiniFullscreen = !isMiniFullscreen;
+    miniVideoPlayer.classList.toggle('video-fullscreen', isMiniFullscreen);
+    miniFullscreenBtn.textContent = isMiniFullscreen ? '🗗' : '⛶';
   });
 }
 
@@ -35192,6 +35245,9 @@ if (miniCloseBtn && !miniCloseBtn.dataset.boundMiniControls) {
   miniCloseBtn.dataset.boundMiniControls = 'true';
   miniCloseBtn.addEventListener('click', () => {
     if (!miniVideoPlayer || !videoOverlay || !miniVideoElement) return;
+    isMiniFullscreen = false;
+    miniVideoPlayer.classList.remove('video-fullscreen');
+    if (miniFullscreenBtn) miniFullscreenBtn.textContent = '⛶';
     miniVideoPlayer.style.display = 'none';
     videoOverlay.style.display = 'none';
     miniVideoElement.pause();
