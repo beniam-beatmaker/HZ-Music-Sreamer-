@@ -8974,8 +8974,8 @@ last i checked this is best, specially since it could be real safe`;
 
     .sticky-ad-skip-btn {
       position: absolute;
-      top: 10px;
       right: 10px;
+      bottom: 10px;
       z-index: 2;
       border: 1px solid rgba(255,255,255,0.4);
       background: rgba(0,0,0,0.65);
@@ -8989,10 +8989,20 @@ last i checked this is best, specially since it could be real safe`;
       line-height: 1;
       backdrop-filter: blur(2px);
       -webkit-backdrop-filter: blur(2px);
+      display: none;
     }
 
     .sticky-ad-skip-btn:active {
       transform: scale(0.98);
+    }
+
+    .sticky-ad-skip-btn:hover,
+    .sticky-ad-skip-btn:focus-visible {
+      background: linear-gradient(180deg, rgba(92, 62, 0, 0.96), rgba(44, 28, 0, 0.98));
+      border-color: rgba(212, 175, 55, 0.9);
+      box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.25), 0 0 18px rgba(92, 62, 0, 0.55), 0 0 26px rgba(212, 175, 55, 0.18);
+      color: #fff6d6;
+      transform: translateY(-1px);
     }
 
     .sticky-ad-skip-btn:disabled {
@@ -9114,6 +9124,51 @@ last i checked this is best, specially since it could be real safe`;
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('Ride all Night', 'https://storage.googleapis.com/hertz-music-folder/Ride%20All%20Night%20(2).mp3', 'Ride all Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Ride all Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Ride all Night</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Call Me Cupid', 'https://storage.googleapis.com/hertz-music-folder/Call%20Me%20Cupid.mp3', 'Call Me Cupid', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:heart.svg?color=%23ffd700" alt="Call Me Cupid cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Call Me Cupid</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Backstabber', 'https://storage.googleapis.com/hertz-music-folder/Backstabber%20(1).mp3', 'Backstabber', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:knife-military.svg?color=%23ffd700" alt="Backstabber cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Backstabber</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Tweak em Swift', 'https://storage.googleapis.com/hertz-music-folder/Floor%20Floorfloor%20(1).mp3', 'Tweak em Swift', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:lightning-bolt.svg?color=%23ffd700" alt="Tweak em Swift cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Tweak em Swift</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
+                <div class="recent-track-item" onclick="playNewTrack('Moves Real Lit', 'https://storage.googleapis.com/hertz-music-folder/Moves%20Real%20Lit.mp3', 'Moves Real Lit', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:trending-up.svg?color=%23ffd700" alt="Moves Real Lit cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Moves Real Lit</div>
+                    <div class="recent-track-artist">Beniam TedlAI</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Stop Em', 'https://storage.googleapis.com/hertz-music-folder/Stop%20the%20Work.mp3', 'Stop Em', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:alert-circle-outline.svg?color=%23ffd700" alt="Stop Em cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -10337,6 +10392,41 @@ last i checked this is best, specially since it could be real safe`;
             </tr>
           </thead>
           <tbody>
+                <tr class="track-row" onclick="playNewTrack('Ride all Night', 'https://storage.googleapis.com/hertz-music-folder/Ride%20All%20Night%20(2).mp3', 'Ride all Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Ride all Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ride all Night</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Call Me Cupid', 'https://storage.googleapis.com/hertz-music-folder/Call%20Me%20Cupid.mp3', 'Call Me Cupid', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">2</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:heart.svg?color=%23ffd700" alt="Call Me Cupid cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Call Me Cupid</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Backstabber', 'https://storage.googleapis.com/hertz-music-folder/Backstabber%20(1).mp3', 'Backstabber', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">3</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:knife-military.svg?color=%23ffd700" alt="Backstabber cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Backstabber</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Tweak em Swift', 'https://storage.googleapis.com/hertz-music-folder/Floor%20Floorfloor%20(1).mp3', 'Tweak em Swift', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">4</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:lightning-bolt.svg?color=%23ffd700" alt="Tweak em Swift cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Tweak em Swift</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
+                <tr class="track-row" onclick="playNewTrack('Moves Real Lit', 'https://storage.googleapis.com/hertz-music-folder/Moves%20Real%20Lit.mp3', 'Moves Real Lit', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:trending-up.svg?color=%23ffd700" alt="Moves Real Lit cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Moves Real Lit</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <tr class="track-row" onclick="playNewTrack('FELON', 'https://storage.googleapis.com/hertz-music-folder/Mars%20(2).mp3', 'FELON', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-circle.svg?color=%23ffd700" alt="FELON cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">FELON</div><div class="track-artist">Ben.I.Am Tedla</div></div></div></td>
@@ -14416,13 +14506,17 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             });
           }
 
-          const STICKY_AD_CADENCE_PATTERN = [4, 5];
-          const STICKY_AD_SEQUENCE_PATTERN = ['US', 'AUS'];
+          const STICKY_AD_CADENCE_PATTERN = [4, 4];
+          const STICKY_AD_SEQUENCE_PATTERN = ['AUS', 'US'];
           const STICKY_AD_START_TIMEOUT_MS = 12000;
           const STICKY_AD_MIN_VISIBLE_MS = 3500;
-          const STICKY_AD_GAP_PX = 12;
-          const STICKY_AD_US_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20U.S%20Ad%20.mp4';
-          const STICKY_AD_AUS_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
+          const STICKY_AD_GAP_PX = 0;
+          const STICKY_AD_US_FILE_NAME = window.location.protocol === 'file:'
+            ? 'The U.S Ad .mp4'
+            : 'https://storage.googleapis.com/hertz-music-folder/The%20U.S%20Ad%20.mp4';
+          const STICKY_AD_AUS_FILE_NAME = window.location.protocol === 'file:'
+            ? 'The AUS Ad #1.mp4'
+            : 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
           const STICKY_AD_US_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/H%20Z%20a%20Hub.mp3';
           const STICKY_AD_AUS_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/Australia.mp3';
           const STICKY_AD_COMPANION_AUDIO_MUTED = true;
@@ -14562,11 +14656,15 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             const skipAdBtn = document.getElementById('stickyTrackAdSkipBtn');
             if (!popup || !adVideo) return false;
 
-            const mainPlayerAudio = document.getElementById('playerAudio');
-            if (mainPlayerAudio && !mainPlayerAudio.paused) {
-              try {
-                mainPlayerAudio.pause();
-              } catch (e) {}
+            if (typeof pauseMainStickyPlayer === 'function') {
+              pauseMainStickyPlayer();
+            } else {
+              const mainPlayerAudio = document.getElementById('playerAudio');
+              if (mainPlayerAudio && !mainPlayerAudio.paused) {
+                try {
+                  mainPlayerAudio.pause();
+                } catch (e) {}
+              }
             }
 
             let adShield = document.getElementById('stickyTrackAdShield');
@@ -14594,7 +14692,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               if (stickyVisible) {
                 const stickyRect = stickyPlayerEl.getBoundingClientRect();
                 const offsetFromBottomToStickyTop = Math.max(0, Math.round(window.innerHeight - stickyRect.top));
-                popup.style.bottom = (offsetFromBottomToStickyTop + STICKY_AD_GAP_PX) + 'px';
+                  popup.style.bottom = (offsetFromBottomToStickyTop + STICKY_AD_GAP_PX) + 'px';
               } else {
                 popup.style.bottom = '';
               }
@@ -14606,11 +14704,12 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             popup.style.display = 'none';
             popup.setAttribute('aria-hidden', 'true');
             if (skipAdBtn) {
-              skipAdBtn.style.display = 'inline-flex';
+              skipAdBtn.style.display = 'none';
               skipAdBtn.disabled = true;
               skipAdBtn.setAttribute('aria-disabled', 'true');
-              skipAdBtn.textContent = 'Skip in 5';
+              skipAdBtn.textContent = 'Skip';
             }
+
             let popupShownAt = 0;
             let popupRevealed = false;
 
@@ -14626,31 +14725,25 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               popup.style.display = 'block';
               popup.setAttribute('aria-hidden', 'false');
 
-              // Lock skip for first 5s after popup is visible, then allow skipping.
               if (skipAdBtn) {
-                let skipRemainingSeconds = 5;
+                skipAdBtn.style.display = 'none';
                 skipAdBtn.disabled = true;
                 skipAdBtn.setAttribute('aria-disabled', 'true');
-                skipAdBtn.textContent = 'Skip in 5';
+                skipAdBtn.textContent = 'Skip';
 
                 if (skipCountdownTimer) {
-                  clearInterval(skipCountdownTimer);
+                  clearTimeout(skipCountdownTimer);
                 }
-                skipCountdownTimer = setInterval(function() {
-                  if (!window.__hzStickyAdActive) return;
-                  skipRemainingSeconds -= 1;
-                  if (skipRemainingSeconds <= 0) {
-                    clearInterval(skipCountdownTimer);
-                    skipCountdownTimer = null;
-                    skipAdBtn.disabled = false;
-                    skipAdBtn.removeAttribute('aria-disabled');
-                    skipAdBtn.textContent = 'Skip';
-                    return;
-                  }
-                  skipAdBtn.textContent = 'Skip in ' + skipRemainingSeconds;
-                }, 1000);
+                skipCountdownTimer = setTimeout(function() {
+                  if (!window.__hzStickyAdActive || resolved) return;
+                  skipAdBtn.style.display = 'inline-flex';
+                  skipAdBtn.disabled = false;
+                  skipAdBtn.removeAttribute('aria-disabled');
+                }, 5000);
               }
             };
+
+            revealAdPopupNow();
 
             const finishAd = function(forceImmediateClose) {
               if (resolved) return;
@@ -14831,52 +14924,21 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
                 return Promise.resolve(stickyAdBlobCache[normalizedSource]);
               }
 
-              const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(normalizedSource);
-              const isHttpSource = /^https?:/i.test(normalizedSource);
-              const shouldFetchAsBlob = !isHttpSource && (window.location.protocol === 'file:' || !hasScheme || normalizedSource.startsWith('file://'));
-
-              if (!shouldFetchAsBlob) {
-                return Promise.resolve(normalizedSource);
-              }
-
-              return fetch(normalizedSource)
-                .then(function(response) {
-                  if (!response.ok) {
-                    throw new Error('Unable to fetch ad source: ' + normalizedSource + ' (' + response.status + ')');
-                  }
-                  return response.blob();
-                })
-                .then(function(blob) {
-                  const objectUrl = URL.createObjectURL(blob);
-                  stickyAdBlobCache[normalizedSource] = objectUrl;
-                  return objectUrl;
-                });
+              return Promise.resolve(normalizedSource);
             };
 
             const playCurrentSource = function() {
               if (resolved || !window.__hzStickyAdActive) return;
+              revealAdPopupNow();
               // Try normal unmuted playback first. If autoplay policy blocks audio,
-              // bootstrap muted playback and immediately restore audible state.
+              // fall back to waiting for a user gesture without muting the ad.
               forceAdAudible();
               adVideo.play().catch(function(primaryError) {
-                try {
-                  adVideo.muted = true;
-                  adVideo.defaultMuted = true;
-                  adVideo.setAttribute('muted', '');
-                } catch (e) {}
-
-                adVideo.play().then(function() {
-                  setTimeout(function() {
-                    forceAdAudible();
-                    adVideo.play().catch(function() {});
-                  }, 80);
-                }).catch(function(secondaryError) {
-                  if (isAutoplayBlockedError(primaryError) || isAutoplayBlockedError(secondaryError)) {
-                    waitForAdPlaybackUnlock(playCurrentSource);
-                    return;
-                  }
-                  tryNextSource();
-                });
+                if (isAutoplayBlockedError(primaryError)) {
+                  waitForAdPlaybackUnlock(playCurrentSource);
+                  return;
+                }
+                tryNextSource();
               });
             };
 
@@ -14928,7 +14990,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
                   adVideo.removeEventListener('playing', onAdPlaying);
                   playbackStarted = true;
                   clearAdUnlockWait();
-                  revealAdPopupNow();
                   startCompanionAudio();
                 });
 
@@ -14984,7 +15045,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             }, 250);
 
             const startupTimeout = Number(window.hzStickyAdStartTimeoutMs || STICKY_AD_START_TIMEOUT_MS);
-            const effectiveStartupTimeout = Math.max(120, Math.min(startupTimeout, 500));
+            const effectiveStartupTimeout = Math.max(2000, Math.min(startupTimeout, STICKY_AD_START_TIMEOUT_MS));
             window.__hzStickyAdTimer = setTimeout(function() {
               if (playbackStarted) return;
               tryNextSource();
@@ -35604,6 +35665,10 @@ document.addEventListener('DOMContentLoaded', function() {
     return false;
   };
 
+  if (typeof window.__hzStickyManualTracksPlayedSinceAd !== 'number') {
+    window.__hzStickyManualTracksPlayedSinceAd = 0;
+  }
+
   const syncPlayPauseIcon = function() {
     if (!playPauseBtnEl) return;
     playPauseBtnEl.innerHTML = (!playerAudio.paused && !playerAudio.ended) ? '&#10073;&#10073;' : '&#9654;';
@@ -35612,9 +35677,9 @@ document.addEventListener('DOMContentLoaded', function() {
   if (typeof window.playNewTrack === 'function' && !window.playNewTrack._hzStickyControlWrapped) {
     const originalPlayNewTrack = window.playNewTrack;
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
-      // Keep sticky-player track starts immediate with no pre-play ad delay.
-      if (window.__hzStickyAdBypassOnce) {
-        window.__hzStickyAdBypassOnce = false;
+      const isManualSelection = window.__hzStickyManualSelectionPending === true;
+      if (isManualSelection) {
+        window.__hzStickyManualSelectionPending = false;
       }
 
       resetOfflineToHomeControlState();
@@ -35633,6 +35698,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (typeof window.syncAutoplayOrderForTrack === 'function' && trackId) {
         window.syncAutoplayOrderForTrack(trackId);
+      }
+
+      if (isManualSelection && typeof window.playStickyTrackTransitionAd === 'function') {
+        window.__hzStickyManualTracksPlayedSinceAd = Number(window.__hzStickyManualTracksPlayedSinceAd || 0) + 1;
+        const manualAdTarget = 4;
+        if (window.__hzStickyManualTracksPlayedSinceAd >= manualAdTarget) {
+          const selectedAdFileName = (typeof getNextStickyAdFileName === 'function')
+            ? getNextStickyAdFileName()
+            : null;
+
+          window.__hzStickyManualTracksPlayedSinceAd = 0;
+          const didShowAd = window.playStickyTrackTransitionAd(function() {
+            originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
+          }, selectedAdFileName);
+
+          if (didShowAd) {
+            return true;
+          }
+        }
       }
 
       const playResult = originalPlayNewTrack.call(this, trackId, trackUrl, trackTitle, trackArtist);
@@ -35696,6 +35780,8 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
+
+      window.__hzStickyManualSelectionPending = true;
 
       window.playNewTrack(parsed.trackId, parsed.trackUrl, parsed.trackTitle, parsed.trackArtist);
 
