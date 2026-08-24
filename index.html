@@ -677,7 +677,7 @@
       'Flex is Wealth': { url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Neat Rep': { url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Blast Off': { url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', title: 'Blast Off', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
-      'Feel Right': { url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', title: 'Feel Right', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
+      'Feel Right': { url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', title: 'Feel Right', artist: 'Beniam TedlAI', genre: 'hiphop' },
       'Love It': { url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', title: 'Love It', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Want it All': { url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', title: 'Want it All', artist: 'B Tilla', genre: 'hiphop' },
       'MF Rocket': { url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
@@ -1527,6 +1527,9 @@ last i checked this is best, specially since it could be real safe`;
 
       const onPlaybackStarted = function() {
         playbackStarted = true;
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
         if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
         if (typeof window.updateLikeButtonState === 'function') {
           window.updateLikeButtonState(trackId);
@@ -9589,7 +9592,7 @@ last i checked this is best, specially since it could be real safe`;
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+              <div class="recent-track-item" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                 <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Feel Right</div>
@@ -10797,7 +10800,7 @@ last i checked this is best, specially since it could be real safe`;
                   <td><div class="track-duration">3:22</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <tr class="track-row" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Feel Right</div><div class="track-artist">Ben.I.Am Tedla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
@@ -16885,7 +16888,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
       'Flex is Wealth': { id: 'Flex is Wealth', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Neat Rep': { id: 'Neat Rep', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Blast Off': { id: 'Blast Off', title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-      'Feel Right': { id: 'Feel Right', title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Feel Right': { id: 'Feel Right', title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Love It': { id: 'Love It', title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'MF Rocket': { id: 'MF Rocket', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Ride wid Me': { id: 'Ride wid Me', title: 'Ride wid Me', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
@@ -16941,7 +16944,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
         { id: 'Flex is Wealth', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3' },
         { id: 'Neat Rep', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3' },
         { id: 'Blast Off', title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3' },
-        { id: 'Feel Right', title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3' },
+        { id: 'Feel Right', title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3' },
         { id: 'Love It', title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3' },
         { id: 'MF Rocket', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3' },
         { id: 'Ride wid Me', title: 'Ride wid Me', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3' },
@@ -27367,6 +27370,14 @@ function showGenrePopup(genre) {
             if (eqEngine && eqEngine.context && eqEngine.context.state === 'suspended') {
               eqEngine.context.resume().catch(function() {});
             }
+            audioEl.muted = false;
+            audioEl.defaultMuted = false;
+            audioEl.removeAttribute('muted');
+            if (Number(audioEl.volume || 0) <= 0.0001) {
+              const savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
+              const safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
+              audioEl.volume = Math.max(0.05, Math.min(1, safePercent / 100));
+            }
             if (window.__hzPendingEqualizerSettings && eqEngine) {
               applyEqualizerSettingsToEngine(window.__hzPendingEqualizerSettings);
               window.__hzPendingEqualizerSettings = null;
@@ -27420,6 +27431,17 @@ function showGenrePopup(genre) {
         window.__hzPendingEqualizerSettings = selectedSettings;
       } else {
         window.__hzPendingEqualizerSettings = null;
+      }
+
+      const audio = document.getElementById('playerAudio');
+      if (audio) {
+        audio.muted = false;
+        audio.defaultMuted = false;
+        audio.removeAttribute('muted');
+        const context = window.__hzEqualizerEngine && window.__hzEqualizerEngine.context;
+        if (context && !audio.paused && context.state === 'suspended' && typeof context.resume === 'function') {
+          context.resume().catch(function() {});
+        }
       }
 
       console.log('✅ Equalizer preset applied:', preset, selectedSettings);
@@ -33290,7 +33312,7 @@ function openGenrePlaylist(genre) {
       { title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', genre: 'hiphop', duration: '3:20' },
-      { title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Want it All', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', genre: 'hiphop', duration: '3:20' },
@@ -36918,8 +36940,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   ];
 
+  const tracksUnderGiggle = [
+  ];
+
   const tracksBeforeBlastOff = [
     { title: 'Bouta Jus Stop', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Bouta%20Jus%20Stop.mp3', cover: 'https://api.iconify.design/mdi:stop-circle-outline.svg?color=%23ffd700' },
+    { title: 'Date you Asked for', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Date%20you%20Asked%20for.mp3', cover: 'https://api.iconify.design/mdi:calendar-question.svg?color=%23ffd700' },
+    { title: 'LoveStruck', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/LoveStruck.mp3', cover: 'https://api.iconify.design/mdi:heart.svg?color=%23ffd700' },
+    { title: 'Shift Ya Mind', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Shift%20Ya%20Mind%20(2).mp3', cover: 'https://api.iconify.design/mdi:swap-horizontal.svg?color=%23ffd700' },
+    { title: 'Trynna Make Ya Happy', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Tryna%20Make%20Ya%20Happy.mp3', cover: 'https://api.iconify.design/mdi:emoticon-happy.svg?color=%23ffd700' },
+    { title: 'Feel Free', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Just%20Want%20to%20Feel%20Free.mp3', cover: 'https://api.iconify.design/mdi:lock-open-outline.svg?color=%23ffd700' },
+    { title: 'Body Like Dat', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Body%20Like%20Dat.mp3', cover: 'https://api.iconify.design/mdi:human.svg?color=%23ffd700' },
+    { title: 'Broken Chores', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Broken%20Chores%20(1).mp3', cover: 'https://api.iconify.design/mdi:tools.svg?color=%23ffd700' },
+    { title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', cover: 'https://api.iconify.design/mdi:thumb-up-outline.svg?color=%23ffd700' },
+    { title: 'Maintain the Balance', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Maintain%20the%20Balance.mp3', cover: 'https://api.iconify.design/mdi:scale-balance.svg?color=%23ffd700' },
+    { title: 'Why Not Grow', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Why%20Not%20Grow.mp3', cover: 'https://api.iconify.design/mdi:sprout.svg?color=%23ffd700' },
+    { title: 'Night Skies', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Night%20Skies.mp3', cover: 'https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700' },
+    { title: 'Whether They Happy', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Whether%20They%20Happy.mp3', cover: 'https://api.iconify.design/mdi:emoticon-happy-outline.svg?color=%23ffd700' },
+    { title: 'At What Cost', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/At%20What%20Cost.mp3', cover: 'https://api.iconify.design/mdi:currency-usd.svg?color=%23ffd700' },
+    { title: 'Fruit So Good', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Fruit%20So%20Good.mp3', cover: 'https://api.iconify.design/mdi:fruit-cherries.svg?color=%23ffd700' },
+    { title: 'Collider Power', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Collider%20Power.mp3', cover: 'https://api.iconify.design/mdi:atom.svg?color=%23ffd700' },
+    { title: 'Room Inventory', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Room%20Inventory.mp3', cover: 'https://api.iconify.design/mdi:clipboard-list-outline.svg?color=%23ffd700' },
+    { title: 'Twisted Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Twisted%20Game.mp3', cover: 'https://api.iconify.design/mdi:gamepad-variant-outline.svg?color=%23ffd700' },
+    { title: 'New Kinda Hell', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/New%20Kinda%20Hell.mp3', cover: 'https://api.iconify.design/mdi:fire.svg?color=%23ffd700' },
+    { title: 'Love her Tight', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20Her%20Tight%20(1).mp3', cover: 'https://api.iconify.design/mdi:heart-multiple-outline.svg?color=%23ffd700' },
+    { title: 'Pick Up Ya Phone', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3', cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700' },
     { title: 'Focus On Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Focus%20On%20Me%20(1).mp3', cover: 'https://api.iconify.design/mdi:target.svg?color=%23ffd700' },
     { title: 'DumbAss Story', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Dumbass%20Story.mp3', cover: 'https://api.iconify.design/mdi:book-alert-outline.svg?color=%23ffd700' },
     { title: 'Wan Feel the Glow', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Wan%20Feel%20the%20Glow.mp3', cover: 'https://api.iconify.design/mdi:white-balance-sunny.svg?color=%23ffd700' },
@@ -36939,6 +36984,8 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksBeforeAnchor(recentList, false, 'Blast Off', tracksBeforeBlastOff);
   insertTracksBeforeAnchor(popularBody, true, 'Blast Off', tracksBeforeBlastOff);
   updateTracksBeforeBlastOffCovers();
+  insertTracksUnderAnchor(recentList, false, 'Giggle', tracksUnderGiggle);
+  insertTracksUnderAnchor(popularBody, true, 'Giggle', tracksUnderGiggle);
   insertTracksUnderAnchor(recentList, false, 'Dead 2 Me', tracksUnderDeadToMe);
   insertTracksUnderAnchor(popularBody, true, 'Dead 2 Me', tracksUnderDeadToMe);
   refreshTrackNumbers(popularBody);
