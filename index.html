@@ -14823,6 +14823,11 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               if (popupRevealed || resolved || !window.__hzStickyAdActive) return;
               popupRevealed = true;
               popupShownAt = Date.now();
+              if (mainPlayerAudio) {
+                try {
+                  mainPlayerAudio.pause();
+                } catch (e) {}
+              }
               popup.style.display = 'block';
               popup.setAttribute('aria-hidden', 'false');
 
@@ -15179,7 +15184,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             }, 250);
 
             const startupTimeout = Number(window.hzStickyAdStartTimeoutMs || STICKY_AD_START_TIMEOUT_MS);
-            const effectiveStartupTimeout = Math.max(120, Math.min(startupTimeout, 500));
+            const effectiveStartupTimeout = Math.max(120, startupTimeout);
             window.__hzStickyAdTimer = setTimeout(function() {
               if (playbackStarted) return;
               tryNextSource();
@@ -15213,6 +15218,16 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             window.__hzStickyAdTrackLoadListenerBound = true;
             playerAudio.addEventListener('loadeddata', function() {
               window.playStickyAdAfterTrackLoad();
+            });
+          }
+
+          if (!window.__hzStickyAdPlaybackGuardBound) {
+            window.__hzStickyAdPlaybackGuardBound = true;
+            playerAudio.addEventListener('play', function() {
+              if (!window.__hzStickyAdActive) return;
+              try {
+                playerAudio.pause();
+              } catch (e) {}
             });
           }
 
@@ -36955,6 +36970,10 @@ document.addEventListener('DOMContentLoaded', function() {
     { title: 'Waitin Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20Game%20(1).mp3', cover: 'https://api.iconify.design/mdi:timer-sand.svg?color=%23ffd700' }
   ];
 
+  const tracksUnderNoGoodInMyGenes = [
+    { title: 'Pains All i Know', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pains%20All%20I%20Know%20(3).mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
+  ];
+
   const tracksUnderWaitinGame = [
     { title: 'Cheese Got Me Shook', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cheese%20Got%20Me%20Shook.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
@@ -36988,6 +37007,8 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksUnderAnchor(popularBody, true, 'Dead 2 Me', tracksUnderDeadToMe);
   insertTracksBeforeAnchor(recentList, false, 'Everytime', tracksBeforeEverytime);
   insertTracksBeforeAnchor(popularBody, true, 'Everytime', tracksBeforeEverytime);
+  insertTracksUnderAnchor(recentList, false, 'No Good in my Genes', tracksUnderNoGoodInMyGenes);
+  insertTracksUnderAnchor(popularBody, true, 'No Good in my Genes', tracksUnderNoGoodInMyGenes);
   insertTracksUnderAnchor(recentList, false, 'Waitin Game', tracksUnderWaitinGame);
   insertTracksUnderAnchor(popularBody, true, 'Waitin Game', tracksUnderWaitinGame);
   refreshTrackNumbers(popularBody);
