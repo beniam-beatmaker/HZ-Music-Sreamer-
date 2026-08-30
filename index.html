@@ -677,7 +677,7 @@
       'Flex is Wealth': { url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Neat Rep': { url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Blast Off': { url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', title: 'Blast Off', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
-      'Feel Right': { url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', title: 'Feel Right', artist: 'Beniam TedlAI', genre: 'hiphop' },
+      'Feel Right': { url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', title: 'Feel Right', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Love It': { url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', title: 'Love It', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
       'Want it All': { url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', title: 'Want it All', artist: 'B Tilla', genre: 'hiphop' },
       'MF Rocket': { url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', genre: 'hiphop' },
@@ -1317,6 +1317,13 @@ last i checked this is best, specially since it could be real safe`;
     window.playNewTrack = function(trackId, trackUrl, trackTitle, trackArtist) {
       console.log('🎵 FULLY FUNCTIONAL TRACK PLAYER CALLED:', trackId, trackTitle, trackArtist);
 
+      const isPlayableAudioSource = function(source) {
+        if (typeof source !== 'string') return false;
+        const value = source.trim();
+        return value !== '' && value !== 'null' && value !== 'undefined' &&
+          /^(https?:|blob:|data:audio\/|file:|\/|\.\.?\/)/i.test(value);
+      };
+
       // Store current track info globally for the sticky player
       currentTrackId = trackId;
       window.currentTrackId = trackId;
@@ -1327,7 +1334,7 @@ last i checked this is best, specially since it could be real safe`;
       // 🎯 PRIORITY: Use provided URL if valid (from liked tracks, playlist, etc.)
       let finalUrl = trackUrl;
 
-      if (finalUrl && finalUrl !== 'null' && finalUrl !== 'undefined' && finalUrl.startsWith('http')) {
+      if (isPlayableAudioSource(finalUrl)) {
         // Valid URL provided - use it (from liked tracks, external sources)
         console.log('✅ Using provided valid URL:', finalUrl);
       } else if (window.trackData && window.trackData[trackId]) {
@@ -1411,7 +1418,7 @@ last i checked this is best, specially since it could be real safe`;
       }
 
       // Final validation
-      if (!trackUrl || !trackUrl.startsWith('http')) {
+      if (!isPlayableAudioSource(trackUrl)) {
         console.error('❌ CRITICAL: No valid URL found for track:', trackId);
         trackUrl = null;
       }
@@ -1421,7 +1428,7 @@ last i checked this is best, specially since it could be real safe`;
       if (!trackArtist) trackArtist = 'Unknown Artist';
 
       // 🔧 VALIDATION: Don't try to play if we don't have a valid URL
-      if (!trackUrl || !trackUrl.startsWith('http')) {
+      if (!isPlayableAudioSource(trackUrl)) {
         console.error('❌ Cannot play track without valid URL:', trackId, trackUrl);
         console.error('❌ Track not found in trackData and no valid URL provided');
         return;
@@ -1527,9 +1534,6 @@ last i checked this is best, specially since it could be real safe`;
 
       const onPlaybackStarted = function() {
         playbackStarted = true;
-        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-          enforceGlobalStickyPlayerUnmute();
-        }
         if (playPauseBtn) playPauseBtn.innerHTML = '&#10073;&#10073;';
         if (typeof window.updateLikeButtonState === 'function') {
           window.updateLikeButtonState(trackId);
@@ -1548,7 +1552,7 @@ last i checked this is best, specially since it could be real safe`;
       };
 
       const attemptImmediatePlayback = function() {
-        if (playbackStarted) return;
+        if (playbackStarted || window.__hzStickyAdActive) return;
         playerAudio.play().then(onPlaybackStarted).catch(() => {
           // Autoplay-policy recovery: warm-start muted, then restore original mute state.
           const wasMuted = !!playerAudio.muted;
@@ -1583,7 +1587,7 @@ last i checked this is best, specially since it could be real safe`;
       const schedulePlaybackRecovery = function() {
         // If playback stalls at 0:00, retry quickly without changing user-visible flow.
         setTimeout(function() {
-          if (playbackStarted) return;
+          if (playbackStarted || window.__hzStickyAdActive) return;
 
           const isStalled =
             playerAudio.paused ||
@@ -1593,16 +1597,18 @@ last i checked this is best, specially since it could be real safe`;
 
           playerAudio.play().then(onPlaybackStarted).catch(function() {
             setTimeout(function() {
-              if (playbackStarted || Number(playerAudio.currentTime || 0) > 0) return;
+              if (playbackStarted || window.__hzStickyAdActive || Number(playerAudio.currentTime || 0) > 0) return;
 
               let retryUrl = trackUrl;
               if (typeof resolveTrackUrl === 'function') {
                 retryUrl = resolveTrackUrl(trackId, trackUrl) || trackUrl;
               }
 
-              if (retryUrl) {
-                const sep = retryUrl.includes('?') ? '&' : '?';
-                const cacheBustedUrl = retryUrl + sep + 'hz_retry=' + Date.now();
+              if (isPlayableAudioSource(retryUrl)) {
+                // Object and data URLs are opaque; query parameters make them invalid.
+                const cacheBustedUrl = /^https?:/i.test(retryUrl)
+                  ? retryUrl + (retryUrl.includes('?') ? '&' : '?') + 'hz_retry=' + Date.now()
+                  : retryUrl;
                 playerAudio.src = cacheBustedUrl;
               }
 
@@ -6077,15 +6083,11 @@ last i checked this is best, specially since it could be real safe`;
     @keyframes greetingCircleColorShift {
       0%, 100% {
         border-color: #ffd700;
-        box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.35), 0 0 22px rgba(255, 215, 0, 0.22);
+        box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.18), 0 0 14px rgba(255, 215, 0, 0.12);
       }
-      33.333% {
-        border-color: #4fa8ff;
-        box-shadow: 0 0 0 1px rgba(79, 168, 255, 0.35), 0 0 22px rgba(79, 168, 255, 0.22);
-      }
-      66.666% {
-        border-color: #8a5bff;
-        box-shadow: 0 0 0 1px rgba(138, 91, 255, 0.35), 0 0 22px rgba(138, 91, 255, 0.22);
+      50% {
+        border-color: #ffd700;
+        box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
       }
     }
 
@@ -8977,7 +8979,7 @@ last i checked this is best, specially since it could be real safe`;
 
     .sticky-ad-skip-btn {
       position: absolute;
-      top: 10px;
+      bottom: 10px;
       right: 10px;
       z-index: 2;
       border: 1px solid rgba(255,255,255,0.4);
@@ -9592,7 +9594,7 @@ last i checked this is best, specially since it could be real safe`;
                 <div class="recent-track-time">Just now</div>
                 <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
               </div>
-              <div class="recent-track-item" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+              <div class="recent-track-item" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                 <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                 <div class="recent-track-info">
                   <div class="recent-track-name">Feel Right</div>
@@ -10800,7 +10802,7 @@ last i checked this is best, specially since it could be real safe`;
                   <td><div class="track-duration">3:22</div></td>
                   <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
                 </tr>
-                <tr class="track-row" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', 'Feel Right', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                <tr class="track-row" onclick="playNewTrack('Feel Right', 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', 'Feel Right', 'Ben.I.Am Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">5</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:music-note.svg?color=%23ffd700" alt="Feel Right cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Feel Right</div><div class="track-artist">Ben.I.Am Tedla</div></div></div></td>
                   <td><div class="track-album">Single</div></td>
@@ -11465,11 +11467,13 @@ last i checked this is best, specially since it could be real safe`;
               const preferredTrack = typeof window.getPreferredTrackData === 'function'
                 ? window.getPreferredTrackData(trackId, trackTitle, trackArtist, trackUrl)
                 : null;
+              const hasExplicitSource = typeof trackUrl === 'string' &&
+                /^(https?:|blob:|data:audio\/|file:|\/|\.\.?\/)/i.test(trackUrl.trim());
 
               return originalPlayNewTrack.call(
                 this,
                 preferredTrack?.id || trackId,
-                preferredTrack?.url || trackUrl,
+                hasExplicitSource ? trackUrl : (preferredTrack?.url || trackUrl),
                 preferredTrack?.title || trackTitle,
                 preferredTrack?.artist || trackArtist
               );
@@ -14610,11 +14614,11 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             });
           }
 
-          const STICKY_AD_CADENCE_PATTERN = [4, 5];
-          const STICKY_AD_SEQUENCE_PATTERN = ['US', 'AUS'];
+          const STICKY_AD_CADENCE_PATTERN = [3];
+          const STICKY_AD_SEQUENCE_PATTERN = ['AUS', 'US'];
           const STICKY_AD_START_TIMEOUT_MS = 12000;
           const STICKY_AD_MIN_VISIBLE_MS = 3500;
-          const STICKY_AD_GAP_PX = 12;
+          const STICKY_AD_GAP_PX = 0;
           const STICKY_AD_US_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20U.S%20Ad%20.mp4';
           const STICKY_AD_AUS_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/The%20AUS%20Ad%20%231.mp4';
           const STICKY_AD_US_AUDIO_FILE_NAME = 'https://storage.googleapis.com/hertz-music-folder/H%20Z%20a%20Hub.mp3';
@@ -14710,6 +14714,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
 
           window.__hzStickyTracksPlayedSinceAd = Number(window.__hzStickyTracksPlayedSinceAd || 0);
           window.__hzStickyTracksPlayedTotal = Number(window.__hzStickyTracksPlayedTotal || 0);
+          window.__hzStickyTracksLoadedSinceAd = Number(window.__hzStickyTracksLoadedSinceAd || 0);
           window.__hzStickyAdCadenceIndex = Number(window.__hzStickyAdCadenceIndex || 0);
           window.__hzStickyAdSequenceIndex = Number(window.__hzStickyAdSequenceIndex || 0);
           if (!Number.isFinite(Number(window.__hzStickyAdNextTriggerCount)) || Number(window.__hzStickyAdNextTriggerCount) < 1) {
@@ -14757,7 +14762,8 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             if (!popup || !adVideo) return false;
 
             const mainPlayerAudio = document.getElementById('playerAudio');
-            if (mainPlayerAudio && !mainPlayerAudio.paused) {
+            const mainPlayerWasPlaying = !!(mainPlayerAudio && !mainPlayerAudio.paused && !mainPlayerAudio.ended);
+            if (mainPlayerAudio) {
               try {
                 mainPlayerAudio.pause();
               } catch (e) {}
@@ -14800,10 +14806,10 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             popup.style.display = 'none';
             popup.setAttribute('aria-hidden', 'true');
             if (skipAdBtn) {
-              skipAdBtn.style.display = 'inline-flex';
+              skipAdBtn.style.display = 'none';
               skipAdBtn.disabled = true;
               skipAdBtn.setAttribute('aria-disabled', 'true');
-              skipAdBtn.textContent = 'Skip in 5';
+              skipAdBtn.textContent = 'Skip';
             }
             let popupShownAt = 0;
             let popupRevealed = false;
@@ -14820,29 +14826,23 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               popup.style.display = 'block';
               popup.setAttribute('aria-hidden', 'false');
 
-              // Lock skip for first 5s after popup is visible, then allow skipping.
+              // Reveal the skip control only after the ad has been visible for five seconds.
               if (skipAdBtn) {
-                let skipRemainingSeconds = 5;
+                skipAdBtn.style.display = 'none';
                 skipAdBtn.disabled = true;
                 skipAdBtn.setAttribute('aria-disabled', 'true');
-                skipAdBtn.textContent = 'Skip in 5';
+                skipAdBtn.textContent = 'Skip';
 
                 if (skipCountdownTimer) {
-                  clearInterval(skipCountdownTimer);
+                  clearTimeout(skipCountdownTimer);
                 }
-                skipCountdownTimer = setInterval(function() {
+                skipCountdownTimer = setTimeout(function() {
                   if (!window.__hzStickyAdActive) return;
-                  skipRemainingSeconds -= 1;
-                  if (skipRemainingSeconds <= 0) {
-                    clearInterval(skipCountdownTimer);
-                    skipCountdownTimer = null;
-                    skipAdBtn.disabled = false;
-                    skipAdBtn.removeAttribute('aria-disabled');
-                    skipAdBtn.textContent = 'Skip';
-                    return;
-                  }
-                  skipAdBtn.textContent = 'Skip in ' + skipRemainingSeconds;
-                }, 1000);
+                  skipCountdownTimer = null;
+                  skipAdBtn.style.display = 'inline-flex';
+                  skipAdBtn.disabled = false;
+                  skipAdBtn.removeAttribute('aria-disabled');
+                }, 5000);
               }
             };
 
@@ -14868,7 +14868,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
                 adAudioSyncTimer = null;
               }
               if (skipCountdownTimer) {
-                clearInterval(skipCountdownTimer);
+                clearTimeout(skipCountdownTimer);
                 skipCountdownTimer = null;
               }
               clearAdUnlockWait();
@@ -14894,6 +14894,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               popup.style.bottom = '';
               if (skipAdBtn && onSkipAdClick) {
                 skipAdBtn.removeEventListener('click', onSkipAdClick);
+                skipAdBtn.style.display = 'none';
                 skipAdBtn.disabled = false;
                 skipAdBtn.removeAttribute('aria-disabled');
                 skipAdBtn.textContent = 'Skip';
@@ -14901,7 +14902,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               if (adShield) adShield.style.display = 'none';
               window.__hzStickyAdActive = false;
 
-              onComplete();
+              onComplete(mainPlayerWasPlaying);
             };
 
             onSkipAdClick = function(evt) {
@@ -15192,27 +15193,28 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
           window.playStickyAdThenTrack = function(playNextTrackFn) {
             if (typeof playNextTrackFn !== 'function') return false;
             if (window.__hzStickyAdActive) return true;
+            return false;
+          };
 
-            window.__hzStickyTracksPlayedTotal = Number(window.__hzStickyTracksPlayedTotal || 0) + 1;
-            window.__hzStickyTracksPlayedSinceAd = Number(window.__hzStickyTracksPlayedSinceAd || 0) + 1;
+          window.playStickyAdAfterTrackLoad = function() {
+            if (window.__hzStickyAdActive || hasActiveMonthlySubscriptionForAds()) return false;
 
-            if (hasActiveMonthlySubscriptionForAds()) {
-              return false;
-            }
+            window.__hzStickyTracksLoadedSinceAd = Number(window.__hzStickyTracksLoadedSinceAd || 0) + 1;
+            if (window.__hzStickyTracksLoadedSinceAd < 3) return false;
 
-            const nextAdAtTrackCount = Math.max(1, Math.floor(Number(window.__hzStickyAdNextTriggerCount || getStickyAdCadenceTarget())));
-            if (window.__hzStickyTracksPlayedSinceAd < nextAdAtTrackCount) {
-              return false;
-            }
-
+            window.__hzStickyTracksLoadedSinceAd = 0;
             const selectedAdFileName = getNextStickyAdFileName();
-
-            window.__hzStickyTracksPlayedSinceAd = 0;
-            consumeStickyAdCadenceTarget();
             return window.playStickyTrackTransitionAd(function() {
-              playNextTrackFn();
+              playerAudio.play().catch(function() {});
             }, selectedAdFileName);
           };
+
+          if (!window.__hzStickyAdTrackLoadListenerBound) {
+            window.__hzStickyAdTrackLoadListenerBound = true;
+            playerAudio.addEventListener('loadeddata', function() {
+              window.playStickyAdAfterTrackLoad();
+            });
+          }
 
           // Update play/pause button on audio events
           playerAudio.addEventListener('play', function() {
@@ -15347,10 +15349,9 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
       window.currentOfflinePlaylist = [];
       window.offlineShuffleMode = false;
 
-      const stickyPlayerAudio = document.getElementById('playerAudio');
-      if (stickyPlayerAudio) {
-        stickyPlayerAudio.onended = null;
-      }
+      // NOTE: do not null playerAudio.onended here - it holds the central
+      // autoplay/ad-cadence handler and nothing re-attaches it afterward,
+      // which permanently killed ad playback after the first track advance.
 
       var idx = trackOrder.indexOf(trackId);
       if (idx !== -1) {
@@ -16888,7 +16889,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
       'Flex is Wealth': { id: 'Flex is Wealth', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Neat Rep': { id: 'Neat Rep', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Blast Off': { id: 'Blast Off', title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-      'Feel Right': { id: 'Feel Right', title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
+      'Feel Right': { id: 'Feel Right', title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Love It': { id: 'Love It', title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'MF Rocket': { id: 'MF Rocket', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
       'Ride wid Me': { id: 'Ride wid Me', title: 'Ride wid Me', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
@@ -16944,7 +16945,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
         { id: 'Flex is Wealth', title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3' },
         { id: 'Neat Rep', title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3' },
         { id: 'Blast Off', title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3' },
-        { id: 'Feel Right', title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3' },
+        { id: 'Feel Right', title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3' },
         { id: 'Love It', title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3' },
         { id: 'MF Rocket', title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3' },
         { id: 'Ride wid Me', title: 'Ride wid Me', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Ride%20wid%20Me.mp3' },
@@ -25870,7 +25871,7 @@ function showGenrePopup(genre) {
 
           const playerAudio = document.getElementById('playerAudio');
           if (playerAudio) {
-            playerAudio.onended = null;
+            // Preserve the central autoplay/ad-cadence onended handler; only sync loop flag.
             playerAudio.loop = (window.loopMode === 1);
           }
 
@@ -27370,14 +27371,6 @@ function showGenrePopup(genre) {
             if (eqEngine && eqEngine.context && eqEngine.context.state === 'suspended') {
               eqEngine.context.resume().catch(function() {});
             }
-            audioEl.muted = false;
-            audioEl.defaultMuted = false;
-            audioEl.removeAttribute('muted');
-            if (Number(audioEl.volume || 0) <= 0.0001) {
-              const savedPercent = parseInt(localStorage.getItem('hertzMasterVolume') || '70', 10);
-              const safePercent = Number.isFinite(savedPercent) ? savedPercent : 70;
-              audioEl.volume = Math.max(0.05, Math.min(1, safePercent / 100));
-            }
             if (window.__hzPendingEqualizerSettings && eqEngine) {
               applyEqualizerSettingsToEngine(window.__hzPendingEqualizerSettings);
               window.__hzPendingEqualizerSettings = null;
@@ -27431,17 +27424,6 @@ function showGenrePopup(genre) {
         window.__hzPendingEqualizerSettings = selectedSettings;
       } else {
         window.__hzPendingEqualizerSettings = null;
-      }
-
-      const audio = document.getElementById('playerAudio');
-      if (audio) {
-        audio.muted = false;
-        audio.defaultMuted = false;
-        audio.removeAttribute('muted');
-        const context = window.__hzEqualizerEngine && window.__hzEqualizerEngine.context;
-        if (context && !audio.paused && context.state === 'suspended' && typeof context.resume === 'function') {
-          context.resume().catch(function() {});
-        }
       }
 
       console.log('✅ Equalizer preset applied:', preset, selectedSettings);
@@ -31792,7 +31774,11 @@ function showGenrePopup(genre) {
       function savePlayerState() {
         const audio = document.getElementById('playerAudio');
       // Ensure Utopia tracks play and show sticky player
-  window.playTrack = playTrack;
+  // Do not clobber the comprehensive homepage window.playTrack (ad-cadence aware,
+  // preserves onended/trackOrder) with this simplified offline-uploader variant.
+  if (typeof window.playTrack !== 'function') {
+    window.playTrack = playTrack;
+  }
 
   // DEBUG: Verify new tracks are in the function when page loads
   console.log('🔍 DEBUGGING: Testing if new tracks are accessible:');
@@ -33312,7 +33298,7 @@ function openGenrePlaylist(genre) {
       { title: 'Flex is Wealth', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Flex__Wealth_FULL_SONG_MusicGPT.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Neat Rep', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Neat%20Rep.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Blast Off', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Blast%20Off.mp3', genre: 'hiphop', duration: '3:20' },
-      { title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', genre: 'hiphop', duration: '3:20' },
+      { title: 'Feel Right', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Love It', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20It.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'Want it All', artist: 'B Tilla', url: 'https://storage.googleapis.com/hertz-music-folder/Want%20it%20All.mp3', genre: 'hiphop', duration: '3:20' },
       { title: 'MF Rocket', artist: 'Ben.I.Am Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/MF%20Rocket.mp3', genre: 'hiphop', duration: '3:20' },
@@ -35746,6 +35732,9 @@ document.addEventListener('DOMContentLoaded', function() {
   };
 
   const resetOfflineToHomeControlState = function() {
+    // Only wipe onended if we're actually leaving an offline-track binding; otherwise
+    // this clobbers the homepage ad-cadence/autoplay onended handler on every track click.
+    const wasOfflineTrackSelected = !!window.offlineStickyTrackSelected;
     window.offlineStickyTrackSelected = false;
     window.currentOfflineTrack = null;
     window.currentOfflinePlaylist = [];
@@ -35756,7 +35745,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const audioEl = document.getElementById('playerAudio');
     if (audioEl) {
-      audioEl.onended = null;
+      if (wasOfflineTrackSelected) {
+        audioEl.onended = null;
+      }
       audioEl.loop = (window.loopMode === 1);
     }
 
@@ -36941,30 +36932,35 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   const tracksUnderGiggle = [
+    {
+      title: 'Pick Up ya Phone',
+      artist: 'Beniam TedlAI',
+      url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3',
+      cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700',
+      duration: '3:20'
+    }
+  ];
+
+  const tracksBeforeGiggle = [
+    { title: 'No Good in my Genes', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/No%20Good%20In%20My%20Genes%20(1).mp3', cover: 'https://api.iconify.design/mdi:dna.svg?color=%23ffd700' },
+    { title: 'Come in Peace', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Come%20In%20Peace.mp3', cover: 'https://api.iconify.design/mdi:peace.svg?color=%23ffd700' },
+    { title: 'Waitin Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20Game%20(1).mp3', cover: 'https://api.iconify.design/mdi:timer-sand.svg?color=%23ffd700' },
+    { title: 'Wantin Passed', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Talkin%20Back%20in%20Time%20(4).mp3', cover: 'https://api.iconify.design/mdi:clock-time-eight-outline.svg?color=%23ffd700' }
+  ];
+
+  const tracksBeforeEverytime = [
+    { title: 'No Good in my Genes', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/No%20Good%20In%20My%20Genes%20(1).mp3', cover: 'https://api.iconify.design/mdi:dna.svg?color=%23ffd700' },
+    { title: 'Pick Up ya Phone', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3', cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700' },
+    { title: 'Wantin Passed', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Talkin%20Back%20in%20Time%20(4).mp3', cover: 'https://api.iconify.design/mdi:clock-time-eight-outline.svg?color=%23ffd700' },
+    { title: 'Waitin Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20Game%20(1).mp3', cover: 'https://api.iconify.design/mdi:timer-sand.svg?color=%23ffd700' }
+  ];
+
+  const tracksUnderWaitinGame = [
+    { title: 'Cheese Got Me Shook', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cheese%20Got%20Me%20Shook.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
 
   const tracksBeforeBlastOff = [
     { title: 'Bouta Jus Stop', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Bouta%20Jus%20Stop.mp3', cover: 'https://api.iconify.design/mdi:stop-circle-outline.svg?color=%23ffd700' },
-    { title: 'Date you Asked for', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Date%20you%20Asked%20for.mp3', cover: 'https://api.iconify.design/mdi:calendar-question.svg?color=%23ffd700' },
-    { title: 'LoveStruck', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/LoveStruck.mp3', cover: 'https://api.iconify.design/mdi:heart.svg?color=%23ffd700' },
-    { title: 'Shift Ya Mind', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Shift%20Ya%20Mind%20(2).mp3', cover: 'https://api.iconify.design/mdi:swap-horizontal.svg?color=%23ffd700' },
-    { title: 'Trynna Make Ya Happy', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Tryna%20Make%20Ya%20Happy.mp3', cover: 'https://api.iconify.design/mdi:emoticon-happy.svg?color=%23ffd700' },
-    { title: 'Feel Free', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Just%20Want%20to%20Feel%20Free.mp3', cover: 'https://api.iconify.design/mdi:lock-open-outline.svg?color=%23ffd700' },
-    { title: 'Body Like Dat', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Body%20Like%20Dat.mp3', cover: 'https://api.iconify.design/mdi:human.svg?color=%23ffd700' },
-    { title: 'Broken Chores', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Broken%20Chores%20(1).mp3', cover: 'https://api.iconify.design/mdi:tools.svg?color=%23ffd700' },
-    { title: 'Feel Right', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Feel%20Right%20(2).mp3', cover: 'https://api.iconify.design/mdi:thumb-up-outline.svg?color=%23ffd700' },
-    { title: 'Maintain the Balance', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Maintain%20the%20Balance.mp3', cover: 'https://api.iconify.design/mdi:scale-balance.svg?color=%23ffd700' },
-    { title: 'Why Not Grow', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Why%20Not%20Grow.mp3', cover: 'https://api.iconify.design/mdi:sprout.svg?color=%23ffd700' },
-    { title: 'Night Skies', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Night%20Skies.mp3', cover: 'https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700' },
-    { title: 'Whether They Happy', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Whether%20They%20Happy.mp3', cover: 'https://api.iconify.design/mdi:emoticon-happy-outline.svg?color=%23ffd700' },
-    { title: 'At What Cost', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/At%20What%20Cost.mp3', cover: 'https://api.iconify.design/mdi:currency-usd.svg?color=%23ffd700' },
-    { title: 'Fruit So Good', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Fruit%20So%20Good.mp3', cover: 'https://api.iconify.design/mdi:fruit-cherries.svg?color=%23ffd700' },
-    { title: 'Collider Power', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Collider%20Power.mp3', cover: 'https://api.iconify.design/mdi:atom.svg?color=%23ffd700' },
-    { title: 'Room Inventory', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Room%20Inventory.mp3', cover: 'https://api.iconify.design/mdi:clipboard-list-outline.svg?color=%23ffd700' },
-    { title: 'Twisted Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Twisted%20Game.mp3', cover: 'https://api.iconify.design/mdi:gamepad-variant-outline.svg?color=%23ffd700' },
-    { title: 'New Kinda Hell', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/New%20Kinda%20Hell.mp3', cover: 'https://api.iconify.design/mdi:fire.svg?color=%23ffd700' },
-    { title: 'Love her Tight', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Love%20Her%20Tight%20(1).mp3', cover: 'https://api.iconify.design/mdi:heart-multiple-outline.svg?color=%23ffd700' },
-    { title: 'Pick Up Ya Phone', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3', cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700' },
     { title: 'Focus On Me', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Focus%20On%20Me%20(1).mp3', cover: 'https://api.iconify.design/mdi:target.svg?color=%23ffd700' },
     { title: 'DumbAss Story', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Dumbass%20Story.mp3', cover: 'https://api.iconify.design/mdi:book-alert-outline.svg?color=%23ffd700' },
     { title: 'Wan Feel the Glow', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Wan%20Feel%20the%20Glow.mp3', cover: 'https://api.iconify.design/mdi:white-balance-sunny.svg?color=%23ffd700' },
@@ -36981,6 +36977,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   moveTracksToTop(recentList, false);
   moveTracksToTop(popularBody, true);
+  insertTracksBeforeAnchor(recentList, false, 'Giggle', tracksBeforeGiggle);
+  insertTracksBeforeAnchor(popularBody, true, 'Giggle', tracksBeforeGiggle);
   insertTracksBeforeAnchor(recentList, false, 'Blast Off', tracksBeforeBlastOff);
   insertTracksBeforeAnchor(popularBody, true, 'Blast Off', tracksBeforeBlastOff);
   updateTracksBeforeBlastOffCovers();
@@ -36988,6 +36986,10 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksUnderAnchor(popularBody, true, 'Giggle', tracksUnderGiggle);
   insertTracksUnderAnchor(recentList, false, 'Dead 2 Me', tracksUnderDeadToMe);
   insertTracksUnderAnchor(popularBody, true, 'Dead 2 Me', tracksUnderDeadToMe);
+  insertTracksBeforeAnchor(recentList, false, 'Everytime', tracksBeforeEverytime);
+  insertTracksBeforeAnchor(popularBody, true, 'Everytime', tracksBeforeEverytime);
+  insertTracksUnderAnchor(recentList, false, 'Waitin Game', tracksUnderWaitinGame);
+  insertTracksUnderAnchor(popularBody, true, 'Waitin Game', tracksUnderWaitinGame);
   refreshTrackNumbers(popularBody);
 });
 </script>
