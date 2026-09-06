@@ -1288,6 +1288,33 @@ last i checked this is best, specially since it could be real safe`;
       return orderedIds;
     };
 
+    // Full track/url/title/artist data for the Popular tracks section, in on-screen order.
+    window.getPopularSectionTrackEntries = function() {
+      const nodes = document.querySelectorAll('.track-table .track-row');
+      const entries = [];
+      const seen = new Set();
+      const decode = (value) => (value || '').replace(/\\'/g, "'").replace(/&#39;/g, "'");
+
+      nodes.forEach((node) => {
+        const onclickValue = node.getAttribute('onclick') || '';
+        const match = onclickValue.match(/playNewTrack\('((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)'\)/);
+        if (!match) return;
+
+        const trackId = decode(match[1]);
+        if (!trackId || seen.has(trackId)) return;
+
+        seen.add(trackId);
+        entries.push({
+          trackId,
+          trackUrl: decode(match[2]),
+          trackTitle: decode(match[3]) || trackId,
+          trackArtist: decode(match[4]) || 'Unknown Artist'
+        });
+      });
+
+      return entries;
+    };
+
     window.syncAutoplayOrderForTrack = function(trackId) {
       const preferredSection = window.__hzLastSelectedSection;
       let orderedIds = [];
@@ -1425,7 +1452,7 @@ last i checked this is best, specially since it could be real safe`;
 
       // Ensure we have all required info
       if (!trackTitle) trackTitle = trackId;
-      if (!trackArtist) trackArtist = 'Unknown Artist';
+      trackArtist = 'Beniam Tedla';
 
       // 🔧 VALIDATION: Don't try to play if we don't have a valid URL
       if (!isPlayableAudioSource(trackUrl)) {
@@ -1675,7 +1702,7 @@ last i checked this is best, specially since it could be real safe`;
     };
 
     // 🎲 RANDOM AUTOPLAY SYSTEM - PLAYS DIFFERENT RANDOM TRACKS AFTER EACH SONG ENDS
-    window.randomAutoplayEnabled = true; // Global toggle for random autoplay
+    window.randomAutoplayEnabled = false; // Off by default so autoplay follows Popular tracks order; toggle via window.toggleRandomAutoplay()
     window.lastPlayedTracks = []; // Track last 5 played tracks to avoid immediate repeats
 
     // Comprehensive track list for random autoplay - includes ALL tracks from the app
@@ -14429,30 +14456,10 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
                 console.error('❌ Audio playback failed:', error);
               });
 
-              // Set up autoplay for next track (all available tracks)
-              playerAudio.onended = function() {
-                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
-                  return;
-                }
-                if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
-                  return;
-                }
-                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
-                  return;
-                }
-                if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
-                  console.log('🎲 Random autoplay override (playTrack branch)');
-                  setTimeout(() => {
-                    window.playRandomTrack();
-                  }, 300);
-                  return;
-                }
-                const trackOrder = Object.keys(allTrackData);
-                const currentIndex = trackOrder.indexOf(trackId);
-                if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
-                  playTrack(trackOrder[currentIndex + 1]);
-                }
-              };
+              // NOTE: do not reassign playerAudio.onended here - it would clobber the
+              // central autoplay/queue/loop-all handler bound in the DOMContentLoaded
+              // block below, which is what keeps tracks chaining continuously until
+              // the user pauses.
             } else {
               console.error('❌ Missing elements or track not found:', { trackId, trackUrl, hasPlayerAudio: !!playerAudio });
             }
@@ -15270,6 +15277,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
               return;
             }
+
             if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
               console.log('🎲 Random autoplay override (sticky player loop logic)');
               var randomAction = function() {
@@ -15285,34 +15293,30 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               randomAction();
               return;
             }
-            if (loopMode === 1) {
-              // Loop all mode - continue to next track, wrap to beginning if at end
-              currentTrackIndex = (currentTrackIndex + 1) % trackOrder.length;
-              window.currentTrackIndex = currentTrackIndex;
-              var loopAllTrackId = trackOrder[currentTrackIndex];
-              var loopAllAction = function() {
-                playTrack(loopAllTrackId);
-                console.log('🔂 Loop ALL - Playing next track:', loopAllTrackId);
+
+            // After any selected track, keep autoplaying through the Popular tracks
+            // section in its on-screen top-to-bottom order (wrapping at the end),
+            // for both normal and loop-all modes.
+            var popularEntries = typeof window.getPopularSectionTrackEntries === 'function'
+              ? window.getPopularSectionTrackEntries()
+              : [];
+
+            if ((loopMode === 1 || loopMode === 0) && popularEntries.length > 0) {
+              var currentPopularIndex = popularEntries.findIndex(function(entry) {
+                return entry.trackId === window.currentTrackId;
+              });
+              var nextPopularIndex = currentPopularIndex === -1 ? 0 : (currentPopularIndex + 1) % popularEntries.length;
+              var nextPopularEntry = popularEntries[nextPopularIndex];
+              var popularContinueAction = function() {
+                window.playNewTrack(nextPopularEntry.trackId, nextPopularEntry.trackUrl, nextPopularEntry.trackTitle, nextPopularEntry.trackArtist);
+                console.log('▶️ Popular tracks autoplay - Playing next track:', nextPopularEntry.trackId);
               };
 
-              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(loopAllAction)) {
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(popularContinueAction)) {
                 return;
               }
 
-              loopAllAction();
-            } else if (loopMode === 0 && currentTrackIndex < trackOrder.length - 1) {
-              // Normal mode - only continue if not at last track
-              currentTrackIndex++;
-              var nextTrackId = trackOrder[currentTrackIndex];
-              var normalNextAction = function() {
-                playTrack(nextTrackId);
-              };
-
-              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(normalNextAction)) {
-                return;
-              }
-
-              normalNextAction();
+              popularContinueAction();
             } else {
               // Track ended and no more to play
               if (typeof window.updateMediaSessionState === 'function') {
@@ -36733,6 +36737,12 @@ console.log('💡 Like any track and it will be instantly saved!');
 console.log('🎵 ================================================');
 
 document.addEventListener('DOMContentLoaded', function() {
+  function normalizeTrackArtistNames() {
+    document.querySelectorAll('.recent-track-artist, .track-artist').forEach(function(artistNode) {
+      artistNode.textContent = 'Beniam Tedla';
+    });
+  }
+
   function normalizeTrackTitle(value) {
     return String(value || '').trim().toLowerCase();
   }
@@ -36974,7 +36984,13 @@ document.addEventListener('DOMContentLoaded', function() {
     { title: 'Pains All i Know', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pains%20All%20I%20Know%20(3).mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
 
+  const tracksUnderPainsAllIKnow = [
+    { title: 'Depression Not Real', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Why%20Ya%20Need%20The%20Drug%20(1).mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
+  ];
+
   const tracksUnderWaitinGame = [
+    { title: 'Monster', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Turn%20Me%20Into%20A%20Monster%20(1).mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' },
+    { title: 'Little Bitch Elon', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Little%20Bitch%20Elon.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' },
     { title: 'Cheese Got Me Shook', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cheese%20Got%20Me%20Shook.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
 
@@ -37009,8 +37025,11 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksBeforeAnchor(popularBody, true, 'Everytime', tracksBeforeEverytime);
   insertTracksUnderAnchor(recentList, false, 'No Good in my Genes', tracksUnderNoGoodInMyGenes);
   insertTracksUnderAnchor(popularBody, true, 'No Good in my Genes', tracksUnderNoGoodInMyGenes);
+  insertTracksUnderAnchor(recentList, false, 'Pains All i Know', tracksUnderPainsAllIKnow);
+  insertTracksUnderAnchor(popularBody, true, 'Pains All i Know', tracksUnderPainsAllIKnow);
   insertTracksUnderAnchor(recentList, false, 'Waitin Game', tracksUnderWaitinGame);
   insertTracksUnderAnchor(popularBody, true, 'Waitin Game', tracksUnderWaitinGame);
+  normalizeTrackArtistNames();
   refreshTrackNumbers(popularBody);
 });
 </script>
