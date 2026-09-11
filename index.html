@@ -1288,33 +1288,6 @@ last i checked this is best, specially since it could be real safe`;
       return orderedIds;
     };
 
-    // Full track/url/title/artist data for the Popular tracks section, in on-screen order.
-    window.getPopularSectionTrackEntries = function() {
-      const nodes = document.querySelectorAll('.track-table .track-row');
-      const entries = [];
-      const seen = new Set();
-      const decode = (value) => (value || '').replace(/\\'/g, "'").replace(/&#39;/g, "'");
-
-      nodes.forEach((node) => {
-        const onclickValue = node.getAttribute('onclick') || '';
-        const match = onclickValue.match(/playNewTrack\('((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)',\s*'((?:\\'|[^'])*)'\)/);
-        if (!match) return;
-
-        const trackId = decode(match[1]);
-        if (!trackId || seen.has(trackId)) return;
-
-        seen.add(trackId);
-        entries.push({
-          trackId,
-          trackUrl: decode(match[2]),
-          trackTitle: decode(match[3]) || trackId,
-          trackArtist: decode(match[4]) || 'Unknown Artist'
-        });
-      });
-
-      return entries;
-    };
-
     window.syncAutoplayOrderForTrack = function(trackId) {
       const preferredSection = window.__hzLastSelectedSection;
       let orderedIds = [];
@@ -1702,7 +1675,7 @@ last i checked this is best, specially since it could be real safe`;
     };
 
     // 🎲 RANDOM AUTOPLAY SYSTEM - PLAYS DIFFERENT RANDOM TRACKS AFTER EACH SONG ENDS
-    window.randomAutoplayEnabled = false; // Off by default so autoplay follows Popular tracks order; toggle via window.toggleRandomAutoplay()
+    window.randomAutoplayEnabled = true; // Global toggle for random autoplay
     window.lastPlayedTracks = []; // Track last 5 played tracks to avoid immediate repeats
 
     // Comprehensive track list for random autoplay - includes ALL tracks from the app
@@ -11528,6 +11501,21 @@ last i checked this is best, specially since it could be real safe`;
 
           window.trackLyricsData = window.trackLyricsData || {};
           Object.assign(window.trackLyricsData, {
+            'Never Know Less': [
+              'Some out there wan say uh, that pain real common oh yea yea, people seek to see, how many fall through the scene oh, cant never never never think, anything good out theres, what would make ya free oh, could jus think to yaselves uh, that many times people feel like sheep uh, but they not, don do things coza that uh, they jus feel feel feel feel feel feel feel',
+              '',
+              'like they cant stop oh ,stop,  stop, stop, stop, stop, stop, stop oh yea ooh, uh uh oh-uh uh',
+              '',
+              'people wid dey eyes opened could feel, like the games all about corrup things oh ooh, might jus sit back like, maybe one day it will change uh oh uh, could change for the better, could change for the worse uh, never know less ya try, never know less ya try oh oh-uh uh',
+              '',
+              'who knows what time could bring, some out there don needa sting, never needa seek to wait, don know yea oh my days uh, never know what could come, never know who to trust, never know whats the point yea, never never never never know who to love oh yea',
+              '',
+              'never know what to trust, only got yaself not no fuckin god uh, some hearin might say, im like a fuckin devil sayin hey uh',
+              '',
+              'people wid dey eyes opened could feel, like the games all about corrup things oh ooh, might jus sit back like, maybe one day it will change uh oh uh, could change for the better, could change for the worse uh, never know less ya try, never know less ya try oh oh-uh uh',
+              '',
+              'ook at people who lead uh, they seem to be free uh, free to be peeved, free to be creeps, free to seem neat uh yea yea,'
+            ].join('\n'),
             'Stop Em': [
               'If people could see, they could protest n feel free, it\'d stop all the shit they go through, from dumpin em down the flooor ooh, jus takes alla yall stoppin, for the world to see yall done wid it yea',
               '',
@@ -14456,10 +14444,30 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
                 console.error('❌ Audio playback failed:', error);
               });
 
-              // NOTE: do not reassign playerAudio.onended here - it would clobber the
-              // central autoplay/queue/loop-all handler bound in the DOMContentLoaded
-              // block below, which is what keeps tracks chaining continuously until
-              // the user pauses.
+              // Set up autoplay for next track (all available tracks)
+              playerAudio.onended = function() {
+                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+                  return;
+                }
+                if (typeof window.playNextQueuedTrack === 'function' && window.playNextQueuedTrack()) {
+                  return;
+                }
+                if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
+                  return;
+                }
+                if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
+                  console.log('🎲 Random autoplay override (playTrack branch)');
+                  setTimeout(() => {
+                    window.playRandomTrack();
+                  }, 300);
+                  return;
+                }
+                const trackOrder = Object.keys(allTrackData);
+                const currentIndex = trackOrder.indexOf(trackId);
+                if (currentIndex !== -1 && currentIndex < trackOrder.length - 1) {
+                  playTrack(trackOrder[currentIndex + 1]);
+                }
+              };
             } else {
               console.error('❌ Missing elements or track not found:', { trackId, trackUrl, hasPlayerAudio: !!playerAudio });
             }
@@ -15277,7 +15285,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             if (typeof window.isQueueAutoplayLocked === 'function' && window.isQueueAutoplayLocked()) {
               return;
             }
-
             if (window.randomAutoplayEnabled && typeof window.playRandomTrack === 'function') {
               console.log('🎲 Random autoplay override (sticky player loop logic)');
               var randomAction = function() {
@@ -15293,30 +15300,34 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               randomAction();
               return;
             }
-
-            // After any selected track, keep autoplaying through the Popular tracks
-            // section in its on-screen top-to-bottom order (wrapping at the end),
-            // for both normal and loop-all modes.
-            var popularEntries = typeof window.getPopularSectionTrackEntries === 'function'
-              ? window.getPopularSectionTrackEntries()
-              : [];
-
-            if ((loopMode === 1 || loopMode === 0) && popularEntries.length > 0) {
-              var currentPopularIndex = popularEntries.findIndex(function(entry) {
-                return entry.trackId === window.currentTrackId;
-              });
-              var nextPopularIndex = currentPopularIndex === -1 ? 0 : (currentPopularIndex + 1) % popularEntries.length;
-              var nextPopularEntry = popularEntries[nextPopularIndex];
-              var popularContinueAction = function() {
-                window.playNewTrack(nextPopularEntry.trackId, nextPopularEntry.trackUrl, nextPopularEntry.trackTitle, nextPopularEntry.trackArtist);
-                console.log('▶️ Popular tracks autoplay - Playing next track:', nextPopularEntry.trackId);
+            if (loopMode === 1) {
+              // Loop all mode - continue to next track, wrap to beginning if at end
+              currentTrackIndex = (currentTrackIndex + 1) % trackOrder.length;
+              window.currentTrackIndex = currentTrackIndex;
+              var loopAllTrackId = trackOrder[currentTrackIndex];
+              var loopAllAction = function() {
+                playTrack(loopAllTrackId);
+                console.log('🔂 Loop ALL - Playing next track:', loopAllTrackId);
               };
 
-              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(popularContinueAction)) {
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(loopAllAction)) {
                 return;
               }
 
-              popularContinueAction();
+              loopAllAction();
+            } else if (loopMode === 0 && currentTrackIndex < trackOrder.length - 1) {
+              // Normal mode - only continue if not at last track
+              currentTrackIndex++;
+              var nextTrackId = trackOrder[currentTrackIndex];
+              var normalNextAction = function() {
+                playTrack(nextTrackId);
+              };
+
+              if (typeof window.playStickyAdThenTrack === 'function' && window.playStickyAdThenTrack(normalNextAction)) {
+                return;
+              }
+
+              normalNextAction();
             } else {
               // Track ended and no more to play
               if (typeof window.updateMediaSessionState === 'function') {
@@ -36899,16 +36910,16 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   const coversBeforeBlastOff = {
-    'Bouta Jus Stop': 'https://api.iconify.design/mdi:stop-circle-outline.svg?color=%23ffd700',
-    'Focus On Me': 'https://api.iconify.design/mdi:target.svg?color=%23ffd700',
-    'DumbAss Story': 'https://api.iconify.design/mdi:book-alert-outline.svg?color=%23ffd700',
-    'Wan Feel the Glow': 'https://api.iconify.design/mdi:white-balance-sunny.svg?color=%23ffd700',
+    'Bouta Jus Stop': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23090909%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22132%22 fill=%22none%22 stroke=%22%23f3d36a%22 stroke-width=%223%22/%3E%3Cpath d=%22M214 164h84v184h-84zM165 220h44v84h-44zm138 0h44v84h-44zm-11-56h118v30H292zm-120 0h76v30h-76z%22 fill=%22%23f4d35d%22/%3E%3Ctext x=%2256%22 y=%22392%22 fill=%22%23f6d974%22 font-size=%2226%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EABOUTA JUS STOP%3C/text%3E%3C/svg%3E',
+    'Focus On Me': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%230e0e0e%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23090909%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22120%22 fill=%22none%22 stroke=%22%23f6d65a%22 stroke-width=%223%22/%3E%3Cpath d=%22M256 156l86 212h-52l-17-42h-68l-17 42h-52zm-18 92h36l-18-46zm28 0h36l-18-46z%22 fill=%22%23f3d772%22/%3E%3Ctext x=%2256%22 y=%22392%22 fill=%22%23f6d974%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EFOCUS ON ME%3C/text%3E%3C/svg%3E',
+    'DumbAss Story': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23010101%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23090909%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M156 164h200v200H156zm36 36h128v128H192zm160-52l46 48-46 46v-94zm-206 0l-46 48 46 46v-94z%22 fill=%22%23f3cf5a%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2226%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EDUMBASS STORY%3C/text%3E%3C/svg%3E',
+    'Wan Feel the Glow': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230d0d0d%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M256 156l34 72h76l-62 46 24 74-72-52-72 52 24-74-62-46h76z%22 fill=%22%23f7d863%22/%3E%3Ctext x=%2256%22 y=%22392%22 fill=%22%23f6d974%22 font-size=%2222%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EWAN FEEL THE GLOW%3C/text%3E%3C/svg%3E',
     'Bitin ya Lip\u{1FAE6}': 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/1fae6.svg',
-    'Keepin things Neat': 'https://api.iconify.design/mdi:broom.svg?color=%23ffd700',
-    'Cold N Flu': 'https://api.iconify.design/mdi:thermometer-alert.svg?color=%23ffd700',
-    'Bounce dat Ass': 'https://api.iconify.design/mdi:human-female-dance.svg?color=%23ffd700',
+    'Keepin things Neat': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23090909%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M150 328h212v36H150zm46-122h120v70H196zm-38-52h196v42H158zm22-44h152v42H180z%22 fill=%22%23f3d45d%22/%3E%3Ctext x=%2256%22 y=%22392%22 fill=%22%23f6d974%22 font-size=%2222%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EKEEPIN THINGS NEAT%3C/text%3E%3C/svg%3E',
+    'Cold N Flu': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%230f0f0f%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M256 150v120h72v34h-72v88h-34v-88h-72v-34h72V150z%22 fill=%22%23f3d35c%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ECOLD N FLU%3C/text%3E%3C/svg%3E',
+    'Bounce dat Ass': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23020202%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23090909%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M182 174c30-28 74-42 118-18 22 12 38 35 42 62 8 52-30 98-83 112s-103-16-121-71c-13-41 5-69 44-85zm78 62c-18-1-36 18-35 37 0 18 15 31 35 31s35-13 35-31c0-18-15-37-35-37z%22 fill=%22%23f3d159%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2222%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EBOUNCE DAT ASS%3C/text%3E%3C/svg%3E',
     'Ask Before ya Assume': 'https://api.iconify.design/mdi:help-circle-outline.svg?color=%23ffd700',
-    'Could Be a Trip': 'https://api.iconify.design/mdi:map-marker-path.svg?color=%23ffd700'
+    'Could Be a Trip': 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23080808%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M136 216l68-88 74 98 78-56 60 72-82 112-108-80-88 86-38-44z%22 fill=%22%23f4d35e%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2226%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ECOULD BE A TRIP%3C/text%3E%3C/svg%3E'
   };
 
   function updateTracksBeforeBlastOffCovers() {
@@ -36937,21 +36948,21 @@ document.addEventListener('DOMContentLoaded', function() {
       title: 'Green Fiend',
       artist: 'Ben.I.Am',
       url: 'https://storage.googleapis.com/hertz-music-folder/Green%20Makes%20Them%20Fiend.mp3',
-      cover: 'https://api.iconify.design/mdi:leaf.svg?color=%23ffd700',
+      cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23020202%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23121212%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M256 152c-61 0-96 42-96 93 0 39 26 66 52 91 18 17 31 37 31 61v15h26v-15c0-24 12-44 30-61 27-25 52-53 52-91 0-51-35-93-95-93zm0 60a34 34 0 113 0 34 34 0 110 0 34 34 0 110 0 34 34 0 110 0 34 34 0 110 0z%22 fill=%22%23f3d359%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2226%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EGREEN FIEND%3C/text%3E%3C/svg%3E',
       duration: '3:20'
     },
     {
       title: 'Wanna Gleem',
       artist: 'Ben.I.Am',
       url: 'https://storage.googleapis.com/hertz-music-folder/Make%20Me%20Wanna%20Gleem.mp3',
-      cover: 'https://api.iconify.design/mdi:star-four-points.svg?color=%23ffd700',
+      cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23090909%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M256 156l31 76h77l-62 46 23 74-69-52-69 52 23-74-62-46h77z%22 fill=%22%23f4d35d%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2226%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EWANNA GLEEM%3C/text%3E%3C/svg%3E',
       duration: '3:20'
     },
     {
       title: 'Ballin',
       artist: 'Ben.I.Am',
       url: 'https://storage.googleapis.com/hertz-music-folder/Ballin%20Wid%20The%20Rep.mp3',
-      cover: 'https://api.iconify.design/mdi:basketball.svg?color=%23ffd700',
+      cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23060606%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22126%22 fill=%22none%22 stroke=%22%23f4d15f%22 stroke-width=%223%22/%3E%3Cpath d=%22M256 146c-64 0-116 52-116 116s52 116 116 116 116-52 116-116-52-116-116-116zm0 50c36 0 66 30 66 66s-30 66-66 66-66-30-66-66 30-66 66-66z%22 fill=%22%23f7d76a%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EBALLIN%3C/text%3E%3C/svg%3E',
       duration: '3:20'
     }
   ];
@@ -36961,7 +36972,7 @@ document.addEventListener('DOMContentLoaded', function() {
       title: 'Pick Up ya Phone',
       artist: 'Beniam TedlAI',
       url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3',
-      cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700',
+      cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23070707%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M200 146h112c25 0 46 21 46 46v180c0 25-21 46-46 46H200c-25 0-46-21-46-46V192c0-25 21-46 46-46zm56 36c-20 0-36 16-36 36v120c0 20 16 36 36 36s36-16 36-36V218c0-20-16-36-36-36z%22 fill=%22%23f2d25e%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2222%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EPICK UP YA PHONE%3C/text%3E%3C/svg%3E',
       duration: '3:20'
     }
   ];
@@ -36975,7 +36986,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const tracksBeforeEverytime = [
     { title: 'No Good in my Genes', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/No%20Good%20In%20My%20Genes%20(1).mp3', cover: 'https://api.iconify.design/mdi:dna.svg?color=%23ffd700' },
-    { title: 'Pick Up ya Phone', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3', cover: 'https://api.iconify.design/mdi:phone.svg?color=%23ffd700' },
+    { title: 'Pick Up ya Phone', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Pick%20Up%20Ya%20Phone.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23070707%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M200 146h112c25 0 46 21 46 46v180c0 25-21 46-46 46H200c-25 0-46-21-46-46V192c0-25 21-46 46-46zm56 36c-20 0-36 16-36 36v120c0 20 16 36 36 36s36-16 36-36V218c0-20-16-36-36-36z%22 fill=%22%23f2d25e%22/%3E%3Ctext x=%2256%22 y=%22390%22 fill=%22%23f6d974%22 font-size=%2222%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EPICK UP YA PHONE%3C/text%3E%3C/svg%3E' },
     { title: 'Wantin Passed', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Talkin%20Back%20in%20Time%20(4).mp3', cover: 'https://api.iconify.design/mdi:clock-time-eight-outline.svg?color=%23ffd700' },
     { title: 'Waitin Game', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Waitin%20Game%20(1).mp3', cover: 'https://api.iconify.design/mdi:timer-sand.svg?color=%23ffd700' }
   ];
@@ -36989,8 +37000,9 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   const tracksUnderWaitinGame = [
-    { title: 'Monster', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Turn%20Me%20Into%20A%20Monster%20(1).mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' },
-    { title: 'Little Bitch Elon', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Little%20Bitch%20Elon.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' },
+    { title: 'Monster', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Turn%20Me%20Into%20A%20Monster%20(1).mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230b0b0b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22140%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%223%22 opacity=%220.9%22/%3E%3Cpath d=%22M112 180h288v40H112zm0 96h288v40H112zm0 96h220v40H112z%22 fill=%22%23d4af37%22 opacity=%220.9%22/%3E%3Ctext x=%2256%22 y=%22362%22 fill=%22%23f6d76b%22 font-size=%2248%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3EMONSTER%3C/text%3E%3C/svg%3E' },
+    { title: 'Little Bitch Elon', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Little%20Bitch%20Elon.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%230d0d0d%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%224%22/%3E%3Cpath d=%22M140 150L180 330H215L245 200L275 330H312L344 150H290L265 270L236 150H199L170 270L145 150Z%22 fill=%22%23f7d86f%22 opacity=%220.95%22/%3E%3Ctext x=%2256%22 y=%22388%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ELITTLE BITCH%3C/text%3E%3Ctext x=%2256%22 y=%22428%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EELON%3C/text%3E%3C/svg%3E' },
+    { title: 'Never Know Less', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Never%20Know%20Less.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230d0d0d%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M115 160h150v30H115zm0 62h282v30H115zm0 62h222v30H115zm0 62h170v30H115z%22 fill=%22%23f0c54b%22 opacity=%220.92%22/%3E%3Ctext x=%2256%22 y=%22356%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ENEVER KNOW%3C/text%3E%3Ctext x=%2256%22 y=%22398%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ELESS%3C/text%3E%3C/svg%3E' },
     { title: 'Cheese Got Me Shook', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Cheese%20Got%20Me%20Shook.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
 
