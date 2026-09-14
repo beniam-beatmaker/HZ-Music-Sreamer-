@@ -3544,7 +3544,7 @@ last i checked this is best, specially since it could be real safe`;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HZ Music Streamer</title>
-<link rel="icon" sizes="48x48" href="HZ.png" type="image/png">
+<link rel="icon" sizes="48x48" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg" type="image/jpeg">
 <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
 <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
 <link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
@@ -3559,6 +3559,7 @@ last i checked this is best, specially since it could be real safe`;
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg" type="image/jpeg">
 <link rel="manifest" href="/manifest.json">
 <meta name="msapplication-TileColor" content="#1a1a1a">
 <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
@@ -6077,7 +6078,7 @@ last i checked this is best, specially since it could be real safe`;
       display: block;
       border-radius: 50%;
       pointer-events: none;
-      z-index: 0;
+      z-index: 2;
     }
 
     @keyframes greetingCircleColorShift {
@@ -6096,7 +6097,15 @@ last i checked this is best, specially since it could be real safe`;
       font-weight: 720;
       line-height: 1;
       margin: 0;
-      position: relative;
+      width: 235px;
+      height: 235px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       z-index: 1;
       color: #ffd700;
       -webkit-text-fill-color: #ffd700;
@@ -6130,6 +6139,24 @@ last i checked this is best, specially since it could be real safe`;
       pointer-events: none;
       z-index: -1;
       animation: hzGalaxySpin 78s linear infinite, hzGalaxyPulse 10s ease-in-out infinite, hzGalaxyDrift 24s ease-in-out infinite;
+    }
+
+    .home-brand-title img {
+      display: block;
+      width: 235px;
+      height: 235px;
+      object-fit: contain;
+      transform-origin: center;
+      animation: hzTitleImageSpin 90s linear infinite;
+    }
+
+    @keyframes hzTitleImageSpin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
     }
 
     .home-brand-title::after {
@@ -6207,9 +6234,11 @@ last i checked this is best, specially since it could be real safe`;
     .home-time-greeting {
       font-size: 2.3rem;
       font-weight: 800;
-      margin-top: 8px;
-      position: relative;
-      z-index: 1;
+      position: absolute;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      z-index: 3;
       color: #c0c0c0;
       background-image: linear-gradient(122deg, #f2f2f2 0%, #c0c0c0 48%, #8f8f8f 100%);
       -webkit-background-clip: text;
@@ -6228,6 +6257,13 @@ last i checked this is best, specially since it could be real safe`;
 
       .home-brand-title {
         font-size: 4rem;
+        width: 205px;
+        height: 205px;
+      }
+
+      .home-brand-title img {
+        width: 205px;
+        height: 205px;
       }
 
       .home-time-greeting {
@@ -9108,7 +9144,7 @@ last i checked this is best, specially since it could be real safe`;
     <div class="home-greeting-wrap">
       <div class="home-greeting-circle">
         <canvas id="homeGreetingStarCanvas" class="home-greeting-star-canvas" aria-hidden="true"></canvas>
-        <h1 class="home-brand-title">HZ</h1>
+        <h1 class="home-brand-title"><img src="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg" alt="HZ"></h1>
         <div class="home-time-greeting" id="greetingText">Good Morning</div>
       </div>
     </div>
@@ -27442,6 +27478,11 @@ function showGenrePopup(genre) {
     function applyEqualizerPreset(preset) {
       console.log('🎚️ Applying equalizer preset:', preset);
 
+      const playerAudio = document.getElementById('playerAudio');
+      const wasPlaying = !!playerAudio && !playerAudio.paused && !playerAudio.ended;
+      const previousVolume = playerAudio ? Number(playerAudio.volume) : 0;
+      const previousTime = playerAudio ? Number(playerAudio.currentTime || 0) : 0;
+
       // Store the preset for audio processing
       localStorage.setItem('hertzActiveEqualizerPreset', preset);
 
@@ -27454,6 +27495,26 @@ function showGenrePopup(genre) {
         window.__hzPendingEqualizerSettings = selectedSettings;
       } else {
         window.__hzPendingEqualizerSettings = null;
+      }
+
+      if (playerAudio && wasPlaying) {
+        playerAudio.muted = false;
+        playerAudio.defaultMuted = false;
+        playerAudio.removeAttribute('muted');
+        if (previousVolume > 0.0001) {
+          playerAudio.volume = previousVolume;
+        }
+        if (playerAudio.currentTime !== previousTime) {
+          playerAudio.currentTime = previousTime;
+        }
+
+        const engine = window.__hzEqualizerEngine;
+        if (engine && engine.context && engine.context.state !== 'running' && typeof engine.context.resume === 'function') {
+          engine.context.resume().catch(function() {});
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
       }
 
       console.log('✅ Equalizer preset applied:', preset, selectedSettings);
@@ -32500,10 +32561,6 @@ function showGenrePopup(genre) {
         const circleR = Math.min(w, h) * 0.5;
 
         ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = '#000000';
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, circleR, 0, Math.PI * 2);
-        ctx.fill();
 
         const greetingElement = document.getElementById('greetingText');
         const greetingText = greetingElement && greetingElement.textContent ? greetingElement.textContent.trim() : '';
