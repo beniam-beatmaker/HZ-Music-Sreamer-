@@ -6148,8 +6148,20 @@ last i checked this is best, specially since it could be real safe`;
       object-fit: contain;
       transform-origin: center;
       animation: hzTitleImageSpin 90s linear infinite;
+      -webkit-transform-origin: center;
+      -webkit-animation: hzTitleImageSpin 90s linear infinite;
       will-change: transform;
+      -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+    }
+
+    @-webkit-keyframes hzTitleImageSpin {
+      from {
+        -webkit-transform: rotate(0deg);
+      }
+      to {
+        -webkit-transform: rotate(360deg);
+      }
     }
 
     @keyframes hzTitleImageSpin {
@@ -32707,7 +32719,24 @@ function showGenrePopup(genre) {
         ctx.restore();
       }
 
+      if (typeof ResizeObserver === 'function') {
+        const resizeObserver = new ResizeObserver(function() {
+          canvas.width = 0;
+          canvas.height = 0;
+        });
+        resizeObserver.observe(canvas);
+      }
+
       drawGreetingStars();
+
+      function resumeGreetingStars() {
+        if (document.visibilityState !== 'visible') return;
+        if (rafId) cancelAnimationFrame(rafId);
+        drawGreetingStars(performance.now());
+      }
+
+      document.addEventListener('visibilitychange', resumeGreetingStars);
+      window.addEventListener('pageshow', resumeGreetingStars);
 
       window.addEventListener('beforeunload', function() {
         if (rafId) cancelAnimationFrame(rafId);
