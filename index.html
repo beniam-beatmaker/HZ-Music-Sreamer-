@@ -3554,11 +3554,11 @@ last i checked this is best, specially since it could be real safe`;
 <link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
 <link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
-<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
-<link rel="icon" type="image/png" sizes="48x48"  href="/android-icon-48x48.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/jpeg" sizes="192x192" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="icon" type="image/jpeg" sizes="48x48" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="icon" type="image/jpeg" sizes="32x32" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="icon" type="image/jpeg" sizes="96x96" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="icon" type="image/jpeg" sizes="16x16" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
 <link rel="icon" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg" type="image/jpeg">
 <link rel="manifest" href="/manifest.json">
 <meta name="msapplication-TileColor" content="#1a1a1a">
@@ -3756,9 +3756,9 @@ last i checked this is best, specially since it could be real safe`;
 <link rel="apple-touch-icon" sizes="180x180" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=180&q=100">
 
 <!-- Favicon variants for better OS recognition -->
-<link rel="icon" type="image/png" sizes="32x32" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=32&q=100">
-<link rel="icon" type="image/png" sizes="16x16" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=16&q=100">
-<link rel="shortcut icon" href="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=32&q=100">
+<link rel="icon" type="image/jpeg" sizes="32x32" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="icon" type="image/jpeg" sizes="16x16" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
+<link rel="shortcut icon" type="image/jpeg" href="vecteezy_luxury-golden-dotted-spiral-vortex-circle-vector-template_17097980-1.jpg">
 
 <!-- Enhanced Cross-Platform Meta Tags -->
 <meta name="mobile-web-app-title" content="HZ">
@@ -6148,6 +6148,8 @@ last i checked this is best, specially since it could be real safe`;
       object-fit: contain;
       transform-origin: center;
       animation: hzTitleImageSpin 90s linear infinite;
+      will-change: transform;
+      backface-visibility: hidden;
     }
 
     @keyframes hzTitleImageSpin {
@@ -32543,10 +32545,12 @@ function showGenrePopup(genre) {
         }
       }
 
-      function drawGreetingStars() {
+      function drawGreetingStars(frameTime) {
         rafId = requestAnimationFrame(drawGreetingStars);
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
+
+        const timeSec = (typeof frameTime === 'number' ? frameTime : performance.now()) * 0.001;
 
         const dpr = Math.max(1, window.devicePixelRatio || 1);
         const w = Math.floor(canvas.clientWidth * dpr);
@@ -32571,7 +32575,7 @@ function showGenrePopup(genre) {
         const isProsperGreetingActive = greetingText === 'Prosper' || (nowHour >= 12 && nowHour < 18);
         const isMorningGreetingActive = greetingText === 'Good Morning' || (nowHour >= 5 && nowHour < 12);
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
-        const starCyclePhase = (performance.now() * 0.001) % 6;
+        const starCyclePhase = timeSec % 6;
         const starsEnabled = true;
 
         function drawSunAt(sunX, sunY, sunRadius, alphaScale) {
@@ -32602,12 +32606,12 @@ function showGenrePopup(genre) {
         ctx.arc(centerX, centerY, circleR * 0.985, 0, Math.PI * 2);
         ctx.clip();
 
-        drawRoundTwinkleStars(ctx, centerX, centerY, circleR, performance.now() * 0.001, dpr, isMobileDevice);
+        drawRoundTwinkleStars(ctx, centerX, centerY, circleR, timeSec, dpr, isMobileDevice);
 
         if (isProsperGreetingActive && !isNightGreetingActive) {
           // Prosper: same directional travel style as stars (left -> right), but slow.
           const edgeR = circleR * 0.88;
-          const prosperPhase = (performance.now() * 0.001) % 24;
+          const prosperPhase = timeSec % 24;
           const prosperProgress = prosperPhase / 24;
           const sunX = (centerX - edgeR) + (edgeR * 2 * prosperProgress);
           const dx = sunX - centerX;
@@ -32622,7 +32626,7 @@ function showGenrePopup(genre) {
         if (isMorningGreetingActive && !isNightGreetingActive) {
           // Morning: slow sunrise arc from east to west.
           const edgeR = circleR * 0.88;
-          const morningPhase = (performance.now() * 0.001) % 28;
+          const morningPhase = timeSec % 28;
           const morningProgress = morningPhase / 28;
           const sunX = (centerX + edgeR) - (edgeR * 2 * morningProgress);
           const dx = sunX - centerX;
@@ -32677,7 +32681,7 @@ function showGenrePopup(genre) {
           const esTailX = esX - esTailLen;
           const esTailY = esY;
           const endFade = Math.max(0, Math.min(1, (1 - esProgress) / 0.18));
-          const esPulse = 0.82 + 0.18 * Math.sin(performance.now() * 0.0024 + es * 1.3);
+          const esPulse = 0.82 + 0.18 * Math.sin(timeSec * 2.4 + es * 1.3);
           const esAlpha = (0.80 + esPulse * 0.18) * endFade;
 
           const edgeGrad = ctx.createLinearGradient(esX, esY, esTailX, esTailY);
