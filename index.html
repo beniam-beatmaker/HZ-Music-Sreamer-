@@ -6285,6 +6285,14 @@ last i checked this is best, specially since it could be real safe`;
       }
     }
 
+    /* Slightly faster rotation on touch/mobile devices only; desktop keeps 90s. */
+    @media (max-width: 900px), (pointer: coarse) {
+      .home-brand-title img {
+        animation-duration: 76s;
+        -webkit-animation-duration: 76s;
+      }
+    }
+
     /* Spotify-style Bottom Navigation */
     .bottom-nav {
         position: fixed;
@@ -32587,7 +32595,8 @@ function showGenrePopup(genre) {
         const isProsperGreetingActive = greetingText === 'Prosper' || (nowHour >= 12 && nowHour < 18);
         const isMorningGreetingActive = greetingText === 'Good Morning' || (nowHour >= 5 && nowHour < 12);
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
-        const starCyclePhase = timeSec % 6;
+        const mobileStarSpeedFactor = isMobileDevice ? 1.15 : 1;
+        const starCyclePhase = (timeSec * mobileStarSpeedFactor) % 6;
         const starsEnabled = true;
 
         function drawSunAt(sunX, sunY, sunRadius, alphaScale) {
