@@ -32508,6 +32508,7 @@ function showGenrePopup(genre) {
       if (!canvas) return;
 
       let rafId = null;
+      const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true }) || canvas.getContext('2d');
       const ROUND_TWINKLE_STAR_COUNT = 0;
 
       function seededRandomFactory(seed) {
@@ -32559,12 +32560,11 @@ function showGenrePopup(genre) {
 
       function drawGreetingStars(frameTime) {
         rafId = requestAnimationFrame(drawGreetingStars);
-        const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
         const timeSec = (typeof frameTime === 'number' ? frameTime : performance.now()) * 0.001;
 
-        const dpr = Math.max(1, window.devicePixelRatio || 1);
+        const dpr = Math.min(2, Math.max(1, window.devicePixelRatio || 1));
         const w = Math.floor(canvas.clientWidth * dpr);
         const h = Math.floor(canvas.clientHeight * dpr);
         if (canvas.width !== w || canvas.height !== h) {
