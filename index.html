@@ -32516,7 +32516,7 @@ function showGenrePopup(genre) {
       if (!canvas) return;
 
       let rafId = null;
-      const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true }) || canvas.getContext('2d');
+      const ctx = canvas.getContext('2d');
       const ROUND_TWINKLE_STAR_COUNT = 0;
 
       function seededRandomFactory(seed) {
@@ -32728,14 +32728,7 @@ function showGenrePopup(genre) {
         ctx.restore();
       }
 
-      if (typeof ResizeObserver === 'function') {
-        const resizeObserver = new ResizeObserver(function() {
-          canvas.width = 0;
-          canvas.height = 0;
-        });
-        resizeObserver.observe(canvas);
-      }
-
+      // Canvas resize is already re-checked every animation frame above; no extra observer needed.
       drawGreetingStars();
 
       function resumeGreetingStars() {
