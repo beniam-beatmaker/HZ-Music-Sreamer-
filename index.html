@@ -13453,6 +13453,23 @@ Jus be careful, if he's still doin dis, jus a mattera time til he nukes the plan
               "all deez ways to try me, makes me think ya want me badly, but, i don want yall back, i jus like what i like, aint trynna be ya type, yea i'm lookin for my type, gorgeous gal all dis time, not finna change dat path, better back the fuck off me with ya tries uh, hurts my mind jus to spot it yea yea",
               '',
               'oh my days, my mind'
+            ].join('\n'),
+            'Try like Dice': [
+              'life, life, life life life oh',
+              '',
+              "Life gets ya down, needa stop the frown, needa change ya sights, maybe make a site uh, seek to make somethin new, steada feelin all blue uh, might find yaself a love, love a site uh, what could come from that noone knows",
+              '',
+              'Knows Knows Knows Knows',
+              '',
+              '',
+              "If ya feelin down needa fix it, everythin cant be fixed but ya better try oh, look to get wealthy oh uh uh, life may get ya down oh uh, but you don needa stop stop uh, who could know what could come, could change ya life if try like dice uh",
+              '',
+              '',
+              "Might think ya needa fight, yea, ya do, fight for a dream uh, call it ya fuckin baby yea, if ya win, ya could ghost everybody who made ya feel the sting, bring all the good ones too yea, never needa look back at it uh, seek to be much more, steada stuck takin meds n forever more yea",
+              '',
+              'Never know what could come, if ya do already won uh, yea',
+              '',
+              "If ya feelin down needa fix it, everythin cant be fixed but ya better try oh, look to get wealthy oh uh uh, life may get ya down oh uh, but you don needa stop stop uh, who could know what could come, could change ya life if ya try like dice"
             ].join('\n')
           });
 
@@ -27144,6 +27161,7 @@ function showGenrePopup(genre) {
                 showTemporaryMessage(`Theme changed to: ${this.options[this.selectedIndex].text}`);
                 break;
               case 'audioQuality':
+                applyAudioQuality(this.value);
                 showTemporaryMessage(`Audio quality: ${this.options[this.selectedIndex].text}`);
                 break;
               case 'equalizerPreset':
@@ -27161,11 +27179,11 @@ function showGenrePopup(genre) {
       // Apply saved theme on load
       applyTheme(theme);
 
-      // Keep current playback chain stable when opening Settings.
-      // Equalizer is still applied when the user changes the preset.
-      if (!localStorage.getItem('hertzActiveEqualizerPreset')) {
-        localStorage.setItem('hertzActiveEqualizerPreset', equalizerPreset);
-      }
+      // Actually (re)apply the saved equalizer preset and audio quality to the live
+      // engine each time Settings opens, instead of only recording the value — this
+      // is what makes both selects work again after a reload or reopening Settings.
+      applyEqualizerPreset(equalizerPreset);
+      applyAudioQuality(audioQuality);
 
       console.log('✅ Settings loaded and fully functional');
     }
@@ -27431,6 +27449,14 @@ function showGenrePopup(genre) {
       bass: { bass: 9, mid: -2, treble: -1 }
     };
 
+    // Cutoff frequency (Hz) simulating each quality tier's audible bandwidth.
+    const AUDIO_QUALITY_FILTER_SETTINGS = {
+      low: 5500,
+      normal: 9500,
+      high: 15000,
+      lossless: 20000
+    };
+
     function ensureEqualizerEngine() {
       const audioEl = document.getElementById('playerAudio');
       if (!audioEl) return null;
@@ -27449,6 +27475,12 @@ function showGenrePopup(genre) {
         engine.context = engine.context || new AudioContextCtor();
         if (!engine.source) {
           engine.source = engine.context.createMediaElementSource(audioEl);
+        }
+
+        if (!engine.qualityFilter) {
+          engine.qualityFilter = engine.context.createBiquadFilter();
+          engine.qualityFilter.type = 'lowpass';
+          engine.qualityFilter.frequency.value = AUDIO_QUALITY_FILTER_SETTINGS.normal;
         }
 
         if (!engine.bassFilter) {
@@ -27476,7 +27508,8 @@ function showGenrePopup(genre) {
         }
 
         if (!engine.connected) {
-          engine.source.connect(engine.bassFilter);
+          engine.source.connect(engine.qualityFilter);
+          engine.qualityFilter.connect(engine.bassFilter);
           engine.bassFilter.connect(engine.midFilter);
           engine.midFilter.connect(engine.trebleFilter);
           engine.trebleFilter.connect(engine.outputGain);
@@ -27493,6 +27526,10 @@ function showGenrePopup(genre) {
             if (window.__hzPendingEqualizerSettings && eqEngine) {
               applyEqualizerSettingsToEngine(window.__hzPendingEqualizerSettings);
               window.__hzPendingEqualizerSettings = null;
+            }
+            if (window.__hzPendingAudioQualityCutoff != null && eqEngine) {
+              applyAudioQualityToEngine(window.__hzPendingAudioQualityCutoff);
+              window.__hzPendingAudioQualityCutoff = null;
             }
           });
           engine.playResumeBound = true;
@@ -27525,6 +27562,56 @@ function showGenrePopup(genre) {
       engine.trebleFilter.gain.setTargetAtTime(treble, now, 0.03);
 
       return true;
+    }
+
+    function applyAudioQualityToEngine(cutoffHz) {
+      const engine = ensureEqualizerEngine();
+      if (!engine || !cutoffHz) return false;
+
+      const now = engine.context.currentTime;
+      const maxCutoff = engine.context.sampleRate ? engine.context.sampleRate / 2 - 200 : 20000;
+      const safeCutoff = clamp(Number(cutoffHz) || AUDIO_QUALITY_FILTER_SETTINGS.normal, 2000, maxCutoff);
+      engine.qualityFilter.frequency.setTargetAtTime(safeCutoff, now, 0.03);
+
+      return true;
+    }
+
+    // New function to apply audio quality tiers (real lowpass cutoff, not cosmetic)
+    function applyAudioQuality(quality) {
+      console.log('🎧 Applying audio quality:', quality);
+
+      const playerAudio = document.getElementById('playerAudio');
+      const wasPlaying = !!playerAudio && !playerAudio.paused && !playerAudio.ended;
+      const previousVolume = playerAudio ? Number(playerAudio.volume) : 0;
+
+      localStorage.setItem('hertzActiveAudioQuality', quality);
+
+      const cutoffHz = AUDIO_QUALITY_FILTER_SETTINGS[quality] || AUDIO_QUALITY_FILTER_SETTINGS.normal;
+      const applied = applyAudioQualityToEngine(cutoffHz);
+      if (!applied) {
+        window.__hzPendingAudioQualityCutoff = cutoffHz;
+      } else {
+        window.__hzPendingAudioQualityCutoff = null;
+      }
+
+      if (playerAudio && wasPlaying) {
+        playerAudio.muted = false;
+        playerAudio.defaultMuted = false;
+        playerAudio.removeAttribute('muted');
+        if (previousVolume > 0.0001) {
+          playerAudio.volume = previousVolume;
+        }
+
+        const engine = window.__hzEqualizerEngine;
+        if (engine && engine.context && engine.context.state !== 'running' && typeof engine.context.resume === 'function') {
+          engine.context.resume().catch(function() {});
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
+      }
+
+      console.log('✅ Audio quality applied:', quality, cutoffHz + 'Hz');
     }
 
     // New function to apply equalizer presets
@@ -32621,35 +32708,10 @@ function showGenrePopup(genre) {
         const isNightByClock = !(nowHour >= 5 && nowHour < 18);
         const isNightByLabel = greetingText === 'Good Night';
         const isNightGreetingActive = isNightByClock || isNightByLabel;
-        const isProsperGreetingActive = greetingText === 'Prosper' || (nowHour >= 12 && nowHour < 18);
-        const isMorningGreetingActive = greetingText === 'Good Morning' || (nowHour >= 5 && nowHour < 12);
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
         const mobileStarSpeedFactor = isMobileDevice ? 1.15 : 1;
         const starCyclePhase = (timeSec * mobileStarSpeedFactor) % 6;
         const starsEnabled = true;
-
-        function drawSunAt(sunX, sunY, sunRadius, alphaScale) {
-          const a = Math.max(0, Math.min(1, alphaScale == null ? 1 : alphaScale));
-          const core = ctx.createRadialGradient(sunX, sunY, sunRadius * 0.20, sunX, sunY, sunRadius * 1.9);
-          core.addColorStop(0, 'rgba(255,245,190,' + (1.00 * a).toFixed(3) + ')');
-          core.addColorStop(0.40, 'rgba(255,214,118,' + (0.98 * a).toFixed(3) + ')');
-          core.addColorStop(1, 'rgba(255,182,80,' + (0.10 * a).toFixed(3) + ')');
-
-          ctx.fillStyle = core;
-          ctx.beginPath();
-          ctx.arc(sunX, sunY, sunRadius * 1.9, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = 'rgba(255,228,142,' + (1.00 * a).toFixed(3) + ')';
-          ctx.beginPath();
-          ctx.arc(sunX, sunY, sunRadius, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.fillStyle = 'rgba(255,250,220,' + (0.95 * a).toFixed(3) + ')';
-          ctx.beginPath();
-          ctx.arc(sunX, sunY, sunRadius * 0.36, 0, Math.PI * 2);
-          ctx.fill();
-        }
 
         const edgeStarCount = 4;
         const edgeR = circleR * 0.96;
@@ -32673,34 +32735,6 @@ function showGenrePopup(genre) {
 
         if (roundTwinkleStars.length) {
           drawRoundTwinkleStars(ctx, centerX, centerY, circleR, timeSec, dpr, isMobileDevice);
-        }
-
-        if (isProsperGreetingActive && !isNightGreetingActive) {
-          // Prosper: same directional travel style as stars (left -> right), but slow.
-          const edgeR = circleR * 0.88;
-          const prosperPhase = timeSec % 24;
-          const prosperProgress = prosperPhase / 24;
-          const sunX = (centerX - edgeR) + (edgeR * 2 * prosperProgress);
-          const dx = sunX - centerX;
-          const sunY = centerY - Math.sqrt(Math.max(0, edgeR * edgeR - dx * dx));
-          const prosperFadeIn = Math.max(0, Math.min(1, prosperProgress / 0.14));
-          const prosperFadeOut = Math.max(0, Math.min(1, (1 - prosperProgress) / 0.14));
-          const prosperAlpha = Math.min(prosperFadeIn, prosperFadeOut);
-          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), prosperAlpha);
-        }
-
-        if (isMorningGreetingActive && !isNightGreetingActive) {
-          // Morning: slow sunrise arc from east to west.
-          const edgeR = circleR * 0.88;
-          const morningPhase = timeSec % 28;
-          const morningProgress = morningPhase / 28;
-          const sunX = (centerX + edgeR) - (edgeR * 2 * morningProgress);
-          const dx = sunX - centerX;
-          const sunY = centerY - Math.sqrt(Math.max(0, edgeR * edgeR - dx * dx));
-          const morningFadeIn = Math.max(0, Math.min(1, morningProgress / 0.14));
-          const morningFadeOut = Math.max(0, Math.min(1, (1 - morningProgress) / 0.14));
-          const morningAlpha = Math.min(morningFadeIn, morningFadeOut);
-          drawSunAt(sunX, sunY, Math.max(5, Math.min(w, h) * 0.036), morningAlpha);
         }
 
         if (burstActive) {
@@ -37137,6 +37171,7 @@ document.addEventListener('DOMContentLoaded', function() {
   ];
 
   const tracksUnderWaitinGame = [
+    { title: 'Try like Dice', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Try%20Like%20Dice.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Crect x=%22146%22 y=%22106%22 width=%22220%22 height=%22220%22 rx=%2232%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%228%22/%3E%3Ccircle cx=%22256%22 cy=%22216%22 r=%2220%22 fill=%22%23f7d86f%22/%3E%3Ctext x=%2256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2238%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ETRY LIKE DICE%3C/text%3E%3C/svg%3E' },
     { title: 'Monster', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Turn%20Me%20Into%20A%20Monster%20(1).mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230b0b0b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22140%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%223%22 opacity=%220.9%22/%3E%3Cpath d=%22M112 180h288v40H112zm0 96h288v40H112zm0 96h220v40H112z%22 fill=%22%23d4af37%22 opacity=%220.9%22/%3E%3Ctext x=%2256%22 y=%22362%22 fill=%22%23f6d76b%22 font-size=%2248%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3EMONSTER%3C/text%3E%3C/svg%3E' },
     { title: 'Little Bitch Elon', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Little%20Bitch%20Elon.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%230d0d0d%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%224%22/%3E%3Cpath d=%22M140 150L180 330H215L245 200L275 330H312L344 150H290L265 270L236 150H199L170 270L145 150Z%22 fill=%22%23f7d86f%22 opacity=%220.95%22/%3E%3Ctext x=%2256%22 y=%22388%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ELITTLE BITCH%3C/text%3E%3Ctext x=%2256%22 y=%22428%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EELON%3C/text%3E%3C/svg%3E' },
     { title: 'Never Know Less', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Never%20Know%20Less.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230d0d0d%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M115 160h150v30H115zm0 62h282v30H115zm0 62h222v30H115zm0 62h170v30H115z%22 fill=%22%23f0c54b%22 opacity=%220.92%22/%3E%3Ctext x=%2256%22 y=%22356%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ENEVER KNOW%3C/text%3E%3Ctext x=%2256%22 y=%22398%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ELESS%3C/text%3E%3C/svg%3E' },
@@ -37159,6 +37194,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const tracksUnderMonster = [
     { title: 'Tinder Livid', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Tinder%20Livid.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cg transform=%22translate(112,90) scale(12)%22%3E%3Cpath fill=%22%23ffd700%22 d=%22M9.317 9.451a.248.248 0 0 0 .37.063l.015-.012c.39-.325.741-.66 1.071-1.017c3.209-3.483 1.335-7.759 1.32-7.799a.5.5 0 0 1 .15-.594a.49.49 0 0 1 .615.033c10.875 10.114 7.995 17.818 7.785 18.337c-.87 3.141-4.335 5.414-8.444 5.53c-.138.008-.242.008-.363.008c-4.852 0-8.977-2.989-8.977-6.807v-.06c0-5.297 4.795-10.522 5.009-10.744a.44.44 0 0 1 .525-.105c.18.076.297.255.291.451q-.065 1.553.631 2.7v.015z%22/%3E%3C/g%3E%3Ctext x=%22256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2242%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22 text-anchor=%22middle%22%3ETINDER%3C/text%3E%3C/svg%3E'
     }
+  ];
+
+  const tracksUnderNeverKnowLess = [
+    { title: 'Thot-Bull', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/thot-bull.mp3', cover: 'https://api.iconify.design/mdi:music-note.svg?color=%23ffd700' }
   ];
 
   const recentList = document.querySelector('.recently-played-list');
@@ -37185,6 +37224,8 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksUnderAnchor(popularBody, true, 'Waitin Game', tracksUnderWaitinGame);
   insertTracksUnderAnchor(recentList, false, 'Monster', tracksUnderMonster);
   insertTracksUnderAnchor(popularBody, true, 'Monster', tracksUnderMonster);
+  insertTracksUnderAnchor(recentList, false, 'Never Know Less', tracksUnderNeverKnowLess);
+  insertTracksUnderAnchor(popularBody, true, 'Never Know Less', tracksUnderNeverKnowLess);
   normalizeTrackArtistNames();
   refreshTrackNumbers(popularBody);
 });
