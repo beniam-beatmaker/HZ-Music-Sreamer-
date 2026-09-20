@@ -28795,6 +28795,7 @@ function showGenrePopup(genre) {
 
       function refreshSubscriptionCardPopupState() {
         const active = hasActiveMonthlySubscription();
+        const isCanceling = active && getSubscriptionCancellationEffectiveAtMs() > Date.now();
 
         if (subscriptionSuccessTick) {
           subscriptionSuccessTick.style.display = active ? 'block' : 'none';
@@ -28810,7 +28811,8 @@ function showGenrePopup(genre) {
         }
 
         if (backBtn) {
-          backBtn.textContent = active ? 'Cancel Subscription' : 'Back';
+          // Already-canceling subscriptions should not offer Cancel Subscription again.
+          backBtn.textContent = (active && !isCanceling) ? 'Cancel Subscription' : 'Back';
           backBtn.disabled = false;
         }
       }
@@ -28913,7 +28915,8 @@ function showGenrePopup(genre) {
 
       if (backBtn) {
         backBtn.addEventListener('click', async function() {
-          if (hasActiveMonthlySubscription()) {
+          const isCanceling = hasActiveMonthlySubscription() && getSubscriptionCancellationEffectiveAtMs() > Date.now();
+          if (hasActiveMonthlySubscription() && !isCanceling) {
             await cancelMonthlySubscription();
             refreshSubscriptionCardPopupState();
             return;
