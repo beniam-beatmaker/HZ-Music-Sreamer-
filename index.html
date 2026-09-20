@@ -28173,14 +28173,27 @@ function showGenrePopup(genre) {
 
       const active = hasActiveMonthlySubscription();
       actionsWrap.style.display = active ? 'block' : 'none';
+
+      if (!active) {
+        // Fully lapsed: hide the cancel controls entirely so Start Subscription can take over.
+        if (cancelButton) cancelButton.style.display = 'none';
+        if (cancelMessage) cancelMessage.style.display = 'none';
+        return;
+      }
+
+      const canceledAtMs = getSubscriptionCancellationEffectiveAtMs();
+      const isCanceling = canceledAtMs > Date.now();
+
       if (cancelButton) {
-        cancelButton.style.display = '';
+        cancelButton.style.display = isCanceling ? 'none' : '';
       }
-      if (!active && cancelMessage) {
-        cancelMessage.style.display = 'none';
-      }
-      if (active && cancelMessage) {
-        cancelMessage.style.display = 'none';
+      if (cancelMessage) {
+        if (isCanceling) {
+          cancelMessage.innerHTML = '<strong>Cancellation scheduled.</strong> Premium stays active until ' + formatChargeDateLabel(new Date(canceledAtMs)) + '.';
+          cancelMessage.style.display = 'block';
+        } else {
+          cancelMessage.style.display = 'none';
+        }
       }
     }
 
