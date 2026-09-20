@@ -5114,14 +5114,15 @@ last i checked this is best, specially since it could be real safe`;
             padding-bottom: 100px;
         }
 
-        /* Fullscreen laptop scaling - maintains exact mobile layout */
+        /* Fullscreen laptop scaling - maintains exact mobile layout.
+           Uses `zoom` instead of `transform: scale()`: a transform on <body> creates a
+           new containing block for every `position: fixed` descendant (popups, sticky
+           player), pushing them far outside the visible viewport on laptop/desktop
+           widths. `zoom` rescales layout without that side effect. */
         @media (min-width: 1024px) {
             body {
                 font-size: 18px;
-                transform: scale(1.2);
-                transform-origin: top center;
-                width: 83.33%; /* 100% / 1.2 */
-                margin: 0 auto;
+                zoom: 1.2;
                 background: linear-gradient(180deg, #1a1a1a 0%, #121212 15%, #000000 100%);
             }
 
@@ -5132,8 +5133,7 @@ last i checked this is best, specially since it could be real safe`;
 
         @media (min-width: 1440px) {
             body {
-                transform: scale(1.4);
-                width: 71.43%; /* 100% / 1.4 */
+                zoom: 1.4;
             }
 
             .app-container {
@@ -5143,8 +5143,7 @@ last i checked this is best, specially since it could be real safe`;
 
         @media (min-width: 1920px) {
             body {
-                transform: scale(1.6);
-                width: 62.5%; /* 100% / 1.6 */
+                zoom: 1.6;
             }
 
             .app-container {
@@ -11626,6 +11625,23 @@ last i checked this is best, specially since it could be real safe`;
               'people wid dey eyes opened could feel, like the games all about corrup things oh ooh, might jus sit back like, maybe one day it will change uh oh uh, could change for the better, could change for the worse uh, never know less ya try, never know less ya try oh oh-uh uh',
               '',
               'Look at people who lead uh, they seem to be free uh, free to be peeved, free to be creeps, free to seem neat uh yea yea,'
+            ].join('\n'),
+            'I Hate You': [
+              `Oh yea yea, lemme, lemme jus say, if ya knew all dis shit i been put through oh`,
+              '',
+              `Been some yearsa pain oh, had me thinkin oh my days oh, made me think fuck uh, whats the point never asked for none a dis oh, had me put in pain yea, made me think why oh, thinkin why like dis uh, only cos ya had a plan, fuck ya plan you aint shit, yea ya not a man uh`,
+              '',
+              `Weak weak weak weak fuckin weak weak weak weak oh-uh`,
+              '',
+              `Like a bitch ya stay quiet, seekin my death while ya lavish, causin me hurt like ya mad uh, not angry jus crazy oh-uh-oh uh, fuckin mad man wid the power, hate to say he my fuckin father, hates his bastard uh, bastard he aint met like a pussy uh,`,
+              '',
+              `man all the shit i been put through, nearly had me killed at the age a 6,  then he thought wait lemme try dis, had my mother walkin wid her tits out, til i was 13 what the fuck now, had me coppin shit shit shit, ever since i was a kid oh, oh-uh, made me think what the fuck, not only that look at luck uh, had a brain chip placed in me, like a bitch trynna get me steep, usin all the public, trynna get me to be lackful, aint no luck yea i hate you, im black too oh, yea jus know i wanna kill you, aint nothin but a fuckin bitch bitch bitch bitch uh oh`,
+              '',
+              `Why ya hate me i dont know, leadin illuminati like a foe, trynna cause me pain like i needa flow, yet forgettin evil like a foe uh oh, trynna stay a lil bitch why, only like to get on cam i, really hate ya fuckin guts, yea you bitch hows my luck uh yea oh`,
+              '',
+              `Like a bitch ya stay quiet, seekin my death while ya lavish, causin me hurt like ya mad uh, not angry jus crazy oh-uh, fuckin mad man wid the power, hate to say he my fuckin father, hates his bastard uh, bastard he aint met like a pussy uh`,
+              '',
+              `Jus know, wont be a bitch like ya want, you da bitch pussy wigga like a niche uh`
             ].join('\n'),
             'Stop Em': [
               'If people could see, they could protest n feel free, it\'d stop all the shit they go through, from dumpin em down the flooor ooh, jus takes alla yall stoppin, for the world to see yall done wid it yea',
@@ -28656,8 +28672,21 @@ function showGenrePopup(genre) {
         // Only append the raw body when there was no clean parsed message, so a normal
         // JSON error response doesn't show its own message text twice.
         const hasMessage = !!(data && data.message);
-        const diagnosticSuffix = ' (HTTP ' + response.status + (!hasMessage && rawResponseText ? ': ' + rawResponseText.slice(0, 160) : '') + ')';
-        lastHandledError = new Error(((data && data.message) || 'Unable to start monthly subscription on backend.') + diagnosticSuffix);
+        const looksLikeHtmlErrorPage = /^\s*<(!doctype|html)/i.test(rawResponseText || '');
+
+        let userFacingMessage;
+        if (hasMessage) {
+          userFacingMessage = data.message + ' (HTTP ' + response.status + ')';
+        } else if (looksLikeHtmlErrorPage && (response.status === 404 || response.status === 405)) {
+          // A plain HTML error page (not our API's JSON) for 404/405 means the request
+          // never reached the actual subscriptions API — usually because it isn't
+          // deployed as a live server function at this address. Give a clear, actionable
+          // message instead of dumping the raw HTML into the user-facing error.
+          userFacingMessage = 'The subscription server isn\'t available at this address right now (HTTP ' + response.status + '). Please try again shortly, or contact support if this keeps happening.';
+        } else {
+          userFacingMessage = 'Unable to start monthly subscription on backend.' + (rawResponseText ? ' (HTTP ' + response.status + ': ' + rawResponseText.slice(0, 160) + ')' : ' (HTTP ' + response.status + ')');
+        }
+        lastHandledError = new Error(userFacingMessage);
 
         // Retry only when this host clearly does not provide the route/method.
         // For real Stripe/backend errors, stop immediately and show the true message.
@@ -37233,6 +37262,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const tracksUnderWaitinGame = [
     { title: 'Try like Dice', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Try%20Like%20Dice.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Crect x=%22146%22 y=%22106%22 width=%22220%22 height=%22220%22 rx=%2232%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%228%22/%3E%3Ccircle cx=%22256%22 cy=%22216%22 r=%2220%22 fill=%22%23f7d86f%22/%3E%3Ctext x=%2256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2238%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ETRY LIKE DICE%3C/text%3E%3C/svg%3E' },
+    { title: 'I Hate You', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/I%20Hate%20U.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22230%22 r=%22144%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%224%22 opacity=%220.95%22/%3E%3Cpath d=%22M169 156h174v34H169zm0 76h174v34H169zm0 76h174v34H169zm0 76h112v34H169z%22 fill=%22%23f0c24d%22 opacity=%220.9%22/%3E%3Ctext x=%2256%22 y=%22392%22 fill=%22%23f6d974%22 font-size=%2231%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3EI HATE%3C/text%3E%3Ctext x=%2256%22 y=%22434%22 fill=%22%23f6d974%22 font-size=%2231%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3EYOU%3C/text%3E%3C/svg%3E' },
     { title: 'Monster', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Turn%20Me%20Into%20A%20Monster%20(1).mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230b0b0b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Ccircle cx=%22256%22 cy=%22256%22 r=%22140%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%223%22 opacity=%220.9%22/%3E%3Cpath d=%22M112 180h288v40H112zm0 96h288v40H112zm0 96h220v40H112z%22 fill=%22%23d4af37%22 opacity=%220.9%22/%3E%3Ctext x=%2256%22 y=%22362%22 fill=%22%23f6d76b%22 font-size=%2248%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3EMONSTER%3C/text%3E%3C/svg%3E' },
     { title: 'Little Bitch Elon', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Little%20Bitch%20Elon.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%230d0d0d%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23101010%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23f0c24d%22 stroke-width=%224%22/%3E%3Cpath d=%22M140 150L180 330H215L245 200L275 330H312L344 150H290L265 270L236 150H199L170 270L145 150Z%22 fill=%22%23f7d86f%22 opacity=%220.95%22/%3E%3Ctext x=%2256%22 y=%22388%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3ELITTLE BITCH%3C/text%3E%3Ctext x=%2256%22 y=%22428%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22%3EELON%3C/text%3E%3C/svg%3E' },
     { title: 'Never Know Less', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Never%20Know%20Less.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%230d0d0d%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2218%22 y=%2218%22 width=%22476%22 height=%22476%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cpath d=%22M115 160h150v30H115zm0 62h282v30H115zm0 62h222v30H115zm0 62h170v30H115z%22 fill=%22%23f0c54b%22 opacity=%220.92%22/%3E%3Ctext x=%2256%22 y=%22356%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ENEVER KNOW%3C/text%3E%3Ctext x=%2256%22 y=%22398%22 fill=%22%23ffd75a%22 font-size=%2228%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%223%22%3ELESS%3C/text%3E%3C/svg%3E' },
