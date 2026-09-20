@@ -28120,7 +28120,11 @@ function showGenrePopup(genre) {
       if (plan !== 'monthly') return false;
 
       const backendState = String(localStorage.getItem('hertzSubscriptionBackendState') || '').toLowerCase();
-      if (backendState === 'canceled') return false;
+      // Only 'active' and 'canceling' (still within the paid grace period) count as active.
+      // Any other known non-active state — canceled, a failed renewal payment, or a
+      // subscription still pending confirmation — must never be shown as active.
+      const NON_ACTIVE_BACKEND_STATES = ['canceled', 'payment_failed', 'pending'];
+      if (NON_ACTIVE_BACKEND_STATES.indexOf(backendState) !== -1) return false;
 
       const canceledAtMs = getSubscriptionCancellationEffectiveAtMs();
       if (!canceledAtMs) return true;
@@ -32738,30 +32742,7 @@ function showGenrePopup(genre) {
 
         ctx.clearRect(0, 0, w, h);
 
-        const greetingElement = document.getElementById('greetingText');
-        const greetingText = greetingElement && greetingElement.textContent ? greetingElement.textContent.trim() : '';
-        const nowHour = new Date().getHours();
-        const isNightByClock = !(nowHour >= 5 && nowHour < 18);
-        const isNightByLabel = greetingText === 'Good Night';
-        const isNightGreetingActive = isNightByClock || isNightByLabel;
         const isMobileDevice = window.matchMedia && window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
-        const mobileStarSpeedFactor = isMobileDevice ? 1.15 : 1;
-        const starCyclePhase = (timeSec * mobileStarSpeedFactor) % 6;
-        const starsEnabled = true;
-
-        const edgeStarCount = 4;
-        const edgeR = circleR * 0.96;
-        const starYOffsets = [
-          -edgeR * 0.12,
-          0,
-          edgeR * 0.12
-        ];
-
-        // Same travel behavior: fast sequential burst left->right on a 6-second loop.
-        const edgeRunSec = 1.55;
-        const edgeStaggerSec = 0.35;
-        const burstWindowSec = edgeRunSec + edgeStaggerSec * (edgeStarCount - 1);
-        const burstActive = starsEnabled && starCyclePhase <= burstWindowSec;
 
         // One shared clip region for this frame instead of two identical save/clip/restore cycles.
         ctx.save();
@@ -32771,50 +32752,6 @@ function showGenrePopup(genre) {
 
         if (roundTwinkleStars.length) {
           drawRoundTwinkleStars(ctx, centerX, centerY, circleR, timeSec, dpr, isMobileDevice);
-        }
-
-        if (burstActive) {
-          for (let es = 0; es < edgeStarCount; es++) {
-            const localT = starCyclePhase - es * edgeStaggerSec;
-            if (localT < 0) continue;
-
-            const esProgress = Math.max(0, Math.min(1, localT / edgeRunSec));
-            if (esProgress >= 1) continue;
-            const esX = (centerX - edgeR) + (edgeR * 2 * esProgress);
-            const esY = centerY + starYOffsets[es % starYOffsets.length];
-
-            const edgeDY = esY - centerY;
-            const edgeHalfWidth = Math.sqrt(Math.max(0, edgeR * edgeR - edgeDY * edgeDY));
-            const edgeLeftX = centerX - edgeHalfWidth;
-            const edgeRightX = centerX + edgeHalfWidth;
-            if (esX < edgeLeftX || esX > edgeRightX) continue;
-
-            const esTailLen = Math.min(w, h) * (isMobileDevice ? 0.110 : 0.095);
-            const esTailX = esX - esTailLen;
-            const esTailY = esY;
-            const endFade = Math.max(0, Math.min(1, (1 - esProgress) / 0.18));
-            const esPulse = 0.82 + 0.18 * Math.sin(timeSec * 2.4 + es * 1.3);
-            const esAlpha = (0.80 + esPulse * 0.18) * endFade;
-
-            const edgeGrad = ctx.createLinearGradient(esX, esY, esTailX, esTailY);
-            edgeGrad.addColorStop(0, 'rgba(255,255,255,' + esAlpha.toFixed(3) + ')');
-            edgeGrad.addColorStop(1, 'rgba(255,255,255,0)');
-
-            ctx.strokeStyle = edgeGrad;
-            ctx.lineWidth = Math.max(isMobileDevice ? 2.4 : 1.8, dpr * (isMobileDevice ? 1.8 : 1.35));
-            ctx.shadowBlur = (isMobileDevice ? 14 : 10) + esPulse * (isMobileDevice ? 10 : 8);
-            ctx.shadowColor = isMobileDevice ? 'rgba(255,255,255,0.98)' : 'rgba(255,255,255,0.90)';
-            ctx.beginPath();
-            ctx.moveTo(esX, esY);
-            ctx.lineTo(esTailX, esTailY);
-            ctx.stroke();
-            // Bright head dot improves visibility on high-DPR mobile screens.
-            ctx.fillStyle = 'rgba(255,255,255,' + Math.min(1, esAlpha + (isMobileDevice ? 0.18 : 0.08)).toFixed(3) + ')';
-            ctx.beginPath();
-            ctx.arc(esX, esY, Math.max(1.6, dpr * (isMobileDevice ? 1.3 : 0.95)), 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-          }
         }
 
         ctx.restore();
