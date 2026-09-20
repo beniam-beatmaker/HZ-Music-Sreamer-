@@ -8761,9 +8761,29 @@ last i checked this is best, specially since it could be real safe`;
   <!-- Spotify-style Service Worker for Better Mobile Integration -->
   <script>
     if ('serviceWorker' in navigator) {
+      // Auto-reload once a newly installed service worker takes control, so deployed
+      // fixes (e.g. subscription/ads handling) reach the APK/TWA without requiring
+      // users to manually clear cache or reinstall.
+      let hzSwReloadTriggered = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (hzSwReloadTriggered) return;
+        hzSwReloadTriggered = true;
+        window.location.reload();
+      });
+
       // Enhanced service worker registration for Spotify-like behavior
       navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(function(registration) {
         console.log('🎵 HZ: Service Worker registered like Spotify - enhanced mobile experience active');
+
+        // Force an update check on every load/foreground so stale cached
+        // versions get replaced promptly instead of waiting on the browser's
+        // own (often infrequent) background update schedule.
+        registration.update().catch(function() {});
+        document.addEventListener('visibilitychange', function() {
+          if (document.visibilityState === 'visible') {
+            registration.update().catch(function() {});
+          }
+        });
 
         // Handle updates like Spotify does
         registration.addEventListener('updatefound', () => {
