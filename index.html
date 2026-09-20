@@ -610,7 +610,6 @@
       'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
       'smile': { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile', artist: 'Amie-Rain' },
       'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
-      'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
       'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
       'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
       'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
@@ -1722,7 +1721,6 @@ last i checked this is best, specially since it could be real safe`;
       { id: 'whisper', url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
       { id: 'lord', url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
       { id: 'Rhymes', url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
-      { id: 'Nights', url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
       { id: 'You My Vibe', url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
 
       { id: 'Dream', url: 'https://storage.googleapis.com/hertz-music-folder/Dream.wav', title: 'Dream', artist: 'Desiree' },
@@ -6147,12 +6145,16 @@ last i checked this is best, specially since it could be real safe`;
       height: 235px;
       object-fit: contain;
       transform-origin: center;
+      transform: translateZ(0) rotate(0deg);
+      -webkit-transform: translateZ(0) rotate(0deg);
       animation: hzTitleImageSpin 90s linear infinite;
       -webkit-transform-origin: center;
       -webkit-animation: hzTitleImageSpin 90s linear infinite;
       will-change: transform;
       -webkit-backface-visibility: hidden;
       backface-visibility: hidden;
+      -webkit-perspective: 1000px;
+      perspective: 1000px;
     }
 
     @-webkit-keyframes hzTitleImageSpin {
@@ -6285,11 +6287,14 @@ last i checked this is best, specially since it could be real safe`;
       }
     }
 
-    /* Slightly faster rotation on touch/mobile devices only; desktop keeps 90s. */
+    /* Slightly faster rotation on touch/mobile devices only; desktop keeps 90s.
+       Do not set a static `transform` here — it fights the running keyframe animation
+       and can visibly snap the rotation back to 0deg whenever this media query is
+       re-evaluated (e.g. Android/iOS address-bar show/hide or orientation change),
+       which was the source of the mobile stutter. */
     @media (max-width: 900px), (pointer: coarse) {
       .home-brand-title img {
         animation-duration: 76s;
-        transform: rotate(0deg) translateZ(0);
         -webkit-animation-duration: 76s;
       }
     }
@@ -9159,7 +9164,7 @@ last i checked this is best, specially since it could be real safe`;
         <a href="Offline25App.html" class="nav-btn">📱 Offline</a>
         <a href="Playlist25App.html" class="nav-btn">📋 Playlists</a>
 
-        <a href="https://hz-streams.com/HZ%20Free%20Downloader.html" class="nav-btn">⬇️ Downloader</a>
+        <a href="Downloader/HZ Free Downloader.html" class="nav-btn">⬇️ Downloader</a>
         <a href="Settings25App.html" class="nav-btn">⚙️ Settings</a>
         <a href="Privacy Policy.html" class="nav-btn">📄 Privacy Policy</a>
     </div>
@@ -9178,6 +9183,15 @@ last i checked this is best, specially since it could be real safe`;
           <h2 class="track-list-title">Recently played</h2>
         </div>
         <div class="recently-played-list">
+                <div class="recent-track-item" onclick="playNewTrack('Tinder Livid', 'https://storage.googleapis.com/hertz-music-folder/Tinder%20Livid.mp3', 'Tinder Livid', 'Beniam Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <div class="recent-track-artwork"><img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cg transform=%22translate(112,90) scale(12)%22%3E%3Cpath fill=%22%23ffd700%22 d=%22M9.317 9.451a.248.248 0 0 0 .37.063l.015-.012c.39-.325.741-.66 1.071-1.017c3.209-3.483 1.335-7.759 1.32-7.799a.5.5 0 0 1 .15-.594a.49.49 0 0 1 .615.033c10.875 10.114 7.995 17.818 7.785 18.337c-.87 3.141-4.335 5.414-8.444 5.53c-.138.008-.242.008-.363.008c-4.852 0-8.977-2.989-8.977-6.807v-.06c0-5.297 4.795-10.522 5.009-10.744a.44.44 0 0 1 .525-.105c.18.076.297.255.291.451q-.065 1.553.631 2.7v.015z%22/%3E%3C/g%3E%3Ctext x=%22256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2242%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22 text-anchor=%22middle%22%3ETINDER%3C/text%3E%3C/svg%3E" alt="Tinder Livid cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
+                  <div class="recent-track-info">
+                    <div class="recent-track-name">Tinder Livid</div>
+                    <div class="recent-track-artist">Beniam Tedla</div>
+                  </div>
+                  <div class="recent-track-time">Just now</div>
+                  <div class="recent-track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div>
+                </div>
                 <div class="recent-track-item" onclick="playNewTrack('Ride all Night', 'https://storage.googleapis.com/hertz-music-folder/Ride%20All%20Night%20(2).mp3', 'Ride all Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <div class="recent-track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Ride all Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div>
                   <div class="recent-track-info">
@@ -10507,6 +10521,13 @@ last i checked this is best, specially since it could be real safe`;
           <tbody>
                 
 
+                <tr class="track-row" onclick="playNewTrack('Tinder Livid', 'https://storage.googleapis.com/hertz-music-folder/Tinder%20Livid.mp3', 'Tinder Livid', 'Beniam Tedla');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
+                  <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
+                  <td><div class="track-info"><div class="track-artwork"><img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cg transform=%22translate(112,90) scale(12)%22%3E%3Cpath fill=%22%23ffd700%22 d=%22M9.317 9.451a.248.248 0 0 0 .37.063l.015-.012c.39-.325.741-.66 1.071-1.017c3.209-3.483 1.335-7.759 1.32-7.799a.5.5 0 0 1 .15-.594a.49.49 0 0 1 .615.033c10.875 10.114 7.995 17.818 7.785 18.337c-.87 3.141-4.335 5.414-8.444 5.53c-.138.008-.242.008-.363.008c-4.852 0-8.977-2.989-8.977-6.807v-.06c0-5.297 4.795-10.522 5.009-10.744a.44.44 0 0 1 .525-.105c.18.076.297.255.291.451q-.065 1.553.631 2.7v.015z%22/%3E%3C/g%3E%3Ctext x=%22256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2242%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22 text-anchor=%22middle%22%3ETINDER%3C/text%3E%3C/svg%3E" alt="Tinder Livid cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Tinder Livid</div><div class="track-artist">Beniam Tedla</div></div></div></td>
+                  <td><div class="track-album">Single</div></td>
+                  <td><div class="track-duration">3:20</div></td>
+                  <td><div class="track-actions"><button class="track-like-btn" onclick="toggleLike(this, event)">♡</button><button class="track-menu-btn" onclick="showTrackMenu(event)">⋯</button></div></td>
+                </tr>
                 <tr class="track-row" onclick="playNewTrack('Ride all Night', 'https://storage.googleapis.com/hertz-music-folder/Ride%20All%20Night%20(2).mp3', 'Ride all Night', 'Beniam TedlAI');" style="cursor: pointer; background: rgba(255,215,0,0.05); border-left: 3px solid gold;">
                   <td><div class="track-number">1</div><button class="track-play-btn">▶</button></td>
                   <td><div class="track-info"><div class="track-artwork"><img src="https://api.iconify.design/mdi:weather-night.svg?color=%23ffd700" alt="Ride all Night cover" style="width:40px;height:40px;border-radius:4px;object-fit:cover;"></div><div class="track-details"><div class="track-name">Ride all Night</div><div class="track-artist">Beniam TedlAI</div></div></div></td>
@@ -13414,6 +13435,24 @@ Jus be careful, if he's still doin dis, jus a mattera time til he nukes the plan
               'Still secrets that my shadows keep',
               'Just me and silence, soft and low',
               'No tesseract, nowhere to go'
+            ].join('\n'),
+            'Tinder Livid': [
+              'my life a mix up, had me thinkin oh, just saught saught saught saught saught saught saught saught',
+              '',
+              "to break dis fuckin bullshit, all i seen was fake shit, nothin real last i checked it, made me feel like it's jus a game, trynna play me, to make me gay uh, i say fuck yall bitches, be gay wid yaselves oh",
+              '',
+              'why so desperate, to try to turn me, holy shit i like chicks cant ya see dat uh uh, hoppin on tinder made me livid, seen a fuckin gal say she wants guys who swing that way, uh, a bit, also seen an image of a guy in undies, yuck, only made me check my settings, nothin different, set to lookin 4 women, what the fuck is that then',
+              '',
+              "all deez ways to try me, makes me think ya want me badly, but, i don want yall back, i jus like what i like, aint trynna be ya type, yea i'm lookin for my type, gorgeous gal all dis time, not finna change dat path, better back the fuck off me with ya tries uh, hurts my mind jus to spot it yea yea",
+              '',
+              "trynna turn a guy gay, by makin him alone so yall could prey oh, if i had a glock yall'd be done, better step the fuck off, leave me be, dont chase no bullshit dreams uh, shits sick, yea i like chicks uh, don mean im finna chase, only cos yall played that fuckin game, uh, game wid my life, so much time, aint finna wait to try, nope na nada nada",
+              '',
+              "why yall stress, trynna turn me, yea i like pussy, can't ya see uh, not lookin 4 a wife, not lookin for a fam, jus breathin erryday, trynna go ham uh, trynna make a kid, yea my biz not a real fam",
+              '',
+              '',
+              "all deez ways to try me, makes me think ya want me badly, but, i don want yall back, i jus like what i like, aint trynna be ya type, yea i'm lookin for my type, gorgeous gal all dis time, not finna change dat path, better back the fuck off me with ya tries uh, hurts my mind jus to spot it yea yea",
+              '',
+              'oh my days, my mind'
             ].join('\n')
           });
 
@@ -14430,7 +14469,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
               'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
               'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
-              'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
               'My Way': { url: 'https://storage.googleapis.com/hertz-music-folder/My%20Way.mp3', title: 'My Way', artist: 'B-Tilla' },
               'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
 
@@ -14562,7 +14600,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
           var trackOrder = [
             'Times', 'Prime', 'Made It', 'Nector', 'Limitless Dreams', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
             'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle',
-            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe',
+            'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'You My Vibe',
             'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
           ];
           // Make variables globally accessible for Media Session handlers
@@ -14674,7 +14712,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
               trackOrder = [
                 'Times', 'Prime', 'Made It', 'Nector', 'Limitless Dreams', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
                 'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle',
-                'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'Nights', 'You My Vibe',
+                'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'You My Vibe',
                 'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
               ];
               console.log('🔀 Shuffle OFF - Original order restored');
@@ -16037,7 +16075,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             'whisper': { url: 'https://storage.googleapis.com/hertz-music-folder/Whisper.wav', title: 'Whisper', artist: 'Molly-Able' },
             'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
             'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
-            'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
             'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
             'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
             'Nimbus': { url: 'https://storage.googleapis.com/hertz-music-folder/Nimbus%20Prod.%20Tedla.mp3', title: 'Nimbus', artist: 'Prod. Tedla' },
@@ -16925,7 +16962,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
       'lord': { id: 'lord', title: 'Lord', artist: 'Sweet-Soul', cover: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=400&q=80', genre: 'Soul' },
       'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
       'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-      'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
       'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
       'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
       'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
@@ -17192,10 +17228,7 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
         'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'Pop' },
         'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
         'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
-        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill' },
-        'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B' },
 
-        'Space': { id: 'Space', title: 'Space', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
         'Nimbus': { id: 'Nimbus', title: 'Nimbus', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=400&q=80', genre: 'Ambient' },
         'Shootin Starz': { id: 'Shootin Starz', title: 'Shootin Starz', artist: 'Prod. Simz', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop' },
         'Mars': { id: 'Mars', title: 'Mars', artist: 'Prod. Tedla', cover: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=400&q=80', genre: 'Electronic' },
@@ -20288,7 +20321,6 @@ function showGenrePopup(genre) {
         'lord': { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord', artist: 'Sweet-Soul' },
         'Good Woman': { url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', title: 'Good Woman', artist: 'Molly-Able' },
         'Rhymes': { url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', title: 'Rhymes', artist: 'Bezzie' },
-        'Nights': { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights', artist: 'Lil Guava' },
         'You My Vibe': { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe', artist: 'Aime-Rain' },
 
         'Space': { url: 'https://storage.googleapis.com/hertz-music-folder/Space%20Prod.%20Tedla.mp3', title: 'Space', artist: 'Prod. Tedla' },
@@ -25642,7 +25674,6 @@ function showGenrePopup(genre) {
           { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright - Soul-Ful' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord - Sweet-Soul' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile - Amie-Rain' },
-          { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights - Lil Guava' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe - Aime-Rain' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz - Prod. Simz' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/faith.mp3', title: 'Faith - B-I-R-M-P' },
@@ -25826,7 +25857,6 @@ function showGenrePopup(genre) {
           { url: 'https://storage.googleapis.com/hertz-music-folder/Bright.wav', title: 'Bright - Soul-Ful' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Lord.wav', title: 'Lord - Sweet-Soul' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', title: 'Smile - Amie-Rain' },
-          { url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', title: 'Nights - Lil Guava' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', title: 'You My Vibe - Aime-Rain' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/Shootin%20Starz%20Prod.%20Simz.mp3', title: 'Shootin Starz - Prod. Simz' },
           { url: 'https://storage.googleapis.com/hertz-music-folder/faith.mp3', title: 'Faith - B-I-R-M-P' },
@@ -29282,7 +29312,6 @@ function showGenrePopup(genre) {
         // Additional tracks from homepage
         'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav' },
         'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80', genre: 'Hip-Hop', url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav' },
-        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80', genre: 'Chill', url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav' },
         'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80', genre: 'R&B', url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav' },
 
 
@@ -29432,7 +29461,6 @@ function showGenrePopup(genre) {
         'smile': { id: 'smile', title: 'Smile', artist: 'Amie-Rain', url: 'https://storage.googleapis.com/hertz-music-folder/Smile.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
         'Good Woman': { id: 'Good Woman', title: 'Good Woman', artist: 'Molly-Able', url: 'https://storage.googleapis.com/hertz-music-folder/Good%20Woman.wav', cover: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=400&q=80' },
         'Rhymes': { id: 'Rhymes', title: 'Rhymes', artist: 'Bezzie', url: 'https://storage.googleapis.com/hertz-music-folder/Rhymes.wav', cover: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=400&q=80' },
-        'Nights': { id: 'Nights', title: 'Nights', artist: 'Lil Guava', url: 'https://storage.googleapis.com/hertz-music-folder/Nights.wav', cover: 'https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=400&q=80' },
         'You My Vibe': { id: 'You My Vibe', title: 'You My Vibe', artist: 'Aime-Rain', url: 'https://storage.googleapis.com/hertz-music-folder/You%20My%20Vibe.wav', cover: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=400&q=80' },
 
 
@@ -34104,6 +34132,11 @@ function openAlbum(albumId) {
   var _lastStarSpawnAt = 0;
   var _stillStars = [];
   var _stillStarsClipR = 0;
+  // Smoothed audio clock: avoids driving the shooting-star motion directly off
+  // `audio.currentTime`, whose update granularity is coarse/jittery on mobile
+  // (Android/iOS) and otherwise causes the stars to visibly stutter mid-flight.
+  var _starClockEstimate = 0;
+  var _starClockInitialized = false;
   var _vizShowEmptyFrame = false;
   var _vizAudioRestoreTimer = null;
 
@@ -35032,8 +35065,26 @@ function openAlbum(albumId) {
     var trackAudio = document.getElementById('playerAudio');
     var starsEnabled = false;
     var starCyclePhase = 0;
-    if (trackAudio && !trackAudio.paused && !trackAudio.ended && isFinite(trackAudio.currentTime) && trackAudio.currentTime >= 3) {
-      starCyclePhase = (trackAudio.currentTime - 3) % 26;
+    var audioPlayingForStars = !!(trackAudio && !trackAudio.paused && !trackAudio.ended && isFinite(trackAudio.currentTime));
+    if (audioPlayingForStars) {
+      var rawAudioTime = trackAudio.currentTime;
+      // Advance the estimate every frame using real elapsed time (frameDt), then gently
+      // pull it toward the real `currentTime` reading. This decouples the star motion
+      // from the browser's coarse/irregular currentTime update cadence on mobile
+      // (Android/iOS), which otherwise makes the stars visibly stutter mid-flight.
+      if (!_starClockInitialized || Math.abs(rawAudioTime - _starClockEstimate) > 0.25) {
+        _starClockEstimate = rawAudioTime;
+        _starClockInitialized = true;
+      } else {
+        _starClockEstimate += frameDt + (rawAudioTime - _starClockEstimate) * 0.12;
+      }
+    } else {
+      _starClockEstimate = trackAudio ? trackAudio.currentTime : 0;
+      _starClockInitialized = false;
+    }
+    if (audioPlayingForStars && _starClockEstimate >= 3) {
+      starCyclePhase = (_starClockEstimate - 3) % 26;
+      if (starCyclePhase < 0) starCyclePhase += 26;
       starsEnabled = starCyclePhase < 6;
     }
 
@@ -37105,6 +37156,11 @@ document.addEventListener('DOMContentLoaded', function() {
     { title: 'Could Be a Trip', artist: 'Beniam TedlAI', url: 'https://storage.googleapis.com/hertz-music-folder/Could%20Be%20A%20Trip%20(1).mp3', cover: 'https://api.iconify.design/mdi:map-marker-path.svg?color=%23ffd700' }
   ];
 
+  const tracksUnderMonster = [
+    { title: 'Tinder Livid', artist: 'Beniam Tedla', url: 'https://storage.googleapis.com/hertz-music-folder/Tinder%20Livid.mp3', cover: 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22512%22 height=%22512%22 viewBox=%220 0 512 512%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 x2=%221%22 y1=%220%22 y2=%221%22%3E%3Cstop offset=%220%25%22 stop-color=%22%23000000%22/%3E%3Cstop offset=%2250%25%22 stop-color=%22%23111111%22/%3E%3Cstop offset=%22100%25%22 stop-color=%22%23000000%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22512%22 height=%22512%22 fill=%22url(%23g)%22/%3E%3Crect x=%2216%22 y=%2216%22 width=%22480%22 height=%22480%22 rx=%2224%22 fill=%22none%22 stroke=%22%23d4af37%22 stroke-width=%224%22/%3E%3Cg transform=%22translate(112,90) scale(12)%22%3E%3Cpath fill=%22%23ffd700%22 d=%22M9.317 9.451a.248.248 0 0 0 .37.063l.015-.012c.39-.325.741-.66 1.071-1.017c3.209-3.483 1.335-7.759 1.32-7.799a.5.5 0 0 1 .15-.594a.49.49 0 0 1 .615.033c10.875 10.114 7.995 17.818 7.785 18.337c-.87 3.141-4.335 5.414-8.444 5.53c-.138.008-.242.008-.363.008c-4.852 0-8.977-2.989-8.977-6.807v-.06c0-5.297 4.795-10.522 5.009-10.744a.44.44 0 0 1 .525-.105c.18.076.297.255.291.451q-.065 1.553.631 2.7v.015z%22/%3E%3C/g%3E%3Ctext x=%22256%22 y=%22420%22 fill=%22%23f6d974%22 font-size=%2242%22 font-weight=%22700%22 font-family=%22Arial,Helvetica,sans-serif%22 letter-spacing=%222%22 text-anchor=%22middle%22%3ETINDER%3C/text%3E%3C/svg%3E'
+    }
+  ];
+
   const recentList = document.querySelector('.recently-played-list');
   const popularBody = document.querySelector('.track-table tbody');
 
@@ -37127,6 +37183,8 @@ document.addEventListener('DOMContentLoaded', function() {
   insertTracksUnderAnchor(popularBody, true, 'Pains All i Know', tracksUnderPainsAllIKnow);
   insertTracksUnderAnchor(recentList, false, 'Waitin Game', tracksUnderWaitinGame);
   insertTracksUnderAnchor(popularBody, true, 'Waitin Game', tracksUnderWaitinGame);
+  insertTracksUnderAnchor(recentList, false, 'Monster', tracksUnderMonster);
+  insertTracksUnderAnchor(popularBody, true, 'Monster', tracksUnderMonster);
   normalizeTrackArtistNames();
   refreshTrackNumbers(popularBody);
 });
