@@ -5879,6 +5879,7 @@ last i checked this is best, specially since it could be real safe`;
       padding: 11px 12px;
       background: rgba(0, 0, 0, 0.35);
       min-height: 42px;
+      cursor: text;
     }
 
     .pay-stripe-element--focus {
@@ -9160,8 +9161,18 @@ last i checked this is best, specially since it could be real safe`;
                 <input id="payCardName" type="text" autocomplete="cc-name" required>
               </div>
               <div>
-                <label for="paymentCardElement">Card details</label>
-                <div id="paymentCardElement" class="pay-stripe-element" aria-label="Secure card entry"></div>
+                <label for="paymentCardNumberElement">Card Number</label>
+                <div id="paymentCardNumberElement" class="pay-stripe-element" aria-label="Secure card number entry"></div>
+              </div>
+              <div class="pay-row">
+                <div>
+                  <label for="paymentCardExpiryElement">Expiry Date</label>
+                  <div id="paymentCardExpiryElement" class="pay-stripe-element" aria-label="Secure card expiry entry"></div>
+                </div>
+                <div>
+                  <label for="paymentCardCvcElement">CVC</label>
+                  <div id="paymentCardCvcElement" class="pay-stripe-element" aria-label="Secure card CVC entry"></div>
+                </div>
               </div>
               <div id="subscriptionSuccessTick" class="pay-subtext" style="display:none;color:#1db954;font-weight:800;margin-top:8px;">✓ Subscription active</div>
               <div id="subscriptionInactiveTick" class="pay-subtext" style="display:none;color:#ff6b6b;font-weight:800;margin-top:8px;">❌ Subscription Inactive</div>
@@ -17671,6 +17682,21 @@ function showGenrePopup(genre) {
     const POPUP_AUDIO_GUARD_SELECTOR = '.page-overlay, .search-popup-overlay, .app-selection-overlay, .app-overlay, .pay-overlay, .popup-overlay, .modal-overlay, .pay-modal-shell, #queuePopup, #miniVideoPlayer, [id$="Overlay"]';
     let popupAudioGuardPrevVisible = false;
     let popupAudioGuardSnapshot = null;
+    // Re-querying + getComputedStyle-ing every overlay on every tick was forcing a full
+    // layout reflow ~5.5x/sec while any popup (including the subscription popups) stayed
+    // open, which is what made buttons feel sluggish. The overlay set barely ever changes
+    // while a popup is open, so cache the NodeList and only refresh it periodically.
+    let popupAudioGuardElementsCache = null;
+    let popupAudioGuardCacheExpiresAt = 0;
+
+    function getPopupAudioGuardElements() {
+      const now = Date.now();
+      if (!popupAudioGuardElementsCache || now > popupAudioGuardCacheExpiresAt) {
+        popupAudioGuardElementsCache = document.querySelectorAll(POPUP_AUDIO_GUARD_SELECTOR);
+        popupAudioGuardCacheExpiresAt = now + 2000;
+      }
+      return popupAudioGuardElementsCache;
+    }
 
     function isElementPopupVisible(el) {
       if (!el) return false;
@@ -17679,6 +17705,13 @@ function showGenrePopup(genre) {
         return false;
       }
       if (el.getAttribute && el.getAttribute('aria-hidden') === 'true') {
+        return false;
+      }
+      // A child (e.g. .pay-modal-shell) can report its OWN display as visible via
+      // getComputedStyle while its actual parent overlay (.pay-overlay) is display:none —
+      // getComputedStyle does not account for that. getClientRects() correctly reflects
+      // whether the element is actually rendered anywhere in the page right now.
+      if (el.getClientRects().length === 0) {
         return false;
       }
       return true;
@@ -17692,7 +17725,7 @@ function showGenrePopup(genre) {
     }
 
     function isAnyPopupVisible() {
-      const popups = document.querySelectorAll(POPUP_AUDIO_GUARD_SELECTOR);
+      const popups = getPopupAudioGuardElements();
       for (let i = 0; i < popups.length; i++) {
         if (!shouldPopupAffectStickyAudio(popups[i])) continue;
         if (isElementPopupVisible(popups[i])) return true;
@@ -17770,7 +17803,9 @@ function showGenrePopup(genre) {
     }
 
     if (!window.__hzPopupAudioGuardInterval) {
-      window.__hzPopupAudioGuardInterval = setInterval(monitorPopupAudioGuard, 180);
+      // Slowed from 180ms: this guard doesn't need sub-200ms precision, and the
+      // faster cadence was adding unnecessary main-thread work while popups were open.
+      window.__hzPopupAudioGuardInterval = setInterval(monitorPopupAudioGuard, 400);
       monitorPopupAudioGuard();
     }
 
@@ -28601,8 +28636,14 @@ function showGenrePopup(genre) {
         }
 
         data = {};
+        let rawResponseText = '';
         try {
-          data = await response.json();
+          // Read the body as text once (a Response body can only be consumed a single
+          // time), then try to parse it as JSON. Falls back to the raw text so the real
+          // cause is surfaced instead of a generic message when the server returns
+          // something non-JSON (e.g. a crash producing an HTML/plain-text error page).
+          rawResponseText = await response.text();
+          data = rawResponseText ? JSON.parse(rawResponseText) : {};
         } catch (err) {
           data = {};
         }
@@ -28612,7 +28653,11 @@ function showGenrePopup(genre) {
           break;
         }
 
-        lastHandledError = new Error((data && data.message) || 'Unable to start monthly subscription on backend.');
+        // Only append the raw body when there was no clean parsed message, so a normal
+        // JSON error response doesn't show its own message text twice.
+        const hasMessage = !!(data && data.message);
+        const diagnosticSuffix = ' (HTTP ' + response.status + (!hasMessage && rawResponseText ? ': ' + rawResponseText.slice(0, 160) : '') + ')';
+        lastHandledError = new Error(((data && data.message) || 'Unable to start monthly subscription on backend.') + diagnosticSuffix);
 
         // Retry only when this host clearly does not provide the route/method.
         // For real Stripe/backend errors, stop immediately and show the true message.
@@ -28780,6 +28825,8 @@ function showGenrePopup(genre) {
       let stripeInstance = null;
       let stripeElementsInstance = null;
       let stripeCardElement = null;
+      let stripeCardExpiryElement = null;
+      let stripeCardCvcElement = null;
       let submittingSubscription = false;
       window.__hzSubscriptionActivationPending = false;
 
@@ -28790,7 +28837,9 @@ function showGenrePopup(genre) {
       const backBtn = document.getElementById('backToCurrencyBtn');
       const cardForm = document.getElementById('paymentCardForm');
       const cardNameInput = document.getElementById('payCardName');
-      const paymentCardElementMount = document.getElementById('paymentCardElement');
+      const paymentCardNumberMount = document.getElementById('paymentCardNumberElement');
+      const paymentCardExpiryMount = document.getElementById('paymentCardExpiryElement');
+      const paymentCardCvcMount = document.getElementById('paymentCardCvcElement');
       const stripeErrorEl = document.getElementById('payCardStripeError');
       const subscriptionSuccessTick = document.getElementById('subscriptionSuccessTick');
       const subscriptionInactiveTick = document.getElementById('subscriptionInactiveTick');
@@ -28835,39 +28884,68 @@ function showGenrePopup(genre) {
         stripeInstance = stripeInstance || await getStripeClient();
         stripeElementsInstance = stripeElementsInstance || stripeInstance.elements({ locale: 'auto' });
 
-        stripeCardElement = stripeElementsInstance.create('card', {
-          hidePostalCode: true,
-          style: {
-            base: {
-              color: '#ffffff',
-              fontFamily: 'inherit',
-              fontSize: '16px',
-              iconColor: '#ffffff',
-              '::placeholder': {
-                color: 'rgba(255,255,255,0.45)'
-              }
-            },
-            invalid: {
-              color: '#ffb0b0',
-              iconColor: '#ffb0b0'
+        const elementStyle = {
+          base: {
+            color: '#ffffff',
+            fontFamily: 'inherit',
+            fontSize: '16px',
+            iconColor: '#ffffff',
+            '::placeholder': {
+              color: 'rgba(255,255,255,0.45)'
             }
+          },
+          invalid: {
+            color: '#ffb0b0',
+            iconColor: '#ffb0b0'
           }
-        });
+        };
 
-        stripeCardElement.on('change', function(event) {
-          if (event.error) {
-            setStripeError(event.error.message || 'Please check your card details.');
-          } else if (stripeErrorEl && stripeErrorEl.textContent) {
-            setStripeError('');
-          }
+        // Separate, individually labeled elements so the user can clearly see the
+        // Card Number, Expiry Date, and CVC sections instead of one combined field.
+        stripeCardElement = stripeElementsInstance.create('cardNumber', { style: elementStyle });
+        stripeCardExpiryElement = stripeElementsInstance.create('cardExpiry', { style: elementStyle });
+        stripeCardCvcElement = stripeElementsInstance.create('cardCvc', { style: elementStyle });
 
-          if (paymentCardElementMount) {
-            paymentCardElementMount.classList.toggle('pay-stripe-element--invalid', !!event.error);
-            paymentCardElementMount.classList.toggle('pay-stripe-element--focus', !!event.complete || !!event.focus);
-          }
-        });
+        function bindFieldFeedback(element, mountEl) {
+          element.on('change', function(event) {
+            if (event.error) {
+              setStripeError(event.error.message || 'Please check your card details.');
+            } else if (stripeErrorEl && stripeErrorEl.textContent) {
+              setStripeError('');
+            }
 
-        stripeCardElement.mount('#paymentCardElement');
+            if (mountEl) {
+              mountEl.classList.toggle('pay-stripe-element--invalid', !!event.error);
+              mountEl.classList.toggle('pay-stripe-element--focus', !!event.complete || !!event.focus);
+            }
+          });
+        }
+
+        bindFieldFeedback(stripeCardElement, paymentCardNumberMount);
+        bindFieldFeedback(stripeCardExpiryElement, paymentCardExpiryMount);
+        bindFieldFeedback(stripeCardCvcElement, paymentCardCvcMount);
+
+        // The mounted iframe can be visually smaller than its bordered container
+        // (e.g. padding around it), so a click that lands in that surrounding area
+        // otherwise does nothing. Forward clicks anywhere in the box (and its label)
+        // to the element's own .focus() so the whole visible field is clickable.
+        function bindClickToFocus(element, mountEl, labelEl) {
+          const focusHandler = function() {
+            if (element && typeof element.focus === 'function') {
+              element.focus();
+            }
+          };
+          if (mountEl) mountEl.addEventListener('click', focusHandler);
+          if (labelEl) labelEl.addEventListener('click', focusHandler);
+        }
+
+        bindClickToFocus(stripeCardElement, paymentCardNumberMount, document.querySelector('label[for="paymentCardNumberElement"]'));
+        bindClickToFocus(stripeCardExpiryElement, paymentCardExpiryMount, document.querySelector('label[for="paymentCardExpiryElement"]'));
+        bindClickToFocus(stripeCardCvcElement, paymentCardCvcMount, document.querySelector('label[for="paymentCardCvcElement"]'));
+
+        stripeCardElement.mount('#paymentCardNumberElement');
+        stripeCardExpiryElement.mount('#paymentCardExpiryElement');
+        stripeCardCvcElement.mount('#paymentCardCvcElement');
         return stripeCardElement;
       }
 
@@ -29041,7 +29119,10 @@ function showGenrePopup(genre) {
                       if (confirmResult && confirmResult.error) {
                         throw confirmResult.error;
                       }
-                      return resolvedBackendResponse;
+                      // Payment intent just succeeded (3D Secure/SCA confirmed), so the
+                      // subscription is now active even though the pre-confirmation
+                      // backend response above still shows its earlier "incomplete" status.
+                      return Object.assign({}, resolvedBackendResponse, { status: 'active' });
                     });
                 }
 
@@ -29052,6 +29133,13 @@ function showGenrePopup(genre) {
               if (backendResponse && backendResponse.status === 'active') {
                 finalizeSubscriptionActivation(backendResponse.subscriptionId || null);
                 return backendResponse;
+              }
+
+              // Not active and no 3D Secure step was pending: the card was declined or the
+              // charge otherwise failed outright. Surface this instead of silently closing
+              // the popup, which previously left the user thinking nothing happened.
+              if (backendResponse && !backendResponse.requiresAction) {
+                throw new Error('Your card was declined or the payment could not be completed. Please check your card details or try a different card.');
               }
 
               closePaymentCardPopup();
