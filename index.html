@@ -1553,14 +1553,19 @@ last i checked this is best, specially since it could be real safe`;
       const attemptImmediatePlayback = function() {
         if (playbackStarted || window.__hzStickyAdActive) return;
         playerAudio.play().then(onPlaybackStarted).catch(() => {
-          // Autoplay-policy recovery: warm-start muted, then restore original mute state.
-          const wasMuted = !!playerAudio.muted;
-          playerAudio.muted = true;
+          // Retry without changing the sticky player's audible state.
+          playerAudio.muted = false;
+          playerAudio.defaultMuted = false;
+          playerAudio.removeAttribute('muted');
           playerAudio.play().then(() => {
-            playerAudio.muted = wasMuted;
+            playerAudio.muted = false;
+            playerAudio.defaultMuted = false;
+            playerAudio.removeAttribute('muted');
             onPlaybackStarted();
           }).catch(() => {
-            playerAudio.muted = wasMuted;
+            playerAudio.muted = false;
+            playerAudio.defaultMuted = false;
+            playerAudio.removeAttribute('muted');
 
           if (playPauseBtn) {
             playPauseBtn.innerHTML = '&#9654;';
@@ -5429,6 +5434,8 @@ last i checked this is best, specially since it could be real safe`;
           transform: translateX(-50%) translateY(12px);
           width: min(560px, 95vw);
           max-height: min(64vh, 460px);
+          display: flex;
+          flex-direction: column;
           background: rgba(12, 12, 12, 0.97);
           border: 1px solid rgba(255, 215, 0, 0.28);
           border-radius: 16px;
@@ -5485,8 +5492,15 @@ last i checked this is best, specially since it could be real safe`;
 
         .lyrics-panel-body {
           padding: 14px 16px 18px;
+          flex: 1 1 auto;
+          min-height: 0;
+          box-sizing: border-box;
           overflow-y: auto;
+          height: min(48vh, 340px);
           max-height: min(48vh, 340px);
+          overscroll-behavior: contain;
+          -webkit-overflow-scrolling: touch;
+          touch-action: pan-y;
           white-space: normal;
           line-height: 1.72;
           color: rgba(255,255,255,0.92);
@@ -5727,10 +5741,15 @@ last i checked this is best, specially since it could be real safe`;
       z-index: 4200;
       padding: 16px;
       box-sizing: border-box;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.08s ease, visibility 0.08s ease;
     }
 
     .pay-overlay.show {
       display: flex;
+      opacity: 1;
+      visibility: visible;
     }
 
     .pay-modal-shell {
@@ -5739,8 +5758,9 @@ last i checked this is best, specially since it could be real safe`;
       border-radius: 18px;
       background: linear-gradient(120deg, #ffd700 0%, #4fa8ff 45%, #8a5bff 100%);
       background-size: 220% 220%;
-      animation: payCycleBorder 4.2s linear infinite;
       box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+      transform: translateY(0);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     .pay-modal {
@@ -5813,11 +5833,21 @@ last i checked this is best, specially since it could be real safe`;
       color: #fff;
       cursor: pointer;
       text-align: left;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.08s ease, border-color 0.08s ease, box-shadow 0.08s ease, transform 0.05s ease;
     }
 
     .pay-currency-btn:hover {
       border-color: rgba(255, 215, 0, 0.6);
       background: rgba(255, 215, 0, 0.08);
+    }
+
+    .pay-currency-btn:active,
+    .pay-btn:active,
+    .pay-modal-close:active,
+    .pay-stripe-element:active {
+      transform: scale(0.99);
     }
 
     .pay-currency-meta {
@@ -5879,6 +5909,9 @@ last i checked this is best, specially since it could be real safe`;
       background: rgba(0, 0, 0, 0.35);
       min-height: 42px;
       cursor: text;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: border-color 0.08s ease, box-shadow 0.08s ease, background 0.08s ease;
     }
 
     .pay-stripe-element--focus {
@@ -5923,6 +5956,9 @@ last i checked this is best, specially since it could be real safe`;
       padding: 10px 14px;
       font-weight: 700;
       cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.05s ease, opacity 0.08s ease, box-shadow 0.08s ease;
     }
 
     .pay-btn-secondary {
@@ -11408,7 +11444,7 @@ last i checked this is best, specially since it could be real safe`;
       <div class="player-controls">
         <button class="player-btn" id="queueBtn" title="Queue" aria-label="Open queue" style="width:28px;height:28px;font-size:0.9rem;">&#9776;</button>
         <button class="player-btn player-shuffle" id="shuffleBtn" title="Shuffle" style="width:28px;height:28px;font-size:0.9rem;">&#128256;</button>
-        <button class="player-btn" id="prevBtn" title="Previous" style="width:38px;height:38px;font-size:1.2rem;">&#9198;</button>
+        <button class="player-btn" id="prevBtn" title="Previous" onclick="window.playPrev && window.playPrev()" style="width:38px;height:38px;font-size:1.2rem;">&#9198;</button>
         <button class="player-btn" id="playPauseBtn" title="Play/Pause" style="width:42px;height:42px;font-size:1.4rem;">&#9654;</button>
         <button class="player-btn" id="nextBtn" title="Next" style="width:38px;height:38px;font-size:1.2rem;">&#9197;</button>
         <button class="player-btn player-loop" id="loopBtn" title="Loop" style="width:28px;height:28px;font-size:0.9rem;">&#128257;</button>
@@ -13562,6 +13598,18 @@ Jus be careful, if he's still doin dis, jus a mattera time til he nukes the plan
             const panel = document.getElementById('lyricsPanel');
             const panelBody = document.getElementById('lyricsPanelBody');
             if (!panel || !panelBody || !panel.classList.contains('open')) return;
+            if (panelBody.dataset.lyricsUserScrolling === 'true') return;
+
+            if (!panelBody.dataset.lyricsManualScrollBound) {
+              const stopForUserScroll = function() {
+                panelBody.dataset.lyricsUserScrolling = 'true';
+                window.stopLyricsAutoScroll();
+              };
+              panelBody.addEventListener('wheel', stopForUserScroll, { passive: true });
+              panelBody.addEventListener('touchstart', stopForUserScroll, { passive: true });
+              panelBody.addEventListener('pointerdown', stopForUserScroll, { passive: true });
+              panelBody.dataset.lyricsManualScrollBound = 'true';
+            }
 
             const lyricLines = Array.from(panelBody.querySelectorAll('.lyrics-line'));
             if (!lyricLines.length) return;
@@ -13569,7 +13617,9 @@ Jus be careful, if he's still doin dis, jus a mattera time til he nukes the plan
             const playerAudio = document.getElementById('playerAudio');
             const isTrackPlaying = () => !!playerAudio && !playerAudio.paused && !playerAudio.ended;
 
-            panelBody.scrollTop = 0;
+            if (panelBody.dataset.lyricsUserScrolling !== 'true') {
+              panelBody.scrollTop = 0;
+            }
 
             window.lyricsAutoScrollTimer = setInterval(() => {
               if (!panel.classList.contains('open')) {
@@ -14306,7 +14356,9 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
 
             const lyricsText = preciseLyrics || window.buildFallbackLyrics(resolvedTitle, resolvedArtist);
             window.renderLyricsMarkup(panelBody, lyricsText);
-            panelBody.scrollTop = 0;
+            if (panelBody.dataset.lyricsUserScrolling !== 'true') {
+              panelBody.scrollTop = 0;
+            }
             window.startLyricsAutoScroll();
           };
 
@@ -14323,6 +14375,11 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
             const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !panel.classList.contains('open');
             if (!shouldOpen && panel.contains(document.activeElement)) {
               document.activeElement.blur();
+            }
+
+            if (shouldOpen) {
+              const panelBody = document.getElementById('lyricsPanelBody');
+              if (panelBody) panelBody.dataset.lyricsUserScrolling = 'false';
             }
 
             if (!shouldOpen) {
@@ -14677,111 +14734,6 @@ Dis shit needs to end, only way it happens is if creeps are dead`;
           var currentTrackIndex = 0;
           var isShuffled = false;
           var loopMode = 0;
-
-          // Play/Pause
-          playPauseBtn.addEventListener('click', function() {
-            if (playerAudio.paused) {
-              playerAudio.play();
-              playPauseBtn.innerHTML = '&#10073;&#10073;'; // Pause icon
-              if (typeof window.updateMediaSessionState === 'function') {
-                window.updateMediaSessionState('playing');
-              }
-            } else {
-              playerAudio.pause();
-              playPauseBtn.innerHTML = '&#9654;'; // Play icon
-              if (typeof window.updateMediaSessionState === 'function') {
-                window.updateMediaSessionState('paused');
-              }
-            }
-          });
-
-          // Next Track
-          nextBtn.addEventListener('click', function() {
-            // Use modulo to wrap around to beginning when reaching end
-            const nextIndex = (currentTrackIndex + 1) % trackOrder.length;
-            currentTrackIndex = nextIndex;
-            window.currentTrackIndex = currentTrackIndex;
-            console.log('⏭️ Next button: moving to track', nextIndex, '(' + trackOrder[nextIndex] + ')');
-            playTrack(trackOrder[currentTrackIndex]);
-          });
-
-          // Previous Track
-          prevBtn.addEventListener('click', function() {
-            // Use modulo to wrap around to end when reaching beginning
-            const prevIndex = (currentTrackIndex - 1 + trackOrder.length) % trackOrder.length;
-            currentTrackIndex = prevIndex;
-            window.currentTrackIndex = currentTrackIndex;
-            console.log('⏮️ Previous button: moving to track', prevIndex, '(' + trackOrder[prevIndex] + ')');
-            playTrack(trackOrder[currentTrackIndex]);
-          });
-
-          // Loop - Two-state toggle: off -> loop one -> off
-          loopBtn.addEventListener('click', function() {
-            var audioEl = document.getElementById('playerAudio');
-            loopMode = loopMode === 0 ? 1 : 0;
-            window.loopMode = loopMode;
-
-            // Disable transition so color change is instant
-            loopBtn.style.transition = 'none';
-
-            if (loopMode === 0) {
-              // No loop - normal playback
-              if (audioEl) audioEl.loop = false;
-              loopBtn.innerHTML = '🔂';
-              loopBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
-              loopBtn.style.color = '#FFD700';
-              loopBtn.style.boxShadow = 'none';
-              loopBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
-              console.log('🔂 Loop OFF - Normal playback');
-            } else {
-              // Loop one - repeats current track
-              if (audioEl) audioEl.loop = true;
-              loopBtn.innerHTML = '🔂';
-              loopBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
-              loopBtn.style.color = '#fff';
-              loopBtn.style.boxShadow = '0 0 15px rgba(0, 102, 255, 0.6)';
-              loopBtn.style.border = '2px solid #0066ff';
-              console.log('🔂 Loop ON - Current track will repeat');
-            }
-          });
-
-          // Shuffle - Toggle with blue glow when active
-          shuffleBtn.addEventListener('click', function() {
-            isShuffled = !isShuffled;
-            window.isShuffled = isShuffled;
-            if (isShuffled) {
-              shuffleBtn.style.background = 'linear-gradient(135deg,#0066ff 0%,#004ccc 100%)';
-              shuffleBtn.style.color = '#fff';
-              shuffleBtn.style.boxShadow = '0 0 20px rgba(0, 102, 255, 0.8), 0 0 40px rgba(0, 102, 255, 0.4)';
-              shuffleBtn.style.border = '2px solid #0066ff';
-              shuffleBtn.style.animation = 'shuffleGlow 2s ease-in-out infinite alternate';
-              // Shuffle the track order except current
-              var currentTrack = trackOrder[currentTrackIndex];
-              var rest = trackOrder.slice();
-              rest.splice(currentTrackIndex, 1);
-              for (let i = rest.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [rest[i], rest[j]] = [rest[j], rest[i]];
-              }
-              trackOrder = [currentTrack].concat(rest);
-              console.log('🔀 Shuffle ON - Tracks randomized');
-            } else {
-              shuffleBtn.style.background = 'linear-gradient(135deg,#FFD700 0%,#B8860B 100%)';
-              shuffleBtn.style.color = '#FFD700';
-              shuffleBtn.style.boxShadow = 'none';
-              shuffleBtn.style.border = '1px solid rgba(255, 215, 0, 0.3)';
-              shuffleBtn.style.animation = 'none';
-              // Restore original order
-              
-              trackOrder = [
-                'Times', 'Prime', 'Made It', 'Nector', 'Limitless Dreams', 'Blossom', 'Mach 1', 'Echo', 'Lights', 'Smilin', 'Buckets', 'Sweet', 'Persistence',
-                'Focus', 'Smooth', 'Different', 'Wop!!!', 'Mind', 'Huh', 'Soul', 'Step', 'Vibes', 'Future', 'Promise', 'Bliss', 'Hustle',
-                'shine', 'heart', 'nova', 'pushit', 'bright', 'whisper', 'lord', 'smile', 'Good Woman', 'Rhymes', 'You My Vibe',
-                'Space', 'Nimbus', 'Shootin Starz', 'Mars', 'Ain&#39;t Shit', 'Dream'
-              ];
-              console.log('🔀 Shuffle OFF - Original order restored');
-            }
-          });
 
           // Volume
           if (volumeRange) {
@@ -17720,9 +17672,6 @@ function showGenrePopup(genre) {
       if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity || '1') === 0) {
         return false;
       }
-      if (el.getAttribute && el.getAttribute('aria-hidden') === 'true') {
-        return false;
-      }
       // A child (e.g. .pay-modal-shell) can report its OWN display as visible via
       // getComputedStyle while its actual parent overlay (.pay-overlay) is display:none —
       // getComputedStyle does not account for that. getClientRects() correctly reflects
@@ -17916,7 +17865,7 @@ function showGenrePopup(genre) {
     function enforceSettingsAudioUnmuted() {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
-      if (window.__hzStickyAdActive) return;
+      if (window.__hzStickyAdActive && !isAnyPopupVisible()) return;
 
       // While any popup is visible, keep sticky-player audio unmuted.
       audio.muted = false;
@@ -17987,7 +17936,7 @@ function showGenrePopup(genre) {
                 },
                 set: function(value) {
                   if (this && this.id === 'playerAudio') {
-                    if (window.__hzStickyAdActive) {
+                    if (window.__hzStickyAdActive && !isAnyPopupVisible()) {
                       return mutedDesc.set.call(this, value);
                     }
                     return mutedDesc.set.call(this, false);
@@ -18007,7 +17956,7 @@ function showGenrePopup(genre) {
                 },
                 set: function(value) {
                   if (this && this.id === 'playerAudio') {
-                    if (window.__hzStickyAdActive) {
+                    if (window.__hzStickyAdActive && !isAnyPopupVisible()) {
                       return defaultMutedDesc.set.call(this, value);
                     }
                     return defaultMutedDesc.set.call(this, false);
@@ -18045,7 +17994,7 @@ function showGenrePopup(genre) {
         window.__hzStickyMuteObserver = new MutationObserver(function() {
           const a = document.getElementById('playerAudio');
           if (!a) return;
-          if (window.__hzStickyAdActive) return;
+          if (window.__hzStickyAdActive && !isAnyPopupVisible()) return;
           if (a.hasAttribute('muted')) {
             a.removeAttribute('muted');
           }
@@ -18065,7 +18014,7 @@ function showGenrePopup(genre) {
     function enforceGlobalStickyPlayerUnmute() {
       const audio = document.getElementById('playerAudio');
       if (!audio) return;
-      if (window.__hzStickyAdActive) return;
+      if (window.__hzStickyAdActive && !isAnyPopupVisible()) return;
 
       lockStickyPlayerMuteState();
 
@@ -18132,6 +18081,10 @@ function showGenrePopup(genre) {
       console.log('⚙️ Opening settings page');
       updateBottomNavActive('settings');
 
+      if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+        enforceGlobalStickyPlayerUnmute();
+      }
+
       const audioBeforeOpen = document.getElementById('playerAudio');
       const settingsWasPlayingBeforeOpen = !!audioBeforeOpen && !audioBeforeOpen.paused && !audioBeforeOpen.ended;
       const settingsTimeBeforeOpen = audioBeforeOpen ? Number(audioBeforeOpen.currentTime || 0) : 0;
@@ -18147,6 +18100,10 @@ function showGenrePopup(genre) {
         const keepSettingsPlaybackAudible = function() {
           const settingsAudio = document.getElementById('playerAudio');
           if (!settingsAudio || !overlay || overlay.style.display === 'none') return;
+
+          if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+            enforceGlobalStickyPlayerUnmute();
+          }
 
           const playbackGuard = window.__hzSettingsPlaybackGuard || null;
           if (settingsAudio.paused && playbackGuard && playbackGuard.wasPlaying && Date.now() <= Number(playbackGuard.armedUntil || 0)) {
@@ -26179,6 +26136,9 @@ function showGenrePopup(genre) {
         overlay.style.display = 'none';
       }
       if (overlayId === 'settingsPageOverlay') {
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
         window.__hzSettingsPlaybackGuard = {
           wasPlaying: false,
           startTime: 0,
@@ -27242,6 +27202,32 @@ function showGenrePopup(genre) {
             }
           };
           select.addEventListener('change', select._hertzSelectHandler);
+
+          if (selectName === 'equalizerPreset') {
+            const keepPresetSelectionAudible = function() {
+              const selectionAudio = document.getElementById('playerAudio');
+              if (!selectionAudio || selectionAudio.paused || selectionAudio.ended) return;
+              selectionAudio.muted = false;
+              selectionAudio.defaultMuted = false;
+              selectionAudio.removeAttribute('muted');
+              if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+                enforceGlobalStickyPlayerUnmute();
+              }
+              const equalizerEngine = window.__hzEqualizerEngine;
+              if (equalizerEngine && equalizerEngine.context && equalizerEngine.context.state !== 'running' && typeof equalizerEngine.context.resume === 'function') {
+                equalizerEngine.context.resume().catch(function() {});
+              }
+            };
+            select.removeEventListener('focus', select._hertzPresetAudioHandler);
+            select.removeEventListener('pointerdown', select._hertzPresetAudioHandler);
+            select.removeEventListener('mousedown', select._hertzPresetAudioHandler);
+            select.removeEventListener('touchstart', select._hertzPresetAudioHandler);
+            select.removeEventListener('input', select._hertzPresetAudioHandler);
+            select._hertzPresetAudioHandler = keepPresetSelectionAudible;
+            ['focus', 'pointerdown', 'mousedown', 'touchstart', 'input'].forEach(function(eventName) {
+              select.addEventListener(eventName, keepPresetSelectionAudible);
+            });
+          }
         }
       });
 
@@ -27250,11 +27236,24 @@ function showGenrePopup(genre) {
       // Apply saved theme on load
       applyTheme(theme);
 
-      // Actually (re)apply the saved equalizer preset and audio quality to the live
-      // engine each time Settings opens, instead of only recording the value — this
-      // is what makes both selects work again after a reload or reopening Settings.
-      applyEqualizerPreset(equalizerPreset);
-      applyAudioQuality(audioQuality);
+      // Do not rebuild the live audio pipeline merely because Settings opened while
+      // a track is playing. Changes made in the controls still apply immediately.
+      const settingsAudio = document.getElementById('playerAudio');
+      if (!settingsAudio || settingsAudio.paused || settingsAudio.ended) {
+        applyEqualizerPreset(equalizerPreset);
+        applyAudioQuality(audioQuality);
+      } else {
+        // Prepare the live audio route before the first preset selection so
+        // attaching MediaElementSource never interrupts an active track.
+        const preparedEngine = ensureEqualizerEngine();
+        if (preparedEngine) {
+          applyEqualizerSettingsToEngine(EQUALIZER_PRESET_SETTINGS[equalizerPreset] || EQUALIZER_PRESET_SETTINGS.flat);
+          applyAudioQualityToEngine(AUDIO_QUALITY_FILTER_SETTINGS[audioQuality] || AUDIO_QUALITY_FILTER_SETTINGS.normal);
+          if (preparedEngine.context && preparedEngine.context.state !== 'running' && typeof preparedEngine.context.resume === 'function') {
+            preparedEngine.context.resume().catch(function() {});
+          }
+        }
+      }
 
       console.log('✅ Settings loaded and fully functional');
     }
@@ -27693,6 +27692,23 @@ function showGenrePopup(genre) {
       const wasPlaying = !!playerAudio && !playerAudio.paused && !playerAudio.ended;
       const previousVolume = playerAudio ? Number(playerAudio.volume) : 0;
       const previousTime = playerAudio ? Number(playerAudio.currentTime || 0) : 0;
+      const keepStickyPlayerAudible = function() {
+        if (!playerAudio || playerAudio.ended) return;
+        if (wasPlaying && playerAudio.paused && playerAudio.src) {
+          playerAudio.play().catch(function() {});
+        }
+        playerAudio.muted = false;
+        playerAudio.defaultMuted = false;
+        playerAudio.removeAttribute('muted');
+        if (previousVolume > 0.0001 && Number(playerAudio.volume || 0) <= 0.0001) {
+          playerAudio.volume = previousVolume;
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
+      };
+
+      keepStickyPlayerAudible();
 
       // Store the preset for audio processing
       localStorage.setItem('hertzActiveEqualizerPreset', preset);
@@ -27727,6 +27743,11 @@ function showGenrePopup(genre) {
           enforceGlobalStickyPlayerUnmute();
         }
       }
+
+      keepStickyPlayerAudible();
+      requestAnimationFrame(keepStickyPlayerAudible);
+      setTimeout(keepStickyPlayerAudible, 32);
+      setTimeout(keepStickyPlayerAudible, 120);
 
       console.log('✅ Equalizer preset applied:', preset, selectedSettings);
     }
@@ -28763,6 +28784,10 @@ function showGenrePopup(genre) {
           if (cardOverlay) {
             cardOverlay.classList.add('show');
             cardOverlay.setAttribute('aria-hidden', 'false');
+            requestAnimationFrame(function() {
+              const nameField = document.getElementById('payCardName');
+              if (nameField) nameField.focus();
+            });
           }
         });
 
@@ -28780,6 +28805,12 @@ function showGenrePopup(genre) {
       if (!overlay) return;
       overlay.classList.add('show');
       overlay.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(function() {
+        const firstButton = overlay.querySelector('.pay-currency-btn');
+        if (firstButton) {
+          firstButton.focus();
+        }
+      });
     }
 
     function showSubscriptionStartedPopup() {
@@ -28964,8 +28995,14 @@ function showGenrePopup(genre) {
               element.focus();
             }
           };
-          if (mountEl) mountEl.addEventListener('click', focusHandler);
-          if (labelEl) labelEl.addEventListener('click', focusHandler);
+          if (mountEl) {
+            mountEl.addEventListener('click', focusHandler);
+            mountEl.addEventListener('pointerdown', focusHandler);
+          }
+          if (labelEl) {
+            labelEl.addEventListener('click', focusHandler);
+            labelEl.addEventListener('pointerdown', focusHandler);
+          }
         }
 
         bindClickToFocus(stripeCardElement, paymentCardNumberMount, document.querySelector('label[for="paymentCardNumberElement"]'));
@@ -28975,6 +29012,12 @@ function showGenrePopup(genre) {
         stripeCardElement.mount('#paymentCardNumberElement');
         stripeCardExpiryElement.mount('#paymentCardExpiryElement');
         stripeCardCvcElement.mount('#paymentCardCvcElement');
+
+        requestAnimationFrame(function() {
+          if (paymentCardNumberMount && stripeCardElement && typeof stripeCardElement.focus === 'function') {
+            stripeCardElement.focus();
+          }
+        });
         return stripeCardElement;
       }
 
@@ -31112,12 +31155,14 @@ function showGenrePopup(genre) {
     }
 
     function toggleLoop() {
-      if (typeof window.loopMode === 'number') {
-        // Sync with the two-state loop handler: 0 = off, 1 = loop one
-        const mode = window.loopMode;
-        isLoop = mode === 1;
-        playerAudio.loop = isLoop;
-        loopBtn.classList.toggle('active', mode !== 0);
+      const nextMode = typeof window.loopMode === 'number'
+        ? (window.loopMode === 1 ? 0 : 1)
+        : (isLoop ? 0 : 1);
+      window.loopMode = nextMode;
+      isLoop = nextMode === 1;
+      playerAudio.loop = isLoop;
+      loopBtn.classList.toggle('active', isLoop);
+      {
         // Apply blue instantly when on, gold when off - no transition
         const lb = document.getElementById('loopBtn');
         if (lb) {
@@ -31134,17 +31179,13 @@ function showGenrePopup(genre) {
             lb.style.border = '1px solid rgba(255, 215, 0, 0.3)';
           }
         }
-      } else {
-        // Fallback for legacy contexts where loopMode is unavailable.
-        isLoop = !isLoop;
-        playerAudio.loop = isLoop;
-        loopBtn.classList.toggle('active', isLoop);
       }
       savePlayerState();
     }
 
     function toggleShuffle() {
       isShuffle = !isShuffle;
+      window.isShuffled = isShuffle;
       shuffleBtn.classList.toggle('active', isShuffle);
       savePlayerState();
     }
@@ -31186,15 +31227,15 @@ function showGenrePopup(genre) {
           savePlayerState();
         });
       }
-      if (playPauseBtn) playPauseBtn.addEventListener('click', playPause);
-      if (prevBtn) prevBtn.addEventListener('click', playPrev);
-      if (nextBtn) nextBtn.addEventListener('click', playNext);
-      if (loopBtn) loopBtn.addEventListener('click', toggleLoop);
-      if (shuffleBtn) shuffleBtn.addEventListener('click', toggleShuffle);
-      if (queueBtn) queueBtn.addEventListener('click', function(event) {
+      if (playPauseBtn) playPauseBtn.onclick = playPause;
+      if (prevBtn) prevBtn.onclick = playPrev;
+      if (nextBtn) nextBtn.onclick = playNext;
+      if (loopBtn) loopBtn.onclick = toggleLoop;
+      if (shuffleBtn) shuffleBtn.onclick = toggleShuffle;
+      if (queueBtn) queueBtn.onclick = function(event) {
         event.stopPropagation();
         toggleQueuePopup();
-      });
+      };
 
       const closeQueuePopupBtn = document.getElementById('closeQueuePopupBtn');
       if (closeQueuePopupBtn) {
@@ -31233,6 +31274,40 @@ function showGenrePopup(genre) {
       renderQueuePopup();
       updateQueueLoopButtonState();
     });
+
+    // The app can remain in the interactive readyState while external media
+    // initializes, so do not leave sticky controls waiting for DOMContentLoaded.
+    if (document.readyState !== 'loading') {
+      if (playPauseBtn && !playPauseBtn.onclick) playPauseBtn.onclick = playPause;
+      if (prevBtn && !prevBtn.onclick) prevBtn.onclick = playPrev;
+      if (nextBtn && !nextBtn.onclick) nextBtn.onclick = playNext;
+      if (loopBtn && !loopBtn.onclick) loopBtn.onclick = toggleLoop;
+      if (shuffleBtn && !shuffleBtn.onclick) shuffleBtn.onclick = toggleShuffle;
+      if (queueBtn && !queueBtn.onclick) queueBtn.onclick = function(event) {
+        event.stopPropagation();
+        toggleQueuePopup();
+      };
+    }
+
+    window.bindStickyPlayerControls = function() {
+      const controls = {
+        playPauseBtn: playPause,
+        prevBtn: playPrev,
+        nextBtn: playNext,
+        loopBtn: toggleLoop,
+        shuffleBtn: toggleShuffle,
+        queueBtn: function(event) {
+          if (event) event.stopPropagation();
+          toggleQueuePopup();
+        }
+      };
+      Object.keys(controls).forEach(function(id) {
+        const button = document.getElementById(id);
+        if (button && !button.onclick) button.onclick = controls[id];
+      });
+    };
+    window.bindStickyPlayerControls();
+    window.addEventListener('load', window.bindStickyPlayerControls);
 
     // Sync button state with actual audio player state
     playerAudio.addEventListener('play', function() {
@@ -32192,6 +32267,9 @@ function showGenrePopup(genre) {
       }
 
       function loadPlayerState() {
+        if (window.__hzStickySelectionUnlocked === true || window.currentTrackId) {
+          return;
+        }
         const state = JSON.parse(localStorage.getItem('playerState') || '{}');
         if (state && state.track) {
           window.currentTrack = state.track;
