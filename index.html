@@ -5971,6 +5971,28 @@ last i checked this is best, specially since it could be real safe`;
       color: #000;
     }
 
+    .pay-btn:disabled {
+      opacity: 0.72;
+      cursor: default;
+    }
+
+    /* Ensure the card form stays fluent and fully usable on small/touch screens. */
+    @media (max-width: 420px) {
+      .pay-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .pay-btn,
+    .pay-modal-close {
+      min-height: 44px;
+    }
+
+    .pay-form input,
+    .pay-stripe-element {
+      min-height: 44px;
+    }
+
     @keyframes payCycleBorder {
       0%, 100% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
@@ -27236,23 +27258,18 @@ function showGenrePopup(genre) {
       // Apply saved theme on load
       applyTheme(theme);
 
-      // Do not rebuild the live audio pipeline merely because Settings opened while
-      // a track is playing. Changes made in the controls still apply immediately.
+      // Never touch the live audio pipeline merely because Settings opened while a
+      // track is playing: attaching the Web Audio graph (createMediaElementSource)
+      // reroutes output through a freshly-created AudioContext that can start
+      // suspended, producing a real silent gap that has nothing to do with the
+      // <audio> element's own muted/volume state. Only rebuild it when the audio
+      // is not currently playing, or lazily later when the user actually changes
+      // a preset/quality control (applyEqualizerPreset/applyAudioQuality already
+      // handle that safely, since a direct user gesture resumes the context fast).
       const settingsAudio = document.getElementById('playerAudio');
       if (!settingsAudio || settingsAudio.paused || settingsAudio.ended) {
         applyEqualizerPreset(equalizerPreset);
         applyAudioQuality(audioQuality);
-      } else {
-        // Prepare the live audio route before the first preset selection so
-        // attaching MediaElementSource never interrupts an active track.
-        const preparedEngine = ensureEqualizerEngine();
-        if (preparedEngine) {
-          applyEqualizerSettingsToEngine(EQUALIZER_PRESET_SETTINGS[equalizerPreset] || EQUALIZER_PRESET_SETTINGS.flat);
-          applyAudioQualityToEngine(AUDIO_QUALITY_FILTER_SETTINGS[audioQuality] || AUDIO_QUALITY_FILTER_SETTINGS.normal);
-          if (preparedEngine.context && preparedEngine.context.state !== 'running' && typeof preparedEngine.context.resume === 'function') {
-            preparedEngine.context.resume().catch(function() {});
-          }
-        }
       }
 
       console.log('✅ Settings loaded and fully functional');
@@ -27653,6 +27670,27 @@ function showGenrePopup(genre) {
       const playerAudio = document.getElementById('playerAudio');
       const wasPlaying = !!playerAudio && !playerAudio.paused && !playerAudio.ended;
       const previousVolume = playerAudio ? Number(playerAudio.volume) : 0;
+      const keepStickyPlayerAudible = function() {
+        if (!playerAudio || playerAudio.ended) return;
+        if (wasPlaying && playerAudio.paused && playerAudio.src) {
+          playerAudio.play().catch(function() {});
+        }
+        playerAudio.muted = false;
+        playerAudio.defaultMuted = false;
+        playerAudio.removeAttribute('muted');
+        if (previousVolume > 0.0001 && Number(playerAudio.volume || 0) <= 0.0001) {
+          playerAudio.volume = previousVolume;
+        }
+        const engine = window.__hzEqualizerEngine;
+        if (engine && engine.context && engine.context.state !== 'running' && typeof engine.context.resume === 'function') {
+          engine.context.resume().catch(function() {});
+        }
+        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
+          enforceGlobalStickyPlayerUnmute();
+        }
+      };
+
+      keepStickyPlayerAudible();
 
       localStorage.setItem('hertzActiveAudioQuality', quality);
 
@@ -27664,22 +27702,12 @@ function showGenrePopup(genre) {
         window.__hzPendingAudioQualityCutoff = null;
       }
 
-      if (playerAudio && wasPlaying) {
-        playerAudio.muted = false;
-        playerAudio.defaultMuted = false;
-        playerAudio.removeAttribute('muted');
-        if (previousVolume > 0.0001) {
-          playerAudio.volume = previousVolume;
-        }
-
-        const engine = window.__hzEqualizerEngine;
-        if (engine && engine.context && engine.context.state !== 'running' && typeof engine.context.resume === 'function') {
-          engine.context.resume().catch(function() {});
-        }
-        if (typeof enforceGlobalStickyPlayerUnmute === 'function') {
-          enforceGlobalStickyPlayerUnmute();
-        }
-      }
+      keepStickyPlayerAudible();
+      requestAnimationFrame(keepStickyPlayerAudible);
+      // Same delayed Web Audio graph attachment risk as applyEqualizerPreset (see there).
+      [32, 120, 250, 500, 1000].forEach(function(delay) {
+        setTimeout(keepStickyPlayerAudible, delay);
+      });
 
       console.log('✅ Audio quality applied:', quality, cutoffHz + 'Hz');
     }
@@ -27746,8 +27774,12 @@ function showGenrePopup(genre) {
 
       keepStickyPlayerAudible();
       requestAnimationFrame(keepStickyPlayerAudible);
-      setTimeout(keepStickyPlayerAudible, 32);
-      setTimeout(keepStickyPlayerAudible, 120);
+      // The first-ever Web Audio graph attachment (createMediaElementSource) can
+      // pause/silence playback with a delay that varies by device/browser, so keep
+      // checking well beyond the immediate ticks instead of assuming it settles fast.
+      [32, 120, 250, 500, 1000].forEach(function(delay) {
+        setTimeout(keepStickyPlayerAudible, delay);
+      });
 
       console.log('✅ Equalizer preset applied:', preset, selectedSettings);
     }
@@ -28919,7 +28951,9 @@ function showGenrePopup(genre) {
         }
 
         if (submitButton) {
-          submitButton.textContent = active ? 'Subscribed ✓' : 'Start Subscription';
+          submitButton.textContent = active
+            ? 'Subscribed ✓'
+            : (submittingSubscription ? 'Processing…' : 'Start Subscription');
           submitButton.disabled = !!active || submittingSubscription;
         }
 
@@ -29204,6 +29238,11 @@ function showGenrePopup(genre) {
             .then(function(backendResponse) {
               if (backendResponse && backendResponse.status === 'active') {
                 finalizeSubscriptionActivation(backendResponse.subscriptionId || null);
+                // The card popup must close on success instead of sitting open behind
+                // the "Enjoy it Premium!!!" toast once that toast auto-dismisses.
+                closePaymentCardPopup();
+                cardForm.reset();
+                setStripeError('');
                 return backendResponse;
               }
 
