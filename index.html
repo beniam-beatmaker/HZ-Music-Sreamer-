@@ -28328,6 +28328,7 @@ function showGenrePopup(genre) {
 
     function maybeShowFortnightSubscriptionReminder() {
       if (!hasActiveMonthlySubscription()) return;
+      if (getSubscriptionCancellationEffectiveAtMs() > Date.now()) return;
 
       const now = Date.now();
       const startedAt = localStorage.getItem('hertzSubscriptionStartedAt') || new Date().toISOString();
@@ -28714,6 +28715,11 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzSubscriptionBackendState', 'canceling');
       localStorage.setItem('hertzSubscriptionAutoRenew', 'false');
 
+      if (localStorage.getItem('hertzSubscriptionCancellationNoticeShown') !== 'true') {
+        alert('Subscription canceled. No further monthly billing will occur.');
+        localStorage.setItem('hertzSubscriptionCancellationNoticeShown', 'true');
+      }
+
       const actionsWrap = document.getElementById('activeSubscriptionActions');
       const cancelButton = document.getElementById('cancelSubscriptionBtn');
       const cancelMessage = document.getElementById('cancelSubscriptionMessage');
@@ -28954,6 +28960,7 @@ function showGenrePopup(genre) {
       localStorage.setItem('hertzSubscriptionAmountUsd', pendingAmountUsd);
       localStorage.setItem('hertzSubscriptionStartedAt', pendingStartedAt);
       localStorage.removeItem('hertzSubscriptionCanceledAt');
+      localStorage.removeItem('hertzSubscriptionCancellationNoticeShown');
       localStorage.setItem('hertzSubscriptionAutoRenew', 'true');
       localStorage.setItem('hertzSubscriptionReminderLastShownAt', String(Date.now()));
       localStorage.setItem('hertzSubscriptionBackendState', 'active');
